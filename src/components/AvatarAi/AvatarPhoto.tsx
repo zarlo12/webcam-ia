@@ -124,14 +124,14 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
               }}
             >
               <option value="" disabled>
-                Selecciona tu profesión
+                Selecciona tu Profesión
               </option>
               <option value="Gastronómico">Gastronómico</option>
               <option value="Administrativo">Administrativo</option>
-              <option value="experto en TIC">experto en TIC</option>
-              <option value="experto en logística">experto en logística</option>
+              <option value="Experto en TIC">Experto en TIC</option>
+              <option value="Experto en logística">Experto en logística</option>
               <option value="Regente de Farmacia">Regente de Farmacia</option>
-              <option value="experto en SST">experto en SST</option>
+              <option value="Experto en SST">Experto en SST</option>
             </select>
             <span className="select-arrow">▼</span>
           </div>

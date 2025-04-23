@@ -21,13 +21,11 @@ interface WaitingProps {
 const Waiting: React.FC<WaitingProps> = ({
   email,
   nombre,
-  cedula,
   imagenGenerada,
   imageUrl,
   tipoSuenio,
   onEmailChange,
   onNombreChange,
-  onCedulaChange,
   onConsentimientoChange,
   onShowPolicy,
   onContinue,

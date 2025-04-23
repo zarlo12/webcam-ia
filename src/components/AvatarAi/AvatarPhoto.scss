@@ -1,0 +1,239 @@
+.containerResult {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  color: white;
+  overflow: hidden; /* Evita desbordamiento */
+  position: relative;
+}
+
+.containerResultFinal {
+  width: 100vw;
+  height: 100vh;
+  // display: flex;
+  flex-direction: column; // Para que la cabecera quede arriba y el contenido se alinee debajo
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  overflow: hidden;
+  position: relative;
+}
+
+.result-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  color: white;
+  overflow: hidden; /* Evita scroll innecesario */
+  position: relative;
+  justify-content: flex-start;
+}
+
+/* Cabecera superior con fondo rojo */
+.header {
+  width: 100%;
+  background-color: #153f7f;
+  padding: 10px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  height: 69px;
+}
+
+.fondo {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+.card {
+  position: relative;
+  z-index: 1;
+  max-width: 90vw;
+  width: 400px;
+  text-align: center;
+}
+
+.clarologo {
+  width: 130px;
+}
+
+.title {
+  font-size: 34px;
+  font-weight: bold;
+}
+
+.subtitle {
+  color: red;
+  font-size: 25px;
+  font-weight: 800;
+  margin-bottom: 15px;
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+
+/* SELECT con estilo de botón rojo */
+.select-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+
+  select {
+    width: 350px;
+    height: 57px;
+    background-color: #153f7f;
+    color: #fff;
+    font-weight: bold;
+    font-size: 25px;
+    border: 2px solid white;
+    border-radius: 15px;
+    text-align: center;
+    cursor: pointer;
+    /* Quita el borde y el “outline” por defecto */
+    outline: none;
+    appearance: none; /* Quita la flecha nativa en algunos navegadores */
+
+    box-sizing: border-box;
+    /* Centrar el texto */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Flecha custom */
+  position: relative;
+  select::after {
+    content: "▼";
+    color: #fff;
+    position: absolute;
+    right: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+}
+
+/* Flecha custom para el select */
+.select-container .select-arrow {
+  position: absolute;
+  right: 43px;
+  top: 54%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #fff;
+  font-size: 18px;
+}
+
+.avatar-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.avatar-container.cam {
+  width: 350px;
+  height: 350px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  margin: 0 auto;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.fotoCapturada {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+form {
+  width: 65%;
+  margin: 0 auto;
+  height: 230px;
+}
+
+.label {
+  width: 100%;
+  display: block;
+  text-align: left;
+  font-size: 12px;
+  margin-bottom: 5px;
+  margin: 10px auto;
+  font-weight: 800;
+  letter-spacing: 3px;
+}
+
+.input {
+  max-width: 100%;
+  width: 92%;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #fff;
+  color: black;
+  border: 1px solid #555;
+  font-size: 14px;
+}
+
+.button {
+  width: 200px;
+  height: 57px;
+  // background: url(../../assets/img/boton.png);
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-color: #153f7f;
+  color: white;
+  font-weight: bold;
+  padding: 10px;
+  margin-top: 15px;
+  border-radius: 15px;
+  border: 2px solid white;
+  cursor: pointer;
+  // border: none;
+  font-size: 25px;
+}
+
+.button:hover {
+  box-shadow: 0px 4px 10px rgba(255, 0, 0, 0.3);
+}
+
+.result {
+  width: 80%;
+  margin: 0 auto;
+  text-align: left;
+  height: 100px;
+
+  .result-text {
+    color: white;
+    font-size: 11px;
+  }
+}

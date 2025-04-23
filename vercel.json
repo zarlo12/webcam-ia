@@ -1,0 +1,15 @@
+{
+  "redirects": [
+    {
+      "source": "/aviso",
+      "destination": "/aviso.html",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/((?!aviso\\.html).*)",
+      "destination": "/index.html"
+    }
+  ]
+}

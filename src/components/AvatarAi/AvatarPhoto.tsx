@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import "./AvatarPhoto.scss";
 // import fondo from "../../assets/img/fondo.png";
 import logo from "../../assets/img/logoScotia.png";
+import logoVigilado from "../../assets/img/vigilado.png";
 import WebcamScene from "../WebcamScene";
 import axios from "axios";
 import Swal from "sweetalert2"; // Import sweetalert2
@@ -96,69 +97,81 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
       </div>
 
       {/* <img src={fondo} alt="Fondo" className="fondo" /> */}
-      <div className="card">
-        <h2 className="subtitle">AVATAR AI</h2>
-        <div className="avatar-container cam">
-          {capturedImageUrl ? (
-            // Si ya se capturó la imagen, se muestra la imagen fija
-            <img
-              src={capturedImageUrl}
-              alt="Foto capturada"
-              className="fotoCapturada"
-            />
-          ) : (
-            // Si no, se muestra el feed en vivo de la cámara
-            <WebcamScene ref={webcamRef} />
-          )}
-        </div>
-
-        <div className="buttons-container">
-          {/* SELECT "Selecciona tu sueño" */}
-          <div className="select-container">
-            <select
-              value={selectedDream}
-              onChange={(e) => {
-                const dream = e.target.value;
-                setSelectedDream(dream);
-                onDreamChange(dream); // Llama al callback para elevar la selección
-              }}
-            >
-              <option value="" disabled>
-                Selecciona tu Profesión
-              </option>
-              <option value="Gastronómico">Gastronómico</option>
-              <option value="Administrativo">Administrativo</option>
-              <option value="Experto en TIC">Experto en TIC</option>
-              <option value="Experto en logística">Experto en logística</option>
-              <option value="Regente de Farmacia">Regente de Farmacia</option>
-              <option value="Experto en SST">Experto en SST</option>
-            </select>
-            <span className="select-arrow">▼</span>
+      <div className="main-content">
+        <div className="card">
+          <h2 className="subtitle">AVATAR AI</h2>
+          <div className="avatar-container cam">
+            {capturedImageUrl ? (
+              // Si ya se capturó la imagen, se muestra la imagen fija
+              <img
+                src={capturedImageUrl}
+                alt="Foto capturada"
+                className="fotoCapturada"
+              />
+            ) : (
+              // Si no, se muestra el feed en vivo de la cámara
+              <WebcamScene ref={webcamRef} />
+            )}
           </div>
 
-          <button
-            type="button"
-            className="button button-camera"
-            onClick={capturedImageUrl ? handleResetCapture : handleCapture}
-          >
-            <div
-              style={{
-                // display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                width: "100%",
-              }}
-            >
-              {/* <FaCamera size={38} style={{ marginRight: "8px" }} /> */}
-              {capturedImageUrl ? "Tomar otra" : "Tomar foto"}
+          <div className="buttons-container">
+            {/* SELECT "Selecciona tu sueño" */}
+            <div className="select-container">
+              <select
+                value={selectedDream}
+                onChange={(e) => {
+                  const dream = e.target.value;
+                  setSelectedDream(dream);
+                  onDreamChange(dream); // Llama al callback para elevar la selección
+                }}
+              >
+                <option value="" disabled>
+                  Selecciona tu Profesión
+                </option>
+                <option value="Gastronómico">Gastronómico</option>
+                <option value="Administrativo">Administrativo</option>
+                <option value="Experto en TIC">Experto en TIC</option>
+                <option value="Experto en logística">
+                  Experto en logística
+                </option>
+                <option value="Regente de Farmacia">Regente de Farmacia</option>
+                <option value="Experto en SST">Experto en SST</option>
+              </select>
+              <span className="select-arrow">▼</span>
             </div>
-          </button>
+
+            <button
+              type="button"
+              className="button button-camera"
+              onClick={capturedImageUrl ? handleResetCapture : handleCapture}
+            >
+              <div
+                style={{
+                  // display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  width: "100%",
+                }}
+              >
+                {/* <FaCamera size={38} style={{ marginRight: "8px" }} /> */}
+                {capturedImageUrl ? "Tomar otra" : "Tomar foto"}
+              </div>
+            </button>
+          </div>
+          <form onSubmit={handleSubmit}>
+            <button
+              type="submit"
+              className="button"
+              disabled={!capturedImageUrl}
+            >
+              Enviar
+            </button>
+          </form>
         </div>
-        <form onSubmit={handleSubmit}>
-          <button type="submit" className="button" disabled={!capturedImageUrl}>
-            Enviar
-          </button>
-        </form>
+      </div>
+
+      <div className="footerAlways">
+        <img src={logoVigilado} alt="Logo Vigilado" className="logo" />
       </div>
     </div>
   );

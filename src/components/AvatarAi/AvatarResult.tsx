@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./AvatarPhoto.scss";
 import logo from "../../assets/img/logoScotia.png";
-
+import logoVigilado from "../../assets/img/vigilado.png";
 import { storage, db } from "../../firebaseConfig";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { collection, addDoc } from "firebase/firestore";
@@ -71,28 +71,34 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
         <img src={logo} alt="Logo Scotia" className="logo-scotia" />
       </div>
 
-      <div className="result-wrapper">
-        <div className="card">
-          <h2 className="subtitle">
-            Comparte en redes sociales etiqueta @colsubsidio
-          </h2>
-          <div className="avatar-container">
-            <img
-              src={uploadedImageUrl}
-              className="avatar"
-              alt="Avatar generado"
-            />
+      <div className="main-content">
+        <div className="result-wrapper">
+          <div className="card">
+            <h2 className="subtitle">
+              Comparte en redes sociales etiqueta @cetcolsubsidio
+            </h2>
+            <div className="avatar-container">
+              <img
+                src={uploadedImageUrl}
+                className="avatar"
+                alt="Avatar generado"
+              />
+            </div>
+            <h2 className="subtitle">¡Descarga la imagen en tu correo!</h2>
+            <button
+              type="button"
+              className="button"
+              onClick={onReset}
+              style={{ width: "250px" }}
+            >
+              Empezar de nuevo
+            </button>
           </div>
-          <h2 className="subtitle">¡Descarga la imagen en tu correo!</h2>
-          <button
-            type="button"
-            className="button"
-            onClick={onReset}
-            style={{ width: "250px" }}
-          >
-            Empezar de nuevo
-          </button>
         </div>
+      </div>
+
+      <div className="footerAlways">
+        <img src={logoVigilado} alt="Logo Vigilado" className="logo" />
       </div>
     </div>
   );

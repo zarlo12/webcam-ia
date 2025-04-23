@@ -13,10 +13,8 @@
 .containerResultFinal {
   width: 100vw;
   height: 100vh;
-  // display: flex;
-  flex-direction: column; // Para que la cabecera quede arriba y el contenido se alinee debajo
-  align-items: center;
-  justify-content: center;
+  display: flex; /* 💡 descomenta esto */
+  flex-direction: column; /* ya lo tenías */
   background-color: white;
   overflow: hidden;
   position: relative;
@@ -236,4 +234,21 @@ form {
     color: white;
     font-size: 11px;
   }
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.footerAlways {
+  width: 100%;
+  background-color: #153f7f;
+  padding: 10px 0;
+  display: flex;
+  justify-content: end;
+  align-items: center;
 }

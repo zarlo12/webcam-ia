@@ -123,7 +123,9 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
                 onDreamChange(dream); // Llama al callback para elevar la selección
               }}
             >
-              <option value="">Selecciona tu profesión</option>
+              <option value="" disabled>
+                Selecciona tu profesión
+              </option>
               <option value="Gastronómico">Gastronómico</option>
               <option value="Administrativo">Administrativo</option>
               <option value="experto en TIC">experto en TIC</option>

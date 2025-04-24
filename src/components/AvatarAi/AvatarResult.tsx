@@ -74,9 +74,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
       <div className="main-content">
         <div className="result-wrapper">
           <div className="card">
-            <h2 className="subtitle">
-              Comparte en redes sociales etiqueta @cetcolsubsidio
-            </h2>
+            <h2 className="subtitle">Soy lo que sueño ser</h2>
             <div className="avatar-container">
               <img
                 src={uploadedImageUrl}
@@ -84,7 +82,11 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
                 alt="Avatar generado"
               />
             </div>
-            <h2 className="subtitle">¡Descarga la imagen en tu correo!</h2>
+            <h2 className="subtitle">
+              Descarga la imagen desde tu correo y comparte en redes sociales.
+              <br />
+              Etiqueta @cetcolsubsidio en Instagram.
+            </h2>
             <button
               type="button"
               className="button"

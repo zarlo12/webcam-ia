@@ -94,7 +94,7 @@ function MainApp() {
         } catch (error) {
           console.error("Error al obtener la imagen:", error);
         }
-      }, 4000); // Consulta cada 5 segundos
+      }, 7000); // Consulta cada 5 segundos
     }
 
     return () => {

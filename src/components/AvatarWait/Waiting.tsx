@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./Waiting.scss";
 import logo from "../../assets/img/logoScotia.png";
 import logoVigilado from "../../assets/img/vigilado.png";
@@ -9,14 +9,14 @@ interface WaitingProps {
   nombre: string;
   cedula: string;
   imagenGenerada: boolean;
-  imageUrl: string; // Nuevo prop para la URL de la imagen a fusionar
+  imageUrl: string;
   tipoSuenio: string;
   onEmailChange: (email: string) => void;
   onNombreChange: (nombre: string) => void;
   onCedulaChange: (cedula: string) => void;
   onConsentimientoChange: (consentimiento: string) => void;
   onShowPolicy: () => void;
-  onContinue: (mergedUrl: string) => void; // Se recibe la URL fusionada
+  onContinue: (mergedUrl: string) => void;
 }
 
 const Waiting: React.FC<WaitingProps> = ({
@@ -31,33 +31,39 @@ const Waiting: React.FC<WaitingProps> = ({
   onShowPolicy,
   onContinue,
 }) => {
-  // Controlamos que el merge se ejecute solo una vez
   const [mergedImage, setMergedImage] = useState<string | null>(null);
   const hasMergedRef = useRef(false);
+
+  // Cargar el script de Tally al montar el componente
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://tally.so/widgets/embed.js";
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   const handleMerged = async (dataUrl: string) => {
     if (hasMergedRef.current) return;
     hasMergedRef.current = true;
     setMergedImage(dataUrl);
-    // Una vez terminado el merge, redirigimos automáticamente a AvatarResult
     onContinue(dataUrl);
   };
 
   return (
     <div className="waiting-container">
-      {/* Barra roja superior con el logo */}
       <div className="header-bar">
         <img src={logo} alt="Logo Scotia" className="logo-scotia" />
       </div>
 
-      {/* Tarjeta de contenido */}
       <div className="main-content">
         <div className="waiting-card">
           <h2 className="subtitle">Avatar IA</h2>
 
-          {imagenGenerada ? (
+          {imagenGenerada && (
             <div className="avatar-container-ready">
-              {/* Si no se ha ejecutado el merge, y existe imageUrl, lo lanzamos */}
               {!mergedImage && imageUrl && (
                 <MergeImage
                   imageUrl={imageUrl}
@@ -66,20 +72,19 @@ const Waiting: React.FC<WaitingProps> = ({
                 />
               )}
             </div>
-          ) : (
-            ""
           )}
 
-          <div className="avatar-container-wait">
-            <p className="waiting-text">
-              Espera...
-              <br /> ¡A segundos de
-              <br /> cumplir tus
-              <br /> metas!
-            </p>
-          </div>
+          {!imagenGenerada && (
+            <div className="avatar-container-wait">
+              <p className="waiting-text">
+                Espera...
+                <br /> ¡A segundos de
+                <br /> cumplir tus
+                <br /> metas!
+              </p>
+            </div>
+          )}
 
-          {/* Formulario de datos */}
           <form className="waiting-form">
             <input
               type="text"
@@ -99,19 +104,13 @@ const Waiting: React.FC<WaitingProps> = ({
               required
             />
 
-            {/* <input
-            type="text"
-            placeholder="Cédula"
-            value={cedula}
-            onChange={(e) => onCedulaChange(e.target.value)}
-            className="input"
-            required
-          /> */}
-
             <button
               type="button"
               className="button"
               style={{ width: "284px", margin: "20px 0 0 0" }}
+              data-tally-open="3jgB21"
+              data-tally-emoji-text="👋"
+              data-tally-emoji-animation="wave"
             >
               Test vocacional
             </button>

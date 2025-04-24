@@ -88,184 +88,314 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
         <button style={closeButtonStyle} onClick={onBack} aria-label="Cerrar">
           &times;
         </button>
-        <h2 style={titleStyle}>CONSENTIMIENTO PREVIO</h2>
-        <p style={textStyle}>
-          En relación con la Ley 81 del 26 de marzo del 2019 de Protección de
-          Datos Personales y al Acuerdo No. 001-2022 de 24 de febrero de 2022
-          “Que establece lineamientos especiales para la protección de datos
-          personales tratados por las entidades bancarias”, por este medio
-          autorizo expresamente a <strong>THE BANK OF NOVA SCOTIA</strong> para
-          que, de conformidad con la ley antes mencionada, con respecto a los
-          datos e información de mi persona, capte, obtenga, solicite, recopile,
-          registre, organice, estructure, almacene, conserve, adapte o
-          modifique, según lo que permita u ordene la ley; extraiga, consulte,
-          utilice, comunique, transmita, intercambie, comparta, difunda (en
-          aquellos casos en los que la ley lo permita u ordene), limite, suprima
-          o destruya (en aquellos datos en los que la ley lo permita u ordene) y
-          en cualquier otra forma, trate dichos datos con respecto a las
-          relaciones que mantengo o mantenga en el futuro con{" "}
-          <strong>THE BANK OF NOVA SCOTIA</strong> y que sirvan para los fines
-          específicos que se indican más adelante.
-          <br />
-          <br />
-          Este consentimiento permite la transferencia transfronteriza de los
-          datos antes indicados. Para los efectos establecidos en la Ley 81 del
-          2019, los fines para los cuales se otorga la autorización en este
-          documento son los que se indican a continuación y, en consecuencia,{" "}
-          <strong>THE BANK OF NOVA SCOTIA</strong> quedará autorizado a lo
-          siguiente, en adición a cualquier autorización otorgada por la Ley:
-          <br />
-          <br />• Ofrecerme productos financieros, servicios de cualquier tipo,
-          promociones o campañas con base en la información que mantengo o
-          mantenga con <strong>THE BANK OF NOVA SCOTIA</strong>, subsidiarias o
-          afiliadas, ya sea de crédito, cuentas pasivas o de servicios prestados
-          por <strong>THE BANK OF NOVA SCOTIA</strong>, subsidiarias o
-          afiliadas.
-          <br />
-          <br />• Realizar análisis internos de los clientes de{" "}
-          <strong>THE BANK OF NOVA SCOTIA</strong>, ya sea para fines de
-          mercadeo, negocios, reportes, análisis de riesgo, cumplimiento,
-          análisis de crédito, análisis estratégicos, fines estadísticos,
-          elaboración de perfiles/segmentaciones y auditorías internas.
-          <br />
-          <br />
-          • Para mi localización en caso de requerir la actualización de la
-          información de mi persona.
-          <br />
-          <br />• Envío y/o recepción de cualquier tipo de datos a socios
-          comerciales de <strong>THE BANK OF NOVA SCOTIA</strong> y de
-          comunicación por cualquier medio, incluyendo el envío de
-          comunicaciones a través de personas o empresas subcontratadas por{" "}
-          <strong>THE BANK OF NOVA SCOTIA</strong> para dicho propósito.
-          <br />
-          <br />
-          • Realización de gestiones de cobranza, atención de reclamos y
-          consultas, gestiones para mi localización para el mantenimiento de
-          información actualizada según las políticas de “Conozca a su Cliente”,
-          seguimiento post venta.
-          <br />
-          <br />• Transmisión y suministro de datos para los efectos de
-          servicios prestados por proveedores externos, como fiduciarias,
-          contadores, abogados, seguros, entre otros, que sean necesarios para
-          perfeccionar los contratos de productos o servicios bancarios
-          suscritos con <strong>THE BANK OF NOVA SCOTIA</strong>, subsidiarias o
-          afiliadas.
-          <br />
-          <br />
-          • Transmisión de datos para los efectos de reportes regulatorios a
-          entidades del Estado.
-          <br />
-          <br />
-          • Utilizar mis datos para la aplicación de procedimientos científicos,
-          matemáticos, algorítmicos, o de cualquiera otra índole similar que
-          sean necesarios para proporcionar cualquier tipo de puntuación o
-          índice, la determinación de hábitos o comportamiento de consumo y para
-          elaborar estudios de mercado.
-          <br />
-          <br />
-          • La transferencia y suministro de datos en caso de venta de carteras
-          de cualquier tipo.
-          <br />
-          <br />
-          Mis datos podrán ser transferidos en forma local o transfronteriza a
-          cualquier entidad relacionada al grupo de{" "}
-          <strong>THE BANK OF NOVA SCOTIA</strong> o a proveedores externos de{" "}
-          <strong>THE BANK OF NOVA SCOTIA</strong>, siempre que los datos
-          enviados a tales proveedores externos sean necesarios para los fines
-          indicados anteriormente.
-          <br />
-          <br />
-          Entiendo que, como titular de los datos personales, tengo, con los
-          límites y excepciones establecidas en la ley, los denominados Derechos
-          ARCO; a saber:
-          <br />
-          <br />
-          • Derecho de acceso, es decir, el derecho a solicitar confirmación
-          sobre mis datos que están recibiendo tratamiento y, en caso de que
-          exista tratamiento, el derecho a conocer los fines del tratamiento,
-          qué tipo de datos están siendo tratados, destinatarios del tratamiento
-          o categorías de destinatarios a los que se les han comunicado estos,
-          así como el plazo previsto de conservación de los mismos.
-          <br />
-          <br />• Derecho de rectificación, es decir, el derecho a que se
-          rectifique cualquier dato que <strong>
-            THE BANK OF NOVA SCOTIA
-          </strong>{" "}
-          mantenga y que sea corregido en caso de que esté incorrecto,
-          irrelevante, incompleto, desfasado, inexacto, falso o impertinente.
-          <br />
-          <br />
-          • Derecho de cancelación, es decir, el derecho a solicitar la
-          eliminación de mis datos personales incorrectos, irrelevantes,
-          incompletos, desfasados, inexactos, falsos o impertinentes.
-          <br />
-          <br />
-          • Derecho de oposición, es decir, el derecho por motivos fundados y
-          legítimos relacionados con una situación en particular, que me
-          permiten negarme a proporcionar mis datos personales o que sean objeto
-          de un determinado tratamiento, así como a revocar mi consentimiento.
-          <br />
-          <br />
-          • Derecho de portabilidad, es decir, el derecho a obtener una copia de
-          mis datos en forma estructurada, en formato genérico y de uso común,
-          con las excepciones establecidas en la ley.
-          <br />
-          <br />
-          Entiendo que puedo ejercer estos derechos escribiendo un correo
-          electrónico con mi solicitud específica al Oficial de Protección de
-          Datos de <strong>THE BANK OF NOVA SCOTIA</strong>, cuyo correo es:{" "}
-          <a href="mailto:pa.privacidad@pa.scotiabank">
-            pa.privacidad@pa.scotiabank
-          </a>
-          .
-          <br />
-          <br />
-          En caso de tener alguna disconformidad relacionada con el tratamiento
-          de mis datos personales, entiendo que puedo presentar ante{" "}
-          <strong>THE BANK OF NOVA SCOTIA</strong> un reclamo o queja. En caso
-          de que <strong>THE BANK OF NOVA SCOTIA</strong> no atienda mi
-          solicitud o en caso de que la respuesta no me satisfaga, entiendo que
-          tengo el derecho de interponer un reclamo ante la Superintendencia de
-          Bancos, según se establece en la ley y los acuerdos bancarios
-          correspondientes.
-          <br />
-          <br />
-          Para los efectos indicados en la ley, el responsable de los datos es{" "}
-          <strong>THE BANK OF NOVA SCOTIA</strong> y para someter su reclamo a{" "}
-          <strong>THE BANK OF NOVA SCOTIA</strong>, o bien, para realizar
-          cualquier consulta relacionada con el tratamiento de sus datos, lo
-          podrá hacer personalmente en alguna de nuestras sucursales o a nuestro
-          Centro de Atención Telefónica TeleScotia al{" "}
-          <strong>800-2000 (local)</strong> /{" "}
-          <strong>(507) 297-5400 (internacional)</strong> o visitándonos en
-          cualquiera de nuestras sucursales.
-          <br />
-          <br />
-          Entiendo que al firmar la presente autorización, la misma aplica para
-          las relaciones contractuales que mantenga ahora o en el futuro con{" "}
-          <strong>THE BANK OF NOVA SCOTIA</strong>.
-          <br />
-          <br />
-          Igualmente, entiendo que <strong>THE BANK OF NOVA SCOTIA</strong>{" "}
-          tiene una Política de Privacidad de los datos personales a la que
-          puedo acceder en el sitio web:{" "}
-          <a
-            href="https://www.scotiabank.com.pa"
-            target="_blank"
-            rel="noreferrer"
-          >
-            www.scotiabank.com.pa
-          </a>
-          , donde puedo obtener información completa sobre el tipo de datos que
-          se recopilan y el tratamiento que se les da.
-          <br />
-          <br />
-          Entiendo que el plazo máximo durante el cual se podrán conservar los
-          datos personales es de <strong>siete (7) años</strong>, contados a
-          partir de la fecha en que se terminó la obligación legal de
-          conservarlos, sin perjuicio de que se puedan eliminar en un plazo
-          menor.
-        </p>
+
+        <section>
+          <h1 style={titleStyle}>
+            AUTORIZACIÓN PARA EL TRATAMIENTO DE DATOS PERSONALES
+          </h1>
+          <p style={textStyle}>
+            Autorizo expresamente de manera libre, previa, voluntaria y
+            debidamente informada a la Corporación Tecnológica La CET (en
+            adelante la “CET”), -, identificada con el NIT 900.401.526-8,
+            localizada en la Carrera 11 No.65-30 de la ciudad de Bogotá (en
+            adelante “CET”), quien actúa en calidad de responsable en los
+            términos de la regulación aplicable, para que lleve a cabo el
+            tratamiento de mis datos personales o los datos personales del menor
+            de edad que represento.
+          </p>
+          <p style={textStyle}>
+            Los datos personales sobre los que recae la presente autorización
+            son aquellos relativos al nombre, apellidos y mis datos de
+            identificación, fecha de expedición del documento de identidad,
+            datos de ubicación y contacto como direcciones físicas,
+            electrónicas, números telefónicos y de celular, datos relacionados
+            con el género y la edad, fecha de nacimiento, gustos y preferencias,
+            datos socioeconómicos, información relativa a la ubicación del
+            dispositivo utilizado para llevar a cabo la navegación en internet,
+            cookies, entendidos como una pequeña cantidad de datos que
+            generalmente incluye un identificador único anónimo que es enviado
+            al computador o dispositivo usado para la navegación y que es
+            almacenado en el disco duro con el fin de salvaguardar mis
+            preferencias de navegación, y datos de naturaleza sensible tales
+            como datos biométricos, de la imagen del rostro y de menores de
+            edad.
+          </p>
+          <p style={textStyle}>
+            En ese sentido, autorizo que el tratamiento de mis datos personales,
+            o de los datos personales del menor de edad que represento, se lleve
+            a cabo por parte de la CET para la prestación de todos los
+            servicios. Asimismo, manifiesto conocer que la CET cuenta con una
+            variedad de servicios, tales como: educación y cultura para que en
+            el desarrollo de las mismas lleve a cabo el tratamiento de los datos
+            personales suministrados, particularmente para que se sirva:
+            recolectar, almacenar, usar, circular, suprimir, procesar, compilar,
+            intercambiar, actualizar, transmitir dentro o fuera del territorio
+            nacional, y disponer de los datos que sean suministrados por mí, así
+            como para transferir dichos datos de manera total o parcial, dentro
+            o fuera del territorio nacional a las personas jurídicas en las
+            cuales tenga participación accionaria o de capital y entidades
+            vinculadas, así como a sus aliados comerciales estratégicos con
+            fines administrativos, comerciales y de mercadeo para el envío de
+            información sobre los diferentes servicios, siempre ligándose a las
+            finalidades que son autorizadas, y en especial para el envío de
+            información sobre campañas, promociones o concursos de carácter
+            comercial y publicitario, invitaciones a eventos de la CET o de
+            terceros, evaluar la calidad de los servicios prestados, realizar
+            estudios o investigaciones de mercado, comercialización de servicios
+            y productos a través de los diferentes canales de información,
+            transmitir los datos personales sea dentro o fuera del territorio
+            nacional con el fin de cumplir con las finalidades aquí descritas
+            así como para adelantar los procedimientos pertinentes de
+            autenticación de identidad y prevención de actividades fraudulentas
+            y demás actividades de seguridad y confidencialidad requeridas.
+          </p>
+          <p style={textStyle}>
+            Autorizo igualmente el tratamiento de mis datos personales, o de los
+            datos personales del menor de edad que represento, para actividades
+            de almacenamiento de la información suministrada en atención a la
+            regulación vigente en la materia, entregar los datos a entidades
+            gubernamentales cuando estas así lo soliciten, llevar a cabo
+            consultas y reportes en operadores de información financiera, dar
+            cumplimiento a la normatividad relevante a las actividades que
+            comprenden las actividades de la CET y atender requerimientos
+            administrativos y judiciales cuando así se requiera.
+          </p>
+          <p style={textStyle}>
+            Autorizo el envío de comunicaciones utilizando mis datos de
+            contactos, tales como: número de teléfono móvil, correo electrónico,
+            redes sociales, dirección de correspondencia, teléfonos fijos, o
+            cualquier otro medio de contacto que permita la tecnología.
+          </p>
+          <p style={textStyle}>
+            Reconozco que fui informado que para los casos en los que se trate
+            de la recolección y tratamiento de datos de naturaleza sensible,
+            incluidos los de menores de edad, y no estoy obligado a autorizar su
+            tratamiento y también acerca de la información que será objeto de
+            tratamiento y las finalidades de ello. Así mismo, reconozco que
+            ninguna actividad que adelante la CET está condicionada al
+            suministro de mi información sensible.
+          </p>
+          <p style={textStyle}>
+            En caso de que el Titular de la información sea un menor de edad se
+            resalta que el tratamiento de su información cumple con los
+            siguientes parámetros:
+          </p>
+          <ul>
+            <li>
+              Se responde y respeta el interés superior de los niños, niñas y
+              adolescentes.
+            </li>
+            <li>Se asegura el respeto de sus derechos fundamentales.</li>
+            <li>
+              La autorización del menor de edad, concedida por sus padres o
+              tutores, ha sido otorgada previo ejercicio del menor de su derecho
+              a ser escuchado, opinión que es valorada teniendo en cuenta la
+              madurez, autonomía y capacidad para entender el asunto.
+            </li>
+            <li>
+              Se resalta que la CET vela por el uso adecuado de los datos
+              personales del menor de edad, de acuerdo con los principios y
+              obligaciones establecidos en la Ley 1581 de 2012 y el Decreto 1074
+              de 2015.
+            </li>
+          </ul>
+          <p style={textStyle}>
+            Acepto y reconozco que los datos suministrados serán sometidos a los
+            fines establecidos anteriormente conforme a la Ley 1581 de 2012, el
+            Decreto 1377 de 2013, el Decreto 1074 de 2015 y demás regulación que
+            haga sus veces.
+          </p>
+          <p style={textStyle}>
+            Fui informado de que podré consultar la Política de Tratamiento de
+            Datos Personales de CET en este enlace
+            <a href="https://cetcolsubsidio.edu.co/" target="_blank">
+              https://cetcolsubsidio.edu.co/
+            </a>
+            y elevar cualquier solicitud, petición, queja o reclamo a través de:
+            líneas de servicio al cliente de CET: (601) 7458227, en Bogotá al
+            WhatsApp 314 727 7545, correo electrónico:
+            <a href="mailto:servicioalcliente@cetcolsubsidio.edu.co">
+              servicioalcliente@cetcolsubsidio.edu.co
+            </a>
+            o personalmente.
+          </p>
+          <p style={textStyle}>
+            Entiendo además que podré ejercer, en cualquier momento, mis
+            derechos como titular de los datos personales, consagrados en el
+            artículo 8 de la Ley 1581 de 2012, como lo son conocer, actualizar,
+            rectificar, modificar, acceder, solicitar la supresión de mis datos
+            personales, o revocar la autorización otorgada, salvo que exista
+            algún deber legal o contractual que obligue a la CET a que la
+            información permanezca en sus bases de datos, o por estricta orden
+            judicial.
+          </p>
+          <p style={textStyle}>
+            En virtud de lo anterior, manifiesto que soy titular de los datos
+            personales proporcionados a la CET, o representante del menor de
+            edad que otorga sus datos personales, y autorizo su tratamiento.
+          </p>
+        </section>
+
+        <section>
+          <h2 style={titleStyle}>AVISO DE PRIVACIDAD</h2>
+          <p style={textStyle}>
+            La Corporación Tecnológica CET (en adelante “CET”), -, identificada
+            con el NIT 900.401.526-8, localizada en la Carrera 11 No.65-30 de la
+            ciudad de Bogotá declara que como responsable de la información
+            protege los datos suministrados por los titulares de la información
+            en virtud de lo dispuesto en la Ley 1581 de 2012, el Decreto 1377 de
+            2013, y el Decreto 1074 del 2015, e informa a éstos que los datos
+            personales serán utilizados en los términos dados en la autorización
+            por su titular. Dicho tratamiento podrá realizarse directamente por
+            la CET y/o por el tercero que éste determine.
+          </p>
+          <p style={textStyle}>La CET se permite informar que:</p>
+          <ul>
+            <li>
+              Garantiza a los titulares de los datos personales la privacidad,
+              confidencialidad y seguridad de los datos entregados, evitando la
+              adulteración, pérdida, consulta, uso o acceso no autorizado o
+              fraudulento por parte de terceros.
+            </li>
+            <li>
+              Tratará los datos personales para la prestación de todos los
+              servicios y para recolectar, almacenar, usar, circular, suprimir,
+              procesar, compilar, intercambiar, actualizar, transmitir dentro o
+              fuera del territorio nacional, y disponer de los datos que sean
+              suministrados, así como para transferir dichos datos de manera
+              total o parcial, dentro o fuera del territorio nacional a las
+              personas jurídicas en las cuales tenga participación accionaria o
+              de capital y entidades vinculadas, así como a sus aliados
+              comerciales estratégicos con fines administrativos, comerciales y
+              de mercadeo para el envío de información sobre los diferentes
+              programas y servicios, siempre ligándose a las finalidades que son
+              autorizadas, y en especial para el envío de información sobre
+              campañas, promociones o concursos de carácter comercial y
+              publicitario, invitaciones a eventos de LA CET o de terceros,
+              evaluar la calidad de los servicios prestados, realizar estudios o
+              investigaciones de mercado, comercialización de servicios y
+              productos a través de los diferentes canales de información,
+              transmitir los datos personales sea dentro o fuera del territorio
+              nacional con el fin de cumplir con las finalidades aquí descritas
+              así como para adelantar los procedimientos pertinentes de
+              autenticación de identidad y prevención de actividades
+              fraudulentas y demás actividades de seguridad y confidencialidad.
+            </li>
+            <li>
+              La información será tratada para actividades de almacenamiento de
+              la información suministrada en atención a la regulación vigente en
+              la materia, entregar los datos a entidades gubernamentales cuando
+              estas así lo soliciten, llevar a cabo consultas y reportes en
+              operadores de información financiera, dar cumplimiento a la
+              normatividad relevante a las actividades que comprenden las
+              actividades de la CET y atender requerimientos administrativos y
+              judiciales cuando así se requiera.
+            </li>
+            <li>
+              Recolectará datos de naturaleza sensible, y que, por ello, el
+              titular no está obligado a autorizar su tratamiento. El titular es
+              igualmente informado acerca de las finalidades en el tratamiento
+              de ese tipo de información y que ninguna actividad que adelante LA
+              CET está condicionada al suministro de información sensible.
+            </li>
+          </ul>
+          <p style={textStyle}>Los titulares tienen los siguientes derechos:</p>
+          <ul>
+            <li>
+              Conocer, actualizar y rectificar sus datos personales frente a la
+              CET y/o al tercero que éste determine.
+            </li>
+            <li>
+              Solicitar prueba de la autorización otorgada, teniendo en cuenta
+              lo dispuesto en el numeral b del art. 8 de la Ley 1581 de 2012.
+            </li>
+            <li>
+              Presentar ante la Superintendencia de Industria y Comercio quejas,
+              solicitudes y reclamos relacionados con el cumplimiento de las
+              normas sobre protección de datos personales.
+            </li>
+            <li>
+              Revocar la autorización y/o solicitar ante la Superintendencia de
+              Industria y Comercio la supresión del dato cuando en el
+              tratamiento no se respeten los principios, derechos y garantías
+              constitucionales y legales. La solicitud de supresión de la
+              información y la revocatoria de la autorización no procederán
+              cuando el titular tenga un deber legal o contractual de permanecer
+              en las bases de datos de la CET.
+            </li>
+            <li>Acceder en forma gratuita a sus datos personales.</li>
+            <li>
+              Ser informado, previa solicitud, respecto del uso que se le ha
+              dado a sus datos personales.
+            </li>
+          </ul>
+          <p style={textStyle}>
+            Los titulares podrán consultar la Política de Tratamiento de Datos
+            Personales de LA CET en el link:
+            <a href="https://cetcolsubsidio.edu.co/" target="_blank">
+              https://cetcolsubsidio.edu.co/
+            </a>
+            y elevar cualquier solicitud, petición, queja o reclamo a través de:
+          </p>
+          <ul>
+            <li>Línea audio-servicios Bogotá: (601) 7458227</li>
+            <li>
+              Página web:
+              <a href="https://cetcolsubsidio.edu.co/" target="_blank">
+                cetcolsubsidio.edu.co
+              </a>
+            </li>
+            <li>
+              Correo electrónico:
+              <a href="mailto:servicioalcliente@cetcolsubsidio.edu.co">
+                servicioalcliente@cetcolsubsidio.edu.co
+              </a>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 style={titleStyle}>
+            AUTORIZACIÓN LEY 2300 DE 2023 “DERECHO A LA INTIMIDAD DE LOS
+            CONSUMIDORES”
+          </h2>
+          <p style={textStyle}>
+            Autorizo expresamente de manera libre, previa, voluntaria y
+            debidamente informada a la Corporación Tecnológica CET (en adelante
+            la “CET”), -, identificada con el NIT 900.401.526-8, localizada en
+            la Carrera 11 No.65-30 de la ciudad de Bogotá para contactarme a
+            través de mensajes cortos de texto (SMS), WhatsApp, correos
+            electrónicos o llamadas telefónicas y/o cualquier otro canal que la
+            CET disponga e informe previamente para el efecto, con el fin de
+            realizar gestiones de cobranzas y/o enviarme información de carácter
+            comercial y/o publicitario, relacionada con campañas, promociones,
+            concursos, invitaciones a eventos de la CET o de terceros, evaluar
+            la calidad de los servicios prestados, realizar estudios o
+            investigaciones de mercado, comercialización de servicios o
+            productos, entre otros.
+          </p>
+          <p style={textStyle}>
+            Declaro que he sido informado que en caso de que requiera ser
+            contactado en horarios distintos deberé manifestarlo expresamente a
+            la CET, a través de las líneas de servicio al cliente CET:
+          </p>
+          <ul>
+            <li>Bogotá: (601) 7458227</li>
+            <li>
+              Página web:
+              <a href="https://cetcolsubsidio.edu.co/" target="_blank">
+                https://cetcolsubsidio.edu.co/
+              </a>
+            </li>
+            <li>
+              Correo electrónico:
+              <a href="mailto:servicioalcliente@cetcolsubsidio.edu.co">
+                servicioalcliente@cetcolsubsidio.edu.co
+              </a>
+            </li>
+          </ul>
+        </section>
+
         {showBackButton && (
           <button style={buttonStyle} onClick={onBack}>
             Volver

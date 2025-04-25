@@ -27,6 +27,7 @@ function MainApp() {
   const [email, setEmail] = useState("");
   const [nombre, setNombre] = useState("");
   const [cedula, setCedula] = useState("");
+  const [celular, setCelular] = useState("");
   const [consentimiento, setConsentimiento] = useState("");
   const [imagenGenerada, setImagenGenerada] = useState(false); // Nueva bandera
   const [tipoSuenio, setTipoSuenio] = useState("");
@@ -37,6 +38,7 @@ function MainApp() {
     setEmail("");
     setNombre("");
     setCedula("");
+    setCelular("");
     setConsentimiento("");
     setImagenGenerada(false); // Reiniciamos la bandera al iniciar el proceso
     setStep("waiting");
@@ -52,6 +54,10 @@ function MainApp() {
   };
   const handleCedulaChange = (newCedula: string) => {
     setCedula(newCedula);
+  };
+
+  const handleCelularChange = (newCelular: string) => {
+    setCelular(newCelular);
   };
   const handleConsentimientoChange = (newConsentimiento: string) => {
     setConsentimiento(newConsentimiento);
@@ -100,7 +106,7 @@ function MainApp() {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [step, lastImageUrl, email, nombre, cedula, consentimiento]);
+  }, [step, lastImageUrl, email, nombre, cedula, celular, consentimiento]);
 
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
@@ -115,12 +121,14 @@ function MainApp() {
           email={email}
           nombre={nombre}
           cedula={cedula}
+          celular={celular}
           imagenGenerada={imagenGenerada} // Prop bandera
           imageUrl={imageUrl}
           tipoSuenio={tipoSuenio}
           onEmailChange={handleEmailChange}
           onNombreChange={handleNombreChange}
           onCedulaChange={handleCedulaChange}
+          onCelularChange={handleCelularChange}
           onConsentimientoChange={handleConsentimientoChange}
           onShowPolicy={() => setStep("policy")}
           onContinue={handleContinue} // Función para pasar a AvatarResult
@@ -132,6 +140,7 @@ function MainApp() {
           email={email}
           nombre={nombre}
           cedula={cedula}
+          celular={celular}
           consentimiento={consentimiento}
           onReset={() => setStep("photo")}
         />

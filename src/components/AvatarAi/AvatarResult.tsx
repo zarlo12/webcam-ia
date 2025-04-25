@@ -10,6 +10,7 @@ interface AvatarResultProps {
   email: string;
   nombre: string;
   cedula: string;
+  celular: string;
   consentimiento: string;
   imageUrl: string; // Imagen ya fusionada
   onReset: () => void;
@@ -19,6 +20,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
   email,
   nombre,
   cedula,
+  celular,
   consentimiento,
   imageUrl,
   onReset,
@@ -44,6 +46,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
           email,
           nombre,
           cedula,
+          celular,
           imageUrl: downloadURL,
           date: new Date(),
           consentimientoAceptado: consentimiento ? "Sí" : "No",
@@ -56,7 +59,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
         console.error("Error al subir imagen:", error);
       }
     },
-    [email, nombre, cedula, consentimiento]
+    [email, nombre, cedula, celular, consentimiento]
   );
 
   useEffect(() => {
@@ -85,7 +88,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
             <h2 className="subtitleResult">
               Descarga la imagen desde tu correo y comparte en redes sociales.
               <br />
-              Etiqueta @cetcolsubsidio en Instagram.
+              Etiquetanos @cetcolsubsidio en Instagram.
             </h2>
             <button
               type="button"

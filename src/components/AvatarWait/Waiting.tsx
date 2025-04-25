@@ -8,12 +8,14 @@ interface WaitingProps {
   email: string;
   nombre: string;
   cedula: string;
+  celular: string;
   imagenGenerada: boolean;
   imageUrl: string;
   tipoSuenio: string;
   onEmailChange: (email: string) => void;
   onNombreChange: (nombre: string) => void;
   onCedulaChange: (cedula: string) => void;
+  onCelularChange: (celular: string) => void;
   onConsentimientoChange: (consentimiento: string) => void;
   onShowPolicy: () => void;
   onContinue: (mergedUrl: string) => void;
@@ -22,11 +24,13 @@ interface WaitingProps {
 const Waiting: React.FC<WaitingProps> = ({
   email,
   nombre,
+  celular,
   imagenGenerada,
   imageUrl,
   tipoSuenio,
   onEmailChange,
   onNombreChange,
+  onCelularChange,
   onConsentimientoChange,
   onShowPolicy,
   onContinue,
@@ -100,6 +104,15 @@ const Waiting: React.FC<WaitingProps> = ({
               placeholder="Email"
               value={email}
               onChange={(e) => onEmailChange(e.target.value)}
+              className="input"
+              required
+            />
+
+            <input
+              type="text"
+              placeholder="Celular"
+              value={celular}
+              onChange={(e) => onCelularChange(e.target.value)}
               className="input"
               required
             />

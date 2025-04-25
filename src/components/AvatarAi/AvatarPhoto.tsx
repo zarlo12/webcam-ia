@@ -77,6 +77,16 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    // 1) Validar que haya seleccionado un "sueño"/interés
+    if (!selectedDream) {
+      Swal.fire({
+        icon: "warning",
+        title: "Advertencia",
+        text: "Por favor selecciona tu interés.",
+      });
+      return;
+    }
+
     if (!capturedImage) {
       Swal.fire({
         icon: "warning",
@@ -126,7 +136,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
                 }}
               >
                 <option value="" disabled>
-                  Selecciona tu Profesión
+                  Selecciona tu interés
                 </option>
                 <option value="Gastronómico">Gastronómico</option>
                 <option value="Administrativo">Administrativo</option>

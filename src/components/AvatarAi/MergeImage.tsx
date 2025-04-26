@@ -3,6 +3,9 @@ import React, { useRef, useEffect } from "react";
 // Importa o define las rutas de tus imágenes de marco
 //import claroMedia from "../../assets/img/ClaroMedia.png";
 
+import logoderecha from "../../assets/img/logo_derecha2.png";
+import logoabajo from "../../assets/img/logo_derecha.png";
+
 interface MergeImageProps {
   imageUrl: string; // URL de la imagen principal (avatar)
   onMerged: (mergedDataUrl: string) => void; // Callback para retornar la imagen fusionada
@@ -33,14 +36,37 @@ const MergeImage: React.FC<MergeImageProps> = ({
       });
 
     // Cargamos la imagen avatar y las imágenes de marco
-    Promise.all([loadImage(imageUrl)])
-      .then(([avatar]) => {
+    Promise.all([
+      loadImage(imageUrl),
+      loadImage(logoderecha),
+      loadImage(logoabajo),
+    ])
+      .then(([avatar, LogoUno, LogoDos]) => {
         // Definir dimensiones del canvas en base al avatar (puedes ajustar según necesidad)
         canvas.width = avatar.width;
         canvas.height = avatar.height;
 
         // Dibuja la imagen principal (avatar)
         ctx.drawImage(avatar, 0, 0, canvas.width, canvas.height);
+
+        const scaleFactorIzq = 0.2; // Factor de escala (0.5 = 50% más pequeño)
+        const scaleFactorDer = 0.4;
+
+        ctx.drawImage(
+          LogoUno,
+          canvas.width - LogoUno.width * scaleFactorDer + 10,
+          20,
+          LogoUno.width * scaleFactorDer,
+          LogoUno.height * scaleFactorDer
+        );
+
+        ctx.drawImage(
+          LogoDos,
+          20,
+          40,
+          LogoDos.width * scaleFactorIzq,
+          LogoDos.height * scaleFactorIzq
+        );
 
         // Convierte el canvas a data URL (imagen en formato PNG)
         const mergedDataUrl = canvas.toDataURL("image/png");

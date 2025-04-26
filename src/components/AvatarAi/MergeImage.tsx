@@ -1,8 +1,5 @@
 import React, { useRef, useEffect } from "react";
 
-// Importa o define las rutas de tus imágenes de marco
-//import claroMedia from "../../assets/img/ClaroMedia.png";
-
 import logoderecha from "../../assets/img/logo_derecha2.png";
 import logoabajo from "../../assets/img/logo_derecha.png";
 
@@ -25,50 +22,60 @@ const MergeImage: React.FC<MergeImageProps> = ({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Función para cargar una imagen y retornar una promesa
+    // Carga de imágenes con promesas
     const loadImage = (src: string): Promise<HTMLImageElement> =>
       new Promise((resolve, reject) => {
         const img = new Image();
-        img.crossOrigin = "anonymous"; // Útil si las imágenes provienen de otro dominio
+        img.crossOrigin = "anonymous";
         img.onload = () => resolve(img);
         img.onerror = (err) => reject(err);
         img.src = src;
       });
 
-    // Cargamos la imagen avatar y las imágenes de marco
     Promise.all([
-      loadImage(imageUrl),
-      loadImage(logoderecha),
-      loadImage(logoabajo),
+      loadImage(imageUrl), // avatar
+      loadImage(logoderecha), // LogoUno
+      loadImage(logoabajo), // LogoDos
     ])
       .then(([avatar, LogoUno, LogoDos]) => {
-        // Definir dimensiones del canvas en base al avatar (puedes ajustar según necesidad)
+        // Ajustamos el canvas al tamaño del avatar
         canvas.width = avatar.width;
         canvas.height = avatar.height;
 
-        // Dibuja la imagen principal (avatar)
+        // Dibujar avatar completo
         ctx.drawImage(avatar, 0, 0, canvas.width, canvas.height);
 
-        const scaleFactorIzq = 0.2; // Factor de escala (0.5 = 50% más pequeño)
-        const scaleFactorDer = 0.4;
+        // Factores de escala para los logos
+        const scaleUno = 0.4; // LogoUno (esquina inferior derecha)
+        const scaleDos = 0.6; // LogoDos (centro derecha)
+        const margin = 12; // espacio al borde
 
+        // Dimensiones escaladas
+        const uWidth = LogoUno.width * scaleUno;
+        const uHeight = LogoUno.height * scaleUno;
+        const dWidth = LogoDos.width * scaleDos;
+        const dHeight = LogoDos.height * scaleDos;
+
+        // LogoUno: esquina inferior derecha
         ctx.drawImage(
           LogoUno,
-          canvas.width - LogoUno.width * scaleFactorDer + 10,
-          20,
-          LogoUno.width * scaleFactorDer,
-          LogoUno.height * scaleFactorDer
+          canvas.width - uWidth - margin,
+          canvas.height - uHeight - margin,
+          uWidth,
+          uHeight
         );
 
+        // LogoDos: centrado verticalmente en el borde derecho
+        // LogoDos: abajo centrado
         ctx.drawImage(
           LogoDos,
-          20,
-          40,
-          LogoDos.width * scaleFactorIzq,
-          LogoDos.height * scaleFactorIzq
+          (canvas.width - dWidth) / 2,
+          canvas.height - dHeight - margin,
+          dWidth,
+          dHeight
         );
 
-        // Convierte el canvas a data URL (imagen en formato PNG)
+        // Convertir a Data URL y pasar al callback
         const mergedDataUrl = canvas.toDataURL("image/png");
         onMerged(mergedDataUrl);
       })
@@ -77,7 +84,7 @@ const MergeImage: React.FC<MergeImageProps> = ({
       });
   }, [imageUrl, onMerged, tipoSuenio]);
 
-  // El canvas se oculta ya que solo lo usamos para generar la imagen final
+  // Canvas oculto
   return <canvas ref={canvasRef} style={{ display: "none" }} />;
 };
 

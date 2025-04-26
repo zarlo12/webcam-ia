@@ -4,6 +4,24 @@ import logo from "../../assets/img/logoScotia.png";
 import logoVigilado from "../../assets/img/vigilado.png";
 import MergeImage from "../AvatarAi/MergeImage"; // Asegúrate de la ruta correcta
 
+declare global {
+  interface Window {
+    Tally?: {
+      openPopup: (
+        formId: string,
+        options?: {
+          layout?: string;
+          width?: number;
+          height?: number;
+          overlay?: boolean;
+          emojiText?: string;
+          emojiAnimation?: string;
+        }
+      ) => void;
+    };
+  }
+}
+
 interface WaitingProps {
   email: string;
   nombre: string;
@@ -48,6 +66,20 @@ const Waiting: React.FC<WaitingProps> = ({
       document.body.removeChild(script);
     };
   }, []);
+
+  // Función para abrir el popup dimensionado
+  const openVocacionalTest = () => {
+    if (window.Tally) {
+      window.Tally.openPopup("3jgB21", {
+        layout: "modal",
+        width: 800,
+        height: 600,
+        overlay: true,
+        emojiText: "👋",
+        emojiAnimation: "wave",
+      });
+    }
+  };
 
   const handleMerged = async (dataUrl: string) => {
     if (hasMergedRef.current) return;
@@ -120,10 +152,8 @@ const Waiting: React.FC<WaitingProps> = ({
             <button
               type="button"
               className="button"
+              onClick={openVocacionalTest}
               style={{ width: "284px", margin: "20px 0 0 0" }}
-              data-tally-open="3jgB21"
-              data-tally-emoji-text="👋"
-              data-tally-emoji-animation="wave"
             >
               Test vocacional
             </button>

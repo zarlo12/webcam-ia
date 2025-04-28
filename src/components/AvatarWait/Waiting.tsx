@@ -10,6 +10,7 @@ declare global {
       openPopup: (
         formId: string,
         options?: {
+          key?: string;
           layout?: string;
           width?: number;
           height?: number;
@@ -71,6 +72,7 @@ const Waiting: React.FC<WaitingProps> = ({
   const openVocacionalTest = () => {
     if (window.Tally) {
       window.Tally.openPopup("3jgB21", {
+        key: Date.now().toString(),
         layout: "modal",
         width: 800,
         height: 600,

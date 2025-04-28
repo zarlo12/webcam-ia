@@ -7,7 +7,9 @@ import Policy from "./Policy";
 
 function MainApp() {
   useEffect(() => {
-    fetch("https://proyectoshm.com/marco_pruebas/imagen/clear_image_data.php")
+    fetch(
+      "https://proyectoshm.com/marco_pruebas/imagen/clear_image_data_dev.php"
+    )
       .then((response) => response.json())
       .then((data) => {
         console.log("Clear WS :", data.message);
@@ -82,7 +84,7 @@ function MainApp() {
       interval = setInterval(async () => {
         try {
           const response = await fetch(
-            "https://proyectoshm.com/marco_pruebas/imagen/callback.php"
+            "https://proyectoshm.com/marco_pruebas/imagen/callback_dev.php"
           );
           const data = await response.json();
           // Si existe una imagen nueva, se actualiza el estado y se guarda en Firestore.
@@ -138,6 +140,7 @@ function MainApp() {
           email={email}
           nombre={nombre}
           cedula={cedula}
+          profesion={tipoSuenio}
           celular={celular}
           consentimiento={consentimiento}
           onReset={() => setStep("photo")}

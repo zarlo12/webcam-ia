@@ -10,6 +10,7 @@ interface AvatarResultProps {
   email: string;
   nombre: string;
   cedula: string;
+  profesion: string;
   celular: string;
   consentimiento: string;
   imageUrl: string; // Imagen ya fusionada
@@ -20,6 +21,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
   email,
   nombre,
   cedula,
+  profesion,
   celular,
   consentimiento,
   imageUrl,
@@ -46,6 +48,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
           email,
           nombre,
           cedula,
+          profesion,
           celular,
           imageUrl: downloadURL,
           date: new Date(),
@@ -59,7 +62,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
         console.error("Error al subir imagen:", error);
       }
     },
-    [email, nombre, cedula, celular, consentimiento]
+    [email, nombre, cedula, profesion, celular, consentimiento]
   );
 
   useEffect(() => {

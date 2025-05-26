@@ -5,7 +5,6 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
   const location = useLocation();
   const showBackButton = location.pathname !== "/aviso_privacidad";
 
-  // Detecta el ancho de la ventana para ajustes responsivos
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -16,7 +15,6 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
 
   const isSmallScreen = windowWidth < 400;
 
-  // Estilos del overlay modal
   const overlayStyle: React.CSSProperties = {
     position: "fixed",
     top: 0,
@@ -30,7 +28,6 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
     zIndex: 1000,
   };
 
-  // Estilos para la tarjeta de la política
   const cardStyle: React.CSSProperties = {
     position: "relative",
     background: "white",
@@ -50,7 +47,14 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
   };
 
   const textStyle: React.CSSProperties = {
-    marginBottom: "30px",
+    marginBottom: "15px",
+    fontSize: isSmallScreen ? "14px" : "16px",
+    lineHeight: "1.5",
+  };
+
+  const listStyle: React.CSSProperties = {
+    marginBottom: "15px",
+    paddingLeft: "20px",
     fontSize: isSmallScreen ? "14px" : "16px",
     lineHeight: "1.5",
   };
@@ -65,7 +69,6 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
     cursor: "pointer",
   };
 
-  // Estilos para la tachita de cerrar (botón X)
   const closeButtonStyle: React.CSSProperties = {
     position: "absolute",
     top: "10px",
@@ -76,7 +79,6 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
     cursor: "pointer",
   };
 
-  // Evitar que el clic en el contenido propague el evento al overlay
   const handleCardClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
   };
@@ -84,316 +86,43 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
   return (
     <div style={overlayStyle} onClick={onBack}>
       <div style={cardStyle} onClick={handleCardClick}>
-        {/* Botón para cerrar la ventana (tachita) */}
         <button style={closeButtonStyle} onClick={onBack} aria-label="Cerrar">
           &times;
         </button>
 
         <section>
           <h1 style={titleStyle}>
-            AUTORIZACIÓN PARA EL TRATAMIENTO DE DATOS PERSONALES
+            Consentimiento para Uso de Imagen y Tratamiento de Datos Personales
           </h1>
           <p style={textStyle}>
-            Autorizo expresamente de manera libre, previa, voluntaria y
-            debidamente informada a la Corporación Tecnológica La CET (en
-            adelante la “CET”), -, identificada con el NIT 900.401.526-8,
-            localizada en la Carrera 11 No.65-30 de la ciudad de Bogotá (en
-            adelante “CET”), quien actúa en calidad de responsable en los
-            términos de la regulación aplicable, para que lleve a cabo el
-            tratamiento de mis datos personales o los datos personales del menor
-            de edad que represento.
+            Yo, por medio del presente autorizo a Grünenthal para:
           </p>
-          <p style={textStyle}>
-            Los datos personales sobre los que recae la presente autorización
-            son aquellos relativos al nombre, apellidos y mis datos de
-            identificación, fecha de expedición del documento de identidad,
-            datos de ubicación y contacto como direcciones físicas,
-            electrónicas, números telefónicos y de celular, datos relacionados
-            con el género y la edad, fecha de nacimiento, gustos y preferencias,
-            datos socioeconómicos, información relativa a la ubicación del
-            dispositivo utilizado para llevar a cabo la navegación en internet,
-            cookies, entendidos como una pequeña cantidad de datos que
-            generalmente incluye un identificador único anónimo que es enviado
-            al computador o dispositivo usado para la navegación y que es
-            almacenado en el disco duro con el fin de salvaguardar mis
-            preferencias de navegación, y datos de naturaleza sensible tales
-            como datos biométricos, de la imagen del rostro y de menores de
-            edad.
-          </p>
-          <p style={textStyle}>
-            En ese sentido, autorizo que el tratamiento de mis datos personales,
-            o de los datos personales del menor de edad que represento, se lleve
-            a cabo por parte de la CET para la prestación de todos los
-            servicios. Asimismo, manifiesto conocer que la CET cuenta con una
-            variedad de servicios, tales como: educación y cultura para que en
-            el desarrollo de las mismas lleve a cabo el tratamiento de los datos
-            personales suministrados, particularmente para que se sirva:
-            recolectar, almacenar, usar, circular, suprimir, procesar, compilar,
-            intercambiar, actualizar, transmitir dentro o fuera del territorio
-            nacional, y disponer de los datos que sean suministrados por mí, así
-            como para transferir dichos datos de manera total o parcial, dentro
-            o fuera del territorio nacional a las personas jurídicas en las
-            cuales tenga participación accionaria o de capital y entidades
-            vinculadas, así como a sus aliados comerciales estratégicos con
-            fines administrativos, comerciales y de mercadeo para el envío de
-            información sobre los diferentes servicios, siempre ligándose a las
-            finalidades que son autorizadas, y en especial para el envío de
-            información sobre campañas, promociones o concursos de carácter
-            comercial y publicitario, invitaciones a eventos de la CET o de
-            terceros, evaluar la calidad de los servicios prestados, realizar
-            estudios o investigaciones de mercado, comercialización de servicios
-            y productos a través de los diferentes canales de información,
-            transmitir los datos personales sea dentro o fuera del territorio
-            nacional con el fin de cumplir con las finalidades aquí descritas
-            así como para adelantar los procedimientos pertinentes de
-            autenticación de identidad y prevención de actividades fraudulentas
-            y demás actividades de seguridad y confidencialidad requeridas.
-          </p>
-          <p style={textStyle}>
-            Autorizo igualmente el tratamiento de mis datos personales, o de los
-            datos personales del menor de edad que represento, para actividades
-            de almacenamiento de la información suministrada en atención a la
-            regulación vigente en la materia, entregar los datos a entidades
-            gubernamentales cuando estas así lo soliciten, llevar a cabo
-            consultas y reportes en operadores de información financiera, dar
-            cumplimiento a la normatividad relevante a las actividades que
-            comprenden las actividades de la CET y atender requerimientos
-            administrativos y judiciales cuando así se requiera.
-          </p>
-          <p style={textStyle}>
-            Autorizo el envío de comunicaciones utilizando mis datos de
-            contactos, tales como: número de teléfono móvil, correo electrónico,
-            redes sociales, dirección de correspondencia, teléfonos fijos, o
-            cualquier otro medio de contacto que permita la tecnología.
-          </p>
-          <p style={textStyle}>
-            Reconozco que fui informado que para los casos en los que se trate
-            de la recolección y tratamiento de datos de naturaleza sensible,
-            incluidos los de menores de edad, y no estoy obligado a autorizar su
-            tratamiento y también acerca de la información que será objeto de
-            tratamiento y las finalidades de ello. Así mismo, reconozco que
-            ninguna actividad que adelante la CET está condicionada al
-            suministro de mi información sensible.
-          </p>
-          <p style={textStyle}>
-            En caso de que el Titular de la información sea un menor de edad se
-            resalta que el tratamiento de su información cumple con los
-            siguientes parámetros:
-          </p>
-          <ul>
+          <ol style={listStyle}>
             <li>
-              Se responde y respeta el interés superior de los niños, niñas y
-              adolescentes.
-            </li>
-            <li>Se asegura el respeto de sus derechos fundamentales.</li>
-            <li>
-              La autorización del menor de edad, concedida por sus padres o
-              tutores, ha sido otorgada previo ejercicio del menor de su derecho
-              a ser escuchado, opinión que es valorada teniendo en cuenta la
-              madurez, autonomía y capacidad para entender el asunto.
+              Captura y uso de mi imagen mediante una fotografía que será procesada con inteligencia artificial para generar una representación visual tipo avatar con rasgos similares a los míos.
             </li>
             <li>
-              Se resalta que la CET vela por el uso adecuado de los datos
-              personales del menor de edad, de acuerdo con los principios y
-              obligaciones establecidos en la Ley 1581 de 2012 y el Decreto 1074
-              de 2015.
+              Uso de dicha imagen con fines promocionales, comerciales, académicos o informativos, en medios físicos, digitales y redes sociales, en el marco de la presente actividad.
             </li>
+            <li>
+              Recolección y tratamiento de mis datos personales, tales como: nombre, correo electrónico, especialidad médica y ciudad de procedencia, los cuales serán utilizados exclusivamente para:
+              <ul style={listStyle}>
+                <li>El envío de la imagen generada por correo electrónico.</li>
+                <li>Estadísticas internas del evento.</li>
+                <li>Comunicación relacionada con esta activación y servicios relacionados.</li>
+              </ul>
+            </li>
+          </ol>
+          <p style={textStyle}>
+            Declaro que he sido informado(a) de que:
+          </p>
+          <ul style={listStyle}>
+            <li>Mis datos serán tratados conforme a la Ley 1581 de 2012 y demás normas concordantes sobre protección de datos personales en Colombia.</li>
+            <li>En cualquier momento podré ejercer mis derechos de acceso, rectificación, actualización o supresión de mis datos enviando una solicitud al correo [correo de contacto de la empresa].</li>
           </ul>
           <p style={textStyle}>
-            Acepto y reconozco que los datos suministrados serán sometidos a los
-            fines establecidos anteriormente conforme a la Ley 1581 de 2012, el
-            Decreto 1377 de 2013, el Decreto 1074 de 2015 y demás regulación que
-            haga sus veces.
+            Conozco y acepto los términos aquí establecidos.
           </p>
-          <p style={textStyle}>
-            Fui informado de que podré consultar la Política de Tratamiento de
-            Datos Personales de CET en este enlace
-            <a href="https://cetcolsubsidio.edu.co/" target="_blank">
-              https://cetcolsubsidio.edu.co/
-            </a>
-            y elevar cualquier solicitud, petición, queja o reclamo a través de:
-            líneas de servicio al cliente de CET: (601) 7458227, en Bogotá al
-            WhatsApp 314 727 7545, correo electrónico:
-            <a href="mailto:servicioalcliente@cetcolsubsidio.edu.co">
-              servicioalcliente@cetcolsubsidio.edu.co
-            </a>
-            o personalmente.
-          </p>
-          <p style={textStyle}>
-            Entiendo además que podré ejercer, en cualquier momento, mis
-            derechos como titular de los datos personales, consagrados en el
-            artículo 8 de la Ley 1581 de 2012, como lo son conocer, actualizar,
-            rectificar, modificar, acceder, solicitar la supresión de mis datos
-            personales, o revocar la autorización otorgada, salvo que exista
-            algún deber legal o contractual que obligue a la CET a que la
-            información permanezca en sus bases de datos, o por estricta orden
-            judicial.
-          </p>
-          <p style={textStyle}>
-            En virtud de lo anterior, manifiesto que soy titular de los datos
-            personales proporcionados a la CET, o representante del menor de
-            edad que otorga sus datos personales, y autorizo su tratamiento.
-          </p>
-        </section>
-
-        <section>
-          <h2 style={titleStyle}>AVISO DE PRIVACIDAD</h2>
-          <p style={textStyle}>
-            La Corporación Tecnológica CET (en adelante “CET”), -, identificada
-            con el NIT 900.401.526-8, localizada en la Carrera 11 No.65-30 de la
-            ciudad de Bogotá declara que como responsable de la información
-            protege los datos suministrados por los titulares de la información
-            en virtud de lo dispuesto en la Ley 1581 de 2012, el Decreto 1377 de
-            2013, y el Decreto 1074 del 2015, e informa a éstos que los datos
-            personales serán utilizados en los términos dados en la autorización
-            por su titular. Dicho tratamiento podrá realizarse directamente por
-            la CET y/o por el tercero que éste determine.
-          </p>
-          <p style={textStyle}>La CET se permite informar que:</p>
-          <ul>
-            <li>
-              Garantiza a los titulares de los datos personales la privacidad,
-              confidencialidad y seguridad de los datos entregados, evitando la
-              adulteración, pérdida, consulta, uso o acceso no autorizado o
-              fraudulento por parte de terceros.
-            </li>
-            <li>
-              Tratará los datos personales para la prestación de todos los
-              servicios y para recolectar, almacenar, usar, circular, suprimir,
-              procesar, compilar, intercambiar, actualizar, transmitir dentro o
-              fuera del territorio nacional, y disponer de los datos que sean
-              suministrados, así como para transferir dichos datos de manera
-              total o parcial, dentro o fuera del territorio nacional a las
-              personas jurídicas en las cuales tenga participación accionaria o
-              de capital y entidades vinculadas, así como a sus aliados
-              comerciales estratégicos con fines administrativos, comerciales y
-              de mercadeo para el envío de información sobre los diferentes
-              programas y servicios, siempre ligándose a las finalidades que son
-              autorizadas, y en especial para el envío de información sobre
-              campañas, promociones o concursos de carácter comercial y
-              publicitario, invitaciones a eventos de LA CET o de terceros,
-              evaluar la calidad de los servicios prestados, realizar estudios o
-              investigaciones de mercado, comercialización de servicios y
-              productos a través de los diferentes canales de información,
-              transmitir los datos personales sea dentro o fuera del territorio
-              nacional con el fin de cumplir con las finalidades aquí descritas
-              así como para adelantar los procedimientos pertinentes de
-              autenticación de identidad y prevención de actividades
-              fraudulentas y demás actividades de seguridad y confidencialidad.
-            </li>
-            <li>
-              La información será tratada para actividades de almacenamiento de
-              la información suministrada en atención a la regulación vigente en
-              la materia, entregar los datos a entidades gubernamentales cuando
-              estas así lo soliciten, llevar a cabo consultas y reportes en
-              operadores de información financiera, dar cumplimiento a la
-              normatividad relevante a las actividades que comprenden las
-              actividades de la CET y atender requerimientos administrativos y
-              judiciales cuando así se requiera.
-            </li>
-            <li>
-              Recolectará datos de naturaleza sensible, y que, por ello, el
-              titular no está obligado a autorizar su tratamiento. El titular es
-              igualmente informado acerca de las finalidades en el tratamiento
-              de ese tipo de información y que ninguna actividad que adelante LA
-              CET está condicionada al suministro de información sensible.
-            </li>
-          </ul>
-          <p style={textStyle}>Los titulares tienen los siguientes derechos:</p>
-          <ul>
-            <li>
-              Conocer, actualizar y rectificar sus datos personales frente a la
-              CET y/o al tercero que éste determine.
-            </li>
-            <li>
-              Solicitar prueba de la autorización otorgada, teniendo en cuenta
-              lo dispuesto en el numeral b del art. 8 de la Ley 1581 de 2012.
-            </li>
-            <li>
-              Presentar ante la Superintendencia de Industria y Comercio quejas,
-              solicitudes y reclamos relacionados con el cumplimiento de las
-              normas sobre protección de datos personales.
-            </li>
-            <li>
-              Revocar la autorización y/o solicitar ante la Superintendencia de
-              Industria y Comercio la supresión del dato cuando en el
-              tratamiento no se respeten los principios, derechos y garantías
-              constitucionales y legales. La solicitud de supresión de la
-              información y la revocatoria de la autorización no procederán
-              cuando el titular tenga un deber legal o contractual de permanecer
-              en las bases de datos de la CET.
-            </li>
-            <li>Acceder en forma gratuita a sus datos personales.</li>
-            <li>
-              Ser informado, previa solicitud, respecto del uso que se le ha
-              dado a sus datos personales.
-            </li>
-          </ul>
-          <p style={textStyle}>
-            Los titulares podrán consultar la Política de Tratamiento de Datos
-            Personales de LA CET en el link:
-            <a href="https://cetcolsubsidio.edu.co/" target="_blank">
-              https://cetcolsubsidio.edu.co/
-            </a>
-            y elevar cualquier solicitud, petición, queja o reclamo a través de:
-          </p>
-          <ul>
-            <li>Línea audio-servicios Bogotá: (601) 7458227</li>
-            <li>
-              Página web:
-              <a href="https://cetcolsubsidio.edu.co/" target="_blank">
-                cetcolsubsidio.edu.co
-              </a>
-            </li>
-            <li>
-              Correo electrónico:
-              <a href="mailto:servicioalcliente@cetcolsubsidio.edu.co">
-                servicioalcliente@cetcolsubsidio.edu.co
-              </a>
-            </li>
-          </ul>
-        </section>
-
-        <section>
-          <h2 style={titleStyle}>
-            AUTORIZACIÓN LEY 2300 DE 2023 “DERECHO A LA INTIMIDAD DE LOS
-            CONSUMIDORES”
-          </h2>
-          <p style={textStyle}>
-            Autorizo expresamente de manera libre, previa, voluntaria y
-            debidamente informada a la Corporación Tecnológica CET (en adelante
-            la “CET”), -, identificada con el NIT 900.401.526-8, localizada en
-            la Carrera 11 No.65-30 de la ciudad de Bogotá para contactarme a
-            través de mensajes cortos de texto (SMS), WhatsApp, correos
-            electrónicos o llamadas telefónicas y/o cualquier otro canal que la
-            CET disponga e informe previamente para el efecto, con el fin de
-            realizar gestiones de cobranzas y/o enviarme información de carácter
-            comercial y/o publicitario, relacionada con campañas, promociones,
-            concursos, invitaciones a eventos de la CET o de terceros, evaluar
-            la calidad de los servicios prestados, realizar estudios o
-            investigaciones de mercado, comercialización de servicios o
-            productos, entre otros.
-          </p>
-          <p style={textStyle}>
-            Declaro que he sido informado que en caso de que requiera ser
-            contactado en horarios distintos deberé manifestarlo expresamente a
-            la CET, a través de las líneas de servicio al cliente CET:
-          </p>
-          <ul>
-            <li>Bogotá: (601) 7458227</li>
-            <li>
-              Página web:
-              <a href="https://cetcolsubsidio.edu.co/" target="_blank">
-                https://cetcolsubsidio.edu.co/
-              </a>
-            </li>
-            <li>
-              Correo electrónico:
-              <a href="mailto:servicioalcliente@cetcolsubsidio.edu.co">
-                servicioalcliente@cetcolsubsidio.edu.co
-              </a>
-            </li>
-          </ul>
         </section>
 
         {showBackButton && (

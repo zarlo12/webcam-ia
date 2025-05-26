@@ -11,7 +11,8 @@ interface AvatarResultProps {
   nombre: string;
   cedula: string;
   profesion: string;
-  celular: string;
+  ciudad: string;
+  especialidad: string;
   consentimiento: string;
   imageUrl: string; // Imagen ya fusionada
   onReset: () => void;
@@ -22,7 +23,8 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
   nombre,
   cedula,
   profesion,
-  celular,
+  ciudad,
+  especialidad,
   consentimiento,
   imageUrl,
   onReset,
@@ -39,7 +41,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
       try {
         const storageRef = ref(
           storage,
-          `avatars_test/${email}-${Date.now()}.png`
+          `grunenthal_avatars/${email}-${Date.now()}.png`
         );
         await uploadString(storageRef, dataUrl, "data_url");
         const downloadURL = await getDownloadURL(storageRef);
@@ -49,20 +51,21 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
           nombre,
           cedula,
           profesion,
-          celular,
+          ciudad,
+          especialidad,
           imageUrl: downloadURL,
           date: new Date(),
           consentimientoAceptado: consentimiento ? "Sí" : "No",
           correoEnviado: false,
         };
         console.log("🚀 ~ datosFirestore:", datosFirestore);
-        await addDoc(collection(db, "imagenesTest"), datosFirestore);
+        await addDoc(collection(db, "grunenthalDev"), datosFirestore);
         setUploadedImageUrl(downloadURL);
       } catch (error) {
         console.error("Error al subir imagen:", error);
       }
     },
-    [email, nombre, cedula, profesion, celular, consentimiento]
+    [email, nombre, cedula, profesion, ciudad, especialidad, consentimiento]
   );
 
   useEffect(() => {

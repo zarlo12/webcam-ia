@@ -18,12 +18,11 @@ interface WebcamRef {
 
 const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
   onProcess,
-  onDreamChange,
 }) => {
   const [email] = useState("");
   const [capturedImage, setCapturedImage] = useState<Blob | null>(null);
   const [capturedImageUrl, setCapturedImageUrl] = useState<string>("");
-  const [selectedDream, setSelectedDream] = useState("");
+
 
   const webcamRef = useRef<WebcamRef | null>(null);
 
@@ -51,7 +50,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
     if (!capturedImage) return;
     const formData = new FormData();
     formData.append("image", capturedImage, "webcam-image.jpg");
-    formData.append("selectedDream", selectedDream);
+  
     try {
       console.log("Enviando imagen...");
       //onProcess(); //TEMPORAL NO DEBE IR AQUI
@@ -78,14 +77,14 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
     e.preventDefault();
 
     // 1) Validar que haya seleccionado un "sueño"/interés
-    if (!selectedDream) {
-      Swal.fire({
-        icon: "warning",
-        title: "Advertencia",
-        text: "Por favor selecciona tu interés.",
-      });
-      return;
-    }
+    // if (!selectedDream) {
+    //   Swal.fire({
+    //     icon: "warning",
+    //     title: "Advertencia",
+    //     text: "Por favor selecciona tu interés.",
+    //   });
+    //   return;
+    // }
 
     if (!capturedImage) {
       Swal.fire({
@@ -126,7 +125,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
 
           <div className="buttons-container">
             {/* SELECT "Selecciona tu sueño" */}
-            <div className="select-container">
+            {/* <div className="select-container">
               <select
                 value={selectedDream}
                 onChange={(e) => {
@@ -148,7 +147,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
                 <option value="Experto en SST">Experto en SST</option>
               </select>
               <span className="select-arrow">▼</span>
-            </div>
+            </div> */}
 
             <button
               type="button"
@@ -174,7 +173,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
               className="button"
               disabled={!capturedImageUrl}
             >
-              Enviar
+              Procesar
             </button>
           </form>
         </div>

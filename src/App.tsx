@@ -25,7 +25,9 @@ function MainApp() {
   const [email, setEmail] = useState("");
   const [nombre, setNombre] = useState("");
   const [cedula, setCedula] = useState("");
-  const [celular, setCelular] = useState("");
+
+  const [ciudad, setCiudad] = useState("");
+  const [especialidad, setEspecialidad] = useState("");
   const [consentimiento, setConsentimiento] = useState("");
   const [imagenGenerada, setImagenGenerada] = useState(false); // Nueva bandera
   const [tipoSuenio, setTipoSuenio] = useState("");
@@ -36,7 +38,8 @@ function MainApp() {
     setEmail("");
     setNombre("");
     setCedula("");
-    setCelular("");
+    setCiudad("");
+    setEspecialidad("");
     setConsentimiento("");
     setImagenGenerada(false); // Reiniciamos la bandera al iniciar el proceso
     setStep("waiting");
@@ -54,8 +57,13 @@ function MainApp() {
     setCedula(newCedula);
   };
 
-  const handleCelularChange = (newCelular: string) => {
-    setCelular(newCelular);
+  
+
+  const handleCiudadChange = (newCiudad: string) => {
+    setCiudad(newCiudad);
+  };
+  const handleEspecialidadChange = (newEspecialidad: string) => {
+    setEspecialidad(newEspecialidad);
   };
   const handleConsentimientoChange = (newConsentimiento: string) => {
     setConsentimiento(newConsentimiento);
@@ -104,7 +112,7 @@ function MainApp() {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [step, lastImageUrl, email, nombre, cedula, celular, consentimiento]);
+  }, [step, lastImageUrl, email, nombre, cedula, ciudad, especialidad, consentimiento]);
 
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
@@ -119,14 +127,16 @@ function MainApp() {
           email={email}
           nombre={nombre}
           cedula={cedula}
-          celular={celular}
+          ciudad={ciudad}
+          especialidad={especialidad}
           imagenGenerada={imagenGenerada} // Prop bandera
           imageUrl={imageUrl}
           tipoSuenio={tipoSuenio}
           onEmailChange={handleEmailChange}
           onNombreChange={handleNombreChange}
           onCedulaChange={handleCedulaChange}
-          onCelularChange={handleCelularChange}
+          onEspecialidadChange={handleEspecialidadChange}
+          onCiudadChange={handleCiudadChange}
           onConsentimientoChange={handleConsentimientoChange}
           onShowPolicy={() => setStep("policy")}
           onContinue={handleContinue} // Función para pasar a AvatarResult
@@ -139,7 +149,8 @@ function MainApp() {
           nombre={nombre}
           cedula={cedula}
           profesion={tipoSuenio}
-          celular={celular}
+          ciudad={ciudad}
+          especialidad={especialidad}
           consentimiento={consentimiento}
           onReset={() => setStep("photo")}
         />

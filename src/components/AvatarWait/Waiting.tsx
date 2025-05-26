@@ -27,14 +27,18 @@ interface WaitingProps {
   email: string;
   nombre: string;
   cedula: string;
-  celular: string;
+  especialidad: string;
+  ciudad: string;
+
   imagenGenerada: boolean;
   imageUrl: string;
   tipoSuenio: string;
   onEmailChange: (email: string) => void;
   onNombreChange: (nombre: string) => void;
+  onEspecialidadChange: (especialidad: string) => void;
+  onCiudadChange: (ciudad: string) => void;
   onCedulaChange: (cedula: string) => void;
-  onCelularChange: (celular: string) => void;
+
   onConsentimientoChange: (consentimiento: string) => void;
   onShowPolicy: () => void;
   onContinue: (mergedUrl: string) => void;
@@ -43,13 +47,15 @@ interface WaitingProps {
 const Waiting: React.FC<WaitingProps> = ({
   email,
   nombre,
-  celular,
+  especialidad,
+  ciudad,
   imagenGenerada,
   imageUrl,
   tipoSuenio,
   onEmailChange,
   onNombreChange,
-  onCelularChange,
+  onEspecialidadChange,
+  onCiudadChange,
   onConsentimientoChange,
   onShowPolicy,
   onContinue,
@@ -69,20 +75,7 @@ const Waiting: React.FC<WaitingProps> = ({
   }, []);
 
   // Función para abrir el popup dimensionado
-  const openVocacionalTest = () => {
-    if (window.Tally) {
-      window.Tally.openPopup("3jgB21", {
-        key: Date.now().toString(),
-        layout: "modal",
-        width: 800,
-        height: 600,
-        overlay: true,
-        emojiText: "👋",
-        emojiAnimation: "wave",
-      });
-    }
-  };
-
+  
   const handleMerged = async (dataUrl: string) => {
     if (hasMergedRef.current) return;
     hasMergedRef.current = true;
@@ -116,9 +109,7 @@ const Waiting: React.FC<WaitingProps> = ({
             <div className="avatar-container-wait">
               <p className="waiting-text">
                 Espera...
-                <br /> ¡A segundos de
-                <br /> cumplir tus
-                <br /> metas!
+                
               </p>
             </div>
           )}
@@ -134,31 +125,42 @@ const Waiting: React.FC<WaitingProps> = ({
             />
 
             <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => onEmailChange(e.target.value)}
+              type="text"
+              placeholder="Especialidad"
+              value={especialidad}
+              onChange={(e) => onEspecialidadChange(e.target.value)}
               className="input"
               required
             />
 
             <input
               type="text"
-              placeholder="Celular"
-              value={celular}
-              onChange={(e) => onCelularChange(e.target.value)}
+              placeholder="Ciudad"
+              value={ciudad}
+              onChange={(e) => onCiudadChange(e.target.value)}
               className="input"
               required
             />
 
-            <button
+            <input
+              type="email"
+              placeholder="Correo"
+              value={email}
+              onChange={(e) => onEmailChange(e.target.value)}
+              className="input"
+              required
+            />
+
+            
+
+            {/* <button
               type="button"
               className="button"
               onClick={openVocacionalTest}
               style={{ width: "284px", margin: "20px 0 0 0" }}
             >
               Test vocacional
-            </button>
+            </button> */}
 
             <div className="checkbox-container">
               <input

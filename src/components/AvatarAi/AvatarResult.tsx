@@ -49,8 +49,6 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
         const datosFirestore = {
           email,
           nombre,
-          cedula,
-          profesion,
           ciudad,
           especialidad,
           imageUrl: downloadURL,
@@ -83,7 +81,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
       <div className="main-content">
         <div className="result-wrapper">
           <div className="card">
-            <h2 className="subtitleResult">Soy lo que sueño ser</h2>
+            <h2 className="subtitleResult">AVATAR IA</h2>
             <div className="avatar-container">
               <img
                 src={uploadedImageUrl}
@@ -91,18 +89,18 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
                 alt="Avatar generado"
               />
             </div>
-            <h2 className="subtitleResult">
+            {/* <h2 className="subtitleResult">
               Descarga la imagen desde tu correo y comparte en redes sociales.
               <br />
               Etiquetanos @cetcolsubsidio en Instagram.
-            </h2>
+            </h2> */}
             <button
               type="button"
               className="button"
               onClick={onReset}
               style={{ width: "250px" }}
             >
-              Empezar de nuevo
+              Generar nueva
             </button>
           </div>
         </div>

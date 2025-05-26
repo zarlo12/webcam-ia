@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from "react";
 
-import logoderecha from "../../assets/img/logo_derecha2.png";
-import logoabajo from "../../assets/img/logo_derecha.png";
+import logoInferior from "../../assets/img/LogoInferior.png";
 
 interface MergeImageProps {
   imageUrl: string; // URL de la imagen principal (avatar)
@@ -33,11 +32,10 @@ const MergeImage: React.FC<MergeImageProps> = ({
       });
 
     Promise.all([
-      loadImage(imageUrl), // avatar
-      loadImage(logoderecha), // LogoUno
-      loadImage(logoabajo), // LogoDos
+      loadImage(imageUrl),    // avatar
+      loadImage(logoInferior) // Logo inferior centrado
     ])
-      .then(([avatar, LogoUno, LogoDos]) => {
+      .then(([avatar, LogoInf]) => {
         // Ajustamos el canvas al tamaño del avatar
         canvas.width = avatar.width;
         canvas.height = avatar.height;
@@ -45,34 +43,20 @@ const MergeImage: React.FC<MergeImageProps> = ({
         // Dibujar avatar completo
         ctx.drawImage(avatar, 0, 0, canvas.width, canvas.height);
 
-        // Factores de escala para los logos
-        const scaleUno = 0.4; // LogoUno (esquina inferior derecha)
-        const scaleDos = 0.6; // LogoDos (centro derecha)
-        const margin = 12; // espacio al borde
+        // Factor de escala y margen para el logo inferior
+        const scale = 1.0;
+        const margin = 12;
 
-        // Dimensiones escaladas
-        const uWidth = LogoUno.width * scaleUno;
-        const uHeight = LogoUno.height * scaleUno;
-        const dWidth = LogoDos.width * scaleDos;
-        const dHeight = LogoDos.height * scaleDos;
+        const logoWidth = LogoInf.width * scale;
+        const logoHeight = LogoInf.height * scale;
 
-        // LogoUno: esquina inferior derecha
+        // Dibujar LogoInferior centrado horizontalmente en la parte inferior
         ctx.drawImage(
-          LogoUno,
-          canvas.width - uWidth - margin,
-          canvas.height - uHeight - margin,
-          uWidth,
-          uHeight
-        );
-
-        // LogoDos: centrado verticalmente en el borde derecho
-        // LogoDos: abajo centrado
-        ctx.drawImage(
-          LogoDos,
-          (canvas.width - dWidth) / 2,
-          canvas.height - dHeight - margin,
-          dWidth,
-          dHeight
+          LogoInf,
+          (canvas.width - logoWidth) / 2,
+          canvas.height - logoHeight - margin,
+          logoWidth,
+          logoHeight
         );
 
         // Convertir a Data URL y pasar al callback

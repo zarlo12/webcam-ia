@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./AvatarPhoto.scss";
 import logo from "../../assets/img/logoScotia.png";
-import logoVigilado from "../../assets/img/vigilado.png";
+
 import { storage, db } from "../../firebaseConfig";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { collection, addDoc } from "firebase/firestore";
@@ -107,7 +107,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
       </div>
 
       <div className="footerAlways">
-        <img src={logoVigilado} alt="Logo Vigilado" className="logo" />
+       
       </div>
     </div>
   );

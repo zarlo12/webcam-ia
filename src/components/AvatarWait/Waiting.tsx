@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./Waiting.scss";
 import logo from "../../assets/img/logoScotia.png";
-import logoVigilado from "../../assets/img/vigilado.png";
+
 import MergeImage from "../AvatarAi/MergeImage"; // Asegúrate de la ruta correcta
 
 declare global {
@@ -190,7 +190,7 @@ const Waiting: React.FC<WaitingProps> = ({
       </div>
 
       <div className="footerAlways">
-        <img src={logoVigilado} alt="Logo Vigilado" className="logo" />
+        
       </div>
     </div>
   );

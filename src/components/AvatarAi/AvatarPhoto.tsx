@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import "./AvatarPhoto.scss";
 // import fondo from "../../assets/img/fondo.png";
 import logo from "../../assets/img/logoScotia.png";
-import logoVigilado from "../../assets/img/vigilado.png";
+
 import WebcamScene from "../WebcamScene";
 import axios from "axios";
 import Swal from "sweetalert2"; // Import sweetalert2
@@ -180,7 +180,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
       </div>
 
       <div className="footerAlways">
-        <img src={logoVigilado} alt="Logo Vigilado" className="logo" />
+        
       </div>
     </div>
   );

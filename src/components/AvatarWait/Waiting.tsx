@@ -179,6 +179,7 @@ const Waiting: React.FC<WaitingProps> = ({
                       e.preventDefault();
                       onShowPolicy();
                     }}
+                    className="linkColorVerde"
                   >
                     Ver política de tratamiento de datos
                   </a>

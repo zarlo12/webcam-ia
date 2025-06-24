@@ -9,10 +9,8 @@ import { collection, addDoc } from "firebase/firestore";
 interface AvatarResultProps {
   email: string;
   nombre: string;
-  cedula: string;
   profesion: string;
-  ciudad: string;
-  especialidad: string;
+  celular: string;
   consentimiento: string;
   imageUrl: string; // Imagen ya fusionada
   onReset: () => void;
@@ -21,10 +19,8 @@ interface AvatarResultProps {
 const AvatarResult: React.FC<AvatarResultProps> = ({
   email,
   nombre,
-  cedula,
   profesion,
-  ciudad,
-  especialidad,
+  celular,
   consentimiento,
   imageUrl,
   onReset,
@@ -49,8 +45,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
         const datosFirestore = {
           email,
           nombre,
-          ciudad,
-          especialidad,
+          celular,
           imageUrl: downloadURL,
           date: new Date(),
           consentimientoAceptado: consentimiento ? "Sí" : "No",
@@ -63,7 +58,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
         console.error("Error al subir imagen:", error);
       }
     },
-    [email, nombre, cedula, profesion, ciudad, especialidad, consentimiento]
+    [email, nombre, profesion, celular, consentimiento]
   );
 
   useEffect(() => {

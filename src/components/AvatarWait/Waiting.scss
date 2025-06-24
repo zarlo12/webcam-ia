@@ -12,13 +12,13 @@
 
 
 .linkColorVerde:hover {
-  color: #2cac66;
+  color: #e1171b;
 }
 
 /* Barra roja superior */
 .header-bar {
   width: 100%;
-  background: linear-gradient(to right, #00A059, #96E600);
+  background: linear-gradient(to right, #e1171b, #e1171b);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -100,7 +100,7 @@
 
   background-image:
     linear-gradient(#fff, #fff),
-    linear-gradient(to right, #00A059, #96E600);
+    linear-gradient(to right, #e1171b, #e1171b);
   background-origin: border-box;
   background-clip: padding-box, border-box;
 
@@ -143,13 +143,13 @@
   border: 2px solid transparent;
   background-image:
     linear-gradient(#ffffff, #ffffff),
-    linear-gradient(to right, #00A059, #96E600);
+    linear-gradient(to right, #e1171b, #e1171b);
   background-origin: border-box;
   background-clip: padding-box, border-box;
 }
 
 .checkbox:checked:before {
-  background: linear-gradient(to right, #00A059, #96E600);
+  background: linear-gradient(to right, #e1171b, #e1171b);
   content: "";
   width: 13px;
   height: 10px;
@@ -165,7 +165,7 @@
   width: 200px;
   height: 50px;
   margin: 20px auto 0 auto;
-  background: linear-gradient(to right, #00A059, #96E600);
+  background: linear-gradient(to right, #e1171b, #e1171b);
   color: #fff;
   font-size: 25px;
   font-weight: bold;

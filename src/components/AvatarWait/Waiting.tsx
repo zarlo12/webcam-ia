@@ -26,18 +26,14 @@ declare global {
 interface WaitingProps {
   email: string;
   nombre: string;
-  cedula: string;
-  especialidad: string;
-  ciudad: string;
+  celular: string;
 
   imagenGenerada: boolean;
   imageUrl: string;
   tipoSuenio: string;
   onEmailChange: (email: string) => void;
   onNombreChange: (nombre: string) => void;
-  onEspecialidadChange: (especialidad: string) => void;
-  onCiudadChange: (ciudad: string) => void;
-  onCedulaChange: (cedula: string) => void;
+  onCelularChange: (celular: string) => void;
 
   onConsentimientoChange: (consentimiento: string) => void;
   onShowPolicy: () => void;
@@ -47,15 +43,13 @@ interface WaitingProps {
 const Waiting: React.FC<WaitingProps> = ({
   email,
   nombre,
-  especialidad,
-  ciudad,
+  celular,
   imagenGenerada,
   imageUrl,
   tipoSuenio,
   onEmailChange,
   onNombreChange,
-  onEspecialidadChange,
-  onCiudadChange,
+  onCelularChange,
   onConsentimientoChange,
   onShowPolicy,
   onContinue,
@@ -124,25 +118,7 @@ const Waiting: React.FC<WaitingProps> = ({
               required
             />
 
-            <input
-              type="text"
-              placeholder="Especialidad"
-              value={especialidad}
-              onChange={(e) => onEspecialidadChange(e.target.value)}
-              className="input"
-              required
-            />
-
-            <input
-              type="text"
-              placeholder="Ciudad"
-              value={ciudad}
-              onChange={(e) => onCiudadChange(e.target.value)}
-              className="input"
-              required
-            />
-
-            <input
+           <input
               type="email"
               placeholder="Correo"
               value={email}
@@ -150,6 +126,17 @@ const Waiting: React.FC<WaitingProps> = ({
               className="input"
               required
             />
+
+            <input
+              type="text"
+              placeholder="Celular"
+              value={celular}
+              onChange={(e) => onCelularChange(e.target.value)}
+              className="input"
+              required
+            />
+
+           
 
             
 

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-
+import logoSuperior from "../../assets/img/LogoSuperior.png";
 import logoInferior from "../../assets/img/LogoInferior.png";
 
 interface MergeImageProps {
@@ -33,9 +33,10 @@ const MergeImage: React.FC<MergeImageProps> = ({
 
     Promise.all([
       loadImage(imageUrl),    // avatar
+      loadImage(logoSuperior),
       loadImage(logoInferior) // Logo inferior centrado
     ])
-      .then(([avatar, LogoInf]) => {
+      .then(([avatar, LogoSup, LogoInf]) => {
         // Ajustamos el canvas al tamaño del avatar
         canvas.width = avatar.width;
         canvas.height = avatar.height;
@@ -47,16 +48,29 @@ const MergeImage: React.FC<MergeImageProps> = ({
         const scale = 1.0;
         const margin = 12;
 
-        const logoWidth = LogoInf.width * scale;
-        const logoHeight = LogoInf.height * scale;
+        const extraTopOffset =  margin*3; // distancia adicional para el logo superior
+        const extraBottomOffset = margin * 3; // hacer que el logo inferior esté un poco más arriba
 
-        // Dibujar LogoInferior centrado horizontalmente en la parte inferior
+         const supWidth = LogoSup.width * scale;
+        const supHeight = LogoSup.height * scale;
+
+        ctx.drawImage(
+          LogoSup,
+          (canvas.width - supWidth) / 2,
+          extraTopOffset,
+          supWidth,
+          supHeight
+        );
+
+        // Logo Inferior: centrado horizontalmente, un poco más arriba que antes
+        const infWidth = LogoInf.width * scale;
+        const infHeight = LogoInf.height * scale;
         ctx.drawImage(
           LogoInf,
-          (canvas.width - logoWidth) / 2,
-          canvas.height - logoHeight - margin,
-          logoWidth,
-          logoHeight
+          (canvas.width - infWidth) / 2,
+          canvas.height - infHeight - extraBottomOffset,
+          infWidth,
+          infHeight
         );
 
         // Convertir a Data URL y pasar al callback

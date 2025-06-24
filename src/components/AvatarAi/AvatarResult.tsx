@@ -37,7 +37,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
       try {
         const storageRef = ref(
           storage,
-          `grunenthal_avatars/${email}-${Date.now()}.png`
+          `carrera_de_la_mujer_avatars/${email}-${Date.now()}.png`
         );
         await uploadString(storageRef, dataUrl, "data_url");
         const downloadURL = await getDownloadURL(storageRef);
@@ -52,7 +52,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
           correoEnviado: false,
         };
         console.log("🚀 ~ datosFirestore:", datosFirestore);
-        await addDoc(collection(db, "grunenthalDev"), datosFirestore);
+        await addDoc(collection(db, "CarreraDeLaMujerDev"), datosFirestore);
         setUploadedImageUrl(downloadURL);
       } catch (error) {
         console.error("Error al subir imagen:", error);
@@ -84,11 +84,12 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
                 alt="Avatar generado"
               />
             </div>
-            {/* <h2 className="subtitleResult">
-              Descarga la imagen desde tu correo y comparte en redes sociales.
+            <h2 className="subtitleResult">
+              Comparte esta imagen 
+              <br />en Instagram y etiquetanos 
               <br />
-              Etiquetanos @cetcolsubsidio en Instagram.
-            </h2> */}
+              <div style={{ color: "#e1171b" }}>@pastaslamuneca</div>
+            </h2>
             <button
               type="button"
               className="button"

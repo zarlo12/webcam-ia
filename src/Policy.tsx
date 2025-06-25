@@ -59,6 +59,14 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
     lineHeight: "1.5",
   };
 
+  const subListStyle: React.CSSProperties = {
+    marginTop: "8px",
+    marginBottom: "15px",
+    paddingLeft: "40px",
+    fontSize: isSmallScreen ? "14px" : "16px",
+    lineHeight: "1.5",
+  };
+
   const buttonStyle: React.CSSProperties = {
     padding: isSmallScreen ? "8px 16px" : "10px 20px",
     fontSize: isSmallScreen ? "14px" : "16px",
@@ -92,46 +100,31 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
 
         <section>
           <h1 style={titleStyle}>
-            Consentimiento para Uso de Imagen y Tratamiento de Datos Personales
+            AUTORIZACIÓN PARA EL TRATAMIENTO DE DATOS PERSONALES
           </h1>
+          <h2 style={titleStyle}>
+            LANZAMIENTO A MEDIOS CARRERA DE LA MUJER PASTAS LA MUÑECA 2025
+          </h2>
+
           <p style={textStyle}>
-            Por medio del presente documento y conforme a lo consagrado en la Ley 1581 de 2012, el Decreto Reglamentario 1377 de 2013 y demás decretos reglamentarios, de manera libre, expresa, voluntaria, inequívoca y debidamente informada, declara que:
-          </p>
-          <p style={textStyle}>
-            Autorizo a <strong>GRÜNENTHAL COLOMBIANA SA (GRÜNENTHAL)</strong> para que, a través de sus empleados, consultores, asesores o contratistas, realice el tratamiento y disposición de mis datos personales indicados más adelante (Datos Personales). De esta manera conozco y acepto que GRÜNENTHAL es el responsable de la información que suministra y que en los casos en que recolecte otros datos míos, será informado.
-          </p>
-          <p style={textStyle}>
-            Autorizo expresamente a GRÜNENTHAL para que se realice el tratamiento de mis Datos Personales para las siguientes finalidades:
+            En virtud del presente documento, de forma libre y espontánea, declaro que:
           </p>
           <ol style={listStyle}>
-            <li>Programar y realizar visitas médicas.</li>
-            <li>Contactarme para la realización de conferencias, estudios clínicos, asistencia a reuniones educativas y otras actividades, sean o no en ejecución de contratos suscritos con GRÜNENTHAL, así como para realizarme pagos por servicios que hubiere prestado.</li>
-            <li>Enviarme información educativa y científica relacionada con la especialidad de mi interés.</li>
-            <li>Enviarme información relacionada con los productos de GRÜNENTHAL.</li>
-            <li>Contactarme para participar en encuestas relacionadas con los productos de GRÜNENTHAL o mercados en los que GRÜNENTHAL participa.</li>
+            <li>
+              AUTORIZO a <strong>HARINERA DEL VALLE S.A.</strong> y a su marca <strong>PASTAS LA MUÑECA</strong> para que, en desarrollo de LA ACTIVIDAD, haga tratamiento de mis datos personales, incluyendo sin limitarse a nombres, apellidos, datos de identificación, fotografías y videos.
+            </li>
+            <li>
+              AUTORIZO a <strong>HARINERA DEL VALLE S.A.</strong> y a su marca <strong>PASTAS LA MUÑECA</strong> a recolectar y hacer tratamiento de mis datos personales, que estén contenidos en los registros fotográficos y/o fílmicos que ésta realice durante LA ACTIVIDAD. El tratamiento que podrá dársele a estos datos incluye su uso, sin costo alguno, para efectuar Publicaciones en redes sociales, página web corporativa, medios impresos y/o publicitarios y medios internos de HARINERA DEL VALLE S.A. y PASTAS LA MUÑECA.
+            </li>
+            <li>
+              HARINERA DEL VALLE S.A. y PASTAS LA MUÑECA me informó:
+              <ul style={subListStyle}>
+                <li>a. Que el tratamiento de mis datos personales se realizará conforme a su política de tratamiento de datos personales;</li>
+                <li>b. el alcance de su política tratamiento de datos personales, mis derechos respecto los mismos y la forma de ejercerlos; y</li>
+                <li>c. que su política de tratamiento de datos se encuentra establecida en el manual de tratamiento de datos publicado en la página web <a href="https://www.hv.com.co" style={{ color: "#e1171b", textDecoration: "none" }}>https://www.hv.com.co</a>.</li>
+              </ul>
+            </li>
           </ol>
-          <p style={textStyle}>
-            Autorizo ser contactado personalmente a través de SMS, mensajería instantánea, redes sociales, correo electrónico, llamadas de voz, videoconferencias y por cualquier otra plataforma o medio digital conocido y/o por conocer. Autorizo igualmente a que mis datos sean transferidos y/o transmitidos a las demás empresas relacionadas con GRÜNENTHAL, así como también a terceros contratistas que presten servicios a GRÜNENTHAL y que deban realizar el tratamiento de datos personales. La mencionada transferencia y/o transmisión de Datos Personales podrá realizarse incluso a empresas que se encuentren fuera del territorio nacional en donde las normas de protección de datos no tengan un nivel de protección equivalente a las normas colombianas. Entendiendo que en el evento de transferencia y/o transmisión, mis Datos Personales serán tratados bajo estrictas medidas de confidencialidad y seguridad.
-          </p>
-          <p style={textStyle}>
-            Se me ha informado que mis Datos Personales serán tratados de acuerdo con la Política de Datos Personales que podrá consultar solicitándola al correo electrónico <a href="mailto:datospersonales.colombia@grunenthal.com">datospersonales.colombia@grunenthal.com</a>. Igualmente, se me ha informado que los derechos que tengo como titular de los datos son los consagrados en el artículo 8 de la Ley 1581 de 2012 y especialmente aquellos de conocer, actualizar, rectificar, solicitar la supresión de los datos y revocar la autorización otorgada, salvo que tenga algún deber legal de permanecer en la base de datos creada o que mis datos sean requeridos para el cumplimiento de obligaciones contractuales.
-          </p>
-          <p style={textStyle}>
-            Para cualquier solicitud o requerimiento relacionado con mis datos personales entiendo que podré contactar al correo electrónico <a href="mailto:datospersonales.colombia@grunenthal.com">datospersonales.colombia@grunenthal.com</a>.
-          </p>
-
-          <h2 style={titleStyle}>Datos Personales:</h2>
-          <ul style={listStyle}>
-            <li>Nombres y Apellidos</li>
-            <li>Género</li>
-            <li>CC / CE</li>
-            <li>Teléfono fijo trabajo</li>
-            <li>Teléfono Celular</li>
-            <li>Correo Electrónico</li>
-            <li>Dirección</li>
-            <li>Ciudad</li>
-            <li>Especialidad</li>
-          </ul>
         </section>
 
         {showBackButton && (

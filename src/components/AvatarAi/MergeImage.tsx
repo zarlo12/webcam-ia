@@ -45,7 +45,7 @@ const MergeImage: React.FC<MergeImageProps> = ({
         ctx.drawImage(avatar, 0, 0, canvas.width, canvas.height);
 
         // Factor de escala y margen para el logo inferior
-        const scale = 0.632;
+        const scale = 0.633;
         const margin = 0;
 
         //const extraTopOffset =  margin*3; // distancia adicional para el logo superior

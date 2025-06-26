@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import logoSuperior from "../../assets/img/LogoSuperior.png";
+// import logoSuperior from "../../assets/img/LogoSuperior.png";
 import logoInferior from "../../assets/img/LogoInferior.png";
 
 interface MergeImageProps {
@@ -33,10 +33,10 @@ const MergeImage: React.FC<MergeImageProps> = ({
 
     Promise.all([
       loadImage(imageUrl),    // avatar
-      loadImage(logoSuperior),
+      //loadImage(logoSuperior),
       loadImage(logoInferior) // Logo inferior centrado
     ])
-      .then(([avatar, LogoSup, LogoInf]) => {
+      .then(([avatar, LogoInf]) => {
         // Ajustamos el canvas al tamaño del avatar
         canvas.width = avatar.width;
         canvas.height = avatar.height;
@@ -45,22 +45,22 @@ const MergeImage: React.FC<MergeImageProps> = ({
         ctx.drawImage(avatar, 0, 0, canvas.width, canvas.height);
 
         // Factor de escala y margen para el logo inferior
-        const scale = 1.0;
-        const margin = 12;
+        const scale = 0.82;
+        const margin = 0;
 
-        const extraTopOffset =  margin*3; // distancia adicional para el logo superior
-        const extraBottomOffset = margin * 3; // hacer que el logo inferior esté un poco más arriba
+        //const extraTopOffset =  margin*3; // distancia adicional para el logo superior
+        const extraBottomOffset = margin ; // hacer que el logo inferior esté un poco más arriba
 
-         const supWidth = LogoSup.width * scale;
-        const supHeight = LogoSup.height * scale;
+         //const supWidth = LogoSup.width * scale;
+        //const supHeight = LogoSup.height * scale;
 
-        ctx.drawImage(
-          LogoSup,
-          (canvas.width - supWidth) / 2,
-          extraTopOffset,
-          supWidth,
-          supHeight
-        );
+        // ctx.drawImage(
+        //   LogoSup,
+        //   (canvas.width - supWidth) / 2,
+        //   extraTopOffset,
+        //   supWidth,
+        //   supHeight
+        // );
 
         // Logo Inferior: centrado horizontalmente, un poco más arriba que antes
         const infWidth = LogoInf.width * scale;

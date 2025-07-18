@@ -87,7 +87,7 @@
   align-items: center;
 }
 
-/* Inputs redondeados con fondo blanco semitransparente */
+/* Inputs redondeados con fondo blanco semitransparente */ 
 .input {
   width: 100%;
   max-width: 300px;
@@ -179,8 +179,21 @@
   border: none;
   border-radius: 12px;
   cursor: pointer;
-}
 
-.button:hover {
-  box-shadow: 0 4px 10px #f5c336;
+  /* Placeholder en negro */
+  &::placeholder {
+    color: #000000;
+    opacity: 0.7;
+  }
+
+  /* Efecto hover */
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.7);
+  }
+
+  /* Efecto focus */
+  &:focus {
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  }
 }

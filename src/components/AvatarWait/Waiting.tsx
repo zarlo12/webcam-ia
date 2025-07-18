@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./Waiting.scss";
-import logo from "../../assets/img/logoScotia.png";
+import logo from "../../assets/img/LOGO-XNOVA.png";
 
 import MergeImage from "../AvatarAi/MergeImage"; // Asegúrate de la ruta correcta
 
@@ -80,7 +80,7 @@ const Waiting: React.FC<WaitingProps> = ({
   return (
     <div className="waiting-container">
       <div className="header-bar">
-        <img src={logo} alt="Logo Scotia" className="logo-scotia" />
+        <img src={logo} alt="Logo" className="logo-scotia" />
       </div>
 
       <div className="main-content">

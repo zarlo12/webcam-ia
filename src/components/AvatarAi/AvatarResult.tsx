@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./AvatarPhoto.scss";
-import logo from "../../assets/img/logoScotia.png";
+import logo from "../../assets/img/LOGO-XNOVA.png";
 
 import { storage, db } from "../../firebaseConfig";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
@@ -70,7 +70,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
   return (
     <div className="containerResultFinal">
       <div className="header-bar">
-        <img src={logo} alt="Logo Scotia" className="logo-scotia" />
+        <img src={logo} alt="Logo" className="logo-scotia" />
       </div>
 
       <div className="main-content">

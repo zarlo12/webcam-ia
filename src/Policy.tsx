@@ -100,30 +100,16 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
 
         <section>
           <h1 style={titleStyle}>
-            AUTORIZACIÓN PARA EL TRATAMIENTO DE DATOS PERSONALES
+            Lorem Ipsum is sim
           </h1>
           <h2 style={titleStyle}>
-            LANZAMIENTO A MEDIOS CARRERA DE LA MUJER PASTAS LA MUÑECA 2025
+            Lorem Ipsum is sim
           </h2>
 
-          <p style={textStyle}>
-            En virtud del presente documento, de forma libre y espontánea, declaro que:
-          </p>
           <ol style={listStyle}>
             <li>
-              AUTORIZO a <strong>HARINERA DEL VALLE S.A.</strong> y a su marca <strong>PASTAS LA MUÑECA</strong> para que, en desarrollo de LA ACTIVIDAD, haga tratamiento de mis datos personales, incluyendo sin limitarse a nombres, apellidos, datos de identificación, fotografías y videos.
-            </li>
-            <li>
-              AUTORIZO a <strong>HARINERA DEL VALLE S.A.</strong> y a su marca <strong>PASTAS LA MUÑECA</strong> a recolectar y hacer tratamiento de mis datos personales, que estén contenidos en los registros fotográficos y/o fílmicos que ésta realice durante LA ACTIVIDAD. El tratamiento que podrá dársele a estos datos incluye su uso, sin costo alguno, para efectuar Publicaciones en redes sociales, página web corporativa, medios impresos y/o publicitarios y medios internos de HARINERA DEL VALLE S.A. y PASTAS LA MUÑECA.
-            </li>
-            <li>
-              HARINERA DEL VALLE S.A. y PASTAS LA MUÑECA me informó:
-              <ul style={subListStyle}>
-                <li>a. Que el tratamiento de mis datos personales se realizará conforme a su política de tratamiento de datos personales;</li>
-                <li>b. el alcance de su política tratamiento de datos personales, mis derechos respecto los mismos y la forma de ejercerlos; y</li>
-                <li>c. que su política de tratamiento de datos se encuentra establecida en el manual de tratamiento de datos publicado en la página web <a href="https://www.hv.com.co" style={{ color: "#e1171b", textDecoration: "none" }}>https://www.hv.com.co</a>.</li>
-              </ul>
-            </li>
+Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop p            </li>
+           
           </ol>
         </section>
 

@@ -10,7 +10,8 @@ interface AvatarResultProps {
   email: string;
   nombre: string;
   profesion: string;
-  celular: string;
+  ciudad: string;
+  formulario: string;
   consentimiento: string;
   imageUrl: string; // Imagen ya fusionada
   onReset: () => void;
@@ -20,7 +21,8 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
   email,
   nombre,
   profesion,
-  celular,
+  ciudad,
+  formulario,
   consentimiento,
   imageUrl,
   onReset,
@@ -45,7 +47,8 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
         const datosFirestore = {
           email,
           nombre,
-          celular,
+          ciudad,
+          formulario,
           imageUrl: downloadURL,
           date: new Date(),
           consentimientoAceptado: consentimiento ? "Sí" : "No",
@@ -58,7 +61,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
         console.error("Error al subir imagen:", error);
       }
     },
-    [email, nombre, profesion, celular, consentimiento]
+    [email, nombre, ciudad, formulario, consentimiento]
   );
 
   useEffect(() => {

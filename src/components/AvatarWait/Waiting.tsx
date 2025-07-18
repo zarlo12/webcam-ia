@@ -26,7 +26,6 @@ declare global {
 interface WaitingProps {
   email: string;
   nombre: string;
-  celular: string;
   ciudad: string;
   formulario: string;
 
@@ -35,7 +34,6 @@ interface WaitingProps {
   tipoSuenio: string;
   onEmailChange: (email: string) => void;
   onNombreChange: (nombre: string) => void;
-  onCelularChange: (celular: string) => void;
   onCiudadChange: (ciudad: string) => void;
   onFormularioChange: (formulario: string) => void;
 
@@ -47,7 +45,6 @@ interface WaitingProps {
 const Waiting: React.FC<WaitingProps> = ({
   email,
   nombre,
-  celular,
   ciudad,
   formulario,
   imagenGenerada,
@@ -55,7 +52,6 @@ const Waiting: React.FC<WaitingProps> = ({
   tipoSuenio,
   onEmailChange,
   onNombreChange,
-  onCelularChange,
   onCiudadChange,
   onFormularioChange,
   onConsentimientoChange,
@@ -156,8 +152,8 @@ const Waiting: React.FC<WaitingProps> = ({
             <input
               type="text"
               placeholder="Formulario"
-              value={celular}
-              onChange={(e) => onCelularChange(e.target.value)}
+              value={formulario}
+              onChange={(e) => onFormularioChange(e.target.value)}
               className="input"
               required
             />

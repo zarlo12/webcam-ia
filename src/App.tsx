@@ -26,7 +26,7 @@ function MainApp() {
   const [nombre, setNombre] = useState("");
 
 
-  const [celular, setCelular] = useState("");
+  const [formulario, setFormulario] = useState("");
   const [consentimiento, setConsentimiento] = useState("");
   const [imagenGenerada, setImagenGenerada] = useState(false); // Nueva bandera
   const [tipoSuenio, setTipoSuenio] = useState("");
@@ -36,7 +36,7 @@ function MainApp() {
   const handleProcess = () => {
     setEmail("");
     setNombre("");
-    setCelular("");
+    setFormulario("");
     setConsentimiento("");
     setImagenGenerada(false); // Reiniciamos la bandera al iniciar el proceso
     setStep("waiting");
@@ -53,8 +53,8 @@ function MainApp() {
 
   
 
-  const handleCelularChange = (newCelular: string) => {
-    setCelular(newCelular);
+  const handleFormularioChange = (newFormulario: string) => {
+    setFormulario(newFormulario);
   };
  
   const handleConsentimientoChange = (newConsentimiento: string) => {
@@ -104,7 +104,7 @@ function MainApp() {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [step, lastImageUrl, email, nombre, celular, consentimiento]);
+  }, [step, lastImageUrl, email, nombre, formulario, consentimiento]);
 
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
@@ -118,13 +118,13 @@ function MainApp() {
         <Waiting
           email={email}
           nombre={nombre}
-          celular={celular}
+          formulario={formulario}
           imagenGenerada={imagenGenerada} // Prop bandera
           imageUrl={imageUrl}
           tipoSuenio={tipoSuenio}
           onEmailChange={handleEmailChange}
           onNombreChange={handleNombreChange}
-          onCelularChange={handleCelularChange}
+          onFormularioChange={handleFormularioChange}
           onConsentimientoChange={handleConsentimientoChange}
           onShowPolicy={() => setStep("policy")}
           onContinue={handleContinue} // Función para pasar a AvatarResult

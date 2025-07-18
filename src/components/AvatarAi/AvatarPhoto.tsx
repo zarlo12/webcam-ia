@@ -179,9 +179,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
         </div>
       </div>
 
-      <div className="footerAlways">
-        
-      </div>
+      
     </div>
   );
 };

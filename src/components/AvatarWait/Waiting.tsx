@@ -27,6 +27,8 @@ interface WaitingProps {
   email: string;
   nombre: string;
   celular: string;
+  ciudad: string;
+  formulario: string;
 
   imagenGenerada: boolean;
   imageUrl: string;
@@ -34,6 +36,8 @@ interface WaitingProps {
   onEmailChange: (email: string) => void;
   onNombreChange: (nombre: string) => void;
   onCelularChange: (celular: string) => void;
+  onCiudadChange: (ciudad: string) => void;
+  onFormularioChange: (formulario: string) => void;
 
   onConsentimientoChange: (consentimiento: string) => void;
   onShowPolicy: () => void;
@@ -44,12 +48,16 @@ const Waiting: React.FC<WaitingProps> = ({
   email,
   nombre,
   celular,
+  ciudad,
+  formulario,
   imagenGenerada,
   imageUrl,
   tipoSuenio,
   onEmailChange,
   onNombreChange,
   onCelularChange,
+  onCiudadChange,
+  onFormularioChange,
   onConsentimientoChange,
   onShowPolicy,
   onContinue,
@@ -118,6 +126,15 @@ const Waiting: React.FC<WaitingProps> = ({
               required
             />
 
+            <input
+              type="text"
+              placeholder="Ciudad"
+              value={ciudad}
+              onChange={(e) => onCiudadChange(e.target.value)}
+              className="input"
+              required
+            />
+
            <input
               type="email"
               placeholder="Correo"
@@ -127,11 +144,20 @@ const Waiting: React.FC<WaitingProps> = ({
               required
             />
 
-            <input
+            {/* <input
               type="text"
               placeholder="Celular"
               value={celular}
               onChange={(e) => onCelularChange(e.target.value)}
+              className="input"
+              required
+            /> */}
+
+            <input
+              type="text"
+              placeholder="Formulario"
+              value={formulario}
+              onChange={(e) => onFormularioChange(e.target.value)}
               className="input"
               required
             />

@@ -87,29 +87,34 @@
   align-items: center;
 }
 
-/* Inputs con borde rojo y texto rojo */
+/* Inputs redondeados con fondo blanco semitransparente */
 .input {
   width: 100%;
   max-width: 300px;
   margin: 10px 0;
   padding: 12px;
-  border: 2px solid transparent;
-  border-radius: 8px;
-  background-color: #fff;
-  color: #282828;
+  border: none;
+  border-radius: 25px; /* Más redondeados */
+  background-color: rgba(255, 255, 255, 0.5); /* Blanco con 50% opacidad */
+  color: #000000; /* Texto negro */
   font-size: 16px;
   outline: none;
 
-  background-image:
-    linear-gradient(#fff, #fff),
-    linear-gradient(to right, #e1171b, #e1171b);
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
-
-  /* Placeholder en rojo más claro (opcional) */
+  /* Placeholder en negro */
   &::placeholder {
-    color: #282828;
+    color: #000000;
     opacity: 0.7;
+  }
+
+  /* Efecto hover */
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.7);
+  }
+
+  /* Efecto focus */
+  &:focus {
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
   }
 }
 

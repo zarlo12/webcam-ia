@@ -2,7 +2,8 @@
 .waiting-container {
   width: 100vw;
   height: 100vh;
-  background-color: #fff; /* Fondo blanco */
+    background: linear-gradient(30deg, #ad2225 33.33%, #6aaddf 33.33%, #6aaddf 66.66%, #efc03e 66.66%);
+
   display: flex;
   flex-direction: column;
   margin: 0;
@@ -18,7 +19,7 @@
 /* Barra roja superior */
 .header-bar {
   width: 100%;
-  background: linear-gradient(to right, #e1171b, #e1171b);
+  background: rgba(255, 255, 255, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -27,15 +28,16 @@
 
 /* Logo Scotia (ajusta el tamaño a tu gusto) */
 .logo-scotia {
-  height: 69px;
-  width: auto;
+  height: 163px;
+    margin-right: -157px;
 }
 
 /* Tarjeta central */
 .waiting-card {
+      margin-top: -320px;
   max-width: 400px;
   width: 90%;
-  margin: 20px auto; /* Centra horizontalmente */
+  //margin: 20px auto; /* Centra horizontalmente */
   text-align: center;
 }
 

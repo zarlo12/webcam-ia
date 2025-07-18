@@ -177,9 +177,7 @@ const Waiting: React.FC<WaitingProps> = ({
         </div>
       </div>
 
-      <div className="footerAlways">
-        
-      </div>
+     
     </div>
   );
 };

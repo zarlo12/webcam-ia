@@ -102,9 +102,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
         </div>
       </div>
 
-      <div className="footerAlways">
-       
-      </div>
+     
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 // import logoSuperior from "../../assets/img/LogoSuperior.png";
-import logoInferior from "../../assets/img/LogoInferior.png";
+// import logoInferior from "../../assets/img/LogoInferior.png";
 
 interface MergeImageProps {
   imageUrl: string; // URL de la imagen principal (avatar)
@@ -34,9 +34,9 @@ const MergeImage: React.FC<MergeImageProps> = ({
     Promise.all([
       loadImage(imageUrl),    // avatar
       //loadImage(logoSuperior),
-      loadImage(logoInferior) // Logo inferior centrado
+      //loadImage(logoInferior) // Logo inferior centrado
     ])
-      .then(([avatar, LogoInf]) => {
+      .then(([avatar]) => {
         // Ajustamos el canvas al tamaño del avatar
         canvas.width = avatar.width;
         canvas.height = avatar.height;
@@ -63,15 +63,15 @@ const MergeImage: React.FC<MergeImageProps> = ({
         // );
 
         // Logo Inferior: centrado horizontalmente, un poco más arriba que antes
-        const infWidth = LogoInf.width * scale;
-        const infHeight = LogoInf.height * scale;
-        ctx.drawImage(
-          LogoInf,
-          (canvas.width - infWidth) / 2,
-          canvas.height - infHeight - extraBottomOffset,
-          infWidth,
-          infHeight
-        );
+        // const infWidth = LogoInf.width * scale;
+        // const infHeight = LogoInf.height * scale;
+        // ctx.drawImage(
+        //   LogoInf,
+        //   (canvas.width - infWidth) / 2,
+        //   canvas.height - infHeight - extraBottomOffset,
+        //   infWidth,
+        //   infHeight
+        // );
 
         // Convertir a Data URL y pasar al callback
         const mergedDataUrl = canvas.toDataURL("image/png");

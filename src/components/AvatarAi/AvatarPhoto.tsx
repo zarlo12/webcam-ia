@@ -10,7 +10,6 @@ import Swal from "sweetalert2"; // Import sweetalert2
 
 interface AvatarPhotoProps {
   onProcess: (email: string) => void;
-  onDreamChange: (dream: string) => void;
 }
 interface WebcamRef {
   captureImage: () => Promise<Blob>;

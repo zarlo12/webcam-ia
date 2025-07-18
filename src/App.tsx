@@ -25,17 +25,18 @@ function MainApp() {
   const [email, setEmail] = useState("");
   const [nombre, setNombre] = useState("");
 
-
+  const [ciudad, setCiudad] = useState("");
   const [formulario, setFormulario] = useState("");
   const [consentimiento, setConsentimiento] = useState("");
   const [imagenGenerada, setImagenGenerada] = useState(false); // Nueva bandera
-  const [tipoSuenio, setTipoSuenio] = useState("");
+
 
   // Esta función se invoca en AvatarPhoto al enviar la petición a n8n.
   // Además, al cambiar a Waiting se limpia el email para que el usuario lo ingrese nuevamente.
   const handleProcess = () => {
     setEmail("");
     setNombre("");
+     setCiudad("");
     setFormulario("");
     setConsentimiento("");
     setImagenGenerada(false); // Reiniciamos la bandera al iniciar el proceso
@@ -51,7 +52,9 @@ function MainApp() {
     setNombre(newNombre);
   };
 
-  
+  const handleCiudadChange = (newCiudad: string) => {
+    setCiudad(newCiudad);
+  };
 
   const handleFormularioChange = (newFormulario: string) => {
     setFormulario(newFormulario);
@@ -62,11 +65,7 @@ function MainApp() {
     console.log("Consentimiento:", newConsentimiento);
   };
 
-  // Callback para recibir la selección de "sueño" desde AvatarPhoto
-  const handleDreamChange = (dream: string) => {
-    setTipoSuenio(dream);
-    console.log("Tipo de sueño seleccionado:", dream);
-  };
+
 
   // Función para pasar a AvatarResult cuando el usuario haga clic en el botón.
   const handleContinue = (mergedUrl: string) => {
@@ -111,7 +110,6 @@ function MainApp() {
       {step === "photo" && (
         <AvatarPhoto
           onProcess={handleProcess}
-          onDreamChange={handleDreamChange}
         />
       )}
       {step === "waiting" && (
@@ -121,9 +119,10 @@ function MainApp() {
           formulario={formulario}
           imagenGenerada={imagenGenerada} // Prop bandera
           imageUrl={imageUrl}
-          tipoSuenio={tipoSuenio}
+          ciudad={ciudad}
           onEmailChange={handleEmailChange}
           onNombreChange={handleNombreChange}
+          onCiudadChange={handleCiudadChange}
           onFormularioChange={handleFormularioChange}
           onConsentimientoChange={handleConsentimientoChange}
           onShowPolicy={() => setStep("policy")}
@@ -135,8 +134,8 @@ function MainApp() {
           imageUrl={imageUrl}
           email={email}
           nombre={nombre}
-          profesion={tipoSuenio}
-          celular={celular}
+          ciudad={ciudad}
+          formulario={formulario}
           consentimiento={consentimiento}
           onReset={() => setStep("photo")}
         />

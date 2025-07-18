@@ -9,7 +9,6 @@ import { collection, addDoc } from "firebase/firestore";
 interface AvatarResultProps {
   email: string;
   nombre: string;
-  profesion: string;
   ciudad: string;
   formulario: string;
   consentimiento: string;
@@ -20,7 +19,6 @@ interface AvatarResultProps {
 const AvatarResult: React.FC<AvatarResultProps> = ({
   email,
   nombre,
-  profesion,
   ciudad,
   formulario,
   consentimiento,

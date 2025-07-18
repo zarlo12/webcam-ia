@@ -31,7 +31,6 @@ interface WaitingProps {
 
   imagenGenerada: boolean;
   imageUrl: string;
-  tipoSuenio: string;
   onEmailChange: (email: string) => void;
   onNombreChange: (nombre: string) => void;
   onCiudadChange: (ciudad: string) => void;
@@ -49,7 +48,6 @@ const Waiting: React.FC<WaitingProps> = ({
   formulario,
   imagenGenerada,
   imageUrl,
-  tipoSuenio,
   onEmailChange,
   onNombreChange,
   onCiudadChange,
@@ -97,7 +95,7 @@ const Waiting: React.FC<WaitingProps> = ({
                 <MergeImage
                   imageUrl={imageUrl}
                   onMerged={handleMerged}
-                  tipoSuenio={tipoSuenio}
+                  tipoSuenio={''}
                 />
               )}
             </div>

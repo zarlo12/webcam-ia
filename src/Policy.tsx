@@ -46,11 +46,7 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
     fontSize: isSmallScreen ? "20px" : "24px",
   };
 
-  const textStyle: React.CSSProperties = {
-    marginBottom: "15px",
-    fontSize: isSmallScreen ? "14px" : "16px",
-    lineHeight: "1.5",
-  };
+
 
   const listStyle: React.CSSProperties = {
     marginBottom: "15px",
@@ -59,13 +55,7 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
     lineHeight: "1.5",
   };
 
-  const subListStyle: React.CSSProperties = {
-    marginTop: "8px",
-    marginBottom: "15px",
-    paddingLeft: "40px",
-    fontSize: isSmallScreen ? "14px" : "16px",
-    lineHeight: "1.5",
-  };
+
 
   const buttonStyle: React.CSSProperties = {
     padding: isSmallScreen ? "8px 16px" : "10px 20px",

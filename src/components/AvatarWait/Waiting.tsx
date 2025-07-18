@@ -156,8 +156,8 @@ const Waiting: React.FC<WaitingProps> = ({
             <input
               type="text"
               placeholder="Formulario"
-              value={formulario}
-              onChange={(e) => onFormularioChange(e.target.value)}
+              value={celular}
+              onChange={(e) => onCelularChange(e.target.value)}
               className="input"
               required
             />

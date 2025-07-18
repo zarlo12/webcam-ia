@@ -15,7 +15,7 @@
   height: 100vh;
   display: flex; /* 💡 descomenta esto */
   flex-direction: column; /* ya lo tenías */
-  background-color: white;
+  background: linear-gradient(30deg, #ad2225 33.33%, #6aaddf 33.33%, #6aaddf 66.66%, #efc03e 66.66%);
   overflow: hidden;
   position: relative;
 }

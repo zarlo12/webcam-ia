@@ -84,12 +84,12 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
                 alt="Avatar generado"
               />
             </div>
-            <h2 className="subtitleResult">
+            {/* <h2 className="subtitleResult">
               Comparte esta imagen 
               <br />en Instagram y etiquetanos 
               <br />
               <div style={{ color: "#e1171b" }}>@pastaslamuneca</div>
-            </h2>
+            </h2> */}
             <button
               type="button"
               className="button"

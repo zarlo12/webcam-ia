@@ -1,32 +1,70 @@
+import { setGlobalOptions } from "firebase-functions/v2";
+import { onRequest } from "firebase-functions/v2/https";
+import {
+  generateAIImage,
+  getProcessingStatus,
+  healthCheck,
+} from "./src/controllers";
+import * as cors from "cors";
+import { corsConfig } from "./src/config";
+
+// Configure global options
+setGlobalOptions({
+  maxInstances: 10,
+  timeoutSeconds: 540, // 9 minutes for AI processing
+  memory: "1GiB",
+  region: "us-central1",
+});
+
+// Initialize CORS
+const corsHandler = cors(corsConfig);
+
 /**
- * Import function triggers from their respective submodules:
- *
- * const {onCall} = require("firebase-functions/v2/https");
- * const {onDocumentWritten} = require("firebase-functions/v2/firestore");
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
+ * Main AI Image Generation endpoint
+ * Handles webcam image processing and AI generation
  */
+export const aiImageGeneration = onRequest(
+  {
+    maxInstances: 5,
+    timeoutSeconds: 540,
+    memory: "2GiB",
+    cors: true,
+  },
+  async (req, res) => {
+    return corsHandler(req, res, () => generateAIImage(req, res));
+  }
+);
 
-const {setGlobalOptions} = require("firebase-functions");
-const {onRequest} = require("firebase-functions/https");
-const logger = require("firebase-functions/logger");
+/**
+ * Processing status endpoint
+ * Check the status of async AI generation tasks
+ */
+export const processingStatus = onRequest(
+  {
+    maxInstances: 10,
+    timeoutSeconds: 60,
+    memory: "512MiB",
+    cors: true,
+  },
+  async (req, res) => {
+    return corsHandler(req, res, () => getProcessingStatus(req, res));
+  }
+);
 
-// For cost control, you can set the maximum number of containers that can be
-// running at the same time. This helps mitigate the impact of unexpected
-// traffic spikes by instead downgrading performance. This limit is a
-// per-function limit. You can override the limit for each function using the
-// `maxInstances` option in the function's options, e.g.
-// `onRequest({ maxInstances: 5 }, (req, res) => { ... })`.
-// NOTE: setGlobalOptions does not apply to functions using the v1 API. V1
-// functions should each use functions.runWith({ maxInstances: 10 }) instead.
-// In the v1 API, each function can only serve one request per container, so
-// this will be the maximum concurrent request count.
-setGlobalOptions({ maxInstances: 10 });
+/**
+ * Health check endpoint
+ */
+export const health = onRequest(
+  {
+    maxInstances: 10,
+    timeoutSeconds: 30,
+    memory: "256MiB",
+    cors: true,
+  },
+  async (req, res) => {
+    return corsHandler(req, res, () => healthCheck(req, res));
+  }
+);
 
-// Create and deploy your first functions
-// https://firebase.google.com/docs/functions/get-started
-
-// exports.helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+// Legacy endpoint for backwards compatibility (if needed)
+export const processWebcamImage = aiImageGeneration;

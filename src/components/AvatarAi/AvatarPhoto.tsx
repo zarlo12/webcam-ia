@@ -1,12 +1,9 @@
 import React, { useState, useRef } from "react";
 import "./AvatarPhoto.scss";
-// import fondo from "../../assets/img/fondo.png";
 import logo from "../../assets/img/LOGO-XNOVA.png";
-
 import WebcamScene from "../WebcamScene";
-import axios from "axios";
-import Swal from "sweetalert2"; // Import sweetalert2
-// import { FaCamera } from "react-icons/fa";
+import aiImageService, { ImageStyle } from "../../services/aiImageService";
+import Swal from "sweetalert2";
 
 interface AvatarPhotoProps {
   onProcess: (email: string) => void;
@@ -15,20 +12,14 @@ interface WebcamRef {
   captureImage: () => Promise<Blob>;
 }
 
-const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
-  onProcess,
-}) => {
+const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess }) => {
   const [email] = useState("");
   const [capturedImage, setCapturedImage] = useState<Blob | null>(null);
   const [capturedImageUrl, setCapturedImageUrl] = useState<string>("");
-
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [selectedStyle, setSelectedStyle] = useState<ImageStyle>(ImageStyle.PROFESSIONAL);
 
   const webcamRef = useRef<WebcamRef | null>(null);
-
-  const webhookUrl =
-    import.meta.env.VITE_N8N_WEBHOOK_URL ||
-    "https://xnova360.app.n8n.cloud/webhook-test/497347b7-8019-4f9b-8541-2ae380e51920";
-  //const webhookUrl = "https://test231234423234432.com/";
 
   // Función para capturar la imagen desde el componente WebcamScene
   const handleCapture = async () => {
@@ -40,28 +31,74 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
         setCapturedImageUrl(url);
       } catch (error) {
         console.error("Error al capturar la imagen:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "No se pudo capturar la imagen. Inténtalo de nuevo.",
+        });
       }
     }
   };
 
-  // Envía la imagedn capturada al endpoint de n8n
+  // Procesa la imagen usando el nuevo servicio de IA
   const handleProcessImage = async () => {
     if (!capturedImage) return;
-    const formData = new FormData();
-    formData.append("image", capturedImage, "webcam-image.jpg");
-  
+    
+    setIsProcessing(true);
+    
     try {
-      console.log("Enviando imagen...");
-      //onProcess(); //TEMPORAL NO DEBE IR AQUI
-      const responseFinal = await axios.post(webhookUrl, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-        timeout: 600000,
+      console.log("Procesando imagen con IA...");
+      
+      // Mostrar alerta de procesamiento
+      Swal.fire({
+        title: "Generando tu imagen con IA",
+        text: "Esto puede tomar unos minutos...",
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
       });
-      console.log("Imagen enviada a n8n!", responseFinal);
-      //alert("Imagen enviada a n8n!");
-      onProcess(email); // Cambia de pantalla (por ejemplo, a 'waiting')
+
+      // Usar el nuevo servicio de IA
+      const result = await aiImageService.generateImageWithFormData(
+        capturedImage,
+        "professional portrait, high quality, detailed, business attire",
+        selectedStyle,
+        "user-" + Date.now()
+      );
+
+      if (result.success && result.imageUrl) {
+        console.log("Imagen generada exitosamente:", result.imageUrl);
+        
+        // Cerrar loading y cambiar de pantalla
+        Swal.close();
+        onProcess(email);
+        
+        // Opcional: Mostrar éxito
+        setTimeout(() => {
+          Swal.fire({
+            icon: "success",
+            title: "¡Éxito!",
+            text: "Tu imagen ha sido generada con IA",
+            timer: 2000,
+            showConfirmButton: false
+          });
+        }, 500);
+        
+      } else {
+        throw new Error(result.error || "Error desconocido al generar la imagen");
+      }
+
     } catch (error) {
       console.error("Error al procesar la imagen:", error);
+      
+      Swal.fire({
+        icon: "error",
+        title: "Error al procesar",
+        text: error instanceof Error ? error.message : "Hubo un problema al generar tu imagen con IA. Inténtalo de nuevo.",
+      });
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -75,16 +112,6 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // 1) Validar que haya seleccionado un "sueño"/interés
-    // if (!selectedDream) {
-    //   Swal.fire({
-    //     icon: "warning",
-    //     title: "Advertencia",
-    //     text: "Por favor selecciona tu interés.",
-    //   });
-    //   return;
-    // }
-
     if (!capturedImage) {
       Swal.fire({
         icon: "warning",
@@ -93,7 +120,11 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
       });
       return;
     }
-    onProcess(email);
+
+    if (isProcessing) {
+      return; // Evitar múltiples envíos
+    }
+
     handleProcessImage();
   };
 
@@ -123,45 +154,34 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
           </div>
 
           <div className="buttons-container">
-            {/* SELECT "Selecciona tu sueño" */}
-            {/* <div className="select-container">
+            {/* Selector de estilo de IA */}
+            <div className="select-container">
               <select
-                value={selectedDream}
-                onChange={(e) => {
-                  const dream = e.target.value;
-                  setSelectedDream(dream);
-                  onDreamChange(dream); // Llama al callback para elevar la selección
-                }}
+                value={selectedStyle}
+                onChange={(e) => setSelectedStyle(e.target.value as ImageStyle)}
               >
-                <option value="" disabled>
-                  Selecciona tu interés
-                </option>
-                <option value="Gastronómico">Gastronómico</option>
-                <option value="Administrativo">Administrativo</option>
-                <option value="Experto en TIC">Experto en TIC</option>
-                <option value="Experto en logística">
-                  Experto en logística
-                </option>
-                <option value="Regente de Farmacia">Regente de Farmacia</option>
-                <option value="Experto en SST">Experto en SST</option>
+                <option value={ImageStyle.PROFESSIONAL}>Profesional</option>
+                <option value={ImageStyle.REALISTIC}>Realista</option>
+                <option value={ImageStyle.ARTISTIC}>Artístico</option>
+                <option value={ImageStyle.CARTOON}>Cartoon</option>
+                <option value={ImageStyle.VINTAGE}>Vintage</option>
               </select>
               <span className="select-arrow">▼</span>
-            </div> */}
+            </div>
 
             <button
               type="button"
               className="button button-camera"
               onClick={capturedImageUrl ? handleResetCapture : handleCapture}
+              disabled={isProcessing}
             >
               <div
                 style={{
-                  // display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
                   width: "100%",
                 }}
               >
-                {/* <FaCamera size={38} style={{ marginRight: "8px" }} /> */}
                 {capturedImageUrl ? "Tomar otra" : "Tomar foto"}
               </div>
             </button>
@@ -170,9 +190,9 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
             <button
               type="submit"
               className="button"
-              disabled={!capturedImageUrl}
+              disabled={!capturedImageUrl || isProcessing}
             >
-              Procesar
+              {isProcessing ? "Generando..." : "Procesar con IA"}
             </button>
           </form>
         </div>

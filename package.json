@@ -1,13 +1,17 @@
 {
-  "name": "webcam-n8n",
+  "name": "webcam-ai",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "AI Image Generation from Webcam using Replicate",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "functions:build": "cd backend/functions && npm run build",
+    "functions:serve": "cd backend/functions && npm run serve",
+    "functions:deploy": "cd backend/functions && npm run deploy"
   },
   "dependencies": {
     "@react-three/drei": "^10.0.3",

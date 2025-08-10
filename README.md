@@ -1,15 +1,31 @@
-# Webcam-n8n
+# Webcam IA - AI Image Generation
 
-## Descripción
-Esta aplicación web permite capturar imágenes desde la webcam del usuario y enviarlas automáticamente a un flujo de trabajo de n8n a través de un webhook. Utiliza React, Three.js y React Three Fiber para crear una interfaz 3D interactiva que muestra la transmisión de la webcam.
+Una aplicación moderna de generación de imágenes con IA que captura fotos de la webcam y las procesa usando Replicate AI en lugar de n8n/comfydeploy.
 
-## Características
-- Visualización en tiempo real de la webcam en un entorno 3D
-- Captura de imágenes presionando la tecla 'M'
-- Envío automático de las imágenes capturadas a n8n en formato base64
-- Controles de cámara 3D para ajustar la vista
+## 🚀 Características
+
+- **Captura de webcam en tiempo real** con React y TypeScript
+- **Generación de imágenes con IA** usando Replicate.com
+- **Múltiples estilos de IA**: Profesional, Realista, Artístico, Cartoon, Vintage
+- **Backend profesional** con Google Cloud Functions
+- **Firebase Storage** para almacenamiento de imágenes
+- **Interfaz moderna** con React y Sass
+- **TypeScript** en todo el stack
+
+## 🏗️ Arquitectura
+
+```
+Frontend (React + TypeScript + Vite)
+    ↓
+Google Cloud Functions (Node.js + TypeScript)
+    ↓
+Replicate API (AI Image Generation)
+    ↓
+Firebase Storage (Image Storage)
+```
 
 ## Tecnologías utilizadas
+
 - React
 - TypeScript
 - Three.js
@@ -18,6 +34,7 @@ Esta aplicación web permite capturar imágenes desde la webcam del usuario y en
 - Axios para peticiones HTTP
 
 ## Configuración
+
 1. Clona este repositorio
 2. Instala las dependencias con `npm install`
 3. Configura tu URL de webhook de n8n en el archivo `.env`:
@@ -28,17 +45,21 @@ Esta aplicación web permite capturar imágenes desde la webcam del usuario y en
 5. Para construir la aplicación para producción, usa `npm run build`
 
 ## Uso
+
 1. Permite el acceso a la webcam cuando el navegador lo solicite
 2. Presiona la tecla 'M' para capturar una imagen
 3. La imagen se enviará automáticamente al webhook de n8n configurado
 4. Utiliza los controles del ratón para ajustar la vista 3D (opcional)
 
 ## Estructura del proyecto
+
 - `src/components/WebcamScene.tsx`: Componente principal que maneja la captura de la webcam y el envío de imágenes
 - `.env`: Archivo de configuración para la URL del webhook de n8n
 
 ## Integración con n8n
+
 Las imágenes se envían como datos base64 en formato JSON al webhook configurado. En n8n, puedes procesar estas imágenes para:
+
 - Almacenarlas en un servicio de almacenamiento
 - Analizarlas con servicios de visión artificial
 - Enviarlas por correo electrónico

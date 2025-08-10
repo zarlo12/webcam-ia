@@ -24,13 +24,32 @@ export enum ImageStyle {
 }
 
 class AIImageService {
-  private baseUrl: string;
+  private generateImageUrl: string;
+  private healthCheckUrl: string;
+  private processingStatusUrl: string;
 
   constructor() {
     // Use environment variable or fallback to production URLs
-    this.baseUrl =
-      import.meta.env.VITE_FIREBASE_FUNCTIONS_URL ||
-      "https://us-central1-imagen-ia-845a3.cloudfunctions.net";
+    const baseUrl = import.meta.env.VITE_FIREBASE_FUNCTIONS_URL;
+
+    if (baseUrl) {
+      // Development or custom base URL
+      this.generateImageUrl = `${baseUrl}/generateAIImage`;
+      this.healthCheckUrl = `${baseUrl}/healthCheck`;
+      this.processingStatusUrl = `${baseUrl}/getProcessingStatus`;
+    } else {
+      // Production URLs
+      this.generateImageUrl = "https://generateaiimage-buybcovkna-uc.a.run.app";
+      this.healthCheckUrl = "https://healthcheck-buybcovkna-uc.a.run.app";
+      this.processingStatusUrl =
+        "https://getprocessingstatus-buybcovkna-uc.a.run.app";
+    }
+
+    console.log("🚀 AIImageService URLs:", {
+      generateImageUrl: this.generateImageUrl,
+      healthCheckUrl: this.healthCheckUrl,
+      processingStatusUrl: this.processingStatusUrl,
+    });
   }
 
   /**
@@ -40,16 +59,12 @@ class AIImageService {
     try {
       console.log("Sending image to AI generation service...");
 
-      const response = await axios.post(
-        `${this.baseUrl}/generateAIImage`,
-        request,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          timeout: 600000, // 10 minutes timeout for AI processing
-        }
-      );
+      const response = await axios.post(this.generateImageUrl, request, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        timeout: 600000, // 10 minutes timeout for AI processing
+      });
 
       return response.data;
     } catch (error) {
@@ -91,16 +106,12 @@ class AIImageService {
 
       console.log("Sending image with FormData to AI generation service...");
 
-      const response = await axios.post(
-        `${this.baseUrl}/generateAIImage`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          timeout: 600000, // 10 minutes timeout
-        }
-      );
+      const response = await axios.post(this.generateImageUrl, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        timeout: 600000, // 10 minutes timeout
+      });
 
       return response.data;
     } catch (error) {
@@ -132,7 +143,7 @@ class AIImageService {
     error?: string;
   }> {
     try {
-      const response = await axios.get(`${this.baseUrl}/healthCheck`, {
+      const response = await axios.get(this.healthCheckUrl, {
         timeout: 10000,
       });
       return response.data;
@@ -151,7 +162,7 @@ class AIImageService {
   async getProcessingStatus(predictionId: string): Promise<any> {
     try {
       const response = await axios.get(
-        `${this.baseUrl}/getProcessingStatus?predictionId=${predictionId}`,
+        `${this.processingStatusUrl}?predictionId=${predictionId}`,
         { timeout: 10000 }
       );
       return response.data;

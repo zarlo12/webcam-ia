@@ -99,16 +99,22 @@ class ReplicateService {
     const modelConfig = this.getModelConfig(style);
 
     const input = {
-      image: imageUrl,
+      input_image: imageUrl,
       prompt: prompt,
-      negative_prompt: "blurry, low quality, distorted, ugly, bad anatomy",
-      num_inference_steps: 30,
-      guidance_scale: 7.5,
-      width: 1024,
-      height: 1024,
+      negative_prompt:
+        "blurry, low quality, distorted, ugly, bad anatomy, deformed face, asymmetric face, different person, wrong face, face swap, face change, altered face, modified facial features, different eyes, different nose, different mouth, changed skin, facial reconstruction",
+      num_steps: 20,
+      style_strength_ratio: 5,
+      num_outputs: 1,
+      guidance_scale: 15,
+      seed: Math.floor(Math.random() * 1000000),
     };
 
-    console.log("Processing with Replicate model:", modelConfig.model);
+    console.log(
+      "Processing with PhotoMaker model for face preservation:",
+      modelConfig.model
+    );
+    console.log("Using prompt with 'img' trigger:", prompt);
 
     const output = await retryWithBackoff(
       async () => {
@@ -164,35 +170,35 @@ class ReplicateService {
    * Get model configuration based on style
    */
   private getModelConfig(style?: string) {
-    switch (style) {
-      case ImageStyle.CARTOON:
-        return REPLICATE_MODELS.FACE_TO_STICKER;
-      case ImageStyle.PROFESSIONAL:
-        return REPLICATE_MODELS.PORTRAIT_GENERATOR;
-      default:
-        return REPLICATE_MODELS.STABLE_DIFFUSION_XL;
-    }
+    // Always use PhotoMaker for face preservation
+    return {
+      model: replicateConfig.model,
+      version: replicateConfig.version,
+    };
   }
 
   /**
    * Get default prompt based on style
    */
   private getDefaultPrompt(style?: string): string {
-    const basePrompt = "professional portrait, high quality, detailed";
+    // Ultra-conservative prompt for maximum face preservation
+    // PhotoMaker requires "img" as trigger word - MAXIMUM face preservation
+    const dentalBasePrompt =
+      "a photo of img person wearing white medical coat in dental clinic, DO NOT CHANGE FACE, keep exact same face, preserve all facial features 100%, same eyes same nose same mouth, identical person, no facial modifications whatsoever";
 
     switch (style) {
       case ImageStyle.REALISTIC:
-        return `${basePrompt}, photorealistic, natural lighting`;
+        return `${dentalBasePrompt}, realistic medical setting, same face exactly, no changes to facial features`;
       case ImageStyle.ARTISTIC:
-        return `${basePrompt}, artistic style, creative interpretation`;
+        return `${dentalBasePrompt}, professional medical portrait, preserve face completely, same person`;
       case ImageStyle.CARTOON:
-        return `${basePrompt}, cartoon style, fun and colorful`;
+        return `${dentalBasePrompt}, cartoon style but keep identical face, same facial features`;
       case ImageStyle.PROFESSIONAL:
-        return `${basePrompt}, business attire, corporate headshot`;
+        return `${dentalBasePrompt}, business portrait, stethoscope, exact same face, zero facial changes`;
       case ImageStyle.VINTAGE:
-        return `${basePrompt}, vintage style, classic photography`;
+        return `${dentalBasePrompt}, classic style, maintain identical facial features, same person`;
       default:
-        return basePrompt;
+        return `${dentalBasePrompt}, professional dentist outfit only, keep face 100% identical, no facial changes`;
     }
   }
 

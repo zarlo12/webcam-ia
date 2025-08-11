@@ -2,8 +2,8 @@ import { ReplicateConfig, FirebaseStorageConfig } from "../types";
 
 export const replicateConfig: ReplicateConfig = {
   apiToken: process.env.REPLICATE_API_TOKEN || "",
-  model: "stability-ai/stable-diffusion-xl-base-1.0",
-  version: "39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b",
+  model: "tencentarc/photomaker",
+  version: "ddfc2b08d209f9fa8c1eca692712918bd449f695dabb4a958da31802a9570fe4",
 };
 
 export const firebaseConfig: FirebaseStorageConfig = {

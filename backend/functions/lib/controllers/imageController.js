@@ -22,8 +22,8 @@ function parseMultipartData(body, boundary) {
         start = pos + boundaryBuffer.length;
         pos = body.indexOf(boundaryBuffer, start);
     }
-    parts.forEach(part => {
-        const headerEnd = part.indexOf('\r\n\r\n');
+    parts.forEach((part) => {
+        const headerEnd = part.indexOf("\r\n\r\n");
         if (headerEnd === -1)
             return;
         const headers = part.slice(0, headerEnd).toString();
@@ -32,7 +32,7 @@ function parseMultipartData(body, boundary) {
         if (!nameMatch)
             return;
         const fieldName = nameMatch[1];
-        if (headers.includes('filename=')) {
+        if (headers.includes("filename=")) {
             // It's a file
             files[fieldName] = content.slice(0, -2); // Remove trailing \r\n
         }
@@ -47,7 +47,7 @@ exports.generateAIImage = (0, https_1.onRequest)({
     cors: true,
     timeoutSeconds: 540,
     memory: "2GiB",
-    maxInstances: 5
+    maxInstances: 5,
 }, async (req, res) => {
     try {
         console.log(`📥 ${req.method} request received - using custom parser v4`);
@@ -102,7 +102,9 @@ const handleMultipartRequest = async (req, res) => {
         let body;
         if (req.rawBody) {
             console.log("📦 Using req.rawBody");
-            body = Buffer.isBuffer(req.rawBody) ? req.rawBody : Buffer.from(req.rawBody);
+            body = Buffer.isBuffer(req.rawBody)
+                ? req.rawBody
+                : Buffer.from(req.rawBody);
         }
         else if (req.body) {
             console.log("📦 Using req.body");
@@ -113,11 +115,11 @@ const handleMultipartRequest = async (req, res) => {
             // Fallback to stream reading
             const chunks = [];
             return new Promise((resolve) => {
-                req.on('data', (chunk) => {
+                req.on("data", (chunk) => {
                     chunks.push(chunk);
                     console.log(`📦 Chunk: ${chunk.length} bytes`);
                 });
-                req.on('end', async () => {
+                req.on("end", async () => {
                     try {
                         const streamBody = Buffer.concat(chunks);
                         await processMultipartBody(streamBody, boundary, res);
@@ -132,7 +134,7 @@ const handleMultipartRequest = async (req, res) => {
                         resolve();
                     }
                 });
-                req.on('error', (error) => {
+                req.on("error", (error) => {
                     console.error("❌ Request stream error:", error);
                     res.status(400).json({
                         success: false,
@@ -172,9 +174,11 @@ async function processMultipartBody(body, boundary, res) {
     console.log(`✅ Image received: ${imageBuffer.length} bytes`);
     console.log(`📋 Parameters: prompt="${prompt}", style="${style}", userId="${userId}"`);
     // Convert buffer to base64 - detect image type from buffer
-    let mimeType = 'image/jpeg'; // default
-    if (imageBuffer.slice(0, 8).equals(Buffer.from([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]))) {
-        mimeType = 'image/png';
+    let mimeType = "image/jpeg"; // default
+    if (imageBuffer
+        .slice(0, 8)
+        .equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) {
+        mimeType = "image/png";
     }
     const base64Image = `data:${mimeType};base64,${imageBuffer.toString("base64")}`;
     const request = {

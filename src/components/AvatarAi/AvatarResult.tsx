@@ -53,7 +53,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
           correoEnviado: false,
         };
         console.log("🚀 ~ datosFirestore:", datosFirestore);
-        await addDoc(collection(db, "CarreraDeLaMujerDev"), datosFirestore);
+        await addDoc(collection(db, "NTPMedia"), datosFirestore);
         setUploadedImageUrl(downloadURL);
       } catch (error) {
         console.error("Error al subir imagen:", error);

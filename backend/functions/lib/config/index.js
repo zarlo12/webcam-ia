@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.REPLICATE_MODELS = exports.rateLimitConfig = exports.corsConfig = exports.firebaseConfig = exports.replicateConfig = void 0;
 exports.replicateConfig = {
     apiToken: process.env.REPLICATE_API_TOKEN || "",
-    model: "tencentarc/photomaker",
-    version: "ddfc2b08d209f9fa8c1eca692712918bd449f695dabb4a958da31802a9570fe4",
+    model: "black-forest-labs/flux-kontext-pro",
+    version: "latest",
 };
 exports.firebaseConfig = {
     bucketName: process.env.STORAGE_BUCKET || "imagen-ia-845a3.appspot.com",

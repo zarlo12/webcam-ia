@@ -17,7 +17,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess }) => {
   const [capturedImage, setCapturedImage] = useState<Blob | null>(null);
   const [capturedImageUrl, setCapturedImageUrl] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const [selectedStyle, setSelectedStyle] = useState<ImageStyle>(ImageStyle.PROFESSIONAL);
+  const [selectedStyle, setSelectedStyle] = useState<ImageStyle>(ImageStyle.REALISTIC);
 
   const webcamRef = useRef<WebcamRef | null>(null);
 
@@ -59,10 +59,10 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess }) => {
         }
       });
 
-      // Usar el nuevo servicio de IA
+      // Usar flux-kontext-pro para máximo realismo y preservación facial
       const result = await aiImageService.generateImageWithFormData(
         capturedImage,
-        "professional portrait, high quality, detailed, business attire",
+        "Transform this person into a professional dentist while keeping the same facial features and identity. They are wearing a clean white medical coat and have a stethoscope around their neck. The background is a modern, bright dental clinic with a dental chair, medical equipment, and professional medical lighting. Ultra-realistic medical photography style.",
         selectedStyle,
         "user-" + Date.now()
       );

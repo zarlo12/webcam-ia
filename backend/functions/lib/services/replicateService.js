@@ -28,7 +28,7 @@ class ReplicateService {
     async generateImageFromWebcam(request) {
         const requestId = (0, utils_1.generateRequestId)();
         try {
-            console.log(`[${requestId}] Starting AI image generation...`);
+            console.log(`[${requestId}] Starting AI image generation with face-to-many...`);
             // Convert and optimize the image
             const imageBuffer = (0, utils_1.base64ToBuffer)(request.imageData);
             const optimizedBuffer = await (0, utils_1.optimizeImageForAI)(imageBuffer);
@@ -60,32 +60,32 @@ class ReplicateService {
      */
     async processWithReplicate(imageUrl, prompt, style) {
         const modelConfig = this.getModelConfig(style);
+        // black-forest-labs/flux-kontext-pro parameters - modelo PRO para máximo realismo
         const input = {
-            input_image: imageUrl,
             prompt: prompt,
-            negative_prompt: "blurry, low quality, distorted, ugly, bad anatomy, deformed face, asymmetric face, different person, wrong face",
-            num_steps: 50,
-            style_strength_ratio: 15,
-            num_outputs: 1,
-            guidance_scale: 5,
+            input_image: imageUrl,
+            output_format: "jpg",
+            guidance_scale: 3.5,
+            num_inference_steps: 28,
             seed: Math.floor(Math.random() * 1000000),
+            disable_safety_checker: false
         };
-        console.log("Processing with PhotoMaker model for face preservation:", modelConfig.model);
-        console.log("Using prompt with 'img' trigger:", prompt);
+        console.log("Processing with flux-kontext-pro for ultra-realistic results:", modelConfig.model);
+        console.log("Using detailed realistic dental prompt:", prompt);
         const output = await (0, utils_1.retryWithBackoff)(async () => {
-            return await this.initReplicate().run(`${modelConfig.model}:${modelConfig.version}`, { input });
+            return await this.initReplicate().run(`${modelConfig.model}`, { input });
         }, 3, 2000);
-        // Handle different output formats
-        if (Array.isArray(output)) {
-            return output[0];
+        // flux-kontext-pro returns a FileOutput object with url() method
+        if (output && typeof output === 'object' && 'url' in output) {
+            return output.url();
         }
         else if (typeof output === "string") {
             return output;
         }
-        else if (output && typeof output === "object" && "url" in output) {
-            return output.url;
+        else if (Array.isArray(output)) {
+            return output[0];
         }
-        throw new Error("Unexpected output format from Replicate API");
+        throw new Error("Unexpected output format from flux-kontext-pro API");
     }
     /**
      * Download generated image and upload to our storage
@@ -111,29 +111,28 @@ class ReplicateService {
         // Always use PhotoMaker for face preservation
         return {
             model: config_1.replicateConfig.model,
-            version: config_1.replicateConfig.version
+            version: config_1.replicateConfig.version,
         };
     }
     /**
      * Get default prompt based on style
      */
     getDefaultPrompt(style) {
-        // Base prompt for dental professional portraits that preserves facial identity
-        // PhotoMaker requires "img" as trigger word
-        const dentalBasePrompt = "a photo of img person as a professional dentist, same face, wearing white medical coat, dental clinic background, clean modern medical office, professional lighting, high quality, detailed, preserve facial features, maintain identity";
+        // Prompt específico para flux-kontext-pro siguiendo best practices
+        const baseRealisticPrompt = `Transform this person into a professional dentist while keeping the same facial features and identity. They are wearing a clean white medical coat and have a stethoscope around their neck. The background is a modern, bright dental clinic with a dental chair, medical equipment on trays, diplomas on the wall, and professional medical lighting. The style is ultra-realistic medical photography with natural skin texture and high detail.`;
         switch (style) {
             case types_1.ImageStyle.REALISTIC:
-                return `${dentalBasePrompt}, photorealistic, natural professional lighting, crisp details, same facial structure`;
+                return `${baseRealisticPrompt} Make it photorealistic with perfect lighting and clinical atmosphere.`;
             case types_1.ImageStyle.ARTISTIC:
-                return `${dentalBasePrompt}, artistic professional style, elegant medical portrait, preserve original face`;
+                return `Transform this person into a professional dentist while maintaining their exact facial features. They wear a white medical coat in an elegant dental office. Artistic professional medical portrait style.`;
             case types_1.ImageStyle.CARTOON:
-                return `${dentalBasePrompt}, friendly cartoon style dental professional, approachable smile, keep same person`;
+                return `Transform this person into a friendly dentist character while keeping their facial identity. They wear a white medical coat. Cartoon dental office background, warm and approachable style.`;
             case types_1.ImageStyle.PROFESSIONAL:
-                return `${dentalBasePrompt}, formal business portrait, confident dental professional, stethoscope around neck, same individual`;
+                return `${baseRealisticPrompt} Formal executive medical portrait style with premium dental practice setting.`;
             case types_1.ImageStyle.VINTAGE:
-                return `${dentalBasePrompt}, classic medical portrait style, timeless professional look, maintain person's identity`;
+                return `Transform this person into a dentist while preserving their facial features. Classic vintage medical photography style in a traditional dental office.`;
             default:
-                return `${dentalBasePrompt}, confident dental professional with friendly smile, preserve original person`;
+                return baseRealisticPrompt;
         }
     }
     /**

@@ -42,7 +42,7 @@ class ReplicateService {
     const requestId = generateRequestId();
 
     try {
-      console.log(`[${requestId}] Starting AI image generation...`);
+      console.log(`[${requestId}] Starting AI image generation with face-to-many...`);
 
       // Convert and optimize the image
       const imageBuffer = base64ToBuffer(request.imageData);
@@ -98,28 +98,27 @@ class ReplicateService {
   ): Promise<string> {
     const modelConfig = this.getModelConfig(style);
 
+    // black-forest-labs/flux-kontext-pro parameters - modelo PRO para máximo realismo
     const input = {
-      input_image: imageUrl,
       prompt: prompt,
-      negative_prompt:
-        "blurry, low quality, distorted, ugly, bad anatomy, deformed face, asymmetric face, different person, wrong face, face swap, face change, altered face, modified facial features, different eyes, different nose, different mouth, changed skin, facial reconstruction",
-      num_steps: 20,
-      style_strength_ratio: 5,
-      num_outputs: 1,
-      guidance_scale: 15,
+      input_image: imageUrl,
+      output_format: "jpg" as const,
+      guidance_scale: 3.5,
+      num_inference_steps: 28,
       seed: Math.floor(Math.random() * 1000000),
+      disable_safety_checker: false
     };
 
     console.log(
-      "Processing with PhotoMaker model for face preservation:",
+      "Processing with flux-kontext-pro for ultra-realistic results:",
       modelConfig.model
     );
-    console.log("Using prompt with 'img' trigger:", prompt);
+    console.log("Using detailed realistic dental prompt:", prompt);
 
     const output = await retryWithBackoff(
       async () => {
         return await this.initReplicate().run(
-          `${modelConfig.model}:${modelConfig.version}` as any,
+          `${modelConfig.model}` as any,
           { input }
         );
       },
@@ -127,16 +126,16 @@ class ReplicateService {
       2000
     );
 
-    // Handle different output formats
-    if (Array.isArray(output)) {
-      return output[0] as string;
+    // flux-kontext-pro returns a FileOutput object with url() method
+    if (output && typeof output === 'object' && 'url' in output) {
+      return (output as any).url();
     } else if (typeof output === "string") {
       return output;
-    } else if (output && typeof output === "object" && "url" in output) {
-      return (output as any).url;
+    } else if (Array.isArray(output)) {
+      return output[0] as string;
     }
 
-    throw new Error("Unexpected output format from Replicate API");
+    throw new Error("Unexpected output format from flux-kontext-pro API");
   }
 
   /**
@@ -181,24 +180,22 @@ class ReplicateService {
    * Get default prompt based on style
    */
   private getDefaultPrompt(style?: string): string {
-    // Ultra-conservative prompt for maximum face preservation
-    // PhotoMaker requires "img" as trigger word - MAXIMUM face preservation
-    const dentalBasePrompt =
-      "a photo of img person wearing white medical coat in dental clinic, DO NOT CHANGE FACE, keep exact same face, preserve all facial features 100%, same eyes same nose same mouth, identical person, no facial modifications whatsoever";
+    // Prompt específico para flux-kontext-pro siguiendo best practices
+    const baseRealisticPrompt = `Transform this person into a professional dentist while keeping the same facial features and identity. They are wearing a clean white medical coat and have a stethoscope around their neck. The background is a modern, bright dental clinic with a dental chair, medical equipment on trays, diplomas on the wall, and professional medical lighting. The style is ultra-realistic medical photography with natural skin texture and high detail.`;
 
     switch (style) {
       case ImageStyle.REALISTIC:
-        return `${dentalBasePrompt}, realistic medical setting, same face exactly, no changes to facial features`;
+        return `${baseRealisticPrompt} Make it photorealistic with perfect lighting and clinical atmosphere.`;
       case ImageStyle.ARTISTIC:
-        return `${dentalBasePrompt}, professional medical portrait, preserve face completely, same person`;
+        return `Transform this person into a professional dentist while maintaining their exact facial features. They wear a white medical coat in an elegant dental office. Artistic professional medical portrait style.`;
       case ImageStyle.CARTOON:
-        return `${dentalBasePrompt}, cartoon style but keep identical face, same facial features`;
+        return `Transform this person into a friendly dentist character while keeping their facial identity. They wear a white medical coat. Cartoon dental office background, warm and approachable style.`;
       case ImageStyle.PROFESSIONAL:
-        return `${dentalBasePrompt}, business portrait, stethoscope, exact same face, zero facial changes`;
+        return `${baseRealisticPrompt} Formal executive medical portrait style with premium dental practice setting.`;
       case ImageStyle.VINTAGE:
-        return `${dentalBasePrompt}, classic style, maintain identical facial features, same person`;
+        return `Transform this person into a dentist while preserving their facial features. Classic vintage medical photography style in a traditional dental office.`;
       default:
-        return `${dentalBasePrompt}, professional dentist outfit only, keep face 100% identical, no facial changes`;
+        return baseRealisticPrompt;
     }
   }
 

@@ -37,7 +37,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
       try {
         const storageRef = ref(
           storage,
-          `carrera_de_la_mujer_avatars/${email}-${Date.now()}.png`
+          `ntpmedia_avatars/${email}-${Date.now()}.png`
         );
         await uploadString(storageRef, dataUrl, "data_url");
         const downloadURL = await getDownloadURL(storageRef);

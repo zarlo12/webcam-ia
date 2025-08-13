@@ -15,7 +15,7 @@
   height: 100vh;
   display: flex; /* 💡 descomenta esto */
   flex-direction: column; /* ya lo tenías */
-  background: linear-gradient(30deg, #ad2225 33.33%, #6aaddf 33.33%, #6aaddf 66.66%, #efc03e 66.66%);
+  background: #8470B1;
   overflow: hidden;
   position: relative;
 }
@@ -35,7 +35,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(30deg, #ad2225 33.33%, #6aaddf 33.33%, #6aaddf 66.66%, #efc03e 66.66%);
+  background: #8470B1;
   color: white;
   overflow: hidden; /* Evita scroll innecesario */
   position: relative;
@@ -45,7 +45,7 @@
 /* Cabecera superior con fondo rojo */
 .header {
   width: 100%;
-  background: rgba(255, 255, 255, 0.5);
+  background: #422E83;
   padding: 10px 0;
   display: flex;
   justify-content: center;
@@ -53,8 +53,8 @@
 }
 
 .logo {
-  height: 163px;
-    margin-right: -157px;
+  height: 80px;
+    // margin-right: -157px;
 }
 
 .fondo {
@@ -103,7 +103,7 @@
   select {
     width: 350px;
     height: 57px;
-    background: linear-gradient(to right, #e1171b, #e1171b);
+    background: linear-gradient(to right, #422E83, #422E83);
     color: #fff;
     font-weight: bold;
     font-size: 25px;
@@ -261,7 +261,7 @@ form {
 }
 .footerAlways {
   width: 100%;
-  background: linear-gradient(to right, #e1171b, #e1171b);
+  background: linear-gradient(to right, #422E83, #422E83);
   padding: 10px 0;
   display: flex;
   justify-content: center;

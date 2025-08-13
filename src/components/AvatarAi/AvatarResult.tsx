@@ -89,7 +89,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
               Comparte esta imagen 
               <br />en Instagram y etiquetanos 
               <br />
-              <div style={{ color: "#e1171b" }}>@pastaslamuneca</div>
+              <div style={{ color: "#422E83" }}>@pastaslamuneca</div>
             </h2> */}
             <button
               type="button"

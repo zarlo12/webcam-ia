@@ -2,7 +2,7 @@
 .waiting-container {
   width: 100vw;
   height: 100vh;
-    background: linear-gradient(30deg, #ad2225 33.33%, #6aaddf 33.33%, #6aaddf 66.66%, #efc03e 66.66%);
+    background: #8470B1;
 
   display: flex;
   flex-direction: column;
@@ -13,13 +13,13 @@
 
 
 .linkColorVerde:hover {
-  color: #e1171b;
+  color: #422E83;
 }
 
 /* Barra roja superior */
 .header-bar {
   width: 100%;
-  background: rgba(255, 255, 255, 0.5);
+  background: #422E83;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,8 +28,8 @@
 
 /* Logo Scotia (ajusta el tamaño a tu gusto) */
 .logo-scotia {
-  height: 163px;
-    margin-right: -157px;
+  height: 80px;
+    // margin-right: -157px;
 }
 
 /* Tarjeta central */
@@ -150,13 +150,13 @@
   border: 2px solid transparent;
   background-image:
     linear-gradient(#ffffff, #ffffff),
-    linear-gradient(to right, #e1171b, #e1171b);
+    linear-gradient(to right, #422E83, #422E83);
   background-origin: border-box;
   background-clip: padding-box, border-box;
 }
 
 .checkbox:checked:before {
-  background: linear-gradient(to right, #e1171b, #e1171b);
+  background: #422E83;
   content: "";
   width: 13px;
   height: 10px;

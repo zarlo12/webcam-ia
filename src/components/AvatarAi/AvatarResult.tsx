@@ -45,8 +45,8 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
         const datosFirestore = {
           email,
           nombre,
-          ciudad,
-          formulario,
+          puestos: ciudad,
+          marcas: formulario,
           imageUrl: downloadURL,
           date: new Date(),
           consentimientoAceptado: consentimiento ? "Sí" : "No",

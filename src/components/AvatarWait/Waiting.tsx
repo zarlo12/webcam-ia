@@ -100,7 +100,7 @@ const Waiting: React.FC<WaitingProps> = ({
 
       <div className="main-content">
         <div className="waiting-card">
-          <h2 className="subtitle">Avatar IA</h2>
+          {/* <h2 className="subtitle">Avatar IA</h2> */}
 
           {aiImageReady && (
             <div className="avatar-container-ready">
@@ -116,6 +116,7 @@ const Waiting: React.FC<WaitingProps> = ({
 
           {!aiImageReady && (
             <div className="avatar-container-wait">
+              <div className="loading-spinner"></div>
               <p className="waiting-text">
                 Espera...
                 

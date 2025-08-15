@@ -30,6 +30,7 @@ interface WaitingProps {
   formulario: string;
 
   imagenGenerada: boolean;
+  aiImageReady: boolean; // Nueva prop para imagen de IA lista
   imageUrl: string;
   onEmailChange: (email: string) => void;
   onNombreChange: (nombre: string) => void;
@@ -47,6 +48,7 @@ const Waiting: React.FC<WaitingProps> = ({
   ciudad,
   formulario,
   imagenGenerada,
+  aiImageReady, // Nueva prop
   imageUrl,
   onEmailChange,
   onNombreChange,
@@ -75,9 +77,20 @@ const Waiting: React.FC<WaitingProps> = ({
   const handleMerged = async (dataUrl: string) => {
     if (hasMergedRef.current) return;
     hasMergedRef.current = true;
+    console.log("🎯 Imagen fusionada completada, habilitando botón");
     setMergedImage(dataUrl);
-    onContinue(dataUrl);
+    // No llamamos onContinue aquí automáticamente, esperamos que el usuario haga clic
   };
+
+  // Debug: log de estados
+  useEffect(() => {
+    console.log("🔍 Estados en Waiting:", {
+      aiImageReady,
+      imageUrl: !!imageUrl,
+      mergedImage: !!mergedImage,
+      imageUrlValue: imageUrl
+    });
+  }, [aiImageReady, imageUrl, mergedImage]);
 
   return (
     <div className="waiting-container">
@@ -89,7 +102,7 @@ const Waiting: React.FC<WaitingProps> = ({
         <div className="waiting-card">
           <h2 className="subtitle">Avatar IA</h2>
 
-          {imagenGenerada && (
+          {aiImageReady && (
             <div className="avatar-container-ready">
               {!mergedImage && imageUrl && (
                 <MergeImage
@@ -101,7 +114,7 @@ const Waiting: React.FC<WaitingProps> = ({
             </div>
           )}
 
-          {!imagenGenerada && (
+          {!aiImageReady && (
             <div className="avatar-container-wait">
               <p className="waiting-text">
                 Espera...
@@ -120,20 +133,22 @@ const Waiting: React.FC<WaitingProps> = ({
               required
             />
 
-            <input
-              type="text"
-              placeholder="Ciudad"
-              value={ciudad}
-              onChange={(e) => onCiudadChange(e.target.value)}
-              className="input"
-              required
-            />
+            
 
            <input
               type="email"
               placeholder="Correo"
               value={email}
               onChange={(e) => onEmailChange(e.target.value)}
+              className="input"
+              required
+            />
+
+            <input
+              type="text"
+              placeholder="Celular"
+              value={ciudad}
+              onChange={(e) => onCiudadChange(e.target.value)}
               className="input"
               required
             />
@@ -147,14 +162,14 @@ const Waiting: React.FC<WaitingProps> = ({
               required
             /> */}
 
-            <input
+            {/* <input
               type="text"
               placeholder="Formulario"
               value={formulario}
               onChange={(e) => onFormularioChange(e.target.value)}
               className="input"
               required
-            />
+            /> */}
 
            
 
@@ -193,6 +208,31 @@ const Waiting: React.FC<WaitingProps> = ({
                 </span>
               </label>
             </div>
+
+            {/* Botón dinámico para ver la imagen generada */}
+            <button
+              type="button"
+              className="button btnVerAvatar"
+              onClick={() => {
+                if (aiImageReady && mergedImage) {
+                  onContinue(mergedImage);
+                }
+              }}
+              disabled={!aiImageReady || !mergedImage}
+              style={{ 
+                width: "284px", 
+                margin: "20px 0 0 0",
+                opacity: (!aiImageReady || !mergedImage) ? 0.6 : 1,
+                fontSize: "18px"
+              }}
+            >
+              {!aiImageReady 
+                ? "Creando tu avatar..." 
+                : !mergedImage 
+                  ? "Finalizando imagen..." 
+                  : "🎉 ¡Ver mi avatar!"
+              }
+            </button>
           </form>
         </div>
       </div>

@@ -29,6 +29,7 @@ function MainApp() {
   const [formulario, setFormulario] = useState("");
   const [consentimiento, setConsentimiento] = useState("");
   const [imagenGenerada, setImagenGenerada] = useState(false); // Nueva bandera
+  const [aiImageReady, setAiImageReady] = useState(false); // Estado para imagen de IA lista
 
 
   // Esta función se invoca en AvatarPhoto al enviar la petición a n8n.
@@ -40,6 +41,7 @@ function MainApp() {
     setFormulario("");
     setConsentimiento("");
     setImagenGenerada(false); // Reiniciamos la bandera al iniciar el proceso
+    setAiImageReady(false); // Reiniciamos el estado de imagen IA
     setStep("waiting");
   };
 
@@ -65,51 +67,35 @@ function MainApp() {
     console.log("Consentimiento:", newConsentimiento);
   };
 
+  // Función para manejar cuando la imagen de IA esté lista
+  const handleAiImageReady = (generatedImageUrl: string) => {
+    setAiImageReady(true);
+    setImagenGenerada(true);
+    setImageUrl(generatedImageUrl); // Establecer la URL de la imagen generada
+    setLastImageUrl(generatedImageUrl);
+  };
+
 
 
   // Función para pasar a AvatarResult cuando el usuario haga clic en el botón.
   const handleContinue = (mergedUrl: string) => {
     setImageUrl(mergedUrl);
+    setLastImageUrl(mergedUrl); // Actualizar también el lastImageUrl
     setStep("result");
   };
 
   useEffect(() => {
-    let interval: ReturnType<typeof setInterval>;
-
-    // Solo en el paso "waiting" se hace polling a la API de PHP.
-    if (step === "waiting") {
-      interval = setInterval(async () => {
-        try {
-          const response = await fetch(
-            "https://proyectoshm.com/marco_pruebas/imagen/callback.php"
-          );
-          const data = await response.json();
-          // Si existe una imagen nueva, se actualiza el estado y se guarda en Firestore.
-          if (
-            data.img_url &&
-            data.img_url !== "" &&
-            data.img_url !== lastImageUrl
-          ) {
-            setLastImageUrl(data.img_url);
-            setImageUrl(data.img_url);
-            setImagenGenerada(true); // Establecemos la bandera en true
-          }
-        } catch (error) {
-          console.error("Error al obtener la imagen:", error);
-        }
-      }, 2000); // Consulta cada 5 segundos
-    }
-
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [step, lastImageUrl, email, nombre, formulario, consentimiento]);
+    // Ya no necesitamos polling porque la imagen viene directamente del servicio de IA
+    // El useEffect anterior que hacía polling a PHP ha sido eliminado
+    // porque ahora usamos Replicate directamente
+  }, []);
 
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
       {step === "photo" && (
         <AvatarPhoto
           onProcess={handleProcess}
+          onAiImageReady={handleAiImageReady}
         />
       )}
       {step === "waiting" && (
@@ -118,6 +104,7 @@ function MainApp() {
           nombre={nombre}
           formulario={formulario}
           imagenGenerada={imagenGenerada} // Prop bandera
+          aiImageReady={aiImageReady} // Nueva prop para imagen de IA lista
           imageUrl={imageUrl}
           ciudad={ciudad}
           onEmailChange={handleEmailChange}

@@ -37,7 +37,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
       try {
         const storageRef = ref(
           storage,
-          `carrera_de_la_mujer_avatars/${email}-${Date.now()}.png`
+          `colgate/${email}-${Date.now()}.png`
         );
         await uploadString(storageRef, dataUrl, "data_url");
         const downloadURL = await getDownloadURL(storageRef);
@@ -53,7 +53,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
           correoEnviado: false,
         };
         console.log("🚀 ~ datosFirestore:", datosFirestore);
-        await addDoc(collection(db, "CarreraDeLaMujerDev"), datosFirestore);
+        await addDoc(collection(db, "Colgate"), datosFirestore);
         setUploadedImageUrl(downloadURL);
       } catch (error) {
         console.error("Error al subir imagen:", error);
@@ -77,7 +77,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
       <div className="main-content">
         <div className="result-wrapper">
           <div className="card">
-            <h2 className="subtitleResult">AVATAR IA</h2>
+            {/* <h2 className="subtitleResult">AVATAR IA</h2> */}
             <div className="avatar-container">
               <img
                 src={uploadedImageUrl}
@@ -93,7 +93,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
             </h2> */}
             <button
               type="button"
-              className="button"
+              className="button btnResult"
               onClick={onReset}
               style={{ width: "250px" }}
             >

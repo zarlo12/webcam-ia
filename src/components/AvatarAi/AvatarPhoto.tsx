@@ -7,12 +7,13 @@ import Swal from "sweetalert2";
 
 interface AvatarPhotoProps {
   onProcess: (email: string) => void;
+  onAiImageReady: (imageUrl: string) => void;
 }
 interface WebcamRef {
   captureImage: () => Promise<Blob>;
 }
 
-const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess }) => {
+const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) => {
   const [email] = useState("");
   const [capturedImage, setCapturedImage] = useState<Blob | null>(null);
   const [capturedImageUrl, setCapturedImageUrl] = useState<string>("");
@@ -49,17 +50,10 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess }) => {
     try {
       console.log("Procesando imagen con IA...");
       
-      // Mostrar alerta de procesamiento
-      Swal.fire({
-        title: "Generando tu imagen con IA",
-        text: "Esto puede tomar unos minutos...",
-        allowOutsideClick: false,
-        didOpen: () => {
-          Swal.showLoading();
-        }
-      });
-
-      // Usar flux-kontext-pro para máximo realismo y preservación facial
+      // Cambiar INMEDIATAMENTE a la pantalla de formulario sin esperar
+      onProcess(email); // Pasa al formulario mientras la imagen se procesa en background
+      
+      // Procesar la imagen en background
       const result = await aiImageService.generateImageWithFormData(
         capturedImage,
         "Transform this person into a professional dentist while keeping the same facial features and identity. They are wearing a clean white medical coat and have a stethoscope around their neck. The background is a modern, bright dental clinic with a dental chair, medical equipment, and professional medical lighting. Ultra-realistic medical photography style.",
@@ -69,34 +63,15 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess }) => {
 
       if (result.success && result.imageUrl) {
         console.log("Imagen generada exitosamente:", result.imageUrl);
-        
-        // Cerrar loading y cambiar de pantalla
-        Swal.close();
-        onProcess(email);
-        
-        // Opcional: Mostrar éxito
-        setTimeout(() => {
-          Swal.fire({
-            icon: "success",
-            title: "¡Éxito!",
-            text: "Tu imagen ha sido generada con IA",
-            timer: 2000,
-            showConfirmButton: false
-          });
-        }, 500);
+        // La imagen estará disponible para el botón dinámico en Waiting
+        onAiImageReady(result.imageUrl); // Notificar que la imagen de IA está lista con su URL
         
       } else {
-        throw new Error(result.error || "Error desconocido al generar la imagen");
+        console.error("Error al generar imagen:", result.error);
       }
 
     } catch (error) {
       console.error("Error al procesar la imagen:", error);
-      
-      Swal.fire({
-        icon: "error",
-        title: "Error al procesar",
-        text: error instanceof Error ? error.message : "Hubo un problema al generar tu imagen con IA. Inténtalo de nuevo.",
-      });
     } finally {
       setIsProcessing(false);
     }

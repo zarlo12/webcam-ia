@@ -70,8 +70,8 @@ class ReplicateService {
             seed: Math.floor(Math.random() * 1000000),
             disable_safety_checker: false
         };
-        console.log("Processing with flux-kontext-pro for ultra-realistic results:", modelConfig.model);
-        console.log("Using detailed realistic dental prompt:", prompt);
+        console.log("Processing with flux-kontext-pro for painted portrait style:", modelConfig.model);
+        console.log("Using detailed painted dental portrait prompt:", prompt);
         const output = await (0, utils_1.retryWithBackoff)(async () => {
             return await this.initReplicate().run(`${modelConfig.model}`, { input });
         }, 3, 2000);
@@ -118,21 +118,21 @@ class ReplicateService {
      * Get default prompt based on style
      */
     getDefaultPrompt(style) {
-        // Prompt específico para flux-kontext-pro siguiendo best practices
-        const baseRealisticPrompt = `Transform this person into a professional dentist while keeping the same facial features and identity. They are wearing a clean white medical coat and have a stethoscope around their neck. The background is a modern, bright dental clinic with a dental chair, medical equipment on trays, diplomas on the wall, and professional medical lighting. The style is ultra-realistic medical photography with natural skin texture and high detail.`;
+        // Prompt específico para flux-kontext-pro siguiendo best practices - ESTILO PINTADO
+        const basePaintedPrompt = `Transform this person into a professional dental practitioner while preserving exactly the same facial features, complexion, and identity. This person is positioned centrally or slightly off-center in a professional portrait style. They wear a light beige or off-white lab coat with a light teal-blue collared shirt underneath. The setting is a warm, inviting dental office with light golden-beige walls, dental chairs, and professional equipment subtly visible in the background. The lighting is warm and diffused, creating soft highlights on their face, with an overall professional yet approachable atmosphere. The style is a semi-realistic painted portrait with visible brushstrokes, reminiscent of impressionistic professional illustration rather than photography. The composition emphasizes the person's face while the background subtly suggests the dental environment. The mood is professional, friendly, and welcoming, with muted warm tones and a painted aesthetic.`;
         switch (style) {
             case types_1.ImageStyle.REALISTIC:
-                return `${baseRealisticPrompt} Make it photorealistic with perfect lighting and clinical atmosphere.`;
+                return `${basePaintedPrompt} Make it a detailed painted portrait with realistic brush textures and warm lighting.`;
             case types_1.ImageStyle.ARTISTIC:
-                return `Transform this person into a professional dentist while maintaining their exact facial features. They wear a white medical coat in an elegant dental office. Artistic professional medical portrait style.`;
+                return `${basePaintedPrompt} Emphasize the artistic painted style with expressive brushstrokes and warm impressionistic colors.`;
             case types_1.ImageStyle.CARTOON:
-                return `Transform this person into a friendly dentist character while keeping their facial identity. They wear a white medical coat. Cartoon dental office background, warm and approachable style.`;
+                return `Transform this person into a friendly dental practitioner while keeping their facial identity. They wear a light beige coat with teal shirt. Painted cartoon style with warm dental office background, approachable and friendly painted aesthetic.`;
             case types_1.ImageStyle.PROFESSIONAL:
-                return `${baseRealisticPrompt} Formal executive medical portrait style with premium dental practice setting.`;
+                return `${basePaintedPrompt} Formal painted executive portrait style with premium dental practice setting and refined brush technique.`;
             case types_1.ImageStyle.VINTAGE:
-                return `Transform this person into a dentist while preserving their facial features. Classic vintage medical photography style in a traditional dental office.`;
+                return `Transform this person into a dental practitioner while preserving their facial features. Classic vintage painted portrait style with warm tones and traditional brushwork in a cozy dental office.`;
             default:
-                return baseRealisticPrompt;
+                return basePaintedPrompt;
         }
     }
     /**

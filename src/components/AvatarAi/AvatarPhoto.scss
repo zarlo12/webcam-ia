@@ -100,38 +100,21 @@
 }
 
 .card {
-  position: absolute; /* Cambiar a absoluto para salir del contenedor */
-  top: -78px; /* Empezar desde el top de la pantalla */
-  left: 50%; /* Centrar horizontalmente */
-  transform: translateX(-50%); /* Ajustar al centro */
-  z-index: 10; /* Alto z-index para estar por encima de todo */
-  max-width: 90vw;
-  width: 457px;
-  text-align: center;
-  
-  /* Imagen de fondo personalizable con píxeles exactos */
-  background-image: url('../../assets/colgate/Referencias-01.png');
-  background-repeat: no-repeat;
-  background-position: -1px -20px; /* Ajustado para que se vea más la parte superior */
-  background-size: 100%; /* Porcentaje o píxeles exactos como 400px 300px */
-  background-attachment: scroll;
-  height: 100vh; /* Altura completa de la pantalla */
-  /* Opcional: agregar padding para espaciar el contenido de la imagen de fondo */
-  padding: 180px 20px 20px 20px; /* Más padding arriba para el header */
-  
-  /* Opcional: agregar un overlay semi-transparente si necesitas mejor legibilidad del texto */
-  /* 
-  &::before {
-    content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.1);
-    z-index: -1;
-  }
-  */
+    top: -98px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    max-width: 95vw;
+    width: 499px;
+    text-align: center;
+    background-image: url(/src/assets/colgate/Referencias-01.png);
+    background-repeat: no-repeat;
+    background-position: 0px -17px;
+    background-size: 100%;
+    background-attachment: scroll;
+    height: 100vh;
+    padding: 214px 20px 20px 20px;
 }
 
 .clarologo {
@@ -212,12 +195,13 @@
 }
 
 .avatar-container.cam {
-  width: 350px;
-  height: 350px;
-  position: relative;
-  overflow: hidden;
-  border-radius: 12px;
-  margin: 0 auto;
+      padding-bottom: 48px;
+    width: 335px;
+    height: 442px;
+    position: relative;
+    overflow: hidden;
+    /* border-radius: 12px; */
+    margin: 0 auto;
 }
 
 .avatar {
@@ -231,7 +215,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 12px;
+  // border-radius: 12px;
 }
 
 form {
@@ -261,8 +245,75 @@ form {
   border: 1px solid #555;
   font-size: 14px;
 }
-
 .button {
+  width: 200px;
+  height: 57px;
+  line-height: 57px;           // centra el texto verticalmente
+  display: inline-block;
+  position: relative;
+  padding: 0 20px;
+  text-align: center;
+  font-size: 25px;
+  font-weight: 800;
+  font-family: "Arial", "Helvetica", sans-serif;
+  color: #ffffff;
+  border-radius: 28px;        // radio grande para aspecto pill
+  border: 2px solid #efefef; // borde claro exterior
+  background: linear-gradient(#dc1615, #dc1615); // gradiente rojo
+  text-shadow: 0 1px 0 rgba(0,0,0,0.3);
+  cursor: pointer;
+  -webkit-appearance: none;
+  box-shadow:
+    0 6px 0 rgba(0,0,0,0.45),     // sombra externa pronunciada (se ve la elevación)
+    inset 0 2px 0 rgba(255,255,255,0.08); // ligero brillo interior
+  transition: transform .08s ease, box-shadow .08s ease, background .12s ease;
+
+  // brillo superior (pseudo-elemento)
+  &::before {
+    content: "";
+    position: absolute;
+    left: 6px;
+    right: 6px;
+    top: 6px;
+    height: 50%;
+    border-radius: 22px;
+    background: linear-gradient(rgba(255,255,255,0.32), rgba(255,255,255,0.06));
+    pointer-events: none;
+  }
+
+  // efecto de reborde/relieve inferior sutil
+  &::after {
+    content: "";
+    position: absolute;
+    left: 6px;
+    right: 6px;
+    bottom: -4px;
+    height: 8px;
+    border-radius: 20px;
+    background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.15));
+    filter: blur(2px);
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 10px rgba(0,0,0,0.35), inset 0 2px 0 rgba(255,255,255,0.06);
+  }
+
+  &:active {
+    transform: translateY(1px);
+    box-shadow: 0 3px 0 rgba(0,0,0,0.5);
+    background: linear-gradient(#d70000, #940000);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 6px 0 rgba(0,0,0,0.45), 0 0 6px rgba(255,80,80,0.25);
+  }
+}
+
+.buttonTEST {
   width: 200px;
   height: 57px;
   // background: url(../../assets/img/boton.png);

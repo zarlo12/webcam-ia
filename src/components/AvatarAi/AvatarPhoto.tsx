@@ -192,7 +192,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess }) => {
               className="button"
               disabled={!capturedImageUrl || isProcessing}
             >
-              {isProcessing ? "Generando..." : "Procesar con IA"}
+              {isProcessing ? "Generando..." : "Procesar"}
             </button>
           </form>
         </div>

@@ -45,7 +45,6 @@
 /* Cabecera superior con fondo rojo */
 .header {
   width: 100%;
-  background: rgba(255, 255, 255, 0.5);
   padding: 10px 0;
   display: flex;
   justify-content: center;
@@ -54,7 +53,7 @@
 
 .logo {
   height: 163px;
-    margin-right: -157px;
+    // margin-right: -157px;
 }
 
 .fondo {
@@ -71,8 +70,32 @@
   position: relative;
   z-index: 1;
   max-width: 90vw;
-  width: 400px;
+  width: 457px;
   text-align: center;
+  
+  /* Imagen de fondo personalizable con píxeles exactos */
+  background-image: url('../../assets/colgate/Referencias-01.png');
+  background-repeat: no-repeat;
+  background-position: -1px -174px; /* Primer número = horizontal, segundo = vertical (negativo sube, positivo baja) */
+  background-size: 100%; /* Porcentaje o píxeles exactos como 400px 300px */
+  background-attachment: scroll;
+  height: 649px;
+  /* Opcional: agregar padding para espaciar el contenido de la imagen de fondo */
+  padding: 20px;
+  
+  /* Opcional: agregar un overlay semi-transparente si necesitas mejor legibilidad del texto */
+  /* 
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: -1;
+  }
+  */
 }
 
 .clarologo {

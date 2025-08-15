@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import "./AvatarPhoto.scss";
-import logo from "../../assets/img/LOGO-XNOVA.png";
+import logo from "../../assets/colgate/Logo.png";
 import WebcamScene from "../WebcamScene";
 import aiImageService, { ImageStyle } from "../../services/aiImageService";
 import Swal from "sweetalert2";
@@ -138,7 +138,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess }) => {
       {/* <img src={fondo} alt="Fondo" className="fondo" /> */}
       <div className="main-content">
         <div className="card">
-          <h2 className="subtitle">AVATAR AI</h2>
+          {/* <h2 className="subtitle">AVATAR AI</h2> */}
           <div className="avatar-container cam">
             {capturedImageUrl ? (
               // Si ya se capturó la imagen, se muestra la imagen fija

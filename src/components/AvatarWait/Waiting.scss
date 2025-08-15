@@ -128,17 +128,19 @@
   max-width: 300px;
   margin: 10px 0;
   padding: 12px;
-  border: none;
-  border-radius: 25px; /* Más redondeados */
-  background-color: rgba(255, 255, 255, 0.5); /* Blanco con 50% opacidad */
-  color: #000000; /* Texto negro */
+  border: 2px solid red; /* Contorno rojo */
+  border-radius: 25px;
+  background-color: rgba(255, 255, 255, 0.5);
+  color: #000000;
   font-size: 16px;
   outline: none;
+  text-align: center; /* Centra el texto y placeholder horizontalmente */
 
-  /* Placeholder en negro */
+  /* Placeholder en negro, centrado */
   &::placeholder {
     color: #000000;
     opacity: 0.7;
+    text-align: center;
   }
 
   /* Efecto hover */

@@ -127,7 +127,7 @@ const Waiting: React.FC<WaitingProps> = ({
           <form className="waiting-form">
             <input
               type="text"
-              placeholder="Nombre"
+              placeholder="Nombre:"
               value={nombre}
               onChange={(e) => onNombreChange(e.target.value)}
               className="input"
@@ -138,7 +138,7 @@ const Waiting: React.FC<WaitingProps> = ({
 
            <input
               type="email"
-              placeholder="Correo"
+              placeholder="Correo:"
               value={email}
               onChange={(e) => onEmailChange(e.target.value)}
               className="input"
@@ -147,7 +147,7 @@ const Waiting: React.FC<WaitingProps> = ({
 
             <input
               type="text"
-              placeholder="Celular"
+              placeholder="Celular:"
               value={ciudad}
               onChange={(e) => onCiudadChange(e.target.value)}
               className="input"

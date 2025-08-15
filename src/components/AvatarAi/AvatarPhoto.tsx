@@ -155,7 +155,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess }) => {
 
           <div className="buttons-container">
             {/* Selector de estilo de IA */}
-            <div className="select-container">
+            {/* <div className="select-container">
               <select
                 value={selectedStyle}
                 onChange={(e) => setSelectedStyle(e.target.value as ImageStyle)}
@@ -167,7 +167,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess }) => {
                 <option value={ImageStyle.VINTAGE}>Vintage</option>
               </select>
               <span className="select-arrow">▼</span>
-            </div>
+            </div> */}
 
             <button
               type="button"

@@ -77,11 +77,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+  z-index: 2; /* Menor que el card para que quede detrás */
 }
 
 .logo {
-  height: 163px;
-    // margin-right: -157px;
+  height: 188px;
+    margin-top: -47px;
+  position: relative;
+  z-index: 3; /* Asegurar que el logo esté visible */
+  // margin-right: -157px;
 }
 
 .fondo {
@@ -95,8 +100,11 @@
 }
 
 .card {
-  position: relative;
-  z-index: 1;
+  position: absolute; /* Cambiar a absoluto para salir del contenedor */
+  top: -78px; /* Empezar desde el top de la pantalla */
+  left: 50%; /* Centrar horizontalmente */
+  transform: translateX(-50%); /* Ajustar al centro */
+  z-index: 10; /* Alto z-index para estar por encima de todo */
   max-width: 90vw;
   width: 457px;
   text-align: center;
@@ -104,12 +112,12 @@
   /* Imagen de fondo personalizable con píxeles exactos */
   background-image: url('../../assets/colgate/Referencias-01.png');
   background-repeat: no-repeat;
-  background-position: -1px -174px; /* Primer número = horizontal, segundo = vertical (negativo sube, positivo baja) */
+  background-position: -1px -20px; /* Ajustado para que se vea más la parte superior */
   background-size: 100%; /* Porcentaje o píxeles exactos como 400px 300px */
   background-attachment: scroll;
-  height: 649px;
+  height: 100vh; /* Altura completa de la pantalla */
   /* Opcional: agregar padding para espaciar el contenido de la imagen de fondo */
-  padding: 20px;
+  padding: 180px 20px 20px 20px; /* Más padding arriba para el header */
   
   /* Opcional: agregar un overlay semi-transparente si necesitas mejor legibilidad del texto */
   /* 
@@ -308,7 +316,8 @@ form {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow: visible; /* Permitir que el contenido salga del contenedor */
+  position: relative; /* Para que la card absolute se posicione correctamente */
 }
 .footerAlways {
   width: 100%;

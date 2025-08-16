@@ -82,6 +82,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   };
 
   // Función temporal para pruebas con imagen fija
+  /*
   const handleTestWithFixedImage = () => {
     const testImageUrl = "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/colgate%2F-1755277712540.png?alt=media&token=884dd5f1-cb1d-477d-a216-369771adab43";
     
@@ -96,6 +97,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
       onAiImageReady(testImageUrl);
     }, 2000); // 2 segundos de delay para simular procesamiento
   };
+  */
 
   // Permite reiniciar la captura para tomar otra foto
   const handleResetCapture = () => {

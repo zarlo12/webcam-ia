@@ -191,7 +191,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
             </button>
             
             {/* Botón temporal para pruebas */}
-            <button
+            {/* <button
               type="button"
               className="button test-button"
               onClick={handleTestWithFixedImage}
@@ -202,7 +202,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
               }}
             >
               🧪 PRUEBA CON IMAGEN FIJA
-            </button>
+            </button> */}
           </form>
         </div>
       </div>

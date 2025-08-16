@@ -104,6 +104,7 @@ class ReplicateService {
     const input = {
       prompt: prompt,
       input_image: imageUrl,
+      aspect_ratio: "9:16",
       output_format: "jpg" as const,
       guidance_scale: 3.5,
       safety_tolerance: 0,

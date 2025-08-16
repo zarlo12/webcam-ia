@@ -30,14 +30,15 @@ const MergeImage: React.FC<MergeImageProps> = ({
 
   // 🎯 CONSTANTES PARA AJUSTAR LA POSICIÓN Y TAMAÑO DE LA REFERENCIA
   const REFERENCIA_SCALE = 0.4;        // 30% del tamaño original
-  const MARGIN_RIGHT = -50;             // Margen desde el borde derecho (más grande = más a la izquierda)
-  const MARGIN_TOP = 0;               // Margen desde el borde superior
+  const MARGIN_RIGHT = -10;             // Margen desde el borde derecho (más grande = más a la izquierda)
+  const MARGIN_TOP = 150;               // Margen desde el borde superior
   const HORIZONTAL_OFFSET = 130;         // Offset adicional horizontal (negativo = más izquierda)
   const VERTICAL_OFFSET = 0;           // Offset adicional vertical (positivo = más abajo)
 
   // 🎯 CONSTANTES PARA EL LOGO SUPERIOR
-  const LOGO_SCALE = 0.5;             // Tamaño del logo (15% del ancho del canvas)
-  const LOGO_MARGIN_TOP = -40;          // Margen desde el borde superior
+  const LOGO_SCALE = 0.5;             // Tamaño del logo (50% del ancho del canvas)
+  const LOGO_MARGIN_TOP = -40;         // Margen desde el borde superior
+  const LOGO_MARGIN_LEFT = 20;        // Margen desde el borde izquierdo
 
   // Función para obtener el índice actual desde localStorage
   const getCurrentIndex = () => {
@@ -104,10 +105,10 @@ const MergeImage: React.FC<MergeImageProps> = ({
           referenciaHeight
         );
 
-        // 🏷️ DIBUJAR EL LOGO SUPERIOR EN EL CENTRO
+        // 🏷️ DIBUJAR EL LOGO SUPERIOR A LA IZQUIERDA
         const logoWidth = canvas.width * LOGO_SCALE;
         const logoHeight = (logo.height / logo.width) * logoWidth; // Mantener proporción
-        const logoX = (canvas.width - logoWidth) / 2; // Centrado horizontalmente
+        const logoX = LOGO_MARGIN_LEFT; // Alineado a la izquierda con margen
         const logoY = LOGO_MARGIN_TOP; // Margen desde arriba
 
         ctx.drawImage(

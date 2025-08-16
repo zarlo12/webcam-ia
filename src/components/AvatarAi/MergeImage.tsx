@@ -30,9 +30,9 @@ const MergeImage: React.FC<MergeImageProps> = ({
 
   // 🎯 CONSTANTES PARA AJUSTAR LA POSICIÓN Y TAMAÑO DE LA REFERENCIA
   const REFERENCIA_SCALE = 0.4;        // 30% del tamaño original
-  const MARGIN_RIGHT = 0;             // Margen desde el borde derecho (más grande = más a la izquierda)
+  const MARGIN_RIGHT = -50;             // Margen desde el borde derecho (más grande = más a la izquierda)
   const MARGIN_TOP = 0;               // Margen desde el borde superior
-  const HORIZONTAL_OFFSET = 80;         // Offset adicional horizontal (negativo = más izquierda)
+  const HORIZONTAL_OFFSET = 130;         // Offset adicional horizontal (negativo = más izquierda)
   const VERTICAL_OFFSET = 0;           // Offset adicional vertical (positivo = más abajo)
 
   // 🎯 CONSTANTES PARA EL LOGO SUPERIOR

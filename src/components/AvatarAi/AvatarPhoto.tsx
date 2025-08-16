@@ -60,7 +60,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
       // Procesar la imagen en background
       const result = await aiImageService.generateImageWithFormData(
         capturedImage,
-        'Cartoon semi-realista, ilustración 2D, líneas limpias y cel-shading. Persona en consultorio dental profesional(rostro + torso) siempre que salga hasta el torso, abrigo clínico claro (beige/off-white), camisa navy o teal, sonrisa amable y profesional. Composición centrada/izquierda, mirada al frente, fondo de consultorio dental profesional y desenfocado. Paleta cálida (beige, ámbar, teal, gris-azul). Ojos ligeramente grandes, proporciones suavizadas, sin detalles fotográficos, estilo dibujo animado profesional.',
+        'Cartoon semi-realista, ilustración 2D, líneas limpias y cel-shading. Persona sentada en consultorio dental profesional(rostro + torso) siempre que salga hasta el torso, abrigo clínico claro (beige/off-white), camisa navy o teal, sonrisa amable y profesional. Composición centrada/izquierda, mirada al frente, fondo de consultorio dental profesional y desenfocado. Paleta cálida (beige, ámbar, teal, gris-azul). Ojos ligeramente grandes, proporciones suavizadas, sin detalles fotográficos, estilo dibujo animado profesional.',
         '',
         "user-" + Date.now()
       );

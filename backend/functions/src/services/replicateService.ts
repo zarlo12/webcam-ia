@@ -106,6 +106,8 @@ class ReplicateService {
       input_image: imageUrl,
       output_format: "jpg" as const,
       guidance_scale: 3.5,
+      safety_tolerance: 0,
+      prompt_upsampling: false,
       num_inference_steps: 28,
       seed: Math.floor(Math.random() * 1000000),
       disable_safety_checker: false,

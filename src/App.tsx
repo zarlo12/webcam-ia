@@ -64,7 +64,7 @@ function MainApp() {
  
   const handleConsentimientoChange = (newConsentimiento: string) => {
     setConsentimiento(newConsentimiento);
-    console.log("Consentimiento:", newConsentimiento);
+    console.log("Consentimiento:", lastImageUrl);
   };
 
   // Función para manejar cuando la imagen de IA esté lista

@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import "./AvatarPhoto.scss";
 import logo from "../../assets/colgate/Logo.png";
 import WebcamScene from "../WebcamScene";
-import aiImageService, { ImageStyle } from "../../services/aiImageService";
+import aiImageService from "../../services/aiImageService";
 import Swal from "sweetalert2";
 
 interface AvatarPhotoProps {
@@ -18,8 +18,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   const [capturedImage, setCapturedImage] = useState<Blob | null>(null);
   const [capturedImageUrl, setCapturedImageUrl] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const [selectedStyle, setSelectedStyle] = useState<ImageStyle>(ImageStyle.ARTISTIC);
-
+  
   // REALISTIC = "realistic",
   // ARTISTIC = "artistic",
   // CARTOON = "cartoon",
@@ -62,7 +61,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
       const result = await aiImageService.generateImageWithFormData(
         capturedImage,
         'Cartoon semi-realista, ilustración 2D, líneas limpias y cel-shading. Persona en consultorio dental (rostro + torso), abrigo clínico claro (beige/off-white), camisa navy o teal, sonrisa amable y profesional. Composición centrada/izquierda, mirada al frente, fondo de consultorio dental y desenfocado. Paleta cálida (beige, ámbar, teal, gris-azul). Ojos ligeramente grandes, proporciones suavizadas, sin detalles fotográficos, estilo dibujo animado profesional.',
-        selectedStyle,
+        '',
         "user-" + Date.now()
       );
 

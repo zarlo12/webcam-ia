@@ -82,9 +82,9 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   };
 
   // Función temporal para pruebass con imagen fija
-  /* 
+  
   const handleTestWithFixedImage = () => {
-    const testImageUrl = "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/colgate%2F-1755277712540.png?alt=media&token=884dd5f1-cb1d-477d-a216-369771adab43";
+    const testImageUrl = "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/generated-images%2Fgenerated_974e631f-effe-4a1a-83c8-563c1b081bed.jpg?alt=media&token=85b431a1-63d3-4487-b0ec-223ee722ff27";
     
     console.log("🧪 Iniciando prueba con imagen fija:", testImageUrl);
     
@@ -95,9 +95,9 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
     setTimeout(() => {
       console.log("🧪 Imagen de prueba lista");
       onAiImageReady(testImageUrl);
-    }, 2000); // 2 segundos de delay para simular procesamiento
+    }, 1000); // 2 segundos de delay para simular procesamiento
   };
-  */
+
 
   // Permite reiniciar la captura para tomar otra foto
   const handleResetCapture = () => {
@@ -193,18 +193,19 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
             </button>
             
             {/* Botón temporal para pruebas */}
-            {/* <button
+            {<button
               type="button"
               className="button test-button"
               onClick={handleTestWithFixedImage}
               style={{ 
                 marginTop: "10px",
                 backgroundColor: "#ff9900",
-                fontSize: "14px"
+                fontSize: "14px",
+                display: 'none'
               }}
             >
               🧪 PRUEBA CON IMAGEN FIJA
-            </button> */}
+            </button> }
           </form>
         </div>
       </div>

@@ -100,25 +100,25 @@ class ReplicateService {
   ): Promise<string> {
     const modelConfig = this.getModelConfig(style);
 
-    // black-forest-labs/flux-kontext-pro parameters - modelo PRO para máximo realismo
+    // black-forest-labs/flux-kontext-pro parameters - optimizado para estilo cartoon
     const input = {
       prompt: prompt,
       input_image: imageUrl,
       aspect_ratio: "9:16",
       output_format: "jpg" as const,
-      guidance_scale: 3.5,
+      guidance_scale: 7.5, // Aumentado para seguir más estrictamente el prompt
       safety_tolerance: 0,
-      prompt_upsampling: false,
-      num_inference_steps: 28,
+      prompt_upsampling: true, // Activado para mejorar interpretación del prompt
+      num_inference_steps: 35, // Aumentado para mejor calidad cartoon
       seed: Math.floor(Math.random() * 1000000),
       disable_safety_checker: false,
     };
 
     console.log(
-      "Processing with flux-kontext-pro for painted portrait style:",
+      "Processing with flux-kontext-pro optimized for cartoon style:",
       modelConfig.model
     );
-    console.log("Using detailed painted dental portrait prompt:", prompt);
+    console.log("Using cartoon illustration prompt:", prompt);
 
     const output = await retryWithBackoff(
       async () => {

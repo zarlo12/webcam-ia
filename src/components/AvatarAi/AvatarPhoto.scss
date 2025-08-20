@@ -15,7 +15,10 @@
   height: 100vh;
   display: flex; /* 💡 descomenta esto */
   flex-direction: column; /* ya lo tenías */
-  background: #8470B1;
+  background: #313138 url('../../assets/xnova/PatronX.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   overflow: hidden;
   position: relative;
 }

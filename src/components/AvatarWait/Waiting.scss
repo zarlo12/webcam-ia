@@ -89,7 +89,7 @@
   align-items: center;
 }
 
-/* Inputs redondeados con fondo blanco semitransparente */ 
+/* Inputs redondeados con fondo azul semitransparente */ 
 .input {
   width: 100%;
   max-width: 300px;
@@ -97,26 +97,30 @@
   padding: 12px;
   border: none;
   border-radius: 25px; /* Más redondeados */
-  background-color: rgba(255, 255, 255, 0.5); /* Blanco con 50% opacidad */
-  color: #000000; /* Texto negro */
+  background-color: rgba(1, 187, 236, 0.4); /* Azul #01BBEC con 40% opacidad */
+  color: #ffffff; /* Texto blanco */
   font-size: 16px;
   outline: none;
+  transition: all 0.3s ease;
 
-  /* Placeholder en negro */
+  /* Placeholder en blanco sólido */
   &::placeholder {
-    color: #000000;
-    opacity: 0.7;
+    color: #ffffff;
+    opacity: 0.8;
   }
 
   /* Efecto hover */
   &:hover {
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(1, 187, 236, 0.6);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 10px rgba(1, 187, 236, 0.2);
   }
 
   /* Efecto focus */
   &:focus {
-    background-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    background-color: rgba(1, 187, 236, 0.7);
+    box-shadow: 0 0 0 3px rgba(1, 187, 236, 0.2);
+    transform: translateY(-1px);
   }
 }
 

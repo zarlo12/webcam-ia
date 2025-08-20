@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./AvatarPhoto.scss";
-import logo from "../../assets/img/LOGO-XNOVA.png";
+import logo from "../../assets/xnova/LogoXnova.png";
 
 import { storage, db } from "../../firebaseConfig";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
@@ -89,7 +89,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
               Comparte esta imagen 
               <br />en Instagram y etiquetanos 
               <br />
-              <div style={{ color: "#422E83" }}>@pastaslamuneca</div>
+              <div style={{ color: "#31afda" }}>@pastaslamuneca</div>
             </h2> */}
             <button
               type="button"

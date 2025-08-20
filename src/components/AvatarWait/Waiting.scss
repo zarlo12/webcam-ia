@@ -2,8 +2,10 @@
 .waiting-container {
   width: 100vw;
   height: 100vh;
-    background: #8470B1;
-
+  background: #313138 url('../../assets/xnova/PatronX.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   display: flex;
   flex-direction: column;
   margin: 0;
@@ -13,13 +15,13 @@
 
 
 .linkColorVerde:hover {
-  color: #422E83;
+  color: #31afda;
 }
 
 /* Barra roja superior */
 .header-bar {
   width: 100%;
-  background: #422E83;
+  // background: #31afda;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -44,7 +46,7 @@
 /* Subtítulo "Avatar IA" */
 .subtitle {
   font-size: 24px;
-  color: #282828;
+  color: white;
   font-weight: bold;
   margin: 15px 0;
 }
@@ -58,7 +60,7 @@
 
 /* Texto de espera */
 .waiting-text {
-  color: #282828;
+  color: white;
   font-size: 35px;
   font-weight: 700;
   line-height: 1.3;
@@ -67,7 +69,7 @@
 
 /* Cuando la imagen está lista */
 .subtitle-wait {
-  color: #282828;
+  color: white;
   font-size: 20px;
   font-weight: 600;
   margin-bottom: 10px;
@@ -124,7 +126,7 @@
   align-items: center;
   font-size: 18px;
   margin-top: 10px;
-  color: #282828;
+  color: white;
   gap: 5px;
   width: 80%;
   margin: 10px auto;
@@ -145,18 +147,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #282828;
+  color: white;
 
   border: 2px solid transparent;
   background-image:
     linear-gradient(#ffffff, #ffffff),
-    linear-gradient(to right, #422E83, #422E83);
+    linear-gradient(to right, #31afda, #31afda);
   background-origin: border-box;
   background-clip: padding-box, border-box;
 }
 
 .checkbox:checked:before {
-  background: #422E83;
+  background: #31afda;
   content: "";
   width: 13px;
   height: 10px;

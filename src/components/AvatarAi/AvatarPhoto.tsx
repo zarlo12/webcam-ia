@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import "./AvatarPhoto.scss";
 // import fondo from "../../assets/img/fondo.png";
-import logo from "../../assets/img/LOGO-XNOVA.png";
+import logo from "../../assets/xnova/LogoXnova.png";
 
 import WebcamScene from "../WebcamScene";
 import axios from "axios";

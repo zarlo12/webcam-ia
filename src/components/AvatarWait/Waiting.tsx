@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./Waiting.scss";
-import logo from "../../assets/img/LOGO-XNOVA.png";
+import logo from "../../assets/xnova/LogoXnova.png";
 
 import MergeImage from "../AvatarAi/MergeImage"; // Asegúrate de la ruta correcta
 
@@ -121,21 +121,20 @@ const Waiting: React.FC<WaitingProps> = ({
             />
 
 
-           <input
-              type="email"
-              placeholder="Correo"
-              value={email}
-              onChange={(e) => onEmailChange(e.target.value)}
-              className="input"
-              required
-            />
-
-            
             <input
               type="text"
               placeholder="Empresa"
               value={ciudad}
               onChange={(e) => onCiudadChange(e.target.value)}
+              className="input"
+              required
+            />
+
+            <input
+              type="email"
+              placeholder="Correo"
+              value={email}
+              onChange={(e) => onEmailChange(e.target.value)}
               className="input"
               required
             />

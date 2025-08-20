@@ -60,7 +60,7 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
   const buttonStyle: React.CSSProperties = {
     padding: isSmallScreen ? "8px 16px" : "10px 20px",
     fontSize: isSmallScreen ? "14px" : "16px",
-    background: "#422E83",
+    background: "#31afda",
     color: "white",
     border: "none",
     borderRadius: "4px",

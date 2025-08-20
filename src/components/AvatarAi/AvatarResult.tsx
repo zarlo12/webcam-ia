@@ -37,7 +37,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
       try {
         const storageRef = ref(
           storage,
-          `ntpmedia_avatars/${email}-${Date.now()}.png`
+          `XnovaGofest_avatars/${email}-${Date.now()}.png`
         );
         await uploadString(storageRef, dataUrl, "data_url");
         const downloadURL = await getDownloadURL(storageRef);
@@ -45,15 +45,15 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
         const datosFirestore = {
           email,
           nombre,
-          puestos: ciudad,
-          marcas: formulario,
+          empresa: ciudad,
+          telefono: formulario,
           imageUrl: downloadURL,
           date: new Date(),
           consentimientoAceptado: consentimiento ? "Sí" : "No",
           correoEnviado: false,
         };
         console.log("🚀 ~ datosFirestore:", datosFirestore);
-        await addDoc(collection(db, "NTPMedia"), datosFirestore);
+        await addDoc(collection(db, "XnovaGofest"), datosFirestore);
         setUploadedImageUrl(downloadURL);
       } catch (error) {
         console.error("Error al subir imagen:", error);

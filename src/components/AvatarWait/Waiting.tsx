@@ -133,7 +133,7 @@ const Waiting: React.FC<WaitingProps> = ({
             
             <input
               type="text"
-              placeholder="Puestos"
+              placeholder="Empresa"
               value={ciudad}
               onChange={(e) => onCiudadChange(e.target.value)}
               className="input"
@@ -142,7 +142,7 @@ const Waiting: React.FC<WaitingProps> = ({
 
             <input
               type="text"
-              placeholder="Marcas"
+              placeholder="Teléfono"
               value={formulario}
               onChange={(e) => onFormularioChange(e.target.value)}
               className="input"

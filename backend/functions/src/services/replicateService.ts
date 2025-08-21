@@ -110,7 +110,7 @@ class ReplicateService {
       safety_tolerance: 0,
       prompt_upsampling: true, // Activado para mejorar interpretación del prompt
       num_inference_steps: 35, // Aumentado para mejor calidad cartoon
-      seed: 352201709,
+      seed: Math.floor(Math.random() * 1000000),
       disable_safety_checker: false,
     };
 

@@ -78,7 +78,26 @@ function MainApp() {
         `${index + 1}) ${acc.toLowerCase()}`
       ).join('; ');
 
-      const dynamicPrompt = `FUNKO-STYLE TOY ILLUSTRATION ONLY - NOT REALISTIC: SINGLE TOY BOX ONLY (do not generate additional boxes). A Funko Pop-style doll placed inside the SAME toy box, positioned on the LEFT side of the box interior. On the RIGHT side, INSIDE THE SAME BOX, arrange the accessories (do not place them outside or in separate boxes). Composition must be strict: doll left, accessories grouped right, all within one box with a single clear display window. Accessories: ${accessoriesText}. Funko proportions: oversized head, small body, round eyes, minimal features. Art style: 2D cel-shaded, clean vector-like lines, packaging art. Warm pastel palette, flat soft shadows. Background: simple box interior branding. IMPORTANT: Generate ONE BOX ONLY — NO second box, NO duplicate packaging or duplicate dolls. NOT a photo, NO realistic skin texture, NO photographic lighting, NO film grain.`;
+      // Definir el tipo de ropa basado en el servicio seleccionado
+      const getClothingStyle = (service: string) => {
+        const clothingMap: { [key: string]: string } = {
+          "15 minutos": "trendy fashion clothing — e.g., a stylish blazer, designer jeans, fashionable accessories",
+          "reaserch": "business professional clothing — e.g., a formal suit jacket, dress shirt, business pants, professional accessories",
+          "plaza claro": "casual shopping attire — e.g., a comfortable sweater, casual pants, shopping-friendly shoes",
+          "Un café claro": "smart casual clothing — e.g., a modern shirt, comfortable jeans, casual jacket",
+          "Salud 1010": "athletic clothing only — e.g., a fitted team jersey or track jacket, athletic shorts or leggings, knee-high sports socks, wristbands, and modern sneakers",
+          "Claro Musica": "urban street clothing — e.g., a hip-hop style hoodie, baggy jeans, urban sneakers, music-inspired accessories",
+          "portal redmas.com.co": "professional business clothing — e.g., a formal shirt, business jacket, professional pants",
+          "mobile marketing": "modern tech-savvy clothing — e.g., a trendy t-shirt, modern jeans, tech accessories",
+          "radiola tv": "traditional folk clothing — e.g., a traditional shirt, folk-style pants, cultural accessories",
+          "Sin Limites tv": "rock/music fan clothing — e.g., a band t-shirt, denim jacket, rock-style accessories"
+        };
+        return clothingMap[service] || "casual clothing";
+      };
+
+      const clothingStyle = getClothingStyle(service);
+
+      const dynamicPrompt = `NO TEXT, FUNKO-STYLE TOY ILLUSTRATION ONLY - NOT REALISTIC: SINGLE TOY BOX ONLY. A Funko Pop–style doll placed inside the SAME toy box, positioned on the LEFT side of the box interior. The doll is wearing ${clothingStyle}; subtle sport details like a knee pad or armband are acceptable. Pose energetic and confident. Do not change any accessories. On the RIGHT side, INSIDE THE SAME BOX, arrange the original accessories: ${accessoriesText}. Strict composition: doll left, accessories grouped right, all within one box with a single clear display window. Funko proportions: oversized head, small body, large round eyes, minimal facial features. Art style: 2D cel-shaded, clean vector-like lines, packaging art, warm pastel palette, flat soft shadows. Company color treatment: primary box surface deep black (#000000), with accent cintillos/straps, thin border lines, and small geometric accents in vivid red (example hex #C8102E) — use red only as decorative accents (ribbons, tape, window border, small corner stripe). IMPORTANT: NO TEXT, NO LOGOS, NO NUMBERS anywhere on the box, window, stickers, price tags, or background. Absolutely no words or typography. NOT a photo, NO realistic skin texture, NO photographic lighting.`;
 
       console.log("📝 Prompt dinámico:", dynamicPrompt);
       console.log("🎯 Servicio seleccionado:", selectedService);

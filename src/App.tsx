@@ -194,6 +194,7 @@ function MainApp() {
           aiImageReady={aiImageReady} // Nueva prop para imagen de IA lista
           imageUrl={imageUrl}
           ciudad={ciudad}
+          selectedService={selectedService} // Pasamos el servicio seleccionado
           onEmailChange={handleEmailChange}
           onNombreChange={handleNombreChange}
           onCiudadChange={handleCiudadChange}

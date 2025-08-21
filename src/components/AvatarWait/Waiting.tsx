@@ -32,6 +32,7 @@ interface WaitingProps {
   imagenGenerada: boolean;
   aiImageReady: boolean; // Nueva prop para imagen de IA lista
   imageUrl: string;
+  selectedService?: string; // Servicio seleccionado del cuestionario
   onEmailChange: (email: string) => void;
   onNombreChange: (nombre: string) => void;
   onCiudadChange: (ciudad: string) => void;
@@ -48,6 +49,7 @@ const Waiting: React.FC<WaitingProps> = ({
   ciudad,
   aiImageReady, // Nueva prop
   imageUrl,
+  selectedService, // Nueva prop para el servicio seleccionado
   onEmailChange,
   onNombreChange,
   onCiudadChange,
@@ -106,6 +108,7 @@ const Waiting: React.FC<WaitingProps> = ({
                   imageUrl={imageUrl}
                   onMerged={handleMerged}
                   tipoSuenio={''}
+                  selectedService={selectedService}
                 />
               )}
             </div>

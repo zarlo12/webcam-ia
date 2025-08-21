@@ -110,6 +110,11 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
           date: new Date(),
           consentimientoAceptado: consentimiento ? "Sí" : "No",
           correoEnviado: false,
+          // Información del avatar generado
+          selectedService: selectedService || "Sin servicio",
+          avatarName: currentAvatar?.name || "Avatar Genérico",
+          avatarDescription: currentAvatar?.description || "Avatar personalizado",
+          avatarIcon: currentAvatar?.icon || "🎭"
         };
         console.log("🚀 ~ datosFirestore:", datosFirestore);
         await addDoc(collection(db, "ClaroSport"), datosFirestore);
@@ -118,7 +123,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
         console.error("Error al subir imagen:", error);
       }
     },
-    [email, nombre, ciudad, formulario, consentimiento]
+    [email, nombre, ciudad, formulario, consentimiento, selectedService, currentAvatar]
   );
 
   useEffect(() => {

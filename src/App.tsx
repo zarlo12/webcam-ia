@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import AvatarPhoto from "./components/AvatarAi/AvatarPhoto";
 import AvatarResult from "./components/AvatarAi/AvatarResult";
 import Waiting from "./components/AvatarWait/Waiting";
+import QuestionForm from "./components/QuestionForm/QuestionForm";
 import Policy from "./Policy";
 
 function MainApp() {
@@ -16,6 +17,7 @@ function MainApp() {
   }, []);
 
   // "photo": para mostrar AvatarPhoto.
+  // "questions": para mostrar el formulario de preguntas.
   // "waiting": para mostrar la pantalla de espera.
   // "result": para mostrar el resultado final.
   // "policy": para mostrar la política de tratamiento de datos.
@@ -30,19 +32,79 @@ function MainApp() {
   const [consentimiento, setConsentimiento] = useState("");
   const [imagenGenerada, setImagenGenerada] = useState(false); // Nueva bandera
   const [aiImageReady, setAiImageReady] = useState(false); // Estado para imagen de IA lista
+  
+  // Nuevos estados para el sistema de preguntas
+  const [selectedService, setSelectedService] = useState("");
+  const [accessories, setAccessories] = useState<string[]>([]);
+  const [capturedImageBlob, setCapturedImageBlob] = useState<Blob | null>(null);
 
 
-  // Esta función se invoca en AvatarPhoto al enviar la petición a n8n.
-  // Además, al cambiar a Waiting se limpia el email para que el usuario lo ingrese nuevamente.
-  const handleProcess = () => {
+  // Esta función se invoca en AvatarPhoto cuando se captura la imagen
+  // Ahora redirige al formulario de preguntas en lugar de directamente a waiting
+  const handlePhotoCapture = (imageBlob: Blob) => {
+    setCapturedImageBlob(imageBlob);
+    setStep("questions");
+  };
+
+  // Función que se ejecuta cuando se completa el formulario de preguntas
+  const handleQuestionFormComplete = (service: string, serviceAccessories: string[]) => {
+    setSelectedService(service);
+    setAccessories(serviceAccessories);
+    
+    console.log("✅ Preguntas completadas:", { service, serviceAccessories });
+    
+    // Inmediatamente procesar la imagen con los accesorios seleccionados
+    handleProcessImageWithAccessories(service, serviceAccessories);
+  };
+
+  // Función para procesar la imagen con los accesorios basados en las respuestas
+  const handleProcessImageWithAccessories = async (service: string, serviceAccessories: string[]) => {
+    if (!capturedImageBlob) return;
+
     setEmail("");
     setNombre("");
-     setCiudad("");
+    setCiudad("");
     setFormulario("");
     setConsentimiento("");
-    setImagenGenerada(false); // Reiniciamos la bandera al iniciar el proceso
-    setAiImageReady(false); // Reiniciamos el estado de imagen IA
+    setImagenGenerada(false);
+    setAiImageReady(false);
     setStep("waiting");
+
+    try {
+      console.log("🎯 Procesando imagen con accesorios para:", service);
+      
+      // Crear el prompt dinámico basado en los accesorios seleccionados
+      const accessoriesText = serviceAccessories.map((acc, index) => 
+        `${index + 1}) ${acc.toLowerCase()}`
+      ).join('; ');
+
+      const dynamicPrompt = `FUNKO-STYLE TOY ILLUSTRATION ONLY - NOT REALISTIC: SINGLE TOY BOX ONLY (do not generate additional boxes). A Funko Pop-style doll placed inside the SAME toy box, positioned on the LEFT side of the box interior. On the RIGHT side, INSIDE THE SAME BOX, arrange the accessories (do not place them outside or in separate boxes). Composition must be strict: doll left, accessories grouped right, all within one box with a single clear display window. Accessories: ${accessoriesText}. Funko proportions: oversized head, small body, round eyes, minimal features. Art style: 2D cel-shaded, clean vector-like lines, packaging art. Warm pastel palette, flat soft shadows. Background: simple box interior branding. IMPORTANT: Generate ONE BOX ONLY — NO second box, NO duplicate packaging or duplicate dolls. NOT a photo, NO realistic skin texture, NO photographic lighting, NO film grain.`;
+
+      console.log("📝 Prompt dinámico:", dynamicPrompt);
+      console.log("🎯 Servicio seleccionado:", selectedService);
+      console.log("🎒 Accesorios:", accessories);
+      
+      // Importar el servicio de IA
+      const { default: aiImageService } = await import("./services/aiImageService");
+      
+      // Procesar la imagen con el prompt personalizado
+      const result = await aiImageService.generateImageWithFormData(
+        capturedImageBlob,
+        dynamicPrompt,
+        '',
+        "user-" + Date.now()
+      );
+
+      if (result.success && result.imageUrl) {
+        console.log("✅ Imagen generada exitosamente:", result.imageUrl);
+        handleAiImageReady(result.imageUrl);
+      } else {
+        console.error("❌ Error al generar imagen:", result.error);
+      }
+
+    } catch (error) {
+      console.error("💥 Error al procesar la imagen:", error);
+    }
   };
 
   // Función para actualizar el email conforme se escribe en Waiting.
@@ -94,8 +156,14 @@ function MainApp() {
     <div style={{ width: "100vw", height: "100vh" }}>
       {step === "photo" && (
         <AvatarPhoto
-          onProcess={handleProcess}
+          onProcess={handlePhotoCapture}
           onAiImageReady={handleAiImageReady}
+          capturedImageBlob={capturedImageBlob}
+        />
+      )}
+      {step === "questions" && (
+        <QuestionForm
+          onComplete={handleQuestionFormComplete}
         />
       )}
       {step === "waiting" && (

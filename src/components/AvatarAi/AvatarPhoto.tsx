@@ -2,22 +2,25 @@ import React, { useState, useRef } from "react";
 import "./AvatarPhoto.scss";
 import logo from "../../assets/colgate/Logo.png";
 import WebcamScene from "../WebcamScene";
-import aiImageService from "../../services/aiImageService";
 import Swal from "sweetalert2";
 
 interface AvatarPhotoProps {
-  onProcess: (email: string) => void;
+  onProcess: (imageBlob: Blob) => void;
   onAiImageReady: (imageUrl: string) => void;
+  capturedImageBlob?: Blob | null;
 }
 interface WebcamRef {
   captureImage: () => Promise<Blob>;
 }
 
-const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) => {
-  const [email] = useState("");
-  const [capturedImage, setCapturedImage] = useState<Blob | null>(null);
+const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ 
+  onProcess, 
+  onAiImageReady, 
+  capturedImageBlob
+}) => {
+  const [capturedImage, setCapturedImage] = useState<Blob | null>(capturedImageBlob || null);
   const [capturedImageUrl, setCapturedImageUrl] = useState<string>("");
-  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [isProcessing] = useState<boolean>(false);
   
   // REALISTIC = "realistic",
   // ARTISTIC = "artistic",
@@ -25,6 +28,15 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   // PROFESSIONAL = "professional",
   // VINTAGE = "vintage",
   const webcamRef = useRef<WebcamRef | null>(null);
+
+  // Efecto para manejar imagen preexistente cuando volvemos de las preguntas
+  React.useEffect(() => {
+    if (capturedImageBlob && !capturedImageUrl) {
+      const url = URL.createObjectURL(capturedImageBlob);
+      setCapturedImageUrl(url);
+      setCapturedImage(capturedImageBlob);
+    }
+  }, [capturedImageBlob]);
 
   // Función para capturar la imagen desde el componente WebcamScene
   const handleCapture = async () => {
@@ -45,67 +57,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
     }
   };
 
-  // Procesa la imagen usando el nuevo servicio de IA
-  const handleProcessImage = async () => {
-    if (!capturedImage) return;
-    
-    setIsProcessing(true);
-    
-    try {
-      console.log("Procesando imagen con IA...");
-      
-      // Cambiar INMEDIATAMENTE a la pantalla de formulario sin esperar
-      onProcess(email); // Pasa al formulario mientras la imagen se procesa en background
-      
-      // Procesar la imagen en background
-      const result = await aiImageService.generateImageWithFormData(
-        capturedImage,
-        'CARTOON ILLUSTRATION STYLE ONLY - NOT REALISTIC: 2D animated cartoon character illustration, cel-shaded cartoon art style, clean vector-like cartoon illustration. Professional dental cartoon character (face + torso visible), wearing light beige cartoon lab coat and navy/teal cartoon shirt, friendly cartoon smile. Cartoon proportions with slightly oversized cartoon eyes, simplified cartoon features, NO photorealistic details, NO realistic skin texture, NO realistic lighting. Cartoon dental office background with simplified cartoon equipment. Art style: Disney-Pixar cartoon illustration, corporate cartoon mascot style, 2D animation character design, cartoon advertisement illustration. IMPORTANT: This must look like a cartoon drawing, NOT a photograph or realistic portrait.',
-        '',
-        "user-" + Date.now()
-      );
-
-      if (result.success && result.imageUrl) {
-        console.log("Imagen generada exitosamente:", result.imageUrl);
-        // La imagen estará disponible para el botón dinámico en Waiting
-        onAiImageReady(result.imageUrl); // Notificar que la imagen de IA está lista con su URL
-        
-      } else {
-        console.error("Error al generar imagen:", result.error);
-      }
-
-    } catch (error) {
-      console.error("Error al procesar la imagen:", error);
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  // Función temporal para pruebass con imagen fija
-  
-  const handleTestWithFixedImage = () => {
-    const testImageUrl = "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/generated-images%2Fgenerated_974e631f-effe-4a1a-83c8-563c1b081bed.jpg?alt=media&token=85b431a1-63d3-4487-b0ec-223ee722ff27";
-    
-    console.log("🧪 Iniciando prueba con imagen fija:", testImageUrl);
-    
-    // Cambiar inmediatamente al formulario
-    onProcess(email);
-    
-    // Simular un breve delay y luego notificar que la imagen está lista
-    setTimeout(() => {
-      console.log("🧪 Imagen de prueba lista");
-      onAiImageReady(testImageUrl);
-    }, 1000); // 2 segundos de delay para simular procesamiento
-  };
-
-
-  // Permite reiniciar la captura para tomar otra foto
-  const handleResetCapture = () => {
-    setCapturedImage(null);
-    setCapturedImageUrl("");
-  };
-
-  // Validación del formulario y envío de la imagen
+    // Validación del formulario y envío de la imagen
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -122,7 +74,32 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
       return; // Evitar múltiples envíos
     }
 
-    handleProcessImage();
+    // Siempre enviamos a las preguntas al hacer submit
+    onProcess(capturedImage);
+  };
+
+  // Función temporal para pruebass con imagen fija
+  const handleTestWithFixedImage = () => {
+    const testImageUrl = "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/generated-images%2Fgenerated_974e631f-effe-4a1a-83c8-563c1b081bed.jpg?alt=media&token=85b431a1-63d3-4487-b0ec-223ee722ff27";
+    
+    console.log("🧪 Iniciando prueba con imagen fija:", testImageUrl);
+    
+    // Simular captura de imagen para pruebas
+    if (capturedImage) {
+      onProcess(capturedImage);
+    }
+    
+    // Simular un breve delay y luego notificar que la imagen está lista
+    setTimeout(() => {
+      console.log("🧪 Imagen de prueba lista");
+      onAiImageReady(testImageUrl);
+    }, 1000); // 1 segundo de delay para simular procesamiento
+  };
+
+  // Permite reiniciar la captura para tomar otra foto
+  const handleResetCapture = () => {
+    setCapturedImage(null);
+    setCapturedImageUrl("");
   };
 
   return (

@@ -97,7 +97,23 @@ function MainApp() {
 
       const clothingStyle = getClothingStyle(service);
 
-      const dynamicPrompt = `NO TEXT, FUNKO-STYLE TOY ILLUSTRATION ONLY - NOT REALISTIC: SINGLE TOY BOX ONLY. A Funko Pop–style doll placed inside the SAME toy box, positioned on the LEFT side of the box interior. The doll is wearing ${clothingStyle}; Pose energetic and confident. Do not change any accessories. On the RIGHT side, INSIDE THE SAME BOX, arrange the original accessories: ${accessoriesText}. Strict composition: doll left, accessories grouped right, all within one box with a single clear display window. RESPETA EL TIPO DE ROPA DEPENDIENDO DEL GENERO DE LA IMAGEN, si es mujer, ropa de mujer y si es hombre ropa de hombre, Funko proportions: oversized head, small body, large round eyes, minimal facial features. Art style: 2D cel-shaded, clean vector-like lines, packaging art, warm pastel palette, flat soft shadows. Company color treatment: primary box surface deep black (#000000), with accent cintillos/straps, thin border lines, and small geometric accents in vivid red (example hex #C8102E) — use red only as decorative accents (ribbons, tape, window border, small corner stripe). BACKGROUND: solid dark gray color #262626, completely uniform, no patterns, no gradients, no textures. IMPORTANT: NO TEXT, NO LOGOS, NO NUMBERS anywhere on the box, window, stickers, price tags, or background. Absolutely no words or typography. NOT a photo, NO realistic skin texture, NO photographic lighting.`;
+      const dynamicPrompt = `NO TEXT, FUNKO-STYLE TOY ILLUSTRATION ONLY - NOT REALISTIC: SINGLE TOY BOX ONLY. A Funko Pop–style doll placed inside the SAME toy box, positioned on the LEFT side of the box interior. 
+
+CRITICAL INSTRUCTIONS:
+1. ANALYZE THE INPUT PHOTO CAREFULLY: Match the person's skin tone, complexion, hair color, and general appearance from the uploaded image
+2. MAINTAIN EXACT FUNKO PROPORTIONS: Oversized round head (must be 2x larger than body), tiny rectangular body, large round black eyes, minimal facial features, no realistic details
+3. CLOTHING ADAPTATION: The doll is wearing ${clothingStyle} - adapt the clothing style to match the gender shown in the input photo (if woman then feminine clothing, if man then masculine clothing)
+
+MANDATORY REQUIREMENTS:
+- Copy the person's skin color and complexion exactly from the input image
+- Keep the signature Funko Pop head shape: round, oversized, simple
+- Large black dot eyes typical of Funko figures
+- Minimal nose and mouth details
+- Match hair color and general hairstyle from the photo but in simplified Funko style
+- Body must be much smaller than the head
+- Pose energetic and confident
+
+Do not change any accessories. On the RIGHT side, INSIDE THE SAME BOX, arrange the original accessories: ${accessoriesText}. Strict composition: doll left, accessories grouped right, all within one box with a single clear display window. Art style: 2D cel-shaded, clean vector-like lines, packaging art, warm pastel palette, flat soft shadows. Company color treatment: primary box surface deep black (#000000), with accent cintillos/straps, thin border lines, and small geometric accents in vivid red (example hex #C8102E) — use red only as decorative accents (ribbons, tape, window border, small corner stripe). BACKGROUND: solid dark gray color #262626, completely uniform, no patterns, no gradients, no textures. IMPORTANT: NO TEXT, NO LOGOS, NO NUMBERS anywhere on the box, window, stickers, price tags, or background. Absolutely no words or typography. NOT a photo, NO realistic skin texture, NO photographic lighting.`;
 
       console.log("📝 Prompt dinámico:", dynamicPrompt);
       console.log("🎯 Servicio seleccionado:", selectedService);

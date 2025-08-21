@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./AvatarPhoto.scss";
-import logo from "../../assets/colgate/Logo.png";
+import logo from "../../assets/clarosport/Logo.png";
 
 import { storage, db } from "../../firebaseConfig";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";

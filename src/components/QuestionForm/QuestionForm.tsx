@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./QuestionForm.scss";
-import logo from "../../assets/colgate/Logo.png";
+import logo from "../../assets/clarosport/Logo.png";
 
 interface QuestionFormProps {
   onComplete: (selectedService: string, accessories: string[]) => void;

@@ -92,7 +92,7 @@ const MergeImage: React.FC<MergeImageProps> = ({
       offsetY: 3
     },
     "mobile marketing": {
-      scale: 0.31,
+      scale: 0.14,
       marginRight: 21,
       marginBottom: 19,
       offsetX: 3,

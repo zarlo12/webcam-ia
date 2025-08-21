@@ -133,7 +133,7 @@
 
 .card {
     position: absolute;
-    top: -98px;
+    top: -185px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
@@ -239,8 +239,8 @@
 .avatar {
   // width: 85%;
   // height: 100%;
-  width: 344px;
-    height: 440px;
+  //width: 344px;
+    height: 432px;
   // object-fit: contain; /* Muestra la imagen completa sin recortes */
   // border-radius: 12px;
 }
@@ -416,4 +416,110 @@ form {
   justify-content: center;
   align-items: center;
   height: 80px;
+}
+
+/* Estilos para la información del avatar */
+.avatar-info {
+  margin: 20px 0;
+      margin-left: 29px !important;
+  padding: 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 2px solid #e1171b;
+  max-width: 400px;
+  text-align: center;
+  
+  .avatar-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    
+    .avatar-icon {
+      font-size: 28px;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    }
+  }
+  
+  .avatar-name {
+    color: #e1171b;
+    font-size: 24px;
+    font-weight: 800;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    line-height: 1.2;
+  }
+  
+  .avatar-description {
+    color: #333;
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0;
+    font-weight: 500;
+    text-align: justify;
+  }
+}
+
+.subtitleResult {
+  color: #333;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 20px 0;
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* Responsive design para la información del avatar */
+@media (max-width: 768px) {
+  .avatar-info {
+    margin: 15px 10px;
+    padding: 15px;
+    max-width: 90%;
+    
+    .avatar-header {
+      gap: 8px;
+      
+      .avatar-icon {
+        font-size: 24px;
+      }
+    }
+    
+    .avatar-name {
+      font-size: 20px;
+    }
+    
+    .avatar-description {
+      font-size: 14px;
+    }
+  }
+  
+  .subtitleResult {
+    font-size: 18px;
+    margin: 15px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .avatar-info {
+    .avatar-header {
+      .avatar-icon {
+        font-size: 20px;
+      }
+    }
+    
+    .avatar-name {
+      font-size: 18px;
+    }
+    
+    .avatar-description {
+      font-size: 13px;
+    }
+  }
+  
+  .subtitleResult {
+    font-size: 16px;
+  }
 }

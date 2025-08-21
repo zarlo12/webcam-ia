@@ -192,6 +192,7 @@ function MainApp() {
           ciudad={ciudad}
           formulario={formulario}
           consentimiento={consentimiento}
+          selectedService={selectedService}
           onReset={() => setStep("photo")}
         />
       )}

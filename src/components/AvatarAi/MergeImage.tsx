@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 // import logoSuperior from "../../assets/img/LogoSuperior.png";
-import logoInferior from "../../assets/xnova/Logos.png";
+import logoInferior from "../../assets/xnova/LogoXnova.png";
 
 interface MergeImageProps {
   imageUrl: string; // URL de la imagen principal (avatar)
@@ -45,7 +45,7 @@ const MergeImage: React.FC<MergeImageProps> = ({
         ctx.drawImage(avatar, 0, 0, canvas.width, canvas.height);
 
         // Factor de escala y margen para el logo inferior
-        const scale = 1.1;
+        const scale = 0.8;
         const margin = 0;
 
         //const extraTopOffset =  margin*3; // distancia adicional para el logo superior
@@ -62,13 +62,13 @@ const MergeImage: React.FC<MergeImageProps> = ({
         //   supHeight
         // );
 
-        // Logo Inferior: centrado horizontalmente, un poco más arriba que antes
+        // Logo Inferior: esquina inferior derecha
         const infWidth = LogoInf.width * scale;
         const infHeight = LogoInf.height * scale;
         ctx.drawImage(
           LogoInf,
-          (canvas.width - infWidth) / 2,
-          canvas.height - infHeight - extraBottomOffset,
+          canvas.width - infWidth - margin, // Posición X: desde el borde derecho
+          canvas.height - infHeight - extraBottomOffset, // Posición Y: desde el borde inferior
           infWidth,
           infHeight
         );

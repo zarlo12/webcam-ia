@@ -123,21 +123,14 @@ const Waiting: React.FC<WaitingProps> = ({
 
             <input
               type="text"
-              placeholder="Empresa"
+              placeholder="ID"
               value={ciudad}
               onChange={(e) => onCiudadChange(e.target.value)}
               className="input"
               required
             />
 
-            <input
-              type="email"
-              placeholder="Correo"
-              value={email}
-              onChange={(e) => onEmailChange(e.target.value)}
-              className="input"
-              required
-            />
+          
 
             <input
               type="text"
@@ -148,7 +141,14 @@ const Waiting: React.FC<WaitingProps> = ({
               required
             />
 
-           
+             <input
+              type="email"
+              placeholder="Correo"
+              value={email}
+              onChange={(e) => onEmailChange(e.target.value)}
+              className="input"
+              required
+            />
 
             
 

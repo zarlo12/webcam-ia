@@ -97,30 +97,6 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
             En virtud del presente documento, de forma libre y espontánea, declaro que:
           </p>
 
-          <ol style={{...listStyle, listStyleType: 'decimal'}}>
-            <li style={{ marginBottom: "15px" }}>
-              <strong>AUTORIZO</strong> a GRUPO XNOVA SAS para que, en desarrollo de LA ACTIVIDAD, haga tratamiento de mis datos personales, incluyendo sin limitarse a nombres, apellidos, datos de identificación, fotografías y videos.
-            </li>
-            
-            <li style={{ marginBottom: "15px" }}>
-              <strong>AUTORIZO</strong> a GRUPO XNOVA SAS a recolectar y hacer tratamiento de mis datos personales, que estén contenidos en los registros fotográficos y/o fílmicos que ésta realice durante LA ACTIVIDAD. El tratamiento que podrá dársele a estos datos incluye su uso, sin costo alguno, para efectuar Publicaciones en redes sociales, página web corporativa, medios impresos y/o publicitarios y medios internos de GRUPO XNOVA SAS
-            </li>
-            
-            <li style={{ marginBottom: "15px" }}>
-              <strong>GRUPO XNOVA SAS</strong> me informó:
-              <ol style={{...listStyle, listStyleType: 'lower-alpha', marginTop: "10px"}}>
-                <li style={{ marginBottom: "8px" }}>
-                  Que el tratamiento de mis datos personales se realizará conforme a su política de tratamiento de datos personales;
-                </li>
-                <li style={{ marginBottom: "8px" }}>
-                  el alcance de su política tratamiento de datos personales, mis derechos respecto los mismos y la forma de ejercerlos; y
-                </li>
-                <li style={{ marginBottom: "8px" }}>
-                  que su política de tratamiento de datos se encuentra establecida en el manual de tratamiento de datos personales.
-                </li>
-              </ol>
-            </li>
-          </ol>
         </section>
 
         {showBackButton && (

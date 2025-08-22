@@ -21,14 +21,28 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
   const [email] = useState("");
   const [capturedImage, setCapturedImage] = useState<Blob | null>(null);
   const [capturedImageUrl, setCapturedImageUrl] = useState<string>("");
-
+  const [selectedStyle, setSelectedStyle] = useState<string>(""); // Nuevo estado para el estilo
 
   const webcamRef = useRef<WebcamRef | null>(null);
 
-  const webhookUrl =
-    import.meta.env.VITE_N8N_WEBHOOK_URL ||
-    "https://xnova360.app.n8n.cloud/webhook-test/497347b7-8019-4f9b-8541-2ae380e51920";
-  //const webhookUrl = "https://test231234423234432.com/";
+  // URLs de los endpoints según el estilo
+  const realistaUrl = import.meta.env.VITE_REALISTA_WEBHOOK_URL || 
+    "https://xnova360.app.n8n.cloud/webhook/4c07f695-b8e7-48ed-81ae-4af3adc78b71";
+  
+  const caricaturaUrl = import.meta.env.VITE_CARICATURA_WEBHOOK_URL || 
+    "https://xnova360.app.n8n.cloud/webhook/7f744819-6e36-43f0-ac4a-2c8810426a52";
+
+  // Función para obtener la URL según el estilo seleccionado
+  const getWebhookUrl = () => {
+    switch (selectedStyle) {
+      case "realista":
+        return realistaUrl;
+      case "caricatura":
+        return caricaturaUrl;
+      default:
+        return realistaUrl; // Por defecto realista
+    }
+  };
 
   // Función para capturar la imagen desde el componente WebcamScene
   const handleCapture = async () => {
@@ -44,21 +58,24 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
     }
   };
 
-  // Envía la imagedn capturada al endpoint de n8n
+  // Envía la imagen capturada al endpoint de n8n
   const handleProcessImage = async () => {
     if (!capturedImage) return;
     const formData = new FormData();
     formData.append("image", capturedImage, "webcam-image.jpg");
+    
+    const currentWebhookUrl = getWebhookUrl();
   
     try {
       console.log("Enviando imagen...");
-      //onProcess(); //TEMPORAL NO DEBE IR AQUI
-      const responseFinal = await axios.post(webhookUrl, formData, {
+      console.log("Estilo seleccionado:", selectedStyle);
+      console.log("URL del webhook:", currentWebhookUrl);
+      
+      const responseFinal = await axios.post(currentWebhookUrl, formData, {
         headers: { "Content-Type": "multipart/form-data" },
         timeout: 600000,
       });
       console.log("Imagen enviada a n8n!", responseFinal);
-      //alert("Imagen enviada a n8n!");
       onProcess(email); // Cambia de pantalla (por ejemplo, a 'waiting')
     } catch (error) {
       console.error("Error al procesar la imagen:", error);
@@ -75,15 +92,15 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // 1) Validar que haya seleccionado un "sueño"/interés
-    // if (!selectedDream) {
-    //   Swal.fire({
-    //     icon: "warning",
-    //     title: "Advertencia",
-    //     text: "Por favor selecciona tu interés.",
-    //   });
-    //   return;
-    // }
+    // Validar que haya seleccionado un estilo
+    if (!selectedStyle) {
+      Swal.fire({
+        icon: "warning",
+        title: "Advertencia",
+        text: "Por favor selecciona un estilo (realista o caricatura).",
+      });
+      return;
+    }
 
     if (!capturedImage) {
       Swal.fire({
@@ -123,30 +140,20 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
           </div>
 
           <div className="buttons-container">
-            {/* SELECT "Selecciona tu sueño" */}
-            {/* <div className="select-container">
+            {/* SELECT para elegir estilo */}
+            <div className="select-container">
               <select
-                value={selectedDream}
-                onChange={(e) => {
-                  const dream = e.target.value;
-                  setSelectedDream(dream);
-                  onDreamChange(dream); // Llama al callback para elevar la selección
-                }}
+                value={selectedStyle}
+                onChange={(e) => setSelectedStyle(e.target.value)}
               >
                 <option value="" disabled>
-                  Selecciona tu interés
+                  Selecciona el estilo
                 </option>
-                <option value="Gastronómico">Gastronómico</option>
-                <option value="Administrativo">Administrativo</option>
-                <option value="Experto en TIC">Experto en TIC</option>
-                <option value="Experto en logística">
-                  Experto en logística
-                </option>
-                <option value="Regente de Farmacia">Regente de Farmacia</option>
-                <option value="Experto en SST">Experto en SST</option>
+                <option value="realista">Estilo Realista</option>
+                <option value="caricatura">Estilo Caricatura</option>
               </select>
               <span className="select-arrow">▼</span>
-            </div> */}
+            </div>
 
             <button
               type="button"

@@ -48,12 +48,6 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
 
 
 
-  const listStyle: React.CSSProperties = {
-    marginBottom: "15px",
-    paddingLeft: "20px",
-    fontSize: isSmallScreen ? "14px" : "16px",
-    lineHeight: "1.5",
-  };
 
 
 

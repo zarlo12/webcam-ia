@@ -16,6 +16,7 @@ interface AvatarResultProps {
   onReset: () => void;
 }
 
+
 const AvatarResult: React.FC<AvatarResultProps> = ({
   email,
   nombre,
@@ -26,6 +27,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
   onReset,
 }) => {
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string>(imageUrl);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const hasUploadedRef = useRef(false);
 
   // Memoiza la función para evitar que cambie en cada render
@@ -33,7 +35,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
     async (dataUrl: string) => {
       if (hasUploadedRef.current) return;
       hasUploadedRef.current = true;
-
+      setIsLoading(true);
       try {
         const storageRef = ref(
           storage,
@@ -57,6 +59,8 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
         setUploadedImageUrl(downloadURL);
       } catch (error) {
         console.error("Error al subir imagen:", error);
+      } finally {
+        setIsLoading(false);
       }
     },
     [email, nombre, ciudad, formulario, consentimiento]
@@ -66,7 +70,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
     if (!hasUploadedRef.current) {
       uploadMergedImage(imageUrl);
     }
-  }, [imageUrl, uploadMergedImage]); // Ahora `useEffect` tiene todas  sus dependencias
+  }, [imageUrl, uploadMergedImage]);
 
   return (
     <div className="containerResultFinal">
@@ -79,31 +83,32 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
           <div className="card">
             <h2 className="subtitleResult">AVATAR IA</h2>
             <div className="avatar-container">
-              <img
-                src={uploadedImageUrl}
-                className="avatar"
-                alt="Avatar generado"
-              />
+              {isLoading ? (
+                <div className="loading-indicator" style={{textAlign: "center", padding: "40px 0"}}>
+                  <span style={{fontSize: 22}}>Guardando avatar...</span>
+                  <br />
+                  <div className="spinner" style={{margin: "20px auto", width: 40, height: 40, border: "4px solid #ccc", borderTop: "4px solid #31afda", borderRadius: "50%", animation: "spin 1s linear infinite"}} />
+                </div>
+              ) : (
+                <img
+                  src={uploadedImageUrl}
+                  className="avatar"
+                  alt="Avatar generado"
+                />
+              )}
             </div>
-            {/* <h2 className="subtitleResult">
-              Comparte esta imagen 
-              <br />en Instagram y etiquetanos 
-              <br />
-              <div style={{ color: "#31afda" }}>@pastaslamuneca</div>
-            </h2> */}
             <button
               type="button"
               className="button"
               onClick={onReset}
               style={{ width: "250px" }}
+              disabled={isLoading}
             >
               Generar nueva
             </button>
           </div>
         </div>
       </div>
-
-     
     </div>
   );
 };

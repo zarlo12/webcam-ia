@@ -1,25 +1,54 @@
 import React, { useRef, useEffect } from "react";
 // import logoSuperior from "../../assets/img/LogoSuperior.png";
 import logoInferior from "../../assets/xnova/LogoXnova.png";
+import logoInferior2 from "../../assets/xnova/LogoXnova2.png";
 
 interface MergeImageProps {
   imageUrl: string; // URL de la imagen principal (avatar)
   onMerged: (mergedDataUrl: string) => void; // Callback para retornar la imagen fusionada
   tipoSuenio: string;
+  selectedStyle?: string; // Estilo seleccionado (realista o caricatura)
 }
 
 const MergeImage: React.FC<MergeImageProps> = ({
   imageUrl,
   onMerged,
   tipoSuenio,
+  selectedStyle,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  // 🎯 CONSTANTES CONFIGURABLES PARA POSICIONAMIENTO DE LOGOS
+  const LOGO_CONFIG = {
+    // Configuración para logo estilo caricatura (logoInferior)
+    caricatura: {
+      scale: 0.8,
+      marginRight: 0,
+      marginBottom: 0,
+      offsetX: 0,  // Ajuste adicional horizontal (negativo = más izquierda)
+      offsetY: 0   // Ajuste adicional vertical (negativo = más arriba)
+    },
+    // Configuración para logo estilo realista (logoInferior2)
+    realista: {
+      scale: 0.8,
+      marginRight: 20,    // Ahora actúa como margen izquierdo
+      marginBottom: 20,
+      offsetX: 0,         // Ajuste adicional horizontal
+      offsetY: 0          // Ajuste adicional vertical
+    }
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+
+    // Seleccionar el logo según el estilo
+    const logoToUse = selectedStyle === "realista" ? logoInferior2 : logoInferior;
+    const config = selectedStyle === "realista" ? LOGO_CONFIG.realista : LOGO_CONFIG.caricatura;
+
+    console.log(`🎨 Usando logo para estilo: ${selectedStyle || "caricatura"}`);
 
     // Carga de imágenes con promesas
     const loadImage = (src: string): Promise<HTMLImageElement> =>
@@ -33,8 +62,7 @@ const MergeImage: React.FC<MergeImageProps> = ({
 
     Promise.all([
       loadImage(imageUrl),    // avatar
-      //loadImage(logoSuperior),
-      loadImage(logoInferior) // Logo inferior centrado
+      loadImage(logoToUse)    // Logo seleccionado dinámicamente
     ])
       .then(([avatar, LogoInf]) => {
         // Ajustamos el canvas al tamaño del avatar
@@ -44,34 +72,32 @@ const MergeImage: React.FC<MergeImageProps> = ({
         // Dibujar avatar completo
         ctx.drawImage(avatar, 0, 0, canvas.width, canvas.height);
 
-        // Factor de escala y margen para el logo inferior
-        const scale = 0.8;
-        const margin = 0;
-
-        //const extraTopOffset =  margin*3; // distancia adicional para el logo superior
-        const extraBottomOffset = margin ; // hacer que el logo inferior esté un poco más arriba
-
-         //const supWidth = LogoSup.width * scale;
-        //const supHeight = LogoSup.height * scale;
-
-        // ctx.drawImage(
-        //   LogoSup,
-        //   (canvas.width - supWidth) / 2,
-        //   extraTopOffset,
-        //   supWidth,
-        //   supHeight
-        // );
-
-        // Logo Inferior: esquina inferior derecha
-        const infWidth = LogoInf.width * scale;
-        const infHeight = LogoInf.height * scale;
+        // Logo Inferior: posición según el estilo
+        const infWidth = LogoInf.width * config.scale;
+        const infHeight = LogoInf.height * config.scale;
+        
+        // Calcular posición con configuración personalizada
+        let posX, posY;
+        
+        if (selectedStyle === "realista") {
+          // Esquina inferior izquierda para realista
+          posX = config.marginRight + config.offsetX;
+          posY = canvas.height - infHeight - config.marginBottom + config.offsetY;
+        } else {
+          // Esquina inferior derecha para caricatura
+          posX = canvas.width - infWidth - config.marginRight + config.offsetX;
+          posY = canvas.height - infHeight - config.marginBottom + config.offsetY;
+        }
+        
         ctx.drawImage(
           LogoInf,
-          canvas.width - infWidth - margin, // Posición X: desde el borde derecho
-          canvas.height - infHeight - extraBottomOffset, // Posición Y: desde el borde inferior
+          posX,
+          posY,
           infWidth,
           infHeight
         );
+
+        console.log(`📐 Logo posicionado: X=${Math.round(posX)}, Y=${Math.round(posY)}, Tamaño=${Math.round(infWidth)}x${Math.round(infHeight)}`);
 
         // Convertir a Data URL y pasar al callback
         const mergedDataUrl = canvas.toDataURL("image/png");
@@ -80,7 +106,7 @@ const MergeImage: React.FC<MergeImageProps> = ({
       .catch((error) => {
         console.error("Error al cargar las imágenes:", error);
       });
-  }, [imageUrl, onMerged, tipoSuenio]);
+  }, [imageUrl, onMerged, tipoSuenio, selectedStyle]); // Agregamos selectedStyle a las dependencias
 
   // Canvas oculto
   return <canvas ref={canvasRef} style={{ display: "none" }} />;

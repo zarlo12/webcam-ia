@@ -31,6 +31,7 @@ interface WaitingProps {
 
   imagenGenerada: boolean;
   imageUrl: string;
+  selectedStyle?: string; // Estilo seleccionado en AvatarPhoto
   onEmailChange: (email: string) => void;
   onNombreChange: (nombre: string) => void;
   onCiudadChange: (ciudad: string) => void;
@@ -48,6 +49,7 @@ const Waiting: React.FC<WaitingProps> = ({
   formulario,
   imagenGenerada,
   imageUrl,
+  selectedStyle,
   onEmailChange,
   onNombreChange,
   onCiudadChange,
@@ -96,6 +98,7 @@ const Waiting: React.FC<WaitingProps> = ({
                   imageUrl={imageUrl}
                   onMerged={handleMerged}
                   tipoSuenio={''}
+                  selectedStyle={selectedStyle}
                 />
               )}
             </div>

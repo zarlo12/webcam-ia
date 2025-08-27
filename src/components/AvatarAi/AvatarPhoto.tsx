@@ -9,7 +9,7 @@ import Swal from "sweetalert2"; // Import sweetalert2
 // import { FaCamera } from "react-icons/fa";
 
 interface AvatarPhotoProps {
-  onProcess: (email: string) => void;
+  onProcess: (style?: string) => void;
 }
 interface WebcamRef {
   captureImage: () => Promise<Blob>;
@@ -76,7 +76,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
         timeout: 600000,
       });
       console.log("Imagen enviada a n8n!", responseFinal);
-      onProcess(email); // Cambia de pantalla (por ejemplo, a 'waiting')
+      // No necesitamos llamar onProcess aquí porque ya se llama en handleSubmit
     } catch (error) {
       console.error("Error al procesar la imagen:", error);
     }
@@ -110,7 +110,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
       });
       return;
     }
-    onProcess(email);
+    onProcess(selectedStyle); // Pasar el estilo seleccionado al callback
     handleProcessImage();
   };
 

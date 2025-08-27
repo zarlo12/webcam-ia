@@ -29,14 +29,18 @@ function MainApp() {
   const [formulario, setFormulario] = useState("");
   const [consentimiento, setConsentimiento] = useState("");
   const [imagenGenerada, setImagenGenerada] = useState(false); // Nueva bandera
+  const [selectedStyle, setSelectedStyle] = useState<string>(""); // Estilo seleccionado (realista/caricatura)
 
 
   // Esta función se invoca en AvatarPhoto al enviar la petición a n8n.
   // Además, al cambiar a Waiting se limpia el email para que el usuario lo ingrese nuevamente.
-  const handleProcess = () => {
+  const handleProcess = (style?: string) => {
+    if (style) {
+      setSelectedStyle(style); // Guardamos el estilo seleccionado
+    }
     setEmail("");
     setNombre("");
-     setCiudad("");
+    setCiudad("");
     setFormulario("");
     setConsentimiento("");
     setImagenGenerada(false); // Reiniciamos la bandera al iniciar el proceso
@@ -120,6 +124,7 @@ function MainApp() {
           imagenGenerada={imagenGenerada} // Prop bandera
           imageUrl={imageUrl}
           ciudad={ciudad}
+          selectedStyle={selectedStyle} // Pasar el estilo seleccionado
           onEmailChange={handleEmailChange}
           onNombreChange={handleNombreChange}
           onCiudadChange={handleCiudadChange}

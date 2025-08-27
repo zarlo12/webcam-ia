@@ -18,7 +18,7 @@ interface WebcamRef {
 const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
   onProcess,
 }) => {
-  const [email] = useState("");
+  // const [email] = useState("");
   const [capturedImage, setCapturedImage] = useState<Blob | null>(null);
   const [capturedImageUrl, setCapturedImageUrl] = useState<string>("");
   const [selectedStyle, setSelectedStyle] = useState<string>(""); // Nuevo estado para el estilo

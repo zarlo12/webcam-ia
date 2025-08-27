@@ -156,13 +156,13 @@
   border: 2px solid transparent;
   background-image:
     linear-gradient(#ffffff, #ffffff),
-    linear-gradient(to right, #31afda, #31afda);
+    linear-gradient(to right, #50338b, #50338b);
   background-origin: border-box;
   background-clip: padding-box, border-box;
 }
 
 .checkbox:checked:before {
-  background: #31afda;
+  background: #50338b;
   content: "";
   width: 13px;
   height: 10px;

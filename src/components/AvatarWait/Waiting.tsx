@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Waiting.scss";
 import logo from "../../assets/xnova/LogoXnova.png";
+import Swal from "sweetalert2";
 
 import MergeImage from "../AvatarAi/MergeImage"; // Asegúrate de la ruta correcta
 
@@ -60,6 +62,62 @@ const Waiting: React.FC<WaitingProps> = ({
 }) => {
   const [mergedImage, setMergedImage] = useState<string | null>(null);
   const hasMergedRef = useRef(false);
+  const navigate = useNavigate();
+  const errorCheckIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // API para verificar errores
+  const ERROR_CHECK_URL = "https://proyectoshm.com/marco_pruebas/imagen/check_error.php";
+
+  // Función para verificar errores en la API
+  const checkForErrors = async () => {
+    try {
+      const response = await fetch(ERROR_CHECK_URL, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      if (data.error_triggered === true) {
+        // Limpiar el intervalo para evitar múltiples alertas
+        if (errorCheckIntervalRef.current) {
+          clearInterval(errorCheckIntervalRef.current);
+          errorCheckIntervalRef.current = null;
+        }
+
+        // Limpiar el estado de error en el servidor
+        await fetch(`${ERROR_CHECK_URL}?clear=true`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        // Mostrar alerta bonita
+        await Swal.fire({
+          icon: 'error',
+          title: '¡Oops! Algo salió mal',
+          text: 'Hubo un error procesando tu imagen. Por favor, toma una nueva foto.',
+          confirmButtonText: 'Tomar nueva foto',
+          confirmButtonColor: '#31afda',
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+        });
+
+        // Redirigir al home
+        navigate('/');
+      }
+    } catch (error) {
+      console.error('Error checking for API errors:', error);
+      // No mostrar alerta para errores de red/API para no molestar al usuario
+    }
+  };
 
   // Cargar el script de Tally al montar el componente
   useEffect(() => {
@@ -71,6 +129,20 @@ const Waiting: React.FC<WaitingProps> = ({
       document.body.removeChild(script);
     };
   }, []);
+
+  // Verificación de errores cada 3 segundos
+  useEffect(() => {
+    // Iniciar la verificación de errores
+    errorCheckIntervalRef.current = setInterval(checkForErrors, 3000);
+
+    // Limpiar el intervalo al desmontar el componente
+    return () => {
+      if (errorCheckIntervalRef.current) {
+        clearInterval(errorCheckIntervalRef.current);
+        errorCheckIntervalRef.current = null;
+      }
+    };
+  }, [navigate]); // Agregamos navigate como dependencia
 
   // Función para abrir el popup dimensionado
   

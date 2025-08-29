@@ -45,15 +45,15 @@ interface WaitingProps {
 const Waiting: React.FC<WaitingProps> = ({
   email,
   nombre,
-  ciudad,
-  formulario,
+  // ciudad,
+  // formulario,
   imagenGenerada,
   imageUrl,
   selectedStyle,
   onEmailChange,
   onNombreChange,
-  onCiudadChange,
-  onFormularioChange,
+  // onCiudadChange,
+  // onFormularioChange,
   onConsentimientoChange,
   onShowPolicy,
   onContinue,
@@ -124,29 +124,29 @@ const Waiting: React.FC<WaitingProps> = ({
             />
 
 
-            <input
+            {/* <input
               type="text"
               placeholder="ID"
               value={ciudad}
               onChange={(e) => onCiudadChange(e.target.value)}
               className="input"
               required
-            />
+            /> */}
 
           
 
-            <input
+            {/* <input
               type="text"
               placeholder="Teléfono"
               value={formulario}
               onChange={(e) => onFormularioChange(e.target.value)}
               className="input"
               required
-            />
+            /> */}
 
              <input
               type="email"
-              placeholder="Correo"
+              placeholder="Correo electrónico"
               value={email}
               onChange={(e) => onEmailChange(e.target.value)}
               className="input"

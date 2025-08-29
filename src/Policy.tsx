@@ -54,7 +54,7 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
   const buttonStyle: React.CSSProperties = {
     padding: isSmallScreen ? "8px 16px" : "10px 20px",
     fontSize: isSmallScreen ? "14px" : "16px",
-    background: "#50338b",
+    background: "#51338b",
     color: "white",
     border: "none",
     borderRadius: "4px",
@@ -87,7 +87,7 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
             FORMATO DE CONSENTIMIENTO INFORMADO
           </h1>
           
-          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "18px" : "20px", color: "#50338b" }}>
+          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "18px" : "20px", color: "#51338b" }}>
             Uso de Datos Personales y Captura Temporal de Imagen Facial para Actividad de Avatar con Inteligencia Artificial
           </h2>
           
@@ -95,7 +95,7 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
             Nutricia Exports B.V. («Nutricia»), término que incluye a cada miembro del grupo de compañías del cual Nutricia Exports B.V. es la compañía matriz, subsidiaria o afiliada), en cumplimiento de lo dispuesto por la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP) de México y demás normativas aplicables, pone a su disposición el presente consentimiento informado.
           </p>
 
-          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#50338b" }}>
+          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#51338b" }}>
             1. Finalidad del tratamiento de datos
           </h2>
           
@@ -121,7 +121,7 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
             Los datos no serán utilizados para fines distintos a los aquí mencionados.
           </p>
 
-          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#50338b" }}>
+          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#51338b" }}>
             2. Naturaleza del procesamiento de la imagen facial
           </h2>
           
@@ -134,7 +134,7 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
             <li>Únicamente Nutricia tendrá acceso autorizado a los datos, con el propósito exclusivo de entregar el resultado de la experiencia.</li>
           </ul>
 
-          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#50338b" }}>
+          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#51338b" }}>
             3. Consentimiento previo y voluntario
           </h2>
           
@@ -147,7 +147,7 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
             <li>En caso de no otorgar su consentimiento, no se capturarán ni procesarán sus datos personales.</li>
           </ul>
 
-          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#50338b" }}>
+          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#51338b" }}>
             4. Medidas de seguridad
           </h2>
           
@@ -155,7 +155,7 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
             El tratamiento de sus datos personales se realizará con estrictas medidas de seguridad administrativas, técnicas y físicas que permiten proteger su información contra daño, pérdida, alteración, destrucción o uso indebido.
           </p>
 
-          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#50338b" }}>
+          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#51338b" }}>
             5. Transferencia de datos
           </h2>
           
@@ -163,7 +163,7 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
             Los datos personales obtenidos no serán compartidos con terceros, salvo que exista obligación legal de hacerlo.
           </p>
 
-          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#50338b" }}>
+          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#51338b" }}>
             6. Derechos ARCO (Acceso, Rectificación, Cancelación y Oposición)
           </h2>
           
@@ -180,7 +180,7 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
             o directamente en el domicilio de Nutricia.
           </p>
 
-          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#50338b" }}>
+          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#51338b" }}>
             7. Contacto del responsable de datos personales
           </h2>
           
@@ -196,7 +196,7 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
             </a>.
           </p>
 
-          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#50338b" }}>
+          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#51338b" }}>
             DECLARACIÓN DE CONSENTIMIENTO
           </h2>
           

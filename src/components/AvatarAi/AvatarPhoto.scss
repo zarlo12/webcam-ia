@@ -52,7 +52,7 @@
 /* Cabecera superior con fondo rojo */
 .header {
   width: 100%;
-  background: linear-gradient(to right, #393d89, #50338b);
+  background: linear-gradient(to right, #2b3c90, #51338b);
   padding: 10px 0;
   display: flex;
   justify-content: center;
@@ -92,7 +92,7 @@
 }
 
 .subtitle {
-  color: #282828;
+  color: #3c3c3c;
   font-size: 25px;
   font-weight: 800;
   margin-bottom: 15px;
@@ -110,7 +110,7 @@
   select {
     width: 350px;
     height: 57px;
-    background: linear-gradient(to right, #393d89, #50338b);
+    background: linear-gradient(to right, #2b3c90, #51338b);
     color: #fff;
     font-weight: bold;
     font-size: 25px;
@@ -204,7 +204,7 @@ form {
   width: 92%;
   padding: 10px;
   border-radius: 5px;
-  background: linear-gradient(to right, #393d89, #50338b);
+  background: linear-gradient(to right, #2b3c90, #51338b);
   color: #ffffff;
   border: 1px solid #555;
   font-size: 14px;
@@ -213,7 +213,7 @@ form {
 .button {
   width: 200px;
   height: 57px;
-  background: linear-gradient(to right, #393d89, #50338b);
+  background: linear-gradient(to right, #2b3c90, #51338b);
   color: #ffffff;
   font-weight: bold;
   padding: 10px;
@@ -278,7 +278,7 @@ form {
 }
 .footerAlways {
   width: 100%;
-  background: linear-gradient(to right, #50338b, #50338b);
+  background: linear-gradient(to right, #51338b, #51338b);
   padding: 10px 0;
   display: flex;
   justify-content: center;

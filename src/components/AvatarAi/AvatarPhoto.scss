@@ -1,3 +1,15 @@
+@font-face {
+  font-family: 'Bariol Regular';
+  src: url('../../assets/fonts/Bariol_Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Bariol Bold';
+  src: url('../../assets/fonts/Bariol_Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
 .containerResult {
   width: 100vw;
   height: 100vh;
@@ -93,6 +105,7 @@
 
 .subtitle {
   color: #3c3c3c;
+  font-family: 'Bariol Bold', Arial, sans-serif;
   font-size: 25px;
   font-weight: 800;
   margin-bottom: 15px;
@@ -108,6 +121,7 @@
   margin-top: 15px;
 
   select {
+    font-family: 'Bariol Regular', Arial, sans-serif;
     width: 350px;
     height: 57px;
     background: linear-gradient(to right, #2b3c90, #51338b);
@@ -216,6 +230,7 @@ form {
   background: linear-gradient(to right, #2b3c90, #51338b);
   color: #ffffff;
   font-weight: bold;
+  font-family: 'Bariol Regular', Arial, sans-serif;
   padding: 10px;
   margin-top: 15px;
   border-radius: 15px;

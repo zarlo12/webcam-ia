@@ -1,3 +1,16 @@
+@font-face {
+  font-family: 'Bariol Regular';
+  src: url('../../assets/fonts/Bariol_Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Bariol Bold';
+  src: url('../../assets/fonts/Bariol_Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+
 /* Contenedor general */
 .waiting-container {
   width: 100vw;
@@ -46,12 +59,14 @@
 /* Subtítulo "Avatar IA" */
 .subtitle {
   font-size: 24px;
+  font-family: 'Bariol Bold', Arial, sans-serif;
   color: #3c3c3c;
   font-weight: bold;
   margin: 15px 0;
 }
 
 .subtitleResult {
+  font-family: 'Bariol Bold', Arial, sans-serif;
   font-size: 21px;
   color: #3c3c3c;
   font-weight: bold;
@@ -61,6 +76,7 @@
 /* Texto de espera */
 .waiting-text {
   color: #3c3c3c;
+  font-family: 'Bariol Bold', Arial, sans-serif;
   font-size: 35px;
   font-weight: 700;
   line-height: 1.3;

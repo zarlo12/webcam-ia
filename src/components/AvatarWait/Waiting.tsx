@@ -244,11 +244,8 @@ const Waiting: React.FC<WaitingProps> = ({
                   Consentimiento
                   <br />
                   <a
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      onShowPolicy();
-                    }}
+                    href="https://www.electrolux.com.co/politica-de-privacidad" 
+                    target="_blank"
                     className="linkColorVerde"
                   >
                     Ver política de tratamiento de datos

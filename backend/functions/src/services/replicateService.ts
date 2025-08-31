@@ -173,7 +173,7 @@ class ReplicateService {
       seed: 1401721543,
       prompt:
         "Just make this change: put the logo (image logo and text) on the person's shirt in the photo.",
-      aspect_ratio: "9:16",
+      aspect_ratio: "1:1",
       input_image_1: LOGO_URL, // Fixed logo URL
       input_image_2: styledImageUrl, // Result from step 1
       output_format: "png",

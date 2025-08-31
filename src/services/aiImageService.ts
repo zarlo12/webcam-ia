@@ -30,15 +30,15 @@ class AIImageService {
 
   constructor() {
     // Use environment variable or fallback to production URLs
-    const baseUrl = import.meta.env.VITE_FIREBASE_FUNCTIONS_URL;
-
+    //const baseUrl = import.meta.env.VITE_FIREBASE_FUNCTIONS_URL;
+    const baseUrl = null;
     if (baseUrl) {
       // Development or custom base URL
       this.generateImageUrl = `${baseUrl}/generateAIImage`;
       this.healthCheckUrl = `${baseUrl}/healthCheck`;
       this.processingStatusUrl = `${baseUrl}/getProcessingStatus`;
     } else {
-      // Production URLs
+      // Production URLs https://generateaiimage-buybcovkna-uc.a.run.app
       this.generateImageUrl = "https://generateaiimage-buybcovkna-uc.a.run.app";
       this.healthCheckUrl = "https://healthcheck-buybcovkna-uc.a.run.app";
       this.processingStatusUrl =

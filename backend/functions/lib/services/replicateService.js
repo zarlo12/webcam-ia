@@ -43,7 +43,7 @@ class ReplicateService {
             console.log(`[${requestId}] Step 3: Removing background with BiRefNet`);
             const finalImageUrl = await this.processWithBiRefNet(styledImageUrl, requestId);
             console.log(`[${requestId}] Complete AI pipeline finished successfully`);
-            return {
+            const resultFinal = {
                 success: true,
                 imageUrl: finalImageUrl,
                 message: "Image processed successfully through complete pipeline",
@@ -55,6 +55,8 @@ class ReplicateService {
                     step3_final: finalImageUrl, // Step 3: Background removed
                 },
             };
+            console.log(`[resultFinal 12121212]`, resultFinal);
+            return resultFinal;
         }
         catch (error) {
             console.error(`[${requestId}] AI pipeline failed:`, error);
@@ -71,7 +73,7 @@ class ReplicateService {
     async processWithFluxKontextPro(imageUrl, prompt, style) {
         // flux-kontext-pro parameters - optimizado para estilo cartoon
         const input = {
-            prompt: prompt,
+            prompt: "anime-style HD",
             input_image: imageUrl,
             aspect_ratio: "match_input_image", //9:16
             output_format: "png",
@@ -83,7 +85,7 @@ class ReplicateService {
             disable_safety_checker: false,
         };
         console.log("Processing with flux-kontext-pro optimized for cartoon style:", config_1.REPLICATE_MODELS.FLUX_KONTEXT_PRO.model);
-        console.log("Using cartoon illustration prompt:", prompt);
+        console.log("Using cartoon illustration prompt:", "anime-style HD");
         const output = await (0, utils_1.retryWithBackoff)(async () => {
             return await this.initReplicate().run(`${config_1.REPLICATE_MODELS.FLUX_KONTEXT_PRO.model}`, {
                 input,
@@ -106,9 +108,9 @@ class ReplicateService {
      */
     async processWithMultiImageKontext(styledImageUrl, requestId) {
         const input = {
-            seed: 296997195,
-            prompt: "Place input_image_1 as a logo centered on the chest of the subject wearing a clean white t-shirt.",
-            aspect_ratio: "1:1",
+            seed: 1401721543,
+            prompt: "Just make this change: put the logo (image logo and text) on the person's shirt in the photo.",
+            aspect_ratio: "9:16",
             input_image_1: config_1.LOGO_URL, // Fixed logo URL
             input_image_2: styledImageUrl, // Result from step 1
             output_format: "png",

@@ -60,7 +60,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
       // Procesar la imagen en background
       const result = await aiImageService.generateImageWithFormData(
         capturedImage,
-        'CARTOON ILLUSTRATION STYLE ONLY - NOT REALISTIC: 2D animated cartoon character illustration, cel-shaded cartoon art style, clean vector-like cartoon illustration. Professional dental cartoon character (face + torso visible), wearing light beige cartoon lab coat and navy/teal cartoon shirt, friendly cartoon smile. Cartoon proportions with slightly oversized cartoon eyes, simplified cartoon features, NO photorealistic details, NO realistic skin texture, NO realistic lighting. Cartoon dental office background with simplified cartoon equipment. Art style: Disney-Pixar cartoon illustration, corporate cartoon mascot style, 2D animation character design, cartoon advertisement illustration. IMPORTANT: This must look like a cartoon drawing, NOT a photograph or realistic portrait.',
+        'anime-style HD',
         '',
         "user-" + Date.now()
       );

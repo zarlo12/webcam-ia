@@ -30,6 +30,21 @@ export const rateLimitConfig = {
 
 // Replicate models configurations
 export const REPLICATE_MODELS = {
+  // Primary model for anime/style conversion
+  FLUX_KONTEXT_PRO: {
+    model: "black-forest-labs/flux-kontext-pro",
+    version: "latest",
+  },
+  // Model for adding logo to clothing
+  MULTI_IMAGE_KONTEXT: {
+    model: "flux-kontext-apps/multi-image-kontext-max",
+    version: "latest",
+  },
+  // Model for background removal
+  BIREFNET: {
+    model: "men1scus/birefnet",
+    version: "f74986db0355b58403ed20963af156525e2891ea3c2d499bfbfb2a28cd87c5d7",
+  },
   STABLE_DIFFUSION_XL: {
     model: "stability-ai/stable-diffusion-xl-base-1.0",
     version: "39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b",
@@ -43,3 +58,7 @@ export const REPLICATE_MODELS = {
     version: "ddfc2b08d209f9fa8c1eca692712918bd449f695dabb4a958da31802a9570fe4",
   },
 } as const;
+
+// Logo URL for the multi-image processing
+export const LOGO_URL =
+  "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/GUIAS%2FLOGO_FINAL.png?alt=media&token=16fc065b-d3e7-47a5-a480-78a7cf5956d7";

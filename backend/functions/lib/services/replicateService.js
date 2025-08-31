@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const replicate_1 = __importDefault(require("replicate"));
 const config_1 = require("../config");
-const types_1 = require("../types");
 const utils_1 = require("../utils");
 const storage_1 = require("../utils/storage");
 class ReplicateService {
@@ -23,31 +22,42 @@ class ReplicateService {
         return this.replicate;
     }
     /**
-     * Generate AI image from webcam capture
+     * Generate AI image from webcam capture - Complete 3-step pipeline
      */
     async generateImageFromWebcam(request) {
         const requestId = (0, utils_1.generateRequestId)();
         try {
-            console.log(`[${requestId}] Starting AI image generation with face-to-many...`);
+            console.log(`[${requestId}] Starting complete AI pipeline: Logo placement -> Style conversion -> Background removal`);
             // Convert and optimize the image
             const imageBuffer = (0, utils_1.base64ToBuffer)(request.imageData);
             const optimizedBuffer = await (0, utils_1.optimizeImageForAI)(imageBuffer);
             // Upload original image to storage for processing
             const originalImageUrl = await (0, storage_1.uploadToStorage)(optimizedBuffer, "original-images", `original_${requestId}.jpg`);
-            // Generate the AI image using Replicate
-            const generatedImageUrl = await this.processWithReplicate(originalImageUrl, request.prompt || this.getDefaultPrompt(request.style), request.style);
-            // Upload generated image to our storage
-            const finalImageUrl = await this.downloadAndUploadImage(generatedImageUrl, requestId);
-            console.log(`[${requestId}] AI image generation completed successfully`);
+            // STEP 1: Add logo to the original image using multi-image-kontext-max
+            console.log(`[${requestId}] Step 1: Adding logo with multi-image-kontext-max`);
+            const logoImageUrl = await this.processWithMultiImageKontext(originalImageUrl, requestId);
+            // STEP 2: Convert the logo image to anime style using flux-kontext-pro
+            console.log(`[${requestId}] Step 2: Processing with flux-kontext-pro for style conversion`);
+            const styledImageUrl = await this.processWithFluxKontextPro(logoImageUrl, request.prompt || this.getDefaultPrompt(request.style), request.style);
+            // STEP 3: Remove background using BiRefNet
+            console.log(`[${requestId}] Step 3: Removing background with BiRefNet`);
+            const finalImageUrl = await this.processWithBiRefNet(styledImageUrl, requestId);
+            console.log(`[${requestId}] Complete AI pipeline finished successfully`);
             return {
                 success: true,
                 imageUrl: finalImageUrl,
-                message: "Image generated successfully",
+                message: "Image processed successfully through complete pipeline",
                 requestId,
+                debug: {
+                    originalImage: originalImageUrl,
+                    step1_logo: logoImageUrl, // Step 1: Logo added
+                    step2_styled: styledImageUrl, // Step 2: Style converted
+                    step3_final: finalImageUrl, // Step 3: Background removed
+                },
             };
         }
         catch (error) {
-            console.error(`[${requestId}] AI image generation failed:`, error);
+            console.error(`[${requestId}] AI pipeline failed:`, error);
             return {
                 success: false,
                 error: error instanceof Error ? error.message : "Unknown error occurred",
@@ -56,27 +66,31 @@ class ReplicateService {
         }
     }
     /**
-     * Process image with Replicate API
+     * STEP 1: Process image with flux-kontext-pro for style conversion
      */
-    async processWithReplicate(imageUrl, prompt, style) {
-        const modelConfig = this.getModelConfig(style);
-        // black-forest-labs/flux-kontext-pro parameters - modelo PRO para máximo realismo
+    async processWithFluxKontextPro(imageUrl, prompt, style) {
+        // flux-kontext-pro parameters - optimizado para estilo cartoon
         const input = {
             prompt: prompt,
             input_image: imageUrl,
-            output_format: "jpg",
-            guidance_scale: 3.5,
-            num_inference_steps: 28,
-            seed: Math.floor(Math.random() * 1000000),
-            disable_safety_checker: false
+            aspect_ratio: "match_input_image", //9:16
+            output_format: "png",
+            guidance_scale: 7.5, // Aumentado para seguir más estrictamente el prompt
+            safety_tolerance: 4,
+            prompt_upsampling: true, // Activado para mejorar interpretación del prompt
+            num_inference_steps: 35, // Aumentado para mejor calidad cartoon
+            seed: 81276873,
+            disable_safety_checker: false,
         };
-        console.log("Processing with flux-kontext-pro for painted portrait style:", modelConfig.model);
-        console.log("Using detailed painted dental portrait prompt:", prompt);
+        console.log("Processing with flux-kontext-pro optimized for cartoon style:", config_1.REPLICATE_MODELS.FLUX_KONTEXT_PRO.model);
+        console.log("Using cartoon illustration prompt:", prompt);
         const output = await (0, utils_1.retryWithBackoff)(async () => {
-            return await this.initReplicate().run(`${modelConfig.model}`, { input });
+            return await this.initReplicate().run(`${config_1.REPLICATE_MODELS.FLUX_KONTEXT_PRO.model}`, {
+                input,
+            });
         }, 3, 2000);
         // flux-kontext-pro returns a FileOutput object with url() method
-        if (output && typeof output === 'object' && 'url' in output) {
+        if (output && typeof output === "object" && "url" in output) {
             return output.url();
         }
         else if (typeof output === "string") {
@@ -88,16 +102,86 @@ class ReplicateService {
         throw new Error("Unexpected output format from flux-kontext-pro API");
     }
     /**
+     * STEP 2: Process image with multi-image-kontext-max to add logo
+     */
+    async processWithMultiImageKontext(styledImageUrl, requestId) {
+        const input = {
+            seed: 296997195,
+            prompt: "Just make this change: put the logo (image logo and text) on the person's shirt in the photo.",
+            aspect_ratio: "1:1",
+            input_image_1: config_1.LOGO_URL, // Fixed logo URL
+            input_image_2: styledImageUrl, // Result from step 1
+            output_format: "png",
+            safety_tolerance: 2,
+        };
+        console.log("Processing with multi-image-kontext-max to add logo:", config_1.REPLICATE_MODELS.MULTI_IMAGE_KONTEXT.model);
+        console.log("Logo URL:", config_1.LOGO_URL);
+        console.log("Styled image URL:", styledImageUrl);
+        const output = await (0, utils_1.retryWithBackoff)(async () => {
+            return await this.initReplicate().run(`${config_1.REPLICATE_MODELS.MULTI_IMAGE_KONTEXT.model}`, {
+                input,
+            });
+        }, 3, 2000);
+        // Handle the output - multi-image-kontext-max returns a FileOutput object
+        let imageUrl;
+        if (output && typeof output === "object" && "url" in output) {
+            imageUrl = output.url();
+        }
+        else if (typeof output === "string") {
+            imageUrl = output;
+        }
+        else if (Array.isArray(output)) {
+            imageUrl = output[0];
+        }
+        else {
+            throw new Error("Unexpected output format from multi-image-kontext-max API");
+        }
+        // Download and upload to our storage
+        return await this.downloadAndUploadImage(imageUrl, `logo_${requestId}`);
+    }
+    /**
+     * STEP 3: Process image with BiRefNet to remove background
+     */
+    async processWithBiRefNet(logoImageUrl, requestId) {
+        const input = {
+            image: logoImageUrl,
+            resolution: "",
+        };
+        console.log("Processing with BiRefNet for background removal:", config_1.REPLICATE_MODELS.BIREFNET.model);
+        console.log("Input image URL:", logoImageUrl);
+        const output = await (0, utils_1.retryWithBackoff)(async () => {
+            return await this.initReplicate().run(`${config_1.REPLICATE_MODELS.BIREFNET.model}:${config_1.REPLICATE_MODELS.BIREFNET.version}`, {
+                input,
+            });
+        }, 3, 2000);
+        // Handle the output - BiRefNet returns a FileOutput object
+        let imageUrl;
+        if (output && typeof output === "object" && "url" in output) {
+            imageUrl = output.url();
+        }
+        else if (typeof output === "string") {
+            imageUrl = output;
+        }
+        else if (Array.isArray(output)) {
+            imageUrl = output[0];
+        }
+        else {
+            throw new Error("Unexpected output format from BiRefNet API");
+        }
+        // Download and upload to our storage as final result
+        return await this.downloadAndUploadImage(imageUrl, `final_${requestId}`);
+    }
+    /**
      * Download generated image and upload to our storage
      */
-    async downloadAndUploadImage(imageUrl, requestId) {
+    async downloadAndUploadImage(imageUrl, filename) {
         try {
             const response = await fetch(imageUrl);
             if (!response.ok) {
                 throw new Error(`Failed to download image: ${response.statusText}`);
             }
             const buffer = Buffer.from(await response.arrayBuffer());
-            return await (0, storage_1.uploadToStorage)(buffer, "generated-images", `generated_${requestId}.jpg`);
+            return await (0, storage_1.uploadToStorage)(buffer, "generated-images", `${filename}.png`);
         }
         catch (error) {
             console.error("Failed to download and upload image:", error);
@@ -105,35 +189,11 @@ class ReplicateService {
         }
     }
     /**
-     * Get model configuration based on style
-     */
-    getModelConfig(style) {
-        // Always use PhotoMaker for face preservation
-        return {
-            model: config_1.replicateConfig.model,
-            version: config_1.replicateConfig.version,
-        };
-    }
-    /**
      * Get default prompt based on style
      */
     getDefaultPrompt(style) {
         // Prompt específico para flux-kontext-pro siguiendo best practices - ESTILO PINTADO
-        const basePaintedPrompt = `Transform this person into a professional dental practitioner while preserving exactly the same facial features, complexion, and identity. This person is positioned centrally or slightly off-center in a professional portrait style. They wear a light beige or off-white lab coat with a light teal-blue collared shirt underneath. The setting is a warm, inviting dental office with light golden-beige walls, dental chairs, and professional equipment subtly visible in the background. The lighting is warm and diffused, creating soft highlights on their face, with an overall professional yet approachable atmosphere. The style is a semi-realistic painted portrait with visible brushstrokes, reminiscent of impressionistic professional illustration rather than photography. The composition emphasizes the person's face while the background subtly suggests the dental environment. The mood is professional, friendly, and welcoming, with muted warm tones and a painted aesthetic.`;
-        switch (style) {
-            case types_1.ImageStyle.REALISTIC:
-                return `${basePaintedPrompt} Make it a detailed painted portrait with realistic brush textures and warm lighting.`;
-            case types_1.ImageStyle.ARTISTIC:
-                return `${basePaintedPrompt} Emphasize the artistic painted style with expressive brushstrokes and warm impressionistic colors.`;
-            case types_1.ImageStyle.CARTOON:
-                return `Transform this person into a friendly dental practitioner while keeping their facial identity. They wear a light beige coat with teal shirt. Painted cartoon style with warm dental office background, approachable and friendly painted aesthetic.`;
-            case types_1.ImageStyle.PROFESSIONAL:
-                return `${basePaintedPrompt} Formal painted executive portrait style with premium dental practice setting and refined brush technique.`;
-            case types_1.ImageStyle.VINTAGE:
-                return `Transform this person into a dental practitioner while preserving their facial features. Classic vintage painted portrait style with warm tones and traditional brushwork in a cozy dental office.`;
-            default:
-                return basePaintedPrompt;
-        }
+        return "anime-style HD";
     }
     /**
      * Check processing status (for async operations)

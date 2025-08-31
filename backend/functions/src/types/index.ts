@@ -11,6 +11,13 @@ export interface ImageGenerationResponse {
   message?: string;
   error?: string;
   requestId?: string;
+  // Debug information for pipeline steps
+  debug?: {
+    step1_logo?: string; // Result from multi-image-kontext-max (logo added)
+    step2_styled?: string; // Result from flux-kontext-pro (style converted)
+    step3_final?: string; // Result from BiRefNet (background removed)
+    originalImage?: string; // Original uploaded image
+  };
 }
 
 export interface ReplicateConfig {

@@ -29,7 +29,7 @@ function MainApp() {
   const [email, setEmail] = useState("");
   const [marca, setMarca] = useState("");
   const [name, setName] = useState("");
-  const [origem, setOrgem] = useState("Feria del Hogar 2025");
+  const [origem] = useState("Feria del Hogar 2025");
   const [rangoEdad, setRangoEdad] = useState("");
   const [renovar, setRenovar] = useState("");
   const [telephone, setTelephone] = useState("");
@@ -107,6 +107,8 @@ function MainApp() {
   const handleContinue = (mergedUrl: string) => {
     setImageUrl(mergedUrl);
     setLastImageUrl(mergedUrl); // Actualizar también el lastImageUrl
+    console.log('lastImageUrl:', lastImageUrl);
+
     setStep("result");
   };
 

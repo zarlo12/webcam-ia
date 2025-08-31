@@ -56,7 +56,6 @@ const Waiting: React.FC<WaitingProps> = ({
   email,
   marca,
   name,
-  origem,
   rangoEdad,
   renovar,
   telephone,

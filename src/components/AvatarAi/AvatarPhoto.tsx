@@ -60,7 +60,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
       // Procesar la imagen en background
       const result = await aiImageService.generateImageWithFormData(
         capturedImage,
-        'anime-style HD',
+        'anime-style',
         '',
         "user-" + Date.now()
       );

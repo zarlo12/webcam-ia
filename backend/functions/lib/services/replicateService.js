@@ -73,19 +73,16 @@ class ReplicateService {
     async processWithFluxKontextPro(imageUrl, prompt, style) {
         // flux-kontext-pro parameters - optimizado para estilo cartoon
         const input = {
-            prompt: "anime-style HD",
+            prompt: "anime-style",
             input_image: imageUrl,
             aspect_ratio: "match_input_image", //9:16
             output_format: "png",
-            guidance_scale: 7.5, // Aumentado para seguir más estrictamente el prompt
-            safety_tolerance: 4,
+            safety_tolerance: 5,
             prompt_upsampling: true, // Activado para mejorar interpretación del prompt
-            num_inference_steps: 35, // Aumentado para mejor calidad cartoon
             seed: 81276873,
-            disable_safety_checker: false,
         };
         console.log("Processing with flux-kontext-pro optimized for cartoon style:", config_1.REPLICATE_MODELS.FLUX_KONTEXT_PRO.model);
-        console.log("Using cartoon illustration prompt:", "anime-style HD");
+        console.log("Using cartoon illustration prompt:", "anime-style");
         const output = await (0, utils_1.retryWithBackoff)(async () => {
             return await this.initReplicate().run(`${config_1.REPLICATE_MODELS.FLUX_KONTEXT_PRO.model}`, {
                 input,

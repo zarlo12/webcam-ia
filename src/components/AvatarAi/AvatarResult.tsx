@@ -36,6 +36,8 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
   onReset,
 }) => {
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string>(imageUrl);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [loadingMessage, setLoadingMessage] = useState<string>("Generando avatar...");
   const hasUploadedRef = useRef(false);
 
   // Función para enviar datos al CRM de VTEX a través de Firebase Function
@@ -71,12 +73,17 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
       hasUploadedRef.current = true;
 
       try {
+        setIsLoading(true);
+        setLoadingMessage("Generando avatar...");
+
         const storageRef = ref(
           storage,
           `electrolux/${email}-${Date.now()}.png`
         );
         await uploadString(storageRef, dataUrl, "data_url");
         const downloadURL = await getDownloadURL(storageRef);
+
+        setLoadingMessage("Generando avatar...");
 
         // Datos para Firestore
         const datosFirestore = {
@@ -109,17 +116,30 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
         };
 
         console.log("🚀 ~ datosFirestore:", datosFirestore);
-        console.log("🚀 ~ datosCRM:", datosCRM);
+        // console.log("🚀 ~ datosCRM:", datosCRM);
 
         // Guardar en Firestore
         await addDoc(collection(db, "Electrolux"), datosFirestore);
         
+        setLoadingMessage("Generando avatar...");
+        
         // Enviar al CRM de VTEX
         await sendToVTEXCRM(datosCRM);
         
+        setLoadingMessage("¡Listo!");
         setUploadedImageUrl(downloadURL);
+        
+        // Esperar un poco antes de ocultar el loading para mostrar el mensaje de éxito
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 1000);
+        
       } catch (error) {
         console.error("Error al subir imagen:", error);
+        setLoadingMessage("Error al guardar");
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 2000);
       }
     },
     [caracteristicas, comprar, email, marca, name, origem, rangoEdad, renovar, telephone, terms, sendToVTEXCRM]
@@ -140,27 +160,67 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
       <div className="main-content">
         <div className="result-wrapper">
           <div className="card">
-            <div className="avatar-container">
-              <img
-                src={uploadedImageUrl}
-                className="avatar"
-                alt="Avatar generado"
-              />
-            </div>
-            <h2 className="subtitleResult">
-              Comparte esta imagen 
-              <br />en Instagram y etiquétanos 
-              <br />
-              <div style={{ color: "#041e50" }}>@electrolux</div>
-            </h2>
-            <button
-              type="button"
-              className="button btnResult"
-              onClick={onReset}
-              style={{ width: "250px" }}
-            >
-              Generar nueva
-            </button>
+            {isLoading ? (
+              // Loading State
+              <div className="loading-container" style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '40px',
+                minHeight: '300px'
+              }}>
+                <div className="loading-spinner" style={{
+                  width: '60px',
+                  height: '60px',
+                  border: '4px solid #f3f3f3',
+                  borderTop: '4px solid #007bff',
+                  borderRadius: '50%',
+                  animation: 'spin 1s linear infinite',
+                  marginBottom: '20px'
+                }}></div>
+                <p style={{
+                  color: '#333',
+                  fontSize: '18px',
+                  fontWeight: '500',
+                  textAlign: 'center',
+                  margin: '0'
+                }}>
+                  {loadingMessage}
+                </p>
+                <style>{`
+                  @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                  }
+                `}</style>
+              </div>
+            ) : (
+              // Result State
+              <>
+                <div className="avatar-container">
+                  <img
+                    src={uploadedImageUrl}
+                    className="avatar"
+                    alt="Avatar generado"
+                  />
+                </div>
+                <h2 className="subtitleResult">
+                  Comparte esta imagen 
+                  <br />en Instagram y etiquétanos 
+                  <br />
+                  <div style={{ color: "#041e50" }}>@electrolux</div>
+                </h2>
+                <button
+                  type="button"
+                  className="button btnResult"
+                  onClick={onReset}
+                  style={{ width: "250px" }}
+                >
+                  Generar nueva
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>

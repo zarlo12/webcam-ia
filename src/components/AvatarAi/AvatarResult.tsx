@@ -7,21 +7,31 @@ import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { collection, addDoc } from "firebase/firestore";
 
 interface AvatarResultProps {
+  caracteristicas: string;
+  comprar: string;
   email: string;
-  nombre: string;
-  ciudad: string;
-  formulario: string;
-  consentimiento: string;
+  marca: string;
+  name: string;
+  origem: string;
+  rangoEdad: string;
+  renovar: string;
+  telephone: string;
+  terms: boolean;
   imageUrl: string; // Imagen ya fusionada
   onReset: () => void;
 }
 
 const AvatarResult: React.FC<AvatarResultProps> = ({
+  caracteristicas,
+  comprar,
   email,
-  nombre,
-  ciudad,
-  formulario,
-  consentimiento,
+  marca,
+  name,
+  origem,
+  rangoEdad,
+  renovar,
+  telephone,
+  terms,
   imageUrl,
   onReset,
 }) => {
@@ -37,36 +47,40 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
       try {
         const storageRef = ref(
           storage,
-          `colgate/${email}-${Date.now()}.png`
+          `electrolux/${email}-${Date.now()}.png`
         );
         await uploadString(storageRef, dataUrl, "data_url");
         const downloadURL = await getDownloadURL(storageRef);
 
         const datosFirestore = {
-          email,
-          nombre,
-          ciudad,
-          formulario,
+          Caracteristicas: caracteristicas,
+          Comprar: comprar,
+          email: email,
+          marca: marca,
+          name: name,
+          origem: origem,
+          rangoEdad: rangoEdad,
+          renovar: renovar,
+          telephone: telephone,
+          terms: terms,
           imageUrl: downloadURL,
           date: new Date(),
-          consentimientoAceptado: consentimiento ? "Sí" : "No",
-          correoEnviado: false,
         };
-        console.log("🚀 ~ datosFirestore:", datosFirestore);
-        await addDoc(collection(db, "Colgate"), datosFirestore);
+        //console.log("🚀 ~ datosFirestore:", datosFirestore);
+        await addDoc(collection(db, "Electrolux"), datosFirestore);
         setUploadedImageUrl(downloadURL);
       } catch (error) {
         console.error("Error al subir imagen:", error);
       }
     },
-    [email, nombre, ciudad, formulario, consentimiento]
+    [caracteristicas, comprar, email, marca, name, origem, rangoEdad, renovar, telephone, terms]
   );
 
   useEffect(() => {
     if (!hasUploadedRef.current) {
       uploadMergedImage(imageUrl);
     }
-  }, [imageUrl, uploadMergedImage]); // Ahora `useEffect` tiene todas  sus dependencias
+  }, [imageUrl, uploadMergedImage]);
 
   return (
     <div className="containerResultFinal">
@@ -77,7 +91,6 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
       <div className="main-content">
         <div className="result-wrapper">
           <div className="card">
-            {/* <h2 className="subtitleResult">AVATAR IA</h2> */}
             <div className="avatar-container">
               <img
                 src={uploadedImageUrl}
@@ -87,9 +100,9 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
             </div>
             <h2 className="subtitleResult">
               Comparte esta imagen 
-              <br />en Instagram y etiquetanos 
-              {/* <br />
-              <div style={{ color: "#041e50" }}>@pastaslamuneca</div> */}
+              <br />en Instagram y etiquétanos 
+              <br />
+              <div style={{ color: "#041e50" }}>@electrolux</div>
             </h2>
             <button
               type="button"
@@ -102,8 +115,6 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
           </div>
         </div>
       </div>
-
-     
     </div>
   );
 };

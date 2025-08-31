@@ -22,49 +22,75 @@ function MainApp() {
   const [step, setStep] = useState("photo");
   const [imageUrl, setImageUrl] = useState("");
   const [lastImageUrl, setLastImageUrl] = useState("");
+  
+  // Nuevos campos según especificación
+  const [caracteristicas, setCaracteristicas] = useState("");
+  const [comprar, setComprar] = useState("");
   const [email, setEmail] = useState("");
-  const [nombre, setNombre] = useState("");
-
-  const [ciudad, setCiudad] = useState("");
-  const [formulario, setFormulario] = useState("");
-  const [consentimiento, setConsentimiento] = useState("");
+  const [marca, setMarca] = useState("");
+  const [name, setName] = useState("");
+  const [origem, setOrgem] = useState("Feria del Hogar 2025");
+  const [rangoEdad, setRangoEdad] = useState("");
+  const [renovar, setRenovar] = useState("");
+  const [telephone, setTelephone] = useState("");
+  const [terms, setTerms] = useState<boolean>(false);
+  
   const [imagenGenerada, setImagenGenerada] = useState(false); // Nueva bandera
   const [aiImageReady, setAiImageReady] = useState(false); // Estado para imagen de IA lista
 
 
   // Esta función se invoca en AvatarPhoto al enviar la petición a n8n.
-  // Además, al cambiar a Waiting se limpia el email para que el usuario lo ingrese nuevamente.
+  // Además, al cambiar a Waiting se limpia los campos para que el usuario los ingrese.
   const handleProcess = () => {
+    setCaracteristicas("");
+    setComprar("");
     setEmail("");
-    setNombre("");
-     setCiudad("");
-    setFormulario("");
-    setConsentimiento("");
+    setMarca("");
+    setName("");
+    setRangoEdad("");
+    setRenovar("");
+    setTelephone("");
+    setTerms(false);
     setImagenGenerada(false); // Reiniciamos la bandera al iniciar el proceso
     setAiImageReady(false); // Reiniciamos el estado de imagen IA
     setStep("waiting");
   };
 
-  // Función para actualizar el email conforme se escribe en Waiting.
+  // Funciones para actualizar los campos conforme se escriben en Waiting.
+  const handleCaracteristicasChange = (newCaracteristicas: string) => {
+    setCaracteristicas(newCaracteristicas);
+  };
+
+  const handleComprarChange = (newComprar: string) => {
+    setComprar(newComprar);
+  };
+
   const handleEmailChange = (newEmail: string) => {
     setEmail(newEmail);
   };
 
-  const handleNombreChange = (newNombre: string) => {
-    setNombre(newNombre);
+  const handleMarcaChange = (newMarca: string) => {
+    setMarca(newMarca);
   };
 
-  const handleCiudadChange = (newCiudad: string) => {
-    setCiudad(newCiudad);
+  const handleNameChange = (newName: string) => {
+    setName(newName);
   };
 
-  const handleFormularioChange = (newFormulario: string) => {
-    setFormulario(newFormulario);
+  const handleRangoEdadChange = (newRangoEdad: string) => {
+    setRangoEdad(newRangoEdad);
   };
- 
-  const handleConsentimientoChange = (newConsentimiento: string) => {
-    setConsentimiento(newConsentimiento);
-    console.log("Consentimiento:", lastImageUrl);
+
+  const handleRenovarChange = (newRenovar: string) => {
+    setRenovar(newRenovar);
+  };
+
+  const handleTelephoneChange = (newTelephone: string) => {
+    setTelephone(newTelephone);
+  };
+
+  const handleTermsChange = (newTerms: boolean) => {
+    setTerms(newTerms);
   };
 
   // Función para manejar cuando la imagen de IA esté lista
@@ -100,30 +126,45 @@ function MainApp() {
       )}
       {step === "waiting" && (
         <Waiting
+          caracteristicas={caracteristicas}
+          comprar={comprar}
           email={email}
-          nombre={nombre}
-          formulario={formulario}
-          imagenGenerada={imagenGenerada} // Prop bandera
-          aiImageReady={aiImageReady} // Nueva prop para imagen de IA lista
+          marca={marca}
+          name={name}
+          origem={origem}
+          rangoEdad={rangoEdad}
+          renovar={renovar}
+          telephone={telephone}
+          terms={terms}
+          imagenGenerada={imagenGenerada}
+          aiImageReady={aiImageReady}
           imageUrl={imageUrl}
-          ciudad={ciudad}
+          onCaracteristicasChange={handleCaracteristicasChange}
+          onComprarChange={handleComprarChange}
           onEmailChange={handleEmailChange}
-          onNombreChange={handleNombreChange}
-          onCiudadChange={handleCiudadChange}
-          onFormularioChange={handleFormularioChange}
-          onConsentimientoChange={handleConsentimientoChange}
+          onMarcaChange={handleMarcaChange}
+          onNameChange={handleNameChange}
+          onRangoEdadChange={handleRangoEdadChange}
+          onRenovarChange={handleRenovarChange}
+          onTelephoneChange={handleTelephoneChange}
+          onTermsChange={handleTermsChange}
           onShowPolicy={() => setStep("policy")}
-          onContinue={handleContinue} // Función para pasar a AvatarResult
+          onContinue={handleContinue}
         />
       )}
       {step === "result" && (
         <AvatarResult
           imageUrl={imageUrl}
+          caracteristicas={caracteristicas}
+          comprar={comprar}
           email={email}
-          nombre={nombre}
-          ciudad={ciudad}
-          formulario={formulario}
-          consentimiento={consentimiento}
+          marca={marca}
+          name={name}
+          origem={origem}
+          rangoEdad={rangoEdad}
+          renovar={renovar}
+          telephone={telephone}
+          terms={terms}
           onReset={() => setStep("photo")}
         />
       )}

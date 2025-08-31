@@ -24,34 +24,54 @@ declare global {
 }
 
 interface WaitingProps {
+  caracteristicas: string;
+  comprar: string;
   email: string;
-  nombre: string;
-  ciudad: string;
-  formulario: string;
-
+  marca: string;
+  name: string;
+  origem: string;
+  rangoEdad: string;
+  renovar: string;
+  telephone: string;
+  terms: boolean;
   imagenGenerada: boolean;
-  aiImageReady: boolean; // Nueva prop para imagen de IA lista
+  aiImageReady: boolean;
   imageUrl: string;
+  onCaracteristicasChange: (caracteristicas: string) => void;
+  onComprarChange: (comprar: string) => void;
   onEmailChange: (email: string) => void;
-  onNombreChange: (nombre: string) => void;
-  onCiudadChange: (ciudad: string) => void;
-  onFormularioChange: (formulario: string) => void;
-
-  onConsentimientoChange: (consentimiento: string) => void;
+  onMarcaChange: (marca: string) => void;
+  onNameChange: (name: string) => void;
+  onRangoEdadChange: (rangoEdad: string) => void;
+  onRenovarChange: (renovar: string) => void;
+  onTelephoneChange: (telephone: string) => void;
+  onTermsChange: (terms: boolean) => void;
   onShowPolicy: () => void;
   onContinue: (mergedUrl: string) => void;
 }
 
 const Waiting: React.FC<WaitingProps> = ({
+  caracteristicas,
+  comprar,
   email,
-  nombre,
-  ciudad,
-  aiImageReady, // Nueva prop
+  marca,
+  name,
+  origem,
+  rangoEdad,
+  renovar,
+  telephone,
+  terms,
+  aiImageReady,
   imageUrl,
+  onCaracteristicasChange,
+  onComprarChange,
   onEmailChange,
-  onNombreChange,
-  onCiudadChange,
-  onConsentimientoChange,
+  onMarcaChange,
+  onNameChange,
+  onRangoEdadChange,
+  onRenovarChange,
+  onTelephoneChange,
+  onTermsChange,
   onShowPolicy,
   onContinue,
 }) => {
@@ -125,15 +145,13 @@ const Waiting: React.FC<WaitingProps> = ({
             <input
               type="text"
               placeholder="Nombre:"
-              value={nombre}
-              onChange={(e) => onNombreChange(e.target.value)}
+              value={name}
+              onChange={(e) => onNameChange(e.target.value)}
               className="input"
               required
             />
 
-            
-
-           <input
+            <input
               type="email"
               placeholder="Correo:"
               value={email}
@@ -144,50 +162,83 @@ const Waiting: React.FC<WaitingProps> = ({
 
             <input
               type="text"
-              placeholder="Celular:"
-              value={ciudad}
-              onChange={(e) => onCiudadChange(e.target.value)}
+              placeholder="Teléfono:"
+              value={telephone}
+              onChange={(e) => onTelephoneChange(e.target.value)}
               className="input"
               required
             />
 
-            {/* <input
-              type="text"
-              placeholder="Celular"
-              value={celular}
-              onChange={(e) => onCelularChange(e.target.value)}
+            <select
+              value={rangoEdad}
+              onChange={(e) => onRangoEdadChange(e.target.value)}
               className="input"
               required
-            /> */}
-
-            {/* <input
-              type="text"
-              placeholder="Formulario"
-              value={formulario}
-              onChange={(e) => onFormularioChange(e.target.value)}
-              className="input"
-              required
-            /> */}
-
-           
-
-            
-
-            {/* <button
-              type="button"
-              className="button"
-              onClick={openVocacionalTest}
-              style={{ width: "284px", margin: "20px 0 0 0" }}
             >
-              Test vocacional
-            </button> */}
+              <option value="">Rango de edad</option>
+              <option value="18-25">18-25</option>
+              <option value="26-35">26-35</option>
+              <option value="36-45">36-45</option>
+              <option value="46-55">46-55</option>
+              <option value="56+">56+</option>
+            </select>
+
+            <select
+              value={caracteristicas}
+              onChange={(e) => onCaracteristicasChange(e.target.value)}
+              className="input"
+              required
+            >
+              <option value="">¿Qué característica buscas?</option>
+              <option value="cocina">Cocina</option>
+              <option value="lavado">Lavado</option>
+              <option value="refrigeracion">Refrigeración</option>
+              <option value="climatizacion">Climatización</option>
+            </select>
+
+            <select
+              value={renovar}
+              onChange={(e) => onRenovarChange(e.target.value)}
+              className="input"
+              required
+            >
+              <option value="">¿Qué quieres renovar?</option>
+              <option value="cocina">Cocina</option>
+              <option value="lavanderia">Lavandería</option>
+              <option value="hogar">Todo el hogar</option>
+            </select>
+
+            <select
+              value={comprar}
+              onChange={(e) => onComprarChange(e.target.value)}
+              className="input"
+              required
+            >
+              <option value="">¿Cuándo planeas comprar?</option>
+              <option value="inmediato">Inmediatamente</option>
+              <option value="1-3meses">En 1-3 meses</option>
+              <option value="6meses">En 6 meses</option>
+              <option value="1año">En 1 año</option>
+            </select>
+
+            <select
+              value={marca}
+              onChange={(e) => onMarcaChange(e.target.value)}
+              className="input"
+              required
+            >
+              <option value="">¿Conoces la marca Electrolux?</option>
+              <option value="si">Sí</option>
+              <option value="no">No</option>
+            </select>
 
             <div className="checkbox-container">
               <input
                 type="checkbox"
                 className="checkbox"
                 id="tratamiento"
-                onChange={(e) => onConsentimientoChange(e.target.value)}
+                checked={terms}
+                onChange={(e) => onTermsChange(e.target.checked)}
               />
               <label htmlFor="tratamiento">
                 <span>

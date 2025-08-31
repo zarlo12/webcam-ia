@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.healthCheck = exports.getProcessingStatus = exports.generateAIImage = void 0;
+exports.sendToVTEX = exports.healthCheck = exports.getProcessingStatus = exports.generateAIImage = void 0;
 const v2_1 = require("firebase-functions/v2");
 const https_1 = require("firebase-functions/v2/https");
 const replicateService_1 = __importDefault(require("../services/replicateService"));
@@ -266,5 +266,61 @@ exports.healthCheck = v2_1.https.onRequest({
         message: "AI Image Generation Service is running",
         timestamp: new Date().toISOString(),
     });
+});
+/**
+ * Send data to VTEX CRM
+ */
+exports.sendToVTEX = v2_1.https.onRequest({
+    cors: true,
+    maxInstances: 10,
+    timeoutSeconds: 30,
+    memory: "256MiB",
+}, async (req, res) => {
+    if (req.method !== "POST") {
+        res.status(405).json({ error: "Method not allowed" });
+        return;
+    }
+    try {
+        const data = req.body;
+        // Validate required fields
+        if (!data.email || !data.name) {
+            res.status(400).json({ error: "Email and name are required" });
+            return;
+        }
+        // Send to VTEX CRM
+        const response = await fetch('https://electroluxco.vtexcommercestable.com.br/api/dataentities/NL/documents', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-VTEX-API-AppKey': 'vtexappkey-electroluxco-TKJHIX',
+                'X-VTEX-API-AppToken': 'NRYXTDVWTORDSZKJFIMEVHONLMSOKREDDDFVOAAWTUHRPWPNUTYBLGPRCYYCJSKHVWGHPKZMKVRMARRUXNVSXRYIGWGPGTHGHJPCXNPYLAMCPAECVQPZFQALCBNJGXBZ'
+            },
+            body: JSON.stringify(data)
+        });
+        if (response.ok) {
+            const result = await response.json();
+            console.log('✅ Datos enviados exitosamente al CRM de VTEX:', result);
+            res.status(200).json({
+                success: true,
+                message: 'Data sent successfully to VTEX CRM',
+                vtexResponse: result
+            });
+        }
+        else {
+            const errorText = await response.text();
+            console.error('❌ Error al enviar datos al CRM:', response.status, errorText);
+            res.status(response.status).json({
+                error: 'Failed to send data to VTEX CRM',
+                details: errorText
+            });
+        }
+    }
+    catch (error) {
+        console.error('❌ Error de conexión con el CRM:', error);
+        res.status(500).json({
+            error: 'Internal server error',
+            details: error instanceof Error ? error.message : 'Unknown error'
+        });
+    }
 });
 //# sourceMappingURL=imageController.js.map

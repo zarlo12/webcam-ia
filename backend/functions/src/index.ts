@@ -16,6 +16,7 @@ export {
   generateAIImage,
   getProcessingStatus,
   healthCheck,
+  sendToVTEX,
 } from "./controllers/imageController";
 
 // Legacy endpoint for backwards compatibility (if needed)

@@ -107,7 +107,7 @@ class ReplicateService {
     async processWithMultiImageKontext(styledImageUrl, requestId) {
         const input = {
             seed: 296997195,
-            prompt: "Just make this change: put the logo (image logo and text) on the person's shirt in the photo.",
+            prompt: "Place input_image_1 as a logo centered on the chest of the subject wearing a clean white t-shirt.",
             aspect_ratio: "1:1",
             input_image_1: config_1.LOGO_URL, // Fixed logo URL
             input_image_2: styledImageUrl, // Result from step 1

@@ -38,6 +38,32 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string>(imageUrl);
   const hasUploadedRef = useRef(false);
 
+  // Función para enviar datos al CRM de VTEX a través de Firebase Function
+  const sendToVTEXCRM = useCallback(
+    async (datos: any) => {
+      try {
+        const response = await fetch('https://us-central1-imagen-ia-845a3.cloudfunctions.net/sendToVTEX', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(datos)
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          console.log('✅ Datos enviados exitosamente al CRM de VTEX:', result);
+        } else {
+          const errorData = await response.json();
+          console.error('❌ Error al enviar datos al CRM:', response.status, errorData);
+        }
+      } catch (error) {
+        console.error('❌ Error de conexión con el CRM:', error);
+      }
+    },
+    []
+  );
+
   // Memoiza la función para evitar que cambie en cada render
   const uploadMergedImage = useCallback(
     async (dataUrl: string) => {
@@ -52,6 +78,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
         await uploadString(storageRef, dataUrl, "data_url");
         const downloadURL = await getDownloadURL(storageRef);
 
+        // Datos para Firestore
         const datosFirestore = {
           Caracteristicas: caracteristicas,
           Comprar: comprar,
@@ -66,14 +93,36 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
           imageUrl: downloadURL,
           date: new Date(),
         };
-        //console.log("🚀 ~ datosFirestore:", datosFirestore);
+
+        // Datos para el CRM de VTEX (sin imageUrl y date)
+        const datosCRM = {
+          Caracteristicas: caracteristicas,
+          Comprar: comprar,
+          email: email,
+          marca: marca,
+          name: name,
+          origem: origem,
+          rangoEdad: rangoEdad,
+          renovar: renovar,
+          telephone: telephone,
+          terms: terms
+        };
+
+        console.log("🚀 ~ datosFirestore:", datosFirestore);
+        console.log("🚀 ~ datosCRM:", datosCRM);
+
+        // Guardar en Firestore
         await addDoc(collection(db, "Electrolux"), datosFirestore);
+        
+        // Enviar al CRM de VTEX
+        await sendToVTEXCRM(datosCRM);
+        
         setUploadedImageUrl(downloadURL);
       } catch (error) {
         console.error("Error al subir imagen:", error);
       }
     },
-    [caracteristicas, comprar, email, marca, name, origem, rangoEdad, renovar, telephone, terms]
+    [caracteristicas, comprar, email, marca, name, origem, rangoEdad, renovar, telephone, terms, sendToVTEXCRM]
   );
 
   useEffect(() => {

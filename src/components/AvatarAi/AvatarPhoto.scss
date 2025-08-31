@@ -106,6 +106,7 @@
 .header {
   width: 100%;
   padding: 10px 0;
+  background-color: #011e41;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -114,8 +115,8 @@
 }
 
 .logo {
-  height: 188px;
-    margin-top: -47px;
+  height: 146px;
+    margin-top: -12px; margin-left: -26px;
   position: relative;
   z-index: 3; /* Asegurar que el logo esté visible */
   // margin-right: -157px;
@@ -140,13 +141,13 @@
     max-width: 95vw;
     width: 499px;
     text-align: center;
-    background-image: url(/src/assets/colgate/Referencias-01.png);
+    // background-image: url(/src/assets/colgate/Referencias-01.png);
     background-repeat: no-repeat;
     background-position: 0px -17px;
     background-size: 100%;
     background-attachment: scroll;
     height: 100vh;
-    padding: 214px 20px 20px 20px;
+    padding: 214px 0px 0px 0px;
 }
 
 .clarologo {
@@ -177,7 +178,7 @@
   select {
     width: 350px;
     height: 57px;
-    background: linear-gradient(to right, #e1171b, #e1171b);
+    background: linear-gradient(to right, #041e50, #041e50);
     color: #fff;
     font-weight: bold;
     font-size: 25px;
@@ -296,8 +297,8 @@ form {
   font-family: "Arial", "Helvetica", sans-serif;
   color: #ffffff;
   border-radius: 28px;        // radio grande para aspecto pill
-  border: 2px solid #efefef; // borde claro exterior
-  background: linear-gradient(#dc1615, #dc1615); // gradiente rojo
+  border: 2px solid #efefef; // borde claro exterior #041e50
+  background: linear-gradient(#041e50, #041e50); // gradiente azul
   text-shadow: 0 1px 0 rgba(0,0,0,0.3);
   cursor: pointer;
   -webkit-appearance: none;
@@ -410,7 +411,7 @@ form {
 }
 .footerAlways {
   width: 100%;
-  background: linear-gradient(to right, #e1171b, #e1171b);
+  background: linear-gradient(to right, #041e50, #041e50);
   padding: 10px 0;
   display: flex;
   justify-content: center;

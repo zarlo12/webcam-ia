@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./AvatarPhoto.scss";
-import logo from "../../assets/colgate/Logo.png";
+import logo from "../../assets/electrolux/logo.png";
 
 import { storage, db } from "../../firebaseConfig";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
@@ -89,7 +89,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
               Comparte esta imagen 
               <br />en Instagram y etiquetanos 
               {/* <br />
-              <div style={{ color: "#e1171b" }}>@pastaslamuneca</div> */}
+              <div style={{ color: "#041e50" }}>@pastaslamuneca</div> */}
             </h2>
             <button
               type="button"

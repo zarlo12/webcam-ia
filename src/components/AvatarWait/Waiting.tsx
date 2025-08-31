@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./Waiting.scss";
-import logo from "../../assets/colgate/Logo.png";
+import logo from "../../assets/electrolux/logo.png";
 
 import MergeImage from "../AvatarAi/MergeImage"; // Asegúrate de la ruta correcta
 

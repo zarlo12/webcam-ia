@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import "./AvatarPhoto.scss";
-import logo from "../../assets/colgate/Logo.png";
+import logo from "../../assets/electrolux/logo.png";
 import WebcamScene from "../WebcamScene";
 import aiImageService from "../../services/aiImageService";
 import Swal from "sweetalert2";

@@ -47,12 +47,13 @@
 
 
 .linkColorVerde:hover {
-  color: #e1171b;
+  color: #041e50;
 }
 
 /* Barra roja superior */
 .header-bar {
   width: 100%;
+  background-color: #011e41;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -61,8 +62,8 @@
 
 /* Logo Scotia (ajusta el tamaño a tu gusto) */
 .logo-scotia {
-  height: 188px;
-    margin-top: -47px;
+  height: 146px;
+    margin-top: -12px; margin-left: -26px;
     // margin-right: -157px;
 }
 
@@ -128,7 +129,7 @@
   max-width: 300px;
   margin: 10px 0;
   padding: 12px;
-  border: 2px solid red; /* Contorno rojo */
+  border: 2px solid #041e50; /* Contorno azul */
   border-radius: 25px;
   background-color: rgba(255, 255, 255, 0.5);
   color: #000000;
@@ -187,13 +188,13 @@
   border: 2px solid transparent;
   background-image:
     linear-gradient(#ffffff, #ffffff),
-    linear-gradient(to right, #e1171b, #e1171b);
+    linear-gradient(to right, #041e50, #041e50);
   background-origin: border-box;
   background-clip: padding-box, border-box;
 }
 
 .checkbox:checked:before {
-  background: linear-gradient(to right, #e1171b, #e1171b);
+  background: linear-gradient(to right, #041e50, #041e50);
   content: "";
   width: 13px;
   height: 10px;
@@ -285,7 +286,7 @@
   width: 50px;
   height: 50px;
   border: 4px solid rgba(255, 255, 255, 0.3);
-  border-top: 4px solid #e1171b;
+  border-top: 4px solid #041e50;
   border-radius: 50%;
   margin: 20px auto;
   animation: spin 1s linear infinite;

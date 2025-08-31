@@ -5,7 +5,7 @@ import referencias02 from '../../assets/colgate/Referencias-02.png'
 import referencias03 from '../../assets/colgate/Referencias-03.png'
 import referencias04 from '../../assets/colgate/Referencias-04.png'
 import referencias05 from '../../assets/colgate/Referencias-05.png'
-import logoSuperior from '../../assets/colgate/Logo.png'
+import logoSuperior from '../../assets/electrolux/logo.png'
 interface MergeImageProps {
   imageUrl: string; // URL de la imagen principasl (avatar)
   onMerged: (mergedDataUrl: string) => void; // Callback para retornar la imagen fusionada

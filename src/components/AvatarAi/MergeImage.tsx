@@ -32,7 +32,7 @@ const MergeImage: React.FC<MergeImageProps> = ({
     realista: {
       scale: 0.8,
       marginRight: 20,    // Ahora actúa como margen izquierdo
-      marginBottom: 20,
+      marginBottom: -16,
       offsetX: 0,         // Ajuste adicional horizontal
       offsetY: 0          // Ajuste adicional vertical
     }

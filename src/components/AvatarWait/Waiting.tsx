@@ -71,7 +71,6 @@ const Waiting: React.FC<WaitingProps> = ({
   onRenovarChange,
   onTelephoneChange,
   onTermsChange,
-  onShowPolicy,
   onContinue,
 }) => {
   const [mergedImage, setMergedImage] = useState<string | null>(null);

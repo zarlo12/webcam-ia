@@ -34,15 +34,17 @@ class AIImageService {
 
     if (baseUrl) {
       // Development or custom base URL
-      this.generateImageUrl = `${baseUrl}/generateAIImage`;
-      this.healthCheckUrl = `${baseUrl}/healthCheck`;
-      this.processingStatusUrl = `${baseUrl}/getProcessingStatus`;
+      this.generateImageUrl = `${baseUrl}/generateAIImageColgate`;
+      this.healthCheckUrl = `${baseUrl}/healthCheckColgate`;
+      this.processingStatusUrl = `${baseUrl}/getProcessingStatusColgate`;
     } else {
-      // Production URLs
-      this.generateImageUrl = "https://generateaiimage-buybcovkna-uc.a.run.app";
-      this.healthCheckUrl = "https://healthcheck-buybcovkna-uc.a.run.app";
+      // Production URLs - these will need to be updated after deployment
+      this.generateImageUrl =
+        "https://generateaiimagecolgate-buybcovkna-uc.a.run.app";
+      this.healthCheckUrl =
+        "https://healthcheckcolgate-buybcovkna-uc.a.run.app";
       this.processingStatusUrl =
-        "https://getprocessingstatus-buybcovkna-uc.a.run.app";
+        "https://getprocessingstatuscolgate-buybcovkna-uc.a.run.app";
     }
 
     console.log("🚀 AIImageService URLs:", {

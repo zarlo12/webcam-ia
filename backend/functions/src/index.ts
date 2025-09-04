@@ -13,10 +13,10 @@ setGlobalOptions({
 
 // Export the functions
 export {
-  generateAIImage,
-  getProcessingStatus,
-  healthCheck,
+  generateAIImageColgate,
+  getProcessingStatusColgate,
+  healthCheckColgate,
 } from "./controllers/imageController";
 
 // Legacy endpoint for backwards compatibility (if needed)
-export { generateAIImage as processWebcamImage } from "./controllers/imageController";
+export { generateAIImageColgate as processWebcamImageColgate } from "./controllers/imageController";

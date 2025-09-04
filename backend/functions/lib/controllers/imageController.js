@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.healthCheck = exports.getProcessingStatus = exports.generateAIImage = void 0;
+exports.healthCheckColgate = exports.getProcessingStatusColgate = exports.generateAIImageColgate = void 0;
 const v2_1 = require("firebase-functions/v2");
 const https_1 = require("firebase-functions/v2/https");
 const replicateService_1 = __importDefault(require("../services/replicateService"));
@@ -43,7 +43,10 @@ function parseMultipartData(body, boundary) {
     });
     return { fields, files };
 }
-exports.generateAIImage = (0, https_1.onRequest)({
+/**
+ * Generate AI image using Replicate API
+ */
+exports.generateAIImageColgate = (0, https_1.onRequest)({
     cors: true,
     timeoutSeconds: 540,
     memory: "2GiB",
@@ -223,7 +226,7 @@ const handleJsonRequest = async (req, res) => {
 /**
  * Get processing status for async operations
  */
-exports.getProcessingStatus = v2_1.https.onRequest({
+exports.getProcessingStatusColgate = v2_1.https.onRequest({
     cors: true,
     maxInstances: 10,
     timeoutSeconds: 60,
@@ -255,7 +258,7 @@ exports.getProcessingStatus = v2_1.https.onRequest({
 /**
  * Health check endpoint
  */
-exports.healthCheck = v2_1.https.onRequest({
+exports.healthCheckColgate = v2_1.https.onRequest({
     cors: true,
     maxInstances: 10,
     timeoutSeconds: 30,

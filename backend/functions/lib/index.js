@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.processWebcamImage = exports.healthCheck = exports.getProcessingStatus = exports.generateAIImage = void 0;
+exports.processWebcamImageColgate = exports.healthCheckColgate = exports.getProcessingStatusColgate = exports.generateAIImageColgate = void 0;
 const dotenv = __importStar(require("dotenv"));
 // Load environment variables
 dotenv.config();
@@ -45,10 +45,10 @@ const v2_1 = require("firebase-functions/v2");
 });
 // Export the functions
 var imageController_1 = require("./controllers/imageController");
-Object.defineProperty(exports, "generateAIImage", { enumerable: true, get: function () { return imageController_1.generateAIImage; } });
-Object.defineProperty(exports, "getProcessingStatus", { enumerable: true, get: function () { return imageController_1.getProcessingStatus; } });
-Object.defineProperty(exports, "healthCheck", { enumerable: true, get: function () { return imageController_1.healthCheck; } });
+Object.defineProperty(exports, "generateAIImageColgate", { enumerable: true, get: function () { return imageController_1.generateAIImageColgate; } });
+Object.defineProperty(exports, "getProcessingStatusColgate", { enumerable: true, get: function () { return imageController_1.getProcessingStatusColgate; } });
+Object.defineProperty(exports, "healthCheckColgate", { enumerable: true, get: function () { return imageController_1.healthCheckColgate; } });
 // Legacy endpoint for backwards compatibility (if needed)
 var imageController_2 = require("./controllers/imageController");
-Object.defineProperty(exports, "processWebcamImage", { enumerable: true, get: function () { return imageController_2.generateAIImage; } });
+Object.defineProperty(exports, "processWebcamImageColgate", { enumerable: true, get: function () { return imageController_2.generateAIImageColgate; } });
 //# sourceMappingURL=index.js.map

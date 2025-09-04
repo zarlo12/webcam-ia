@@ -1,6 +1,6 @@
 {
-  "name": "webcam-ai-functions",
-  "description": "Cloud Functions for Firebase - AI Image Generation",
+  "name": "webcam-ai-functions-colgate",
+  "description": "Cloud Functions for Firebase - AI Image Generation for Colgate",
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",

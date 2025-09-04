@@ -49,7 +49,10 @@ function parseMultipartData(
   return { fields, files };
 }
 
-export const generateAIImage = onRequest(
+/**
+ * Generate AI image using Replicate API
+ */
+export const generateAIImageColgate = onRequest(
   {
     cors: true,
     timeoutSeconds: 540,
@@ -263,7 +266,7 @@ const handleJsonRequest = async (req: any, res: any): Promise<void> => {
 /**
  * Get processing status for async operations
  */
-export const getProcessingStatus = https.onRequest(
+export const getProcessingStatusColgate = https.onRequest(
   {
     cors: true,
     maxInstances: 10,
@@ -300,7 +303,7 @@ export const getProcessingStatus = https.onRequest(
 /**
  * Health check endpoint
  */
-export const healthCheck = https.onRequest(
+export const healthCheckColgate = https.onRequest(
   {
     cors: true,
     maxInstances: 10,

@@ -60,23 +60,28 @@ class ReplicateService {
      */
     async processWithReplicate(imageUrl, prompt, style) {
         const modelConfig = this.getModelConfig(style);
-        // black-forest-labs/flux-kontext-pro parameters - modelo PRO para máximo realismo
+        // black-forest-labs/flux-kontext-pro parameters - optimizado para estilo cartoon
         const input = {
             prompt: prompt,
             input_image: imageUrl,
+            aspect_ratio: "9:16",
             output_format: "jpg",
-            guidance_scale: 3.5,
-            num_inference_steps: 28,
+            guidance_scale: 7.5, // Aumentado para seguir más estrictamente el prompt
+            safety_tolerance: 0,
+            prompt_upsampling: true, // Activado para mejorar interpretación del prompt
+            num_inference_steps: 35, // Aumentado para mejor calidad cartoon
             seed: Math.floor(Math.random() * 1000000),
-            disable_safety_checker: false
+            disable_safety_checker: false,
         };
-        console.log("Processing with flux-kontext-pro for painted portrait style:", modelConfig.model);
-        console.log("Using detailed painted dental portrait prompt:", prompt);
+        console.log("Processing with flux-kontext-pro optimized for cartoon style:", modelConfig.model);
+        console.log("Using cartoon illustration prompt:", prompt);
         const output = await (0, utils_1.retryWithBackoff)(async () => {
-            return await this.initReplicate().run(`${modelConfig.model}`, { input });
+            return await this.initReplicate().run(`${modelConfig.model}`, {
+                input,
+            });
         }, 3, 2000);
         // flux-kontext-pro returns a FileOutput object with url() method
-        if (output && typeof output === 'object' && 'url' in output) {
+        if (output && typeof output === "object" && "url" in output) {
             return output.url();
         }
         else if (typeof output === "string") {

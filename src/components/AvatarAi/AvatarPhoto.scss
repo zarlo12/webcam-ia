@@ -156,6 +156,26 @@
   }
 }
 
+/* Estilos específicos para las opciones del select */
+.select-container select option {
+  background-color: #ffffff !important;
+  color: #2b3c90 !important;
+  font-weight: bold !important;
+  padding: 10px !important;
+  font-size: 18px !important;
+  border: none !important;
+}
+
+.select-container select option:checked {
+  background-color: #2b3c90 !important;
+  color: #ffffff !important;
+}
+
+.select-container select option:disabled {
+  background-color: #f0f0f0 !important;
+  color: #999999 !important;
+}
+
 /* Flecha custom para el select */
 .select-container .select-arrow {
   position: absolute;
@@ -299,4 +319,35 @@ form {
   justify-content: center;
   align-items: center;
   height: 80px;
+}
+
+/* Estilos adicionales para máxima compatibilidad con opciones del select */
+select option {
+  background: white !important;
+  color: #2b3c90 !important;
+  font-weight: bold !important;
+}
+
+select option:disabled {
+  background: #f0f0f0 !important;
+  color: #999 !important;
+}
+
+/* Para navegadores basados en WebKit (Chrome, Safari, Edge) */
+select option:hover {
+  background: #e8f4fd !important;
+  color: #2b3c90 !important;
+}
+
+/* Para Firefox */
+@-moz-document url-prefix() {
+  select option {
+    background-color: white !important;
+    color: #2b3c90 !important;
+  }
+  
+  select option:disabled {
+    background-color: #f0f0f0 !important;
+    color: #999 !important;
+  }
 }

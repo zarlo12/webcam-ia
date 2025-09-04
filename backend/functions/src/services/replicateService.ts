@@ -102,15 +102,16 @@ class ReplicateService {
 
     // black-forest-labs/flux-kontext-pro parameters - optimizado para estilo cartoon
     const input = {
-      prompt: prompt,
+      prompt:
+        "CARTOON ILLUSTRATION STYLE ONLY - NOT REALISTIC: 2D animated cartoon character illustration, cel-shaded cartoon art style, clean vector-like cartoon illustration. Professional dental cartoon character (face + torso visible), wearing light beige cartoon lab coat and navy/teal cartoon shirt, friendly cartoon smile. Cartoon proportions with slightly oversized cartoon eyes, simplified cartoon features, NO photorealistic details, NO realistic skin texture, NO realistic lighting. Cartoon dental office background with simplified cartoon equipment. Art style: cartoon illustration, corporate cartoon mascot style, 2D animation character design, cartoon advertisement illustration. IMPORTANT: This must look like a cartoon drawing, NOT a photograph or realistic portrait.",
       input_image: imageUrl,
-      aspect_ratio: "9:16",
+      aspect_ratio: "match_input_image",
       output_format: "jpg" as const,
       guidance_scale: 7.5, // Aumentado para seguir más estrictamente el prompt
-      safety_tolerance: 0,
+      safety_tolerance: 1,
       prompt_upsampling: true, // Activado para mejorar interpretación del prompt
       num_inference_steps: 35, // Aumentado para mejor calidad cartoon
-      seed: Math.floor(Math.random() * 1000000),
+      seed: 2040723876,
       disable_safety_checker: false,
     };
 

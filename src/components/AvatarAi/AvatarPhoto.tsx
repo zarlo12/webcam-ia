@@ -82,14 +82,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
     e.preventDefault();
 
     // Validar que haya seleccionado un estilo
-    if (!selectedStyle) {
-      Swal.fire({
-        icon: "warning",
-        title: "Advertencia",
-        text: "Por favor selecciona un estilo (realista o caricatura).",
-      });
-      return;
-    }
+   
 
     if (!capturedImage) {
       Swal.fire({

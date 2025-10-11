@@ -218,7 +218,7 @@ const Waiting: React.FC<WaitingProps> = ({
 
              <input
               type="email"
-              placeholder="Correo electrónico"
+              placeholder="Correo"
               value={email}
               onChange={(e) => onEmailChange(e.target.value)}
               className="input"
@@ -236,7 +236,7 @@ const Waiting: React.FC<WaitingProps> = ({
               Test vocacional
             </button> */}
 
-            <div className="checkbox-container">
+            {/* <div className="checkbox-container">
               <input
                 type="checkbox"
                 className="checkbox"
@@ -259,7 +259,7 @@ const Waiting: React.FC<WaitingProps> = ({
                   </a>
                 </span>
               </label>
-            </div>
+            </div> */}
           </form>
         </div>
       </div>

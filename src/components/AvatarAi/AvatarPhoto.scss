@@ -239,7 +239,7 @@ form {
   width: 92%;
   padding: 10px;
   border-radius: 5px;
-  background: linear-gradient(to right, #2c2a29, #2c2a29);
+  background: linear-gradient(to right, #ff7529, #ff7529);
   color: #ffffff;
   border: 1px solid #555;
   font-size: 14px;
@@ -284,7 +284,7 @@ form {
   /* Efecto active */
   &:active {
     transform: translateY(0);
-    background: linear-gradient(to right, #323678, #432a7a);
+    background: linear-gradient(to right, #43c7e7, #43c7e7);
   }
 
   /* Transición suave para todos los estados */

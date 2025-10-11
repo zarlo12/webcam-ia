@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 // import logoSuperior from "../../assets/img/LogoSuperior.png";
-import logoInferior from "../../assets/banistmo/Logo superior.png";
-import logoInferior2 from "../../assets/xnova/LogoXnova2.png";
+import logoInferior from "../../assets/banistmo/PHOTOBOOTH-04.png";
+
 
 interface MergeImageProps {
   imageUrl: string; // URL de la imagen principal (avatar)
@@ -22,19 +22,11 @@ const MergeImage: React.FC<MergeImageProps> = ({
   const LOGO_CONFIG = {
     // Configuración para logo estilo caricatura (logoInferior)
     caricatura: {
-      scale: 0.8,
+      scale: 1,
       marginRight: 0,
       marginBottom: 0,
       offsetX: 0,  // Ajuste adicional horizontal (negativo = más izquierda)
       offsetY: 0   // Ajuste adicional vertical (negativo = más arriba)
-    },
-    // Configuración para logo estilo realista (logoInferior2)
-    realista: {
-      scale: 0.8,
-      marginRight: 20,    // Ahora actúa como margen izquierdo
-      marginBottom: -16,
-      offsetX: 0,         // Ajuste adicional horizontal
-      offsetY: 0          // Ajuste adicional vertical
     }
   };
 
@@ -45,8 +37,8 @@ const MergeImage: React.FC<MergeImageProps> = ({
     if (!ctx) return;
 
     // Seleccionar el logo según el estilo
-    const logoToUse = selectedStyle === "realista" ? logoInferior2 : logoInferior;
-    const config = selectedStyle === "realista" ? LOGO_CONFIG.realista : LOGO_CONFIG.caricatura;
+    const logoToUse = logoInferior;
+    const config = LOGO_CONFIG.caricatura;
 
     console.log(`🎨 Usando logo para estilo: ${selectedStyle || "caricatura"}`);
 

@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import "./AvatarPhoto.scss";
 // import fondo from "../../assets/img/fondo.png";
-import logo from "../../assets/xnova/LogoXnova.png";
+import logo from "../../assets/banistmo/Logo superior.png";
 
 import WebcamScene from "../WebcamScene";
 import axios from "axios";
@@ -21,27 +21,16 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
   // const [email] = useState("");
   const [capturedImage, setCapturedImage] = useState<Blob | null>(null);
   const [capturedImageUrl, setCapturedImageUrl] = useState<string>("");
-  const [selectedStyle, setSelectedStyle] = useState<string>(""); // Nuevo estado para el estilo
+  const [selectedStyle] = useState<string>(""); // Nuevo estado para el estilo
 
   const webcamRef = useRef<WebcamRef | null>(null);
 
   // URLs de los endpoints según el estilo
-  const realistaUrl = import.meta.env.VITE_REALISTA_WEBHOOK_URL || 
-    "https://xnova360.app.n8n.cloud/webhook/4c07f695-b8e7-48ed-81ae-4af3adc78b71";
-  
-  const caricaturaUrl = import.meta.env.VITE_CARICATURA_WEBHOOK_URL || 
-    "https://xnova360.app.n8n.cloud/webhook/7f744819-6e36-43f0-ac4a-2c8810426a52";
-
+  const realistaUrl = import.meta.env.VITE_N8N_WEBHOOK_URL
   // Función para obtener la URL según el estilo seleccionado
   const getWebhookUrl = () => {
-    switch (selectedStyle) {
-      case "realista":
-        return realistaUrl;
-      case "caricatura":
-        return caricaturaUrl;
-      default:
-        return realistaUrl; // Por defecto realista
-    }
+    
+    return realistaUrl;
   };
 
   // Función para capturar la imagen desde el componente WebcamScene
@@ -141,7 +130,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
 
           <div className="buttons-container">
             {/* SELECT para elegir estilo */}
-            <div className="select-container">
+            {/* <div className="select-container">
               <select
                 value={selectedStyle}
                 onChange={(e) => setSelectedStyle(e.target.value)}
@@ -153,7 +142,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
                 <option value="caricatura">Estilo Caricatura</option>
               </select>
               <span className="select-arrow">▼</span>
-            </div>
+            </div> */}
 
             <button
               type="button"

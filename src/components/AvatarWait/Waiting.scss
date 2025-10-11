@@ -34,7 +34,7 @@
 /* Barra roja superior */
 .header-bar {
   width: 100%;
-  background: linear-gradient(to right, #2b3c90, #51338b);
+  background: linear-gradient(to right, #2c2a29, #2c2a29);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -172,13 +172,13 @@
   border: 2px solid transparent;
   background-image:
     linear-gradient(#ffffff, #ffffff),
-    linear-gradient(to right, #51338b, #51338b);
+    linear-gradient(to right, #2c2a29, #2c2a29);
   background-origin: border-box;
   background-clip: padding-box, border-box;
 }
 
 .checkbox:checked:before {
-  background: #51338b;
+  background: #2c2a29;
   content: "";
   width: 13px;
   height: 10px;
@@ -193,7 +193,7 @@ color: #3c3c3c;
 .button {
   width: 200px;
   height: 57px;
-  background: linear-gradient(to right, #2b3c90, #51338b);
+  background: linear-gradient(to right, #ff7529, #ff7529);
   color: #ffffff;
   font-weight: bold;
   padding: 10px;

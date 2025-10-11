@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 // import logoSuperior from "../../assets/img/LogoSuperior.png";
-import logoInferior from "../../assets/xnova/LogoXnova.png";
+import logoInferior from "../../assets/banistmo/Logo superior.png";
 import logoInferior2 from "../../assets/xnova/LogoXnova2.png";
 
 interface MergeImageProps {

@@ -128,7 +128,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
                   width: '60px',
                   height: '60px',
                   border: '4px solid #f3f3f3',
-                  borderTop: '4px solid #007bff',
+                  borderTop: '4px solid #f91b00',
                   borderRadius: '50%',
                   animation: 'spin 1s linear infinite',
                   marginBottom: '20px'
@@ -159,12 +159,12 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
                     alt="Avatar generado"
                   />
                 </div>
-                <h2 className="subtitleResult">
+                {/* <h2 className="subtitleResult">
                   Comparte esta imagen 
                   <br />en Instagram y etiquétanos 
                   <br />
                   <div style={{ color: "#041e50" }}>@electrolux_co</div>
-                </h2>
+                </h2> */}<br/> <br/>
                 <button
                   type="button"
                   className="button btnResult"

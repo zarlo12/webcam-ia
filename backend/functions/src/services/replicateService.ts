@@ -63,7 +63,7 @@ class ReplicateService {
       );
       const finalImageUrl = await this.processWithFluxKontextPro(
         originalImageUrl,
-        "Painting-style person, wearing formal clothes and with a futuristic red background",
+        "Person in formal clothing and red futuristic background",
         request.style
       );
 
@@ -106,13 +106,13 @@ class ReplicateService {
   ): Promise<string> {
     // flux-kontext-pro parameters - optimized for business style
     const input = {
-      seed: 725753180,
+      seed: 628269464,
       prompt: prompt,
       input_image: imageUrl,
-      aspect_ratio: "match_input_image",
+      aspect_ratio: "9:16", //"match_input_image",
       output_format: "jpg" as const,
       safety_tolerance: 2,
-      prompt_upsampling: true,
+      prompt_upsampling: false,
     };
 
     console.log(
@@ -186,7 +186,7 @@ class ReplicateService {
    */
   private getDefaultPrompt(style?: string): string {
     // Business style prompt for flux-kontext-pro
-    return "Painting-style person, wearing formal clothes and with a futuristic red background";
+    return "Person in formal clothing and red futuristic background";
   }
 
   /**

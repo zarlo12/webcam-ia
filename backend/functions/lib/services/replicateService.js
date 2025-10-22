@@ -35,7 +35,7 @@ class ReplicateService {
             const originalImageUrl = await (0, storage_1.uploadToStorage)(optimizedBuffer, "original-images", `original_${requestId}.jpg`);
             // Single step: Convert to business style using flux-kontext-pro
             console.log(`[${requestId}] Processing with flux-kontext-pro for business style conversion`);
-            const finalImageUrl = await this.processWithFluxKontextPro(originalImageUrl, "Painting-style person, wearing formal clothes and with a futuristic red background", request.style);
+            const finalImageUrl = await this.processWithFluxKontextPro(originalImageUrl, "Person in formal clothing and red futuristic background", request.style);
             console.log(`[${requestId}] Business style conversion completed successfully`);
             const resultFinal = {
                 success: true,
@@ -65,13 +65,13 @@ class ReplicateService {
     async processWithFluxKontextPro(imageUrl, prompt, style) {
         // flux-kontext-pro parameters - optimized for business style
         const input = {
-            seed: 725753180,
+            seed: 628269464,
             prompt: prompt,
             input_image: imageUrl,
-            aspect_ratio: "match_input_image",
+            aspect_ratio: "9:16", //"match_input_image",
             output_format: "jpg",
             safety_tolerance: 2,
-            prompt_upsampling: true,
+            prompt_upsampling: false,
         };
         console.log("Processing with flux-kontext-pro for business style:", config_1.REPLICATE_MODELS.FLUX_KONTEXT_PRO.model);
         console.log("Using business style prompt:", prompt);
@@ -120,7 +120,7 @@ class ReplicateService {
      */
     getDefaultPrompt(style) {
         // Business style prompt for flux-kontext-pro
-        return "Painting-style person, wearing formal clothes and with a futuristic red background";
+        return "Person in formal clothing and red futuristic background";
     }
     /**
      * Check processing status (for async operations)

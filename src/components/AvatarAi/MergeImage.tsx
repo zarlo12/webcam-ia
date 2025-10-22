@@ -14,11 +14,6 @@ const MergeImage: React.FC<MergeImageProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // 🎯 CONSTANTES PARA AJUSTAR LA POSICIÓN Y TAMAÑO DEL AVATAR
-  const AVATAR_SCALE = 0.6;           // Tamaño del avatar (60% del tamaño original)
-  const AVATAR_MARGIN_BOTTOM = 0;    // Margen desde el borde inferior
-  const AVATAR_HORIZONTAL_CENTER = true; // Centrar horizontalmente
-
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -35,40 +30,36 @@ const MergeImage: React.FC<MergeImageProps> = ({
         img.src = src;
       });
 
-    console.log(`�️ Fusionando avatar con fondo de Electrolux`);
+    console.log(`🎨 Fusionando imagen empresarial con overlay superior`);
 
     Promise.all([
-      loadImage(fondo),      // fondo de Electrolux
-      loadImage(imageUrl)    // avatar del usuario
+      loadImage(imageUrl),   // imagen principal (avatar empresarial)
+      loadImage(fondo)       // elemento que va encima (superior izquierda)
     ])
-      .then(([fondoImg, avatarImg]) => {
-        // Ajustamos el canvas al tamaño del fondo
-        canvas.width = fondoImg.width;
-        canvas.height = fondoImg.height;
+      .then(([mainImg, overlayImg]) => {
+        // Ajustamos el canvas al tamaño de la imagen principal (tamaño real)
+        canvas.width = mainImg.width;
+        canvas.height = mainImg.height;
 
-        // Dibujar fondo completo
-        ctx.drawImage(fondoImg, 0, 0, canvas.width, canvas.height);
+        // Dibujar la imagen principal como base (tamaño completo)
+        ctx.drawImage(mainImg, 0, 0, canvas.width, canvas.height);
 
-        // Calcular tamaño y posición para el avatar
-        const avatarWidth = avatarImg.width * AVATAR_SCALE;
-        const avatarHeight = avatarImg.height * AVATAR_SCALE;
-
-        // Posición: centrado horizontalmente y en la parte inferior
-        const avatarX = AVATAR_HORIZONTAL_CENTER 
-          ? (canvas.width - avatarWidth) / 2 
-          : canvas.width - avatarWidth - 50; // fallback a la derecha
-        const avatarY = canvas.height - avatarHeight - AVATAR_MARGIN_BOTTOM;
-
-        // Dibujar el avatar en la posición calculada
+        // Dibujar el elemento overlay en la esquina superior izquierda
+        // Mantener el tamaño original del overlay o ajustarlo si es necesario
+        const overlayX = 0; // Esquina superior izquierda
+        const overlayY = 0; // Esquina superior izquierda
+        
+        // Dibujar el overlay en su tamaño original
         ctx.drawImage(
-          avatarImg,
-          avatarX,
-          avatarY,
-          avatarWidth,
-          avatarHeight
+          overlayImg,
+          overlayX,
+          overlayY,
+          overlayImg.width,
+          overlayImg.height
         );
 
-        console.log(`🎯 Avatar posicionado: (${Math.round(avatarX)}, ${Math.round(avatarY)}) - Tamaño: ${Math.round(avatarWidth)}x${Math.round(avatarHeight)}`);
+        console.log(`🎯 Imagen base: ${mainImg.width}x${mainImg.height}`);
+        console.log(`🎯 Overlay posicionado en: (${overlayX}, ${overlayY}) - Tamaño: ${overlayImg.width}x${overlayImg.height}`);
 
         // Convertir a Data URL y pasar al callback
         const mergedDataUrl = canvas.toDataURL("image/png");

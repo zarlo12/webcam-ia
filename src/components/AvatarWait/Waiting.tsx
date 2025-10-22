@@ -194,7 +194,7 @@ const Waiting: React.FC<WaitingProps> = ({
                   Consentimiento
                   <br />
                   <a
-                    href="https://www.electrolux.com.co/politica-de-privacidad" 
+                    href="https://claroempresashn.com/index.php/politica-de-privacidad/" 
                     target="_blank"
                     className="linkColorVerde"
                   >

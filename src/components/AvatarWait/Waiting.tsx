@@ -236,7 +236,7 @@ const Waiting: React.FC<WaitingProps> = ({
               Test vocacional
             </button> */}
 
-            <div className="checkbox-container" style={{ display: "none" }}>
+            <div className="checkbox-container">
               <input
                 type="checkbox"
                 className="checkbox"

@@ -15,6 +15,7 @@
 .waiting-container {
   width: 100vw;
   height: 100vh;
+  background-image: url('../../assets/policia/Fondo.png');
   background-color: white;
   background-size: cover;
   background-position: center;
@@ -28,13 +29,13 @@
 
 
 .linkColorVerde:hover {
-  color: #3c3c3c;
+  color: #fff;
 }
 
 /* Barra roja superior */
 .header-bar {
   width: 100%;
-  background: linear-gradient(to right, #2c2a29, #2c2a29);
+  background: rgba(255, 255, 255, 0.18); /* Blanco con 18% de opacidad */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -58,9 +59,9 @@
 
 /* Subtítulo "Avatar IA" */
 .subtitle {
-  font-size: 24px;
+  font-size: 35px;
   font-family: 'Bariol Bold', Arial, sans-serif;
-  color: #3c3c3c;
+  color: #fff;
   font-weight: bold;
   margin: 15px 0;
 }
@@ -68,14 +69,14 @@
 .subtitleResult {
   font-family: 'Bariol Bold', Arial, sans-serif;
   font-size: 21px;
-  color: #3c3c3c;
+  color: #fff;
   font-weight: bold;
   margin: 15px 0;
 }
 
 /* Texto de espera */
 .waiting-text {
-  color: #3c3c3c;
+  color: #fff;
   font-family: 'Bariol Bold', Arial, sans-serif;
   font-size: 35px;
   font-weight: 700;
@@ -85,7 +86,7 @@
 
 /* Cuando la imagen está lista */
 .subtitle-wait {
-  color: #3c3c3c;
+  color: #fff;
   font-size: 20px;
   font-weight: 600;
   margin-bottom: 10px;
@@ -111,10 +112,10 @@
   max-width: 300px;
   margin: 10px 0;
   padding: 12px;
-  border: none;
   border-radius: 25px; /* Más redondeados */
   background-color: rgba(1, 187, 236, 0.4); /* Azul #01BBEC con 40% opacidad */
   color: #ffffff; /* Texto blanco */
+  border: 4px solid #ffffff; /* Borde blanco de 4px */
   font-size: 16px;
   outline: none;
   transition: all 0.3s ease;
@@ -127,7 +128,7 @@
 
   /* Efecto hover */
   &:hover {
-    background-color: rgba(1, 187, 236, 0.6);
+    background-color: #2c2a29;
     transform: translateY(-1px);
     box-shadow: 0 2px 10px rgba(1, 187, 236, 0.2);
   }
@@ -146,7 +147,7 @@
   align-items: center;
   font-size: 18px;
   margin-top: 10px;
-  color: #3c3c3c;
+  color: #fff;
   gap: 5px;
   width: 80%;
   margin: 10px auto;
@@ -167,7 +168,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #3c3c3c;
+  color: #fff;
 
   border: 2px solid transparent;
   background-image:
@@ -178,12 +179,12 @@
 }
 
 .checkbox:checked:before {
-  background: #2c2a29;
+  background: #112749;
   content: "";
   width: 13px;
   height: 10px;
   display: flex;
-color: #3c3c3c;
+color: #fff;
   justify-content: center;
   align-content: center;
   align-self: center;
@@ -193,13 +194,13 @@ color: #3c3c3c;
 .button {
   width: 200px;
   height: 57px;
-  background: linear-gradient(to right, #ff7529, #ff7529);
+  background: linear-gradient(to right, #112749, #112749);
   color: #ffffff;
   font-weight: bold;
   padding: 10px;
   margin-top: 15px;
-  border-radius: 15px;
-  border: none;
+  border-radius: 31px;
+  border: 4px solid #ffffff; /* Borde blanco de 4px */
   cursor: pointer;
   font-size: 25px;
 
@@ -211,7 +212,7 @@ color: #3c3c3c;
 
   /* Efecto hover */
   &:hover {
-    background: linear-gradient(to right, #43c7e7, #43c7e7);
+    background: linear-gradient(to right, #112749, #112749);
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(57, 61, 137, 0.4);
     transition: all 0.3s ease;
@@ -219,7 +220,7 @@ color: #3c3c3c;
 
   /* Efecto focus */
   &:focus {
-    background: linear-gradient(to right, #43c7e7, #43c7e7);
+    background: linear-gradient(to right, #112749, #112749);
     box-shadow: 0 0 0 3px rgba(57, 61, 137, 0.3);
     outline: none;
     transition: all 0.3s ease;
@@ -228,7 +229,7 @@ color: #3c3c3c;
   /* Efecto active */
   &:active {
     transform: translateY(0);
-    background: linear-gradient(to right, #43c7e7, #43c7e7);
+    background: linear-gradient(to right, #112749, #112749);
   }
 
   /* Transición suave para todos los estados */

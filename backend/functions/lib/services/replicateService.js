@@ -22,44 +22,36 @@ class ReplicateService {
         return this.replicate;
     }
     /**
-     * Generate AI image from webcam capture - Complete 3-step pipeline
+     * Generate AI image from webcam capture - Single step business style conversion
      */
     async generateImageFromWebcam(request) {
         const requestId = (0, utils_1.generateRequestId)();
         try {
-            console.log(`[${requestId}] Starting complete AI pipeline: Logo placement -> Style conversion -> Background removal`);
+            console.log(`[${requestId}] Starting business style conversion with flux-kontext-pro`);
             // Convert and optimize the image
             const imageBuffer = (0, utils_1.base64ToBuffer)(request.imageData);
             const optimizedBuffer = await (0, utils_1.optimizeImageForAI)(imageBuffer);
             // Upload original image to storage for processing
             const originalImageUrl = await (0, storage_1.uploadToStorage)(optimizedBuffer, "original-images", `original_${requestId}.jpg`);
-            // STEP 1: Add logo to the original image using multi-image-kontext-max
-            console.log(`[${requestId}] Step 1: Adding logo with multi-image-kontext-max`);
-            const logoImageUrl = await this.processWithMultiImageKontext(originalImageUrl, requestId);
-            // STEP 2: Convert the logo image to anime style using flux-kontext-pro
-            console.log(`[${requestId}] Step 2: Processing with flux-kontext-pro for style conversion`);
-            const styledImageUrl = await this.processWithFluxKontextPro(logoImageUrl, request.prompt || this.getDefaultPrompt(request.style), request.style);
-            // STEP 3: Remove background using BiRefNet
-            console.log(`[${requestId}] Step 3: Removing background with BiRefNet`);
-            const finalImageUrl = await this.processWithBiRefNet(styledImageUrl, requestId);
-            console.log(`[${requestId}] Complete AI pipeline finished successfully`);
+            // Single step: Convert to business style using flux-kontext-pro
+            console.log(`[${requestId}] Processing with flux-kontext-pro for business style conversion`);
+            const finalImageUrl = await this.processWithFluxKontextPro(originalImageUrl, "Painting-style person, wearing formal clothes and with a futuristic red background", request.style);
+            console.log(`[${requestId}] Business style conversion completed successfully`);
             const resultFinal = {
                 success: true,
                 imageUrl: finalImageUrl,
-                message: "Image processed successfully through complete pipeline",
+                message: "Image processed successfully with business style",
                 requestId,
                 debug: {
                     originalImage: originalImageUrl,
-                    step1_logo: logoImageUrl, // Step 1: Logo added
-                    step2_styled: styledImageUrl, // Step 2: Style converted
-                    step3_final: finalImageUrl, // Step 3: Background removed
+                    finalImage: finalImageUrl,
                 },
             };
-            console.log(`[resultFinal 12121212]`, resultFinal);
+            console.log(`[resultFinal business style]`, resultFinal);
             return resultFinal;
         }
         catch (error) {
-            console.error(`[${requestId}] AI pipeline failed:`, error);
+            console.error(`[${requestId}] Business style conversion failed:`, error);
             return {
                 success: false,
                 error: error instanceof Error ? error.message : "Unknown error occurred",
@@ -68,107 +60,43 @@ class ReplicateService {
         }
     }
     /**
-     * STEP 1: Process image with flux-kontext-pro for style conversion
+     * Process image with flux-kontext-pro for business style conversion
      */
     async processWithFluxKontextPro(imageUrl, prompt, style) {
-        // flux-kontext-pro parameters - optimizado para estilo cartoon
+        // flux-kontext-pro parameters - optimized for business style
         const input = {
-            prompt: "anime-style",
+            seed: 725753180,
+            prompt: prompt,
             input_image: imageUrl,
-            aspect_ratio: "match_input_image", //9:16
-            output_format: "png",
-            safety_tolerance: 5,
-            prompt_upsampling: true, // Activado para mejorar interpretación del prompt
-            seed: 81276873,
+            aspect_ratio: "match_input_image",
+            output_format: "jpg",
+            safety_tolerance: 2,
+            prompt_upsampling: true,
         };
-        console.log("Processing with flux-kontext-pro optimized for cartoon style:", config_1.REPLICATE_MODELS.FLUX_KONTEXT_PRO.model);
-        console.log("Using cartoon illustration prompt:", "anime-style");
+        console.log("Processing with flux-kontext-pro for business style:", config_1.REPLICATE_MODELS.FLUX_KONTEXT_PRO.model);
+        console.log("Using business style prompt:", prompt);
         const output = await (0, utils_1.retryWithBackoff)(async () => {
             return await this.initReplicate().run(`${config_1.REPLICATE_MODELS.FLUX_KONTEXT_PRO.model}`, {
                 input,
             });
         }, 3, 2000);
         // flux-kontext-pro returns a FileOutput object with url() method
+        let imageUrl_result;
         if (output && typeof output === "object" && "url" in output) {
-            return output.url();
+            imageUrl_result = output.url();
         }
         else if (typeof output === "string") {
-            return output;
+            imageUrl_result = output;
         }
         else if (Array.isArray(output)) {
-            return output[0];
-        }
-        throw new Error("Unexpected output format from flux-kontext-pro API");
-    }
-    /**
-     * STEP 2: Process image with multi-image-kontext-max to add logo
-     */
-    async processWithMultiImageKontext(styledImageUrl, requestId) {
-        const input = {
-            seed: 1401721543,
-            prompt: "Just make this change: put the logo (image logo and text) on the person's shirt in the photo.",
-            aspect_ratio: "1:1",
-            input_image_1: config_1.LOGO_URL, // Fixed logo URL
-            input_image_2: styledImageUrl, // Result from step 1
-            output_format: "png",
-            safety_tolerance: 2,
-        };
-        console.log("Processing with multi-image-kontext-max to add logo:", config_1.REPLICATE_MODELS.MULTI_IMAGE_KONTEXT.model);
-        console.log("Logo URL:", config_1.LOGO_URL);
-        console.log("Styled image URL:", styledImageUrl);
-        const output = await (0, utils_1.retryWithBackoff)(async () => {
-            return await this.initReplicate().run(`${config_1.REPLICATE_MODELS.MULTI_IMAGE_KONTEXT.model}`, {
-                input,
-            });
-        }, 3, 2000);
-        // Handle the output - multi-image-kontext-max returns a FileOutput object
-        let imageUrl;
-        if (output && typeof output === "object" && "url" in output) {
-            imageUrl = output.url();
-        }
-        else if (typeof output === "string") {
-            imageUrl = output;
-        }
-        else if (Array.isArray(output)) {
-            imageUrl = output[0];
+            imageUrl_result = output[0];
         }
         else {
-            throw new Error("Unexpected output format from multi-image-kontext-max API");
-        }
-        // Download and upload to our storage
-        return await this.downloadAndUploadImage(imageUrl, `logo_${requestId}`);
-    }
-    /**
-     * STEP 3: Process image with BiRefNet to remove background
-     */
-    async processWithBiRefNet(logoImageUrl, requestId) {
-        const input = {
-            image: logoImageUrl,
-            resolution: "",
-        };
-        console.log("Processing with BiRefNet for background removal:", config_1.REPLICATE_MODELS.BIREFNET.model);
-        console.log("Input image URL:", logoImageUrl);
-        const output = await (0, utils_1.retryWithBackoff)(async () => {
-            return await this.initReplicate().run(`${config_1.REPLICATE_MODELS.BIREFNET.model}:${config_1.REPLICATE_MODELS.BIREFNET.version}`, {
-                input,
-            });
-        }, 3, 2000);
-        // Handle the output - BiRefNet returns a FileOutput object
-        let imageUrl;
-        if (output && typeof output === "object" && "url" in output) {
-            imageUrl = output.url();
-        }
-        else if (typeof output === "string") {
-            imageUrl = output;
-        }
-        else if (Array.isArray(output)) {
-            imageUrl = output[0];
-        }
-        else {
-            throw new Error("Unexpected output format from BiRefNet API");
+            throw new Error("Unexpected output format from flux-kontext-pro API");
         }
         // Download and upload to our storage as final result
-        return await this.downloadAndUploadImage(imageUrl, `final_${requestId}`);
+        const requestId = Date.now().toString();
+        return await this.downloadAndUploadImage(imageUrl_result, `business_${requestId}`);
     }
     /**
      * Download generated image and upload to our storage
@@ -191,8 +119,8 @@ class ReplicateService {
      * Get default prompt based on style
      */
     getDefaultPrompt(style) {
-        // Prompt específico para flux-kontext-pro siguiendo best practices - ESTILO PINTADO
-        return "anime-style HD";
+        // Business style prompt for flux-kontext-pro
+        return "Painting-style person, wearing formal clothes and with a futuristic red background";
     }
     /**
      * Check processing status (for async operations)

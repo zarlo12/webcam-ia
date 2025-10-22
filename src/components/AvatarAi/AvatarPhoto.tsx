@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import "./AvatarPhoto.scss";
-import logo from "../../assets/electrolux/logo.png";
+import logo from "../../assets/img/empresas.png";
 import WebcamScene from "../WebcamScene";
 import aiImageService from "../../services/aiImageService";
 import Swal from "sweetalert2";
@@ -201,7 +201,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
                 marginTop: "10px",
                 backgroundColor: "#ff9900",
                 fontSize: "14px",
-                display: 'none'
+                display: 'block'
               }}
             >
               🧪 PRUEBA CON IMAGEN FIJA

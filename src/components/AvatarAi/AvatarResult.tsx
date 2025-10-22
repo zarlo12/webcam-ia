@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./AvatarPhoto.scss";
-import logo from "../../assets/electrolux/logo.png";
+import logo from "../../assets/img/empresas.png";
 
 import { storage, db } from "../../firebaseConfig";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
@@ -40,31 +40,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
   const [loadingMessage, setLoadingMessage] = useState<string>("Generando avatar...");
   const hasUploadedRef = useRef(false);
 
-  // Función para enviar datos al CRM de VTEX a través de Firebase Function
-  const sendToVTEXCRM = useCallback(
-    async (datos: any) => {
-      try {
-        const response = await fetch('https://us-central1-imagen-ia-845a3.cloudfunctions.net/sendToVTEX', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(datos)
-        });
-
-        if (response.ok) {
-          const result = await response.json();
-          console.log('✅ Datos enviados exitosamente al CRM de VTEX:', result);
-        } else {
-          const errorData = await response.json();
-          console.error('❌ Error al enviar datos al CRM:', response.status, errorData);
-        }
-      } catch (error) {
-        console.error('❌ Error de conexión con el CRM:', error);
-      }
-    },
-    []
-  );
+ 
 
   // Memoiza la función para evitar que cambie en cada render
   const uploadMergedImage = useCallback(
@@ -78,7 +54,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
 
         const storageRef = ref(
           storage,
-          `electrolux/${email}-${Date.now()}.png`
+          `claro-empresas2025/${email}-${Date.now()}.png`
         );
         await uploadString(storageRef, dataUrl, "data_url");
         const downloadURL = await getDownloadURL(storageRef);
@@ -102,29 +78,18 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
         };
 
         // Datos para el CRM de VTEX (sin imageUrl y date)
-        const datosCRM = {
-          Caracteristicas: caracteristicas,
-          Comprar: comprar,
-          email: email,
-          marca: marca,
-          name: name,
-          origem: origem,
-          rangoEdad: rangoEdad,
-          renovar: renovar,
-          telephone: telephone,
-          terms: terms
-        };
+       
 
         console.log("🚀 ~ datosFirestore:", datosFirestore);
         // console.log("🚀 ~ datosCRM:", datosCRM);
 
         // Guardar en Firestore
-        await addDoc(collection(db, "Electrolux"), datosFirestore);
+        await addDoc(collection(db, "Claro-empresas2025"), datosFirestore);
         
         setLoadingMessage("Generando avatar...");
         
         // Enviar al CRM de VTEX
-        await sendToVTEXCRM(datosCRM);
+        //await sendToVTEXCRM(datosCRM);
         
         setLoadingMessage("¡Listo!");
         setUploadedImageUrl(downloadURL);
@@ -142,7 +107,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
         }, 2000);
       }
     },
-    [caracteristicas, comprar, email, marca, name, origem, rangoEdad, renovar, telephone, terms, sendToVTEXCRM]
+    [caracteristicas, comprar, email, marca, name, origem, rangoEdad, renovar, telephone, terms]
   );
 
   useEffect(() => {

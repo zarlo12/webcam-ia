@@ -85,7 +85,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
             <div className="avatar-container">
               {isLoading ? (
                 <div className="loading-indicator" style={{textAlign: "center", padding: "40px 0"}}>
-                  <span style={{fontSize: 22}}>Guardando avatar...</span>
+                  <span style={{fontSize: 22, color: "#fff"}}>Guardando avatar...</span>
                   <br />
                   <div className="spinner" style={{margin: "20px auto", width: 40, height: 40, border: "4px solid #ccc", borderTop: "4px solid #2c2a29", borderRadius: "50%", animation: "spin 1s linear infinite"}} />
                 </div>

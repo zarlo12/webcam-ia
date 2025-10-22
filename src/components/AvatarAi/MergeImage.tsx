@@ -1,7 +1,5 @@
 import React, { useRef, useEffect } from "react";
 // import logoSuperior from "../../assets/img/LogoSuperior.png";
-import logoInferior from "../../assets/banistmo/PHOTOBOOTH-04.png";
-
 
 interface MergeImageProps {
   imageUrl: string; // URL de la imagen principal (avatar)
@@ -18,17 +16,7 @@ const MergeImage: React.FC<MergeImageProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // 🎯 CONSTANTES CONFIGURABLES PARA POSICIONAMIENTO DE LOGOS
-  const LOGO_CONFIG = {
-    // Configuración para logo estilo caricatura (logoInferior)
-    caricatura: {
-      scale: 1,
-      marginRight: 0,
-      marginBottom: 0,
-      offsetX: 0,  // Ajuste adicional horizontal (negativo = más izquierda)
-      offsetY: 0   // Ajuste adicional vertical (negativo = más arriba)
-    }
-  };
+
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -36,9 +24,6 @@ const MergeImage: React.FC<MergeImageProps> = ({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Seleccionar el logo según el estilo
-    const logoToUse = logoInferior;
-    const config = LOGO_CONFIG.caricatura;
 
     console.log(`🎨 Usando logo para estilo: ${selectedStyle || "caricatura"}`);
 
@@ -54,9 +39,9 @@ const MergeImage: React.FC<MergeImageProps> = ({
 
     Promise.all([
       loadImage(imageUrl),    // avatar
-      loadImage(logoToUse)    // Logo seleccionado dinámicamente
+      //loadImage(logoToUse)    // Logo seleccionado dinámicamente
     ])
-      .then(([avatar, LogoInf]) => {
+      .then(([avatar, ]) => {
         // Ajustamos el canvas al tamaño del avatar
         canvas.width = avatar.width;
         canvas.height = avatar.height;
@@ -65,32 +50,11 @@ const MergeImage: React.FC<MergeImageProps> = ({
         ctx.drawImage(avatar, 0, 0, canvas.width, canvas.height);
 
         // Logo Inferior: posición según el estilo
-        const infWidth = LogoInf.width * config.scale;
-        const infHeight = LogoInf.height * config.scale;
+        // const infWidth = LogoInf.width * config.scale;
+        // const infHeight = LogoInf.height * config.scale;
         
         // Calcular posición con configuración personalizada
-        let posX, posY;
-        
-        if (selectedStyle === "realista") {
-          // Esquina inferior izquierda para realista
-          posX = config.marginRight + config.offsetX;
-          posY = canvas.height - infHeight - config.marginBottom + config.offsetY;
-        } else {
-          // Esquina inferior derecha para caricatura
-          posX = canvas.width - infWidth - config.marginRight + config.offsetX;
-          posY = canvas.height - infHeight - config.marginBottom + config.offsetY;
-        }
-        
-        ctx.drawImage(
-          LogoInf,
-          posX,
-          posY,
-          infWidth,
-          infHeight
-        );
-
-        console.log(`📐 Logo posicionado: X=${Math.round(posX)}, Y=${Math.round(posY)}, Tamaño=${Math.round(infWidth)}x${Math.round(infHeight)}`);
-
+     
         // Convertir a Data URL y pasar al callback
         const mergedDataUrl = canvas.toDataURL("image/png");
         onMerged(mergedDataUrl);

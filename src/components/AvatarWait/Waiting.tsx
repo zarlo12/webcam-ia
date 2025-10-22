@@ -24,52 +24,42 @@ declare global {
 }
 
 interface WaitingProps {
-  caracteristicas: string;
-  comprar: string;
   email: string;
-  marca: string;
   name: string;
-  origem: string;
-  rangoEdad: string;
-  renovar: string;
   telephone: string;
+  nombreEmpresa: string;
+  cargo: string;
   terms: boolean;
   imagenGenerada: boolean;
   aiImageReady: boolean;
   imageUrl: string;
-  onCaracteristicasChange: (caracteristicas: string) => void;
-  onComprarChange: (comprar: string) => void;
+  
   onEmailChange: (email: string) => void;
-  onMarcaChange: (marca: string) => void;
+
   onNameChange: (name: string) => void;
-  onRangoEdadChange: (rangoEdad: string) => void;
-  onRenovarChange: (renovar: string) => void;
+
   onTelephoneChange: (telephone: string) => void;
+  onNombreEmpresaChange: (nombreEmpresa: string) => void;
+  onCargoChange: (cargo: string) => void;
   onTermsChange: (terms: boolean) => void;
   onShowPolicy: () => void;
   onContinue: (mergedUrl: string) => void;
 }
 
 const Waiting: React.FC<WaitingProps> = ({
-  caracteristicas,
-  comprar,
   email,
-  marca,
   name,
-  rangoEdad,
-  renovar,
   telephone,
+  nombreEmpresa,
+  cargo,
   terms,
   aiImageReady,
   imageUrl,
-  onCaracteristicasChange,
-  onComprarChange,
   onEmailChange,
-  onMarcaChange,
   onNameChange,
-  onRangoEdadChange,
-  onRenovarChange,
   onTelephoneChange,
+  onNombreEmpresaChange,
+  onCargoChange,
   onTermsChange,
   onContinue,
 }) => {
@@ -140,11 +130,31 @@ const Waiting: React.FC<WaitingProps> = ({
           )}
 
           <form className="waiting-form">
+
+             <input
+              type="text"
+              placeholder="Nombre empresa:"
+              value={nombreEmpresa}
+              onChange={(e) => onNombreEmpresaChange(e.target.value)}
+              className="input"
+              required
+            />
+
+
             <input
               type="text"
-              placeholder="Nombre:"
+              placeholder="Nombre y Apellido:"
               value={name}
               onChange={(e) => onNameChange(e.target.value)}
+              className="input"
+              required
+            />
+
+             <input
+              type="text"
+              placeholder="Cargo:"
+              value={cargo}
+              onChange={(e) => onCargoChange(e.target.value)}
               className="input"
               required
             />
@@ -167,10 +177,9 @@ const Waiting: React.FC<WaitingProps> = ({
               required
             />
 
-       
+           
 
-
-
+           
 
             <div className="checkbox-container">
               <input

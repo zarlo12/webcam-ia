@@ -24,14 +24,10 @@ function MainApp() {
   const [lastImageUrl, setLastImageUrl] = useState("");
   
   // Nuevos campos según especificación
-  const [caracteristicas, setCaracteristicas] = useState("");
-  const [comprar, setComprar] = useState("");
   const [email, setEmail] = useState("");
-  const [marca, setMarca] = useState("");
+  const [nombreEmpresa, setNombreEmpresa] = useState("");
+  const [cargo, setCargo] = useState("");
   const [name, setName] = useState("");
-  const [origem] = useState("Feria del Hogar 2025");
-  const [rangoEdad, setRangoEdad] = useState("");
-  const [renovar, setRenovar] = useState("");
   const [telephone, setTelephone] = useState("");
   const [terms, setTerms] = useState<boolean>(false);
   
@@ -42,13 +38,11 @@ function MainApp() {
   // Esta función se invoca en AvatarPhoto al enviar la petición a n8n.
   // Además, al cambiar a Waiting se limpia los campos para que el usuario los ingrese.
   const handleProcess = () => {
-    setCaracteristicas("");
-    setComprar("");
+
+    setNombreEmpresa("");
     setEmail("");
-    setMarca("");
+    setCargo("");
     setName("");
-    setRangoEdad("");
-    setRenovar("");
     setTelephone("");
     setTerms(false);
     setImagenGenerada(false); // Reiniciamos la bandera al iniciar el proceso
@@ -56,33 +50,26 @@ function MainApp() {
     setStep("waiting");
   };
 
-  // Funciones para actualizar los campos conforme se escriben en Waiting.
-  const handleCaracteristicasChange = (newCaracteristicas: string) => {
-    setCaracteristicas(newCaracteristicas);
-  };
 
-  const handleComprarChange = (newComprar: string) => {
-    setComprar(newComprar);
-  };
+
+
 
   const handleEmailChange = (newEmail: string) => {
     setEmail(newEmail);
   };
 
-  const handleMarcaChange = (newMarca: string) => {
-    setMarca(newMarca);
-  };
+
 
   const handleNameChange = (newName: string) => {
     setName(newName);
   };
 
-  const handleRangoEdadChange = (newRangoEdad: string) => {
-    setRangoEdad(newRangoEdad);
+  const handleNombreEmpresaChange = (newNombreEmpresa: string) => {
+    setNombreEmpresa(newNombreEmpresa);
   };
 
-  const handleRenovarChange = (newRenovar: string) => {
-    setRenovar(newRenovar);
+  const handleCargoChange = (newCargo: string) => {
+    setCargo(newCargo);
   };
 
   const handleTelephoneChange = (newTelephone: string) => {
@@ -128,26 +115,22 @@ function MainApp() {
       )}
       {step === "waiting" && (
         <Waiting
-          caracteristicas={caracteristicas}
-          comprar={comprar}
           email={email}
-          marca={marca}
+          nombreEmpresa={nombreEmpresa}
+          cargo={cargo}
           name={name}
-          origem={origem}
-          rangoEdad={rangoEdad}
-          renovar={renovar}
           telephone={telephone}
           terms={terms}
           imagenGenerada={imagenGenerada}
           aiImageReady={aiImageReady}
           imageUrl={imageUrl}
-          onCaracteristicasChange={handleCaracteristicasChange}
-          onComprarChange={handleComprarChange}
+        
+      
           onEmailChange={handleEmailChange}
-          onMarcaChange={handleMarcaChange}
+          
           onNameChange={handleNameChange}
-          onRangoEdadChange={handleRangoEdadChange}
-          onRenovarChange={handleRenovarChange}
+          onNombreEmpresaChange={handleNombreEmpresaChange}
+          onCargoChange={handleCargoChange} 
           onTelephoneChange={handleTelephoneChange}
           onTermsChange={handleTermsChange}
           onShowPolicy={() => setStep("policy")}
@@ -157,14 +140,10 @@ function MainApp() {
       {step === "result" && (
         <AvatarResult
           imageUrl={imageUrl}
-          caracteristicas={caracteristicas}
-          comprar={comprar}
           email={email}
-          marca={marca}
+          nombreEmpresa={nombreEmpresa}
+          cargo={cargo}
           name={name}
-          origem={origem}
-          rangoEdad={rangoEdad}
-          renovar={renovar}
           telephone={telephone}
           terms={terms}
           onReset={() => setStep("photo")}

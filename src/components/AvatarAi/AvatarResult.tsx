@@ -7,14 +7,10 @@ import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { collection, addDoc } from "firebase/firestore";
 
 interface AvatarResultProps {
-  caracteristicas: string;
-  comprar: string;
   email: string;
-  marca: string;
   name: string;
-  origem: string;
-  rangoEdad: string;
-  renovar: string;
+  nombreEmpresa: string;
+  cargo: string;
   telephone: string;
   terms: boolean;
   imageUrl: string; // Imagen ya fusionada
@@ -22,14 +18,10 @@ interface AvatarResultProps {
 }
 
 const AvatarResult: React.FC<AvatarResultProps> = ({
-  caracteristicas,
-  comprar,
   email,
-  marca,
+  nombreEmpresa,
+  cargo,
   name,
-  origem,
-  rangoEdad,
-  renovar,
   telephone,
   terms,
   imageUrl,
@@ -63,14 +55,11 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
 
         // Datos para Firestore
         const datosFirestore = {
-          Caracteristicas: caracteristicas,
-          Comprar: comprar,
+         
           email: email,
-          marca: marca,
           name: name,
-          origem: origem,
-          rangoEdad: rangoEdad,
-          renovar: renovar,
+          nombreEmpresa: nombreEmpresa,
+          cargo: cargo,
           telephone: telephone,
           terms: terms,
           imageUrl: downloadURL,
@@ -107,7 +96,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
         }, 2000);
       }
     },
-    [caracteristicas, comprar, email, marca, name, origem, rangoEdad, renovar, telephone, terms]
+    [ email, nombreEmpresa, cargo, name, telephone, terms]
   );
 
   useEffect(() => {

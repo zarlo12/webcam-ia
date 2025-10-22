@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import "./AvatarPhoto.scss";
 // import fondo from "../../assets/img/fondo.png";
-import logo from "../../assets/banistmo/Logo superior.png";
+import logo from "../../assets/policia/logo.png";
 
 import WebcamScene from "../WebcamScene";
 import axios from "axios";

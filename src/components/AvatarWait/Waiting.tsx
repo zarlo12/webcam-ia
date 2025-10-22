@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Waiting.scss";
-import logo from "../../assets/banistmo/Logo superior.png";
+import logo from "../../assets/policia/logo.png";
 import Swal from "sweetalert2";
 
 import MergeImage from "../AvatarAi/MergeImage"; // Asegúrate de la ruta correcta

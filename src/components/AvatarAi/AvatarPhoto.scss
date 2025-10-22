@@ -51,9 +51,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-image: url('../../assets/banistmo/Fondo.png');
+  background-image: url('../../assets/policia/Fondo.png');
   background-color: white;
-  background-size: 610px 661px;
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   color: white;
@@ -62,10 +62,10 @@
   justify-content: flex-start;
 }
 
-/* Cabecera superior con fondo rojo */
+/* Cabecera superior con fondo blanco semi-transparente */
 .header {
   width: 100%;
-  background: linear-gradient(to right, #2c2a29, #2c2a29);
+  background: rgba(255, 255, 255, 0.18); /* Blanco con 18% de opacidad */
   padding: 10px 0;
   display: flex;
   justify-content: center;

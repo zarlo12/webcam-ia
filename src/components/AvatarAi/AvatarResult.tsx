@@ -47,7 +47,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
         const datosFirestore = {
           email,
           nombre,
-          ID: ciudad,
+          ciudad: ciudad,
           telefono: formulario,
           imageUrl: downloadURL,
           date: new Date(),

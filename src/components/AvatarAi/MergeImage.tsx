@@ -30,7 +30,7 @@ const MergeImage: React.FC<MergeImageProps> = ({
         img.src = src;
       });
 
-    console.log(`🎨 Fusionando imagen empresarial con overlay superior`);
+    console.log(`🎨 Fusionando imagen empresarial con overlay inferior derecho`);
 
     Promise.all([
       loadImage(imageUrl),   // imagen principal (avatar empresarial)
@@ -44,22 +44,32 @@ const MergeImage: React.FC<MergeImageProps> = ({
         // Dibujar la imagen principal como base (tamaño completo)
         ctx.drawImage(mainImg, 0, 0, canvas.width, canvas.height);
 
-        // Dibujar el elemento overlay en la esquina superior izquierda
-        // Mantener el tamaño original del overlay o ajustarlo si es necesario
-        const overlayX = 0; // Esquina superior izquierda
-        const overlayY = 0; // Esquina superior izquierda
+        // Dibujar el elemento overlay con posición y tamaño ajustables
+        const overlayScale = 0.7; // Hacer el overlay 70% de su tamaño original
+        const overlayWidth = overlayImg.width * overlayScale;
+        const overlayHeight = overlayImg.height * overlayScale;
         
-        // Dibujar el overlay en su tamaño original
+        // 🎯 POSICIÓN MANUAL - Ajusta estos valores para mover el overlay
+        const overlayX = 450; // Posición X (horizontal) - aumenta para mover a la derecha
+        const overlayY = 1180; // Posición Y (vertical) - aumenta para mover hacia abajo
+        
+        console.log(`🔍 Debug posicionamiento:`);
+        console.log(`Canvas: ${canvas.width}x${canvas.height}`);
+        console.log(`Overlay original: ${overlayImg.width}x${overlayImg.height}`);
+        console.log(`Overlay escalado: ${overlayWidth}x${overlayHeight}`);
+        console.log(`Posición manual: (${overlayX}, ${overlayY})`);
+        
+        // Dibujar el overlay con el nuevo tamaño y posición
         ctx.drawImage(
           overlayImg,
           overlayX,
           overlayY,
-          overlayImg.width,
-          overlayImg.height
+          overlayWidth,
+          overlayHeight
         );
 
         console.log(`🎯 Imagen base: ${mainImg.width}x${mainImg.height}`);
-        console.log(`🎯 Overlay posicionado en: (${overlayX}, ${overlayY}) - Tamaño: ${overlayImg.width}x${overlayImg.height}`);
+        console.log(`🎯 Overlay posicionado en: (${overlayX}, ${overlayY}) - Tamaño: ${Math.round(overlayWidth)}x${Math.round(overlayHeight)}`);
 
         // Convertir a Data URL y pasar al callback
         const mergedDataUrl = canvas.toDataURL("image/png");

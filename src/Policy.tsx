@@ -54,7 +54,7 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
   const buttonStyle: React.CSSProperties = {
     padding: isSmallScreen ? "8px 16px" : "10px 20px",
     fontSize: isSmallScreen ? "14px" : "16px",
-    background: "#ff7529",
+    background: "#006937",
     color: "white",
     border: "none",
     borderRadius: "4px",
@@ -87,121 +87,121 @@ const Policy = ({ onBack }: { onBack: () => void }) => {
             FORMATO DE CONSENTIMIENTO INFORMADO
           </h1>
           
-          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "18px" : "20px", color: "#ff7529" }}>
-            Uso de Datos Personales y Captura Temporal de Imagen Facial para Actividad de Avatar con Inteligencia Artificial
+          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "18px" : "20px", color: "#006937" }}>
+            Uso de Datos Personales y Captura Temporal de Imagen Facial
           </h2>
           
+          <p style={{ fontSize: isSmallScreen ? "14px" : "16px", lineHeight: "1.5", marginBottom: "10px" }}>
+            <strong>Evento:</strong> Congreso de Comunicaciones "IA: Realidad que transforma"
+          </p>
           <p style={{ fontSize: isSmallScreen ? "14px" : "16px", lineHeight: "1.5", marginBottom: "20px" }}>
-            Nutricia Exports B.V. («Nutricia»), término que incluye a cada miembro del grupo de compañías del cual Nutricia Exports B.V. es la compañía matriz, subsidiaria o afiliada), en cumplimiento de lo dispuesto por la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP) de México y demás normativas aplicables, pone a su disposición el presente consentimiento informado.
+            <strong>Entidad Responsable:</strong> Policía Nacional de Colombia
+          </p>
+          
+          <p style={{ fontSize: isSmallScreen ? "14px" : "16px", lineHeight: "1.5", marginBottom: "20px" }}>
+            En cumplimiento de la Ley 1581 de 2012 y demás normas sobre protección de datos personales, la Policía Nacional de Colombia, a través de la Dirección de Comunicaciones Estratégicas, pone a su disposición el presente consentimiento informado.
           </p>
 
-          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#ff7529" }}>
-            1. Finalidad del tratamiento de datos
+          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#006937" }}>
+            1. Finalidad del tratamiento de datos personales
           </h2>
           
           <p style={{ fontSize: isSmallScreen ? "14px" : "16px", lineHeight: "1.5", marginBottom: "15px" }}>
-            Los datos personales que se solicitarán son:
+            Durante su participación en la actividad "IA: Realidad que transforma", se podrán recopilar los siguientes datos personales:
           </p>
           <ul style={{ fontSize: isSmallScreen ? "14px" : "16px", lineHeight: "1.5", marginBottom: "15px", paddingLeft: "20px" }}>
-            <li>Nombre o Alias</li>
+            <li>Nombre completo o alias</li>
             <li>Correo electrónico</li>
-            <li>Captura temporal y transitoria de fotografía de su rostro</li>
+            <li>Captura temporal de su imagen facial</li>
           </ul>
           
           <p style={{ fontSize: isSmallScreen ? "14px" : "16px", lineHeight: "1.5", marginBottom: "15px" }}>
-            Dichos datos serán tratados con las siguientes finalidades:
+            Estos datos serán utilizados exclusivamente para los siguientes fines:
           </p>
           <ol style={{ fontSize: isSmallScreen ? "14px" : "16px", lineHeight: "1.5", marginBottom: "15px", paddingLeft: "20px" }}>
-            <li>Generar de forma inmediata un avatar con inteligencia artificial que proyecta su rostro en pantalla.</li>
-            <li>Enviar por correo electrónico su avatar generado.</li>
-            <li>Llevar un registro estadístico de participación en la actividad.</li>
+            <li>Generar un avatar o imagen digital mediante tecnología de inteligencia artificial que incorpore su rostro.</li>
+            <li>Enviar al correo electrónico proporcionado el avatar o la imagen generada.</li>
+            <li>Realizar estadísticas internas sobre participación en la experiencia.</li>
           </ol>
           
           <p style={{ fontSize: isSmallScreen ? "14px" : "16px", lineHeight: "1.5", marginBottom: "20px" }}>
-            Los datos no serán utilizados para fines distintos a los aquí mencionados.
+            Los datos no serán utilizados para propósitos diferentes a los aquí descritos.
           </p>
 
-          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#ff7529" }}>
+          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#006937" }}>
             2. Naturaleza del procesamiento de la imagen facial
           </h2>
           
-          <p style={{ fontSize: isSmallScreen ? "14px" : "16px", lineHeight: "1.5", marginBottom: "15px" }}>
-            La captura de la fotografía de su rostro será temporal y transitoria, utilizada únicamente durante un lapso aproximado de 1 a 2 minutos para la generación del avatar.
-          </p>
-          
           <ul style={{ fontSize: isSmallScreen ? "14px" : "16px", lineHeight: "1.5", marginBottom: "20px", paddingLeft: "20px" }}>
-            <li>Una vez procesada y enviada la imagen al correo electrónico proporcionado, tanto la fotografía original como la imagen generada con inteligencia artificial serán eliminadas.</li>
-            <li>Únicamente Nutricia tendrá acceso autorizado a los datos, con el propósito exclusivo de entregar el resultado de la experiencia.</li>
+            <li>La fotografía de su rostro será capturada de manera temporal, durante un lapso aproximado de 1 a 2 minutos, únicamente con el fin de generar el avatar digital.</li>
+            <li>Una vez enviada la imagen generada a su correo electrónico, tanto la fotografía original como el resultado serán eliminados de forma segura.</li>
+            <li>Solo personal autorizado de la Policía Nacional y del proveedor tecnológico participante tendrá acceso a los datos, y únicamente para los fines aquí indicados.</li>
           </ul>
 
-          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#ff7529" }}>
-            3. Consentimiento previo y voluntario
+          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#006937" }}>
+            3. Consentimiento previo, libre y voluntario
           </h2>
           
-          <p style={{ fontSize: isSmallScreen ? "14px" : "16px", lineHeight: "1.5", marginBottom: "15px" }}>
-            La participación en esta experiencia es completamente voluntaria.
-          </p>
-          
           <ul style={{ fontSize: isSmallScreen ? "14px" : "16px", lineHeight: "1.5", marginBottom: "20px", paddingLeft: "20px" }}>
-            <li>Usted podrá decidir libremente si desea o no participar.</li>
-            <li>En caso de no otorgar su consentimiento, no se capturarán ni procesarán sus datos personales.</li>
+            <li>Su participación en la actividad es completamente voluntaria.</li>
+            <li>En caso de no otorgar su consentimiento, no se realizará la captura ni el procesamiento de sus datos personales.</li>
           </ul>
 
-          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#ff7529" }}>
+          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#006937" }}>
             4. Medidas de seguridad
           </h2>
           
           <p style={{ fontSize: isSmallScreen ? "14px" : "16px", lineHeight: "1.5", marginBottom: "20px" }}>
-            El tratamiento de sus datos personales se realizará con estrictas medidas de seguridad administrativas, técnicas y físicas que permiten proteger su información contra daño, pérdida, alteración, destrucción o uso indebido.
+            La Policía Nacional de Colombia implementa medidas técnicas, administrativas y físicas para garantizar la protección, confidencialidad e integridad de sus datos personales, de conformidad con la normativa vigente.
           </p>
 
-          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#ff7529" }}>
-            5. Transferencia de datos
+          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#006937" }}>
+            5. Transferencia y tratamiento por terceros
           </h2>
           
+          <p style={{ fontSize: isSmallScreen ? "14px" : "16px", lineHeight: "1.5", marginBottom: "10px" }}>
+            Los datos personales no serán compartidos con terceros distintos a los proveedores tecnológicos que apoyan la experiencia de generación de avatar, quienes actúan bajo acuerdos de confidencialidad y seguridad equivalentes a los exigidos por la ley.
+          </p>
           <p style={{ fontSize: isSmallScreen ? "14px" : "16px", lineHeight: "1.5", marginBottom: "20px" }}>
-            Los datos personales obtenidos no serán compartidos con terceros, salvo que exista obligación legal de hacerlo.
+            No se realizarán transferencias internacionales de datos.
           </p>
 
-          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#ff7529" }}>
-            6. Derechos ARCO (Acceso, Rectificación, Cancelación y Oposición)
+          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#006937" }}>
+            6. Derechos del titular de los datos (Derechos ARCO)
           </h2>
           
-          <p style={{ fontSize: isSmallScreen ? "14px" : "16px", lineHeight: "1.5", marginBottom: "20px" }}>
-            Usted podrá ejercer en cualquier momento sus derechos de acceso, rectificación, cancelación u oposición (ARCO) respecto de sus datos personales, mediante solicitud enviada al siguiente{" "}
+          <p style={{ fontSize: isSmallScreen ? "14px" : "16px", lineHeight: "1.5", marginBottom: "15px" }}>
+            Usted puede, en cualquier momento:
+          </p>
+          <ul style={{ fontSize: isSmallScreen ? "14px" : "16px", lineHeight: "1.5", marginBottom: "15px", paddingLeft: "20px" }}>
+            <li>Acceder a sus datos personales.</li>
+            <li>Solicitar su rectificación o actualización.</li>
+            <li>Solicitar su eliminación cuando no sean necesarios para los fines descritos.</li>
+            <li>Oponerse al tratamiento de los mismos.</li>
+          </ul>
+          
+          <p style={{ fontSize: isSmallScreen ? "14px" : "16px", lineHeight: "1.5", marginBottom: "10px" }}>
+            Para ejercer estos derechos, puede comunicarse con:
+          </p>
+          <p style={{ fontSize: isSmallScreen ? "14px" : "16px", lineHeight: "1.5", marginBottom: "10px" }}>
+            <strong>Correo electrónico:</strong>{" "}
             <a 
-              href="https://www.nutricia.com/es_ec/politica-de-privacidad/contacto-privacidad.html" 
-              target="_blank" 
-              rel="noopener noreferrer"
+              href="mailto:coestpolicia8@gmail.com" 
               style={{ color: "#0066cc", textDecoration: "none" }}
             >
-              link
-            </a>{" "}
-            o directamente en el domicilio de Nutricia.
+              coestpolicia8@gmail.com
+            </a>
+          </p>
+          <p style={{ fontSize: isSmallScreen ? "14px" : "16px", lineHeight: "1.5", marginBottom: "20px" }}>
+            <strong>Dirección:</strong> Dirección de Comunicaciones Estratégicas – Policía Nacional de Colombia
           </p>
 
-          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#ff7529" }}>
-            7. Contacto del responsable de datos personales
+          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#006937" }}>
+            7. Declaración de consentimiento
           </h2>
           
           <p style={{ fontSize: isSmallScreen ? "14px" : "16px", lineHeight: "1.5", marginBottom: "20px" }}>
-            Para cualquier consulta o ejercicio de derechos, podrá comunicarse con el área designada de protección de datos al correo en el siguiente{" "}
-            <a 
-              href="https://www.nutricia.com/es_ec/politica-de-privacidad/contacto-privacidad.html" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              style={{ color: "#0066cc", textDecoration: "none" }}
-            >
-              link
-            </a>.
-          </p>
-
-          <h2 style={{ ...titleStyle, fontSize: isSmallScreen ? "16px" : "18px", color: "#ff7529" }}>
-            DECLARACIÓN DE CONSENTIMIENTO
-          </h2>
-          
-          <p style={{ fontSize: isSmallScreen ? "14px" : "16px", lineHeight: "1.5", marginBottom: "20px" }}>
-            La forma de otorgar su consentimiento será mediante la acción de dar clic en la casilla de autorización de datos personales y consentimiento de uso de imagen al momento de la experiencia. Al hacerlo, usted confirma que ha leído y entendido el presente consentimiento informado, y acepta de manera libre, expresa, voluntaria e informada el tratamiento de sus datos personales conforme a lo descrito en este documento.
+            Al participar en la actividad y marcar la casilla de autorización, firmar o realizar cualquier acción equivalente de aceptación, usted declara que ha leído, comprendido y acepta de manera libre, expresa e informada el tratamiento de sus datos personales bajo las condiciones señaladas.
           </p>
 
         </section>

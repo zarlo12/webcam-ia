@@ -35,7 +35,7 @@ class ReplicateService {
             const originalImageUrl = await (0, storage_1.uploadToStorage)(optimizedBuffer, "original-images", `original_${requestId}.jpg`);
             // Single step: Convert to business style using flux-kontext-pro
             console.log(`[${requestId}] Processing with flux-kontext-pro for business style conversion`);
-            const finalImageUrl = await this.processWithFluxKontextPro(originalImageUrl, "Person in formal clothing and red futuristic background", request.style);
+            const finalImageUrl = await this.processWithFluxKontextPro(originalImageUrl, "Painting-style person, wearing formal clothes and with a futuristic red background", request.style);
             console.log(`[${requestId}] Business style conversion completed successfully`);
             const resultFinal = {
                 success: true,
@@ -65,7 +65,7 @@ class ReplicateService {
     async processWithFluxKontextPro(imageUrl, prompt, style) {
         // flux-kontext-pro parameters - optimized for business style
         const input = {
-            seed: 628269464,
+            seed: 1775051390,
             prompt: prompt,
             input_image: imageUrl,
             aspect_ratio: "9:16", //"match_input_image",

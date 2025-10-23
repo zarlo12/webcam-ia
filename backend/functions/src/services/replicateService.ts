@@ -63,7 +63,7 @@ class ReplicateService {
       );
       const finalImageUrl = await this.processWithFluxKontextPro(
         originalImageUrl,
-        "Person in formal clothing and red futuristic background",
+        "Painting-style person, wearing formal clothes and with a futuristic red background",
         request.style
       );
 
@@ -106,7 +106,7 @@ class ReplicateService {
   ): Promise<string> {
     // flux-kontext-pro parameters - optimized for business style
     const input = {
-      seed: 628269464,
+      seed: 1775051390,
       prompt: prompt,
       input_image: imageUrl,
       aspect_ratio: "9:16", //"match_input_image",

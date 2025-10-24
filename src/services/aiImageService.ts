@@ -104,7 +104,10 @@ class AIImageService {
       if (style) formData.append("style", style);
       if (userId) formData.append("userId", userId);
 
-      console.log("Sending image with FormData to AI generation service...");
+      console.log(
+        "Sending image with FormData to AI generation service...",
+        formData
+      );
 
       const response = await axios.post(this.generateImageUrl, formData, {
         headers: {

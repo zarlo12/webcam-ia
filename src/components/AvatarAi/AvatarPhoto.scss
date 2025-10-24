@@ -210,15 +210,67 @@
   }
 }
 
-/* Flecha custom para el select */
+/* Flecha custom para el select mejorada */
 .select-container .select-arrow {
   position: absolute;
-  right: 43px;
-  top: 54%;
+  right: 20px;
+  top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
   color: #fff;
-  font-size: 18px;
+  font-size: 20px;
+  font-weight: bold;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.3);
+  z-index: 1;
+}
+
+/* Estilos mejorados para el select con efectos de botón */
+.select-container select {
+  background: linear-gradient(#f91b00, #f91b00) !important; // Gradiente rojo
+  border: 2px solid #efefef !important; // Borde claro
+  border-radius: 28px !important; // Radio redondeado
+  font-weight: 800 !important;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.3) !important;
+  box-shadow:
+    0 6px 0 rgba(0,0,0,0.45),
+    inset 0 2px 0 rgba(255,255,255,0.08) !important;
+  transition: transform .08s ease, box-shadow .08s ease, background .12s ease !important;
+}
+
+.select-container select::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  top: 6px;
+  height: 50%;
+  border-radius: 22px;
+  background: linear-gradient(rgba(255,255,255,0.32), rgba(255,255,255,0.06));
+  pointer-events: none;
+}
+
+.select-container select:hover {
+  transform: translateY(-1px) !important;
+  box-shadow:
+    0 7px 0 rgba(0,0,0,0.45),
+    inset 0 2px 0 rgba(255,255,255,0.12) !important;
+  background: linear-gradient(#ff2e00, #ff2e00) !important;
+}
+
+.select-container select:focus {
+  transform: translateY(-1px) !important;
+  box-shadow:
+    0 7px 0 rgba(0,0,0,0.45),
+    inset 0 2px 0 rgba(255,255,255,0.12),
+    0 0 0 3px rgba(249, 27, 0, 0.3) !important;
+  background: linear-gradient(#ff2e00, #ff2e00) !important;
+}
+
+.select-container select:active {
+  transform: translateY(2px) !important;
+  box-shadow:
+    0 2px 0 rgba(0,0,0,0.45),
+    inset 0 2px 0 rgba(255,255,255,0.08) !important;
 }
 
 .avatar-container {
@@ -302,6 +354,7 @@ form {
   text-shadow: 0 1px 0 rgba(0,0,0,0.3);
   cursor: pointer;
   -webkit-appearance: none;
+  appearance: none;
   box-shadow:
     0 6px 0 rgba(0,0,0,0.45),     // sombra externa pronunciada (se ve la elevación)
     inset 0 2px 0 rgba(255,255,255,0.08); // ligero brillo interior

@@ -18,6 +18,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   const [capturedImage, setCapturedImage] = useState<Blob | null>(null);
   const [capturedImageUrl, setCapturedImageUrl] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [selectedGender, setSelectedGender] = useState<string>(""); // Estado para el género seleccionado
   
   // REALISTIC = "realistic",
   // ARTISTIC = "artistic",
@@ -25,6 +26,18 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   // PROFESSIONAL = "professional",
   // VINTAGE = "vintage",
   const webcamRef = useRef<WebcamRef | null>(null);
+
+  // Función para generar el prompt basado en el género seleccionado
+  const getPromptByGender = (gender: string): string => {
+    switch (gender) {
+      case "hombre":
+        return "Painting-style man, wearing formal business suit and with a futuristic red background";
+      case "mujer":
+        return "Painting-style woman, wearing a tailored women's blazer with a futuristic red background";
+      default:
+        return "Painting-style person, wearing formal clothes and with a futuristic red background";
+    }
+  };
 
   // Función para capturar la imagen desde el componente WebcamScene
   const handleCapture = async () => {
@@ -57,10 +70,13 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
       // Cambiar INMEDIATAMENTE a la pantalla de formulario sin esperar
       onProcess(email); // Pasa al formulario mientras la imagen se procesa en background
       
-      // Procesar la imagen en background
+      // Procesar la imagen en background con prompt basado en género
+      const prompt = getPromptByGender(selectedGender);
+      console.log("Usando prompt:", prompt);
+      
       const result = await aiImageService.generateImageWithFormData(
         capturedImage,
-        'anime-style',
+        prompt,
         '',
         "user-" + Date.now()
       );
@@ -109,6 +125,15 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!selectedGender) {
+      Swal.fire({
+        icon: "warning",
+        title: "Advertencia",
+        text: "Por favor selecciona tu género.",
+      });
+      return;
+    }
+
     if (!capturedImage) {
       Swal.fire({
         icon: "warning",
@@ -151,20 +176,22 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
           </div>
 
           <div className="buttons-container">
-            {/* Selector de estilo de IA */}
-            {/* <div className="select-container">
+            {/* Selector de género */}
+            <div className="select-container">
               <select
-                value={selectedStyle}
-                onChange={(e) => setSelectedStyle(e.target.value as ImageStyle)}
+                value={selectedGender}
+                onChange={(e) => setSelectedGender(e.target.value)}
+                className="input"
+                required
               >
-                <option value={ImageStyle.PROFESSIONAL}>Profesional</option>
-                <option value={ImageStyle.REALISTIC}>Realista</option>
-                <option value={ImageStyle.ARTISTIC}>Artístico</option>
-                <option value={ImageStyle.CARTOON}>Cartoon</option>
-                <option value={ImageStyle.VINTAGE}>Vintage</option>
+                <option value="" disabled>
+                  Selecciona tu género
+                </option>
+                <option value="hombre">Hombre</option>
+                <option value="mujer">Mujer</option>
               </select>
               <span className="select-arrow">▼</span>
-            </div> */}
+            </div>
 
             <button
               type="button"
@@ -187,7 +214,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
             <button
               type="submit"
               className="button"
-              disabled={!capturedImageUrl || isProcessing}
+              disabled={!capturedImageUrl || !selectedGender || isProcessing}
             >
               {isProcessing ? "Generando..." : "Procesar"}
             </button>
@@ -201,7 +228,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
                 marginTop: "10px",
                 backgroundColor: "#ff9900",
                 fontSize: "14px",
-                display: 'block'
+                display: 'none'
               }}
             >
               🧪 PRUEBA CON IMAGEN FIJA

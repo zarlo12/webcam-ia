@@ -35,7 +35,9 @@ class ReplicateService {
             const originalImageUrl = await (0, storage_1.uploadToStorage)(optimizedBuffer, "original-images", `original_${requestId}.jpg`);
             // Single step: Convert to business style using flux-kontext-pro
             console.log(`[${requestId}] Processing with flux-kontext-pro for business style conversion`);
-            const finalImageUrl = await this.processWithFluxKontextPro(originalImageUrl, "Painting-style person, wearing formal clothes and with a futuristic red background", request.style);
+            const prompt = request.prompt || this.getDefaultPrompt(request.style);
+            console.log(`[${requestId}] Using prompt: "${prompt}"`);
+            const finalImageUrl = await this.processWithFluxKontextPro(originalImageUrl, prompt, request.style);
             console.log(`[${requestId}] Business style conversion completed successfully`);
             const resultFinal = {
                 success: true,
@@ -65,7 +67,7 @@ class ReplicateService {
     async processWithFluxKontextPro(imageUrl, prompt, style) {
         // flux-kontext-pro parameters - optimized for business style
         const input = {
-            seed: 1775051390,
+            seed: 124243038,
             prompt: prompt,
             input_image: imageUrl,
             aspect_ratio: "9:16", //"match_input_image",
@@ -119,8 +121,8 @@ class ReplicateService {
      * Get default prompt based on style
      */
     getDefaultPrompt(style) {
-        // Business style prompt for flux-kontext-pro
-        return "Person in formal clothing and red futuristic background";
+        // Default business style prompt for flux-kontext-pro
+        return "Painting-style person, wearing formal clothes and with a futuristic red background";
     }
     /**
      * Check processing status (for async operations)

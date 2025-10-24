@@ -61,9 +61,11 @@ class ReplicateService {
       console.log(
         `[${requestId}] Processing with flux-kontext-pro for business style conversion`
       );
+      const prompt = request.prompt || this.getDefaultPrompt(request.style);
+      console.log(`[${requestId}] Using prompt: "${prompt}"`);
       const finalImageUrl = await this.processWithFluxKontextPro(
         originalImageUrl,
-        "Painting-style person, wearing formal clothes and with a futuristic red background",
+        prompt,
         request.style
       );
 
@@ -106,7 +108,7 @@ class ReplicateService {
   ): Promise<string> {
     // flux-kontext-pro parameters - optimized for business style
     const input = {
-      seed: 1775051390,
+      seed: 124243038,
       prompt: prompt,
       input_image: imageUrl,
       aspect_ratio: "9:16", //"match_input_image",
@@ -185,8 +187,8 @@ class ReplicateService {
    * Get default prompt based on style
    */
   private getDefaultPrompt(style?: string): string {
-    // Business style prompt for flux-kontext-pro
-    return "Person in formal clothing and red futuristic background";
+    // Default business style prompt for flux-kontext-pro
+    return "Painting-style person, wearing formal clothes and with a futuristic red background";
   }
 
   /**

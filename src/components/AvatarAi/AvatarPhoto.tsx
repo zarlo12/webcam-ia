@@ -52,7 +52,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
     if (!capturedImage) return;
     const formData = new FormData();
     formData.append("image", capturedImage, "webcam-image.jpg");
-    
+    formData.append("Ciudad", "Bogotá");
     const currentWebhookUrl = getWebhookUrl();
   
     try {

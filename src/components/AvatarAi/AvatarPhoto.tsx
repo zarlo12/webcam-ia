@@ -22,6 +22,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
   const [capturedImage, setCapturedImage] = useState<Blob | null>(null);
   const [capturedImageUrl, setCapturedImageUrl] = useState<string>("");
   const [selectedStyle] = useState<string>(""); // Nuevo estado para el estilo
+  const [selectedCity, setSelectedCity] = useState<string>(""); // Estado para la ciudad seleccionada
 
   const webcamRef = useRef<WebcamRef | null>(null);
 
@@ -52,7 +53,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
     if (!capturedImage) return;
     const formData = new FormData();
     formData.append("image", capturedImage, "webcam-image.jpg");
-    formData.append("Ciudad", "Bogotá");
+    formData.append("Ciudad", selectedCity);
     const currentWebhookUrl = getWebhookUrl();
   
     try {
@@ -81,8 +82,15 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validar que haya seleccionado un estilo
-   
+    // Validar que haya seleccionado una ciudad
+    if (!selectedCity) {
+      Swal.fire({
+        icon: "warning",
+        title: "Advertencia",
+        text: "Por favor selecciona una ciudad.",
+      });
+      return;
+    }
 
     if (!capturedImage) {
       Swal.fire({
@@ -122,6 +130,21 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
           </div>
 
           <div className="buttons-container">
+            {/* SELECT para elegir ciudad */}
+            <div className="select-container">
+              <select
+                value={selectedCity}
+                onChange={(e) => setSelectedCity(e.target.value)}
+              >
+                <option value="" disabled>
+                  Ciudad
+                </option>
+                <option value="Bogotá">Bogotá</option>
+                <option value="Medellín">Medellín</option>
+              </select>
+              <span className="flecha">▼</span>
+            </div>
+
             {/* SELECT para elegir estilo */}
             {/* <div className="select-container">
               <select

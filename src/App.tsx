@@ -26,6 +26,7 @@ function MainApp() {
   const [nombre, setNombre] = useState("");
 
   const [ciudad, setCiudad] = useState("");
+  const [ciudadSeleccionada, setCiudadSeleccionada] = useState(""); // Ciudad desde AvatarPhoto
   const [formulario, setFormulario] = useState("");
   const [consentimiento, setConsentimiento] = useState("");
   const [imagenGenerada, setImagenGenerada] = useState(false); // Nueva bandera
@@ -34,9 +35,12 @@ function MainApp() {
 
   // Esta función se invoca en AvatarPhoto al enviar la petición a n8n.
   // Además, al cambiar a Waiting se limpia el email para que el usuario lo ingrese nuevamente.
-  const handleProcess = (style?: string) => {
+  const handleProcess = (style?: string, selectedCity?: string) => {
     if (style) {
       setSelectedStyle(style); // Guardamos el estilo seleccionado
+    }
+    if (selectedCity) {
+      setCiudadSeleccionada(selectedCity); // Guardamos la ciudad seleccionada desde AvatarPhoto
     }
     setEmail("");
     setNombre("");
@@ -139,7 +143,7 @@ function MainApp() {
           imageUrl={imageUrl}
           email={email}
           nombre={nombre}
-          ciudad={ciudad}
+          ciudad={ciudadSeleccionada}
           formulario={formulario}
           consentimiento={consentimiento}
           onReset={() => setStep("photo")}

@@ -9,7 +9,7 @@ import Swal from "sweetalert2"; // Import sweetalert2
 // import { FaCamera } from "react-icons/fa";
 
 interface AvatarPhotoProps {
-  onProcess: (style?: string) => void;
+  onProcess: (style?: string, selectedCity?: string) => void;
 }
 interface WebcamRef {
   captureImage: () => Promise<Blob>;
@@ -100,7 +100,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
       });
       return;
     }
-    onProcess(selectedStyle); // Pasar el estilo seleccionado al callback
+    onProcess(selectedStyle, selectedCity); // Pasar el estilo y la ciudad seleccionada al callback
     handleProcessImage();
   };
 

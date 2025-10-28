@@ -225,19 +225,6 @@ const Waiting: React.FC<WaitingProps> = ({
               required
             />
 
-            <select
-              value={ciudad}
-              onChange={(e) => onCiudadChange(e.target.value)}
-              className="input"
-              required
-            >
-              <option value="" disabled>
-                Selecciona tu ciudad
-              </option>
-              <option value="Bogotá">Bogotá</option>
-              <option value="Medellín">Medellín</option>
-            </select>
-
             {/* <button
               type="button"
               className="button"

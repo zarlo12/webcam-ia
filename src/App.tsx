@@ -92,6 +92,7 @@ function MainApp() {
             "https://proyectoshm.com/marco_pruebas/imagen/callback_v2.php"
           );
           const data = await response.json();
+          console.log("🚀 ~ MainApp ~ data:", data)
           // Si existe una imagen nueva, se actualiza el estado y se guarda en Firestore.
           if (
             data.img_url &&

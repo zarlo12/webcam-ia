@@ -137,7 +137,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
                 onChange={(e) => setSelectedCity(e.target.value)}
               >
                 <option value="" disabled>
-                  Ciudad
+                  Selecciona tu ciudad
                 </option>
                 <option value="Bogotá">Bogotá</option>
                 <option value="Medellín">Medellín</option>

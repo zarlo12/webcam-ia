@@ -124,7 +124,7 @@
 
   select {
     font-family: 'Bariol Regular', Arial, sans-serif;
-    width: 200px;
+    width: 334px;
     height: 57px;
     background: linear-gradient(to right, #112749, #112749);
     color: #ffffff;
@@ -132,7 +132,7 @@
     font-size: 25px;
     border: 4px solid #ffffff;
     border-radius: 31px;
-    text-align: center;
+    text-align: left;
     cursor: pointer;
     /* Quita el borde y el “outline” por defecto */
     outline: none;
@@ -141,10 +141,11 @@
     -moz-appearance: none; /* Para Firefox */
 
     box-sizing: border-box;
-    /* Centrar el texto */
+    /* Alinear el texto a la izquierda */
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    padding-left: 20px;
 
     /* Efectos de hover, focus y active iguales a los botones */
     &:hover {
@@ -208,6 +209,17 @@
   position: absolute;
   right: 43px;
   top: 54%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #fff;
+  font-size: 18px;
+}
+
+/* Flecha custom para el select de ciudad */
+.select-container .flecha {
+  position: absolute;
+  right: 58px;
+  top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
   color: #fff;

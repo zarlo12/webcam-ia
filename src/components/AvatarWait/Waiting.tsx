@@ -216,7 +216,7 @@ const Waiting: React.FC<WaitingProps> = ({
 
              <input
               type="email"
-              placeholder="Correo"
+              placeholder="Correo electrónico"
               value={email}
               onChange={(e) => onEmailChange(e.target.value)}
               className="input"

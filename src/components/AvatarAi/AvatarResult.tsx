@@ -28,6 +28,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
 }) => {
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string>(imageUrl);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isResetting, setIsResetting] = useState<boolean>(false);
   const hasUploadedRef = useRef(false);
 
   // Memoiza la función para evitar que cambie en cada render
@@ -66,6 +67,22 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
     [email, nombre, ciudad, formulario, consentimiento]
   );
 
+  // Función para manejar el reset con consulta automática
+  const handleReset = async () => {
+    setIsResetting(true);
+    try {
+      console.log("Consultando endpoint de limpieza...");
+      const response = await fetch("https://proyectoshm.com/marco_pruebas/imagen/clear_image_data_nutricia2.php");
+      const data = await response.json();
+      console.log("Respuesta del endpoint de limpieza:", data);
+    } catch (error) {
+      console.error("Error al consultar el endpoint de limpieza:", error);
+    } finally {
+      setIsResetting(false);
+      onReset(); // Llamar a la función original de reset
+    }
+  };
+
   useEffect(() => {
     if (!hasUploadedRef.current) {
       uploadMergedImage(imageUrl);
@@ -100,11 +117,11 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
             <button
               type="button"
               className="button"
-              onClick={onReset}
+              onClick={handleReset}
               style={{ width: "250px" }}
-              disabled={isLoading}
+              disabled={isLoading || isResetting}
             >
-              Generar nueva
+              {isResetting ? "Limpiando..." : "Generar nueva"}
             </button>
           </div>
         </div>

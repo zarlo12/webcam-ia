@@ -24,8 +24,8 @@ const MergeImage: React.FC<MergeImageProps> = ({
     caricatura: {
       scale: 0.8,
       marginRight: 0,
-      marginBottom: 0,
-      offsetX: 0,  // Ajuste adicional horizontal (negativo = más izquierda)
+      marginBottom: 45,
+      offsetX: -45,  // Ajuste adicional horizontal (negativo = más izquierda)
       offsetY: 0   // Ajuste adicional vertical (negativo = más arriba)
     },
     // Configuración para logo estilo realista (logoInferior2)

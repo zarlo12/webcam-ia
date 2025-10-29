@@ -64,7 +64,7 @@ const Waiting: React.FC<WaitingProps> = ({
   const errorCheckIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // API para verificar errores
-  const ERROR_CHECK_URL = "https://proyectoshm.com/marco_pruebas/imagen/check_error.php";
+  const ERROR_CHECK_URL = "https://proyectoshm.com/marco_pruebas/imagen/check_error_policia.php";
 
   // Función para verificar errores en la API
   const checkForErrors = async () => {

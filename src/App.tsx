@@ -7,7 +7,7 @@ import Policy from "./Policy";
 
 function MainApp() {
   useEffect(() => {
-    fetch("https://proyectoshm.com/marco_pruebas/imagen/clear_image_data_v2.php")
+    fetch("https://proyectoshm.com/marco_pruebas/imagen/clear_image_data_policia.php")
       .then((response) => response.json())
       .then((data) => {
         console.log("Clear WS :", data.message);
@@ -89,7 +89,7 @@ function MainApp() {
       interval = setInterval(async () => {
         try {
           const response = await fetch(
-            "https://proyectoshm.com/marco_pruebas/imagen/callback_v2.php"
+            "https://proyectoshm.com/marco_pruebas/imagen/callback_policia.php"
           );
           const data = await response.json();
           console.log("🚀 ~ MainApp ~ data:", data)

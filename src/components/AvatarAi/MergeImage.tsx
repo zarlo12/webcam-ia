@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import fondo from '../../assets/electrolux/fondo.png'
+import fondo from '../../assets/ban100/fondo.png'
 
 interface MergeImageProps {
   imageUrl: string; // URL de la imagen principal (avatar)
@@ -15,8 +15,8 @@ const MergeImage: React.FC<MergeImageProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // 🎯 CONSTANTES PARA AJUSTAR LA POSICIÓN Y TAMAÑO DEL AVATAR
-  const AVATAR_SCALE = 0.6;           // Tamaño del avatar (60% del tamaño original)
-  const AVATAR_MARGIN_BOTTOM = 0;    // Margen desde el borde inferior
+  const AVATAR_SCALE = 1.6;           // Tamaño del avatar (60% del tamaño original)
+  const AVATAR_MARGIN_BOTTOM = -80;    // Margen desde el borde inferior
   const AVATAR_HORIZONTAL_CENTER = true; // Centrar horizontalmente
 
   useEffect(() => {

@@ -51,24 +51,20 @@ interface WaitingProps {
 }
 
 const Waiting: React.FC<WaitingProps> = ({
-  caracteristicas,
-  comprar,
+
   email,
-  marca,
+
   name,
-  rangoEdad,
-  renovar,
+
   telephone,
   terms,
   aiImageReady,
   imageUrl,
-  onCaracteristicasChange,
-  onComprarChange,
+
   onEmailChange,
-  onMarcaChange,
+
   onNameChange,
-  onRangoEdadChange,
-  onRenovarChange,
+
   onTelephoneChange,
   onTermsChange,
   onContinue,

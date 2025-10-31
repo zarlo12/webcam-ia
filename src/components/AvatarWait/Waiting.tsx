@@ -167,68 +167,8 @@ const Waiting: React.FC<WaitingProps> = ({
               required
             />
 
-            <select
-              value={rangoEdad}
-              onChange={(e) => onRangoEdadChange(e.target.value)}
-              className="input"
-              required
-            >
-              <option value="">Rango de edad</option>
-              <option value="18-25">18-25</option>
-              <option value="26-35">26-35</option>
-              <option value="36-45">36-45</option>
-              <option value="46-55">46-55</option>
-              <option value="56+">56+</option>
-            </select>
+           
 
-            <select
-              value={caracteristicas}
-              onChange={(e) => onCaracteristicasChange(e.target.value)}
-              className="input"
-              required
-            >
-              <option value="">¿Qué característica buscas?</option>
-              <option value="cocina">Cocina</option>
-              <option value="lavado">Lavado</option>
-              <option value="refrigeracion">Refrigeración</option>
-              <option value="climatizacion">Climatización</option>
-            </select>
-
-            <select
-              value={renovar}
-              onChange={(e) => onRenovarChange(e.target.value)}
-              className="input"
-              required
-            >
-              <option value="">¿Qué quieres renovar?</option>
-              <option value="cocina">Cocina</option>
-              <option value="lavanderia">Lavandería</option>
-              <option value="hogar">Todo el hogar</option>
-            </select>
-
-            <select
-              value={comprar}
-              onChange={(e) => onComprarChange(e.target.value)}
-              className="input"
-              required
-            >
-              <option value="">¿Cuándo planeas comprar?</option>
-              <option value="inmediato">Inmediatamente</option>
-              <option value="1-3meses">En 1-3 meses</option>
-              <option value="6meses">En 6 meses</option>
-              <option value="1año">En 1 año</option>
-            </select>
-
-            <select
-              value={marca}
-              onChange={(e) => onMarcaChange(e.target.value)}
-              className="input"
-              required
-            >
-              <option value="">¿Conoces la marca Electrolux?</option>
-              <option value="si">Sí</option>
-              <option value="no">No</option>
-            </select>
 
             <div className="checkbox-container">
               <input
@@ -243,7 +183,7 @@ const Waiting: React.FC<WaitingProps> = ({
                   Consentimiento
                   <br />
                   <a
-                    href="https://www.electrolux.com.co/politica-de-privacidad" 
+                    href="https://www.ban100.com.co/politicas-de-tratamiento-de-datos" 
                     target="_blank"
                     className="linkColorVerde"
                   >

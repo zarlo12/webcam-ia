@@ -5,6 +5,12 @@ import WebcamScene from "../WebcamScene";
 import aiImageService from "../../services/aiImageService";
 import Swal from "sweetalert2";
 
+// Enum para el género
+enum Gender {
+  MALE = "male",
+  FEMALE = "female",
+}
+
 interface AvatarPhotoProps {
   onProcess: (email: string) => void;
   onAiImageReady: (imageUrl: string) => void;
@@ -18,6 +24,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   const [capturedImage, setCapturedImage] = useState<Blob | null>(null);
   const [capturedImageUrl, setCapturedImageUrl] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [selectedGender, setSelectedGender] = useState<Gender>(Gender.MALE);
   
   // REALISTIC = "realistic",
   // ARTISTIC = "artistic",
@@ -25,6 +32,18 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   // PROFESSIONAL = "professional",
   // VINTAGE = "vintage",
   const webcamRef = useRef<WebcamRef | null>(null);
+
+  // Función para obtener el prompt según el género seleccionadoe
+  const getPromptByGender = (gender: Gender): string => {
+    switch (gender) {
+      case Gender.MALE:
+        return "Dress him in an elegant, bright purple suit with a bluish undertone. Sparkling and full of glitter.";
+      case Gender.FEMALE:
+        return "Dress her in an elegant, bright purple suit with a bluish undertone. Sparkling and full of glitter.";
+      default:
+        return "";
+    }
+  };
 
   // Función para capturar la imagen desde el componente WebcamScene
   const handleCapture = async () => {
@@ -53,14 +72,19 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
     
     try {
       console.log("Procesando imagen con IA...");
+      console.log("Género seleccionado:", selectedGender);
+      
+      // Obtener el prompt según el género seleccionado
+      const genderPrompt = getPromptByGender(selectedGender);
+      console.log("Prompt generado:", genderPrompt);
       
       // Cambiar INMEDIATAMENTE a la pantalla de formulario sin esperar
       onProcess(email); // Pasa al formulario mientras la imagen se procesa en background
       
-      // Procesar la imagen en background
+      // Procesar la imagen en background con el prompt específico del género
       const result = await aiImageService.generateImageWithFormData(
         capturedImage,
-        'anime-style',
+        genderPrompt, // Usar el prompt específico del género
         '',
         "user-" + Date.now()
       );
@@ -151,6 +175,23 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
           </div>
 
           <div className="buttons-container">
+            {/* Selector de género */}
+            <div className="select-container">
+              <label htmlFor="gender-select" className="select-label">
+      
+              </label>
+              <select
+                id="gender-select"
+                value={selectedGender}
+                onChange={(e) => setSelectedGender(e.target.value as Gender)}
+                className="gender-select"
+              >
+                <option value={Gender.MALE}>👨 Hombre</option>
+                <option value={Gender.FEMALE}>👩 Mujer</option>
+              </select>
+              <span className="select-arrow">▼</span>
+            </div>
+
             {/* Selector de estilo de IA */}
             {/* <div className="select-container">
               <select

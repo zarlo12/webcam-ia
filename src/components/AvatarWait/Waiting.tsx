@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./Waiting.scss";
-import logo from "../../assets/electrolux/logo.png";
+import logo from "../../assets/ban100/logo.svg";
 
 import MergeImage from "../AvatarAi/MergeImage"; // Asegúrate de la ruta correcta
 
@@ -274,7 +274,7 @@ const Waiting: React.FC<WaitingProps> = ({
                 ? "Creando tu avatar..." 
                 : !mergedImage 
                   ? "Finalizando imagen..." 
-                  : "🎉 ¡Ver mi avatar!"
+                  : "¡Ver mi avatar!"
               }
             </button>
           </form>

@@ -39,10 +39,11 @@ class AIImageService {
       this.processingStatusUrl = `${baseUrl}/getProcessingStatus`;
     } else {
       // Production URLs https://generateaiimage-buybcovkna-uc.a.run.app
-      this.generateImageUrl = "https://generateaiimage-buybcovkna-uc.a.run.app";
-      this.healthCheckUrl = "https://healthcheck-buybcovkna-uc.a.run.app";
+      this.generateImageUrl =
+        "https://generateaiimage-buybcovkna-uc.a.run.app3";
+      this.healthCheckUrl = "https://healthcheck-buybcovkna-uc.a.run.app3";
       this.processingStatusUrl =
-        "https://getprocessingstatus-buybcovkna-uc.a.run.app";
+        "https://getprocessingstatus-buybcovkna-uc.a.run.app3";
     }
 
     console.log("🚀 AIImageService URLs:", {

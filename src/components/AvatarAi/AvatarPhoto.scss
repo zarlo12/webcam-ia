@@ -106,7 +106,6 @@
 .header {
   width: 100%;
   padding: 10px 0;
-  background-color: #011e41;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -115,8 +114,8 @@
 }
 
 .logo {
-  height: 146px;
-    margin-top: -12px; margin-left: -26px;
+  height: 104px;
+    margin-top: 28px; margin-left: -6px;
   position: relative;
   z-index: 3; /* Asegurar que el logo esté visible */
   // margin-right: -157px;
@@ -178,7 +177,7 @@
   select {
     width: 350px;
     height: 57px;
-    background: linear-gradient(to right, #041e50, #041e50);
+    background: linear-gradient(to right, #704de4, #704de4);
     color: #fff;
     font-weight: bold;
     font-size: 25px;
@@ -297,8 +296,8 @@ form {
   font-family: "Arial", "Helvetica", sans-serif;
   color: #ffffff;
   border-radius: 28px;        // radio grande para aspecto pill
-  border: 2px solid #efefef; // borde claro exterior #041e50
-  background: linear-gradient(#041e50, #041e50); // gradiente azul
+  border: 2px solid #efefef; // borde claro exterior #704de4
+  background: linear-gradient(#704de4, #704de4); // gradiente azul
   text-shadow: 0 1px 0 rgba(0,0,0,0.3);
   cursor: pointer;
   -webkit-appearance: none;
@@ -343,12 +342,12 @@ form {
   &:active {
     transform: translateY(1px);
     box-shadow: 0 3px 0 rgba(0,0,0,0.5);
-    background: linear-gradient(#d70000, #940000);
+    background: linear-gradient(#1f145d, #1f145d);
   }
 
   &:focus {
     outline: none;
-    box-shadow: 0 6px 0 rgba(0,0,0,0.45), 0 0 6px rgba(255,80,80,0.25);
+    box-shadow: 0 6px 0 rgba(0,0,0,0.45), 0 0 6px rgba(5, 9, 91, 0.25);
   }
 }
 
@@ -411,7 +410,7 @@ form {
 }
 .footerAlways {
   width: 100%;
-  background: linear-gradient(to right, #041e50, #041e50);
+  background: linear-gradient(to right, #704de4, #704de4);
   padding: 10px 0;
   display: flex;
   justify-content: center;

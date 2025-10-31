@@ -6,14 +6,7 @@ import Waiting from "./components/AvatarWait/Waiting";
 import Policy from "./Policy";
 
 function MainApp() {
-  useEffect(() => {
-    fetch("https://proyectoshm.com/marco_pruebas/imagen/clear_image_data.php")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Clear WS :", data.message);
-      })
-      .catch((error) => console.error("Error limpiando el archivo:", error));
-  }, []);
+
 
   // "photo": para mostrar AvatarPhoto.
   // "waiting": para mostrar la pantalla de espera.

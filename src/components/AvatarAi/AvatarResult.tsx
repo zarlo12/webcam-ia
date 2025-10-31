@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./AvatarPhoto.scss";
-import logo from "../../assets/electrolux/logo.png";
+import logo from "../../assets/ban100/logo.svg";
 
 import { storage, db } from "../../firebaseConfig";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
@@ -166,13 +166,13 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
                     className="avatar"
                     alt="Avatar generado"
                   />
-                </div>
-                <h2 className="subtitleResult">
+                </div> <br/><br/><br/>
+                {/* <h2 className="subtitleResult">
                   Comparte esta imagen 
                   <br />en Instagram y etiquétanos 
                   <br />
                   <div style={{ color: "#041e50" }}>@electrolux_co</div>
-                </h2>
+                </h2> */}
                 <button
                   type="button"
                   className="button btnResult"

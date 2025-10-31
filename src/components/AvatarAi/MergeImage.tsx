@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import fondo from '../../assets/ban100/fondo.png'
+import logosimg from '../../assets/ban100/logosimg.png'
 
 interface MergeImageProps {
   imageUrl: string; // URL de la imagen principal (avatar)
@@ -19,6 +20,11 @@ const MergeImage: React.FC<MergeImageProps> = ({
   const AVATAR_MARGIN_BOTTOM = -80;    // Margen desde el borde inferior
   const AVATAR_HORIZONTAL_CENTER = true; // Centrar horizontalmente
 
+  // 🎯 CONSTANTES PARA AJUSTAR LA POSICIÓN Y TAMAÑO DEL LOGO
+  const LOGO_SCALE = 0.9;             // Tamaño del logo
+  const LOGO_X = 115;                  // Posición X del logo
+  const LOGO_Y = 130;                  // Posición Y del logo
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -35,13 +41,14 @@ const MergeImage: React.FC<MergeImageProps> = ({
         img.src = src;
       });
 
-    console.log(`�️ Fusionando avatar con fondo de Electrolux`);
+    console.log(`🎨 Fusionando avatar con fondo de Electrolux + logo superior`);
 
     Promise.all([
       loadImage(fondo),      // fondo de Electrolux
-      loadImage(imageUrl)    // avatar del usuario
+      loadImage(imageUrl),   // avatar del usuario
+      loadImage(logosimg)    // logo superior
     ])
-      .then(([fondoImg, avatarImg]) => {
+      .then(([fondoImg, avatarImg, logoImg]) => {
         // Ajustamos el canvas al tamaño del fondo
         canvas.width = fondoImg.width;
         canvas.height = fondoImg.height;
@@ -69,6 +76,25 @@ const MergeImage: React.FC<MergeImageProps> = ({
         );
 
         console.log(`🎯 Avatar posicionado: (${Math.round(avatarX)}, ${Math.round(avatarY)}) - Tamaño: ${Math.round(avatarWidth)}x${Math.round(avatarHeight)}`);
+
+        // 🎨 DIBUJAR EL LOGO COMO CAPA SUPERIOR
+        const logoWidth = logoImg.width * LOGO_SCALE;
+        const logoHeight = logoImg.height * LOGO_SCALE;
+
+        // Posición simple del logo usando coordenadas directas
+        const logoX = LOGO_X;
+        const logoY = LOGO_Y;
+
+        // Dibujar el logo como capa superior
+        ctx.drawImage(
+          logoImg,
+          logoX,
+          logoY,
+          logoWidth,
+          logoHeight
+        );
+
+        console.log(`🏷️ Logo posicionado: (${Math.round(logoX)}, ${Math.round(logoY)}) - Tamaño: ${Math.round(logoWidth)}x${Math.round(logoHeight)}`);
 
         // Convertir a Data URL y pasar al callback
         const mergedDataUrl = canvas.toDataURL("image/png");

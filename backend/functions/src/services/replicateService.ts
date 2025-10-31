@@ -57,22 +57,22 @@ class ReplicateService {
         `original_${requestId}.jpg`
       );
 
-      // STEP 1: Add logo to the original image using multi-image-kontext-max
-      console.log(
-        `[${requestId}] Step 1: Adding logo with multi-image-kontext-max`
-      );
-      const logoImageUrl = await this.processWithMultiImageKontext(
-        originalImageUrl,
-        requestId
-      );
+      // STEP 1: Add logo to the original image using multi-image-kontext-max (DISABLED)
+      // console.log(
+      //   `[${requestId}] Step 1: Adding logo with multi-image-kontext-max`
+      // );
+      // const logoImageUrl = await this.processWithMultiImageKontext(
+      //   originalImageUrl,
+      //   requestId
+      // );
 
       // STEP 2: Convert the logo image to anime style using flux-kontext-pro
       console.log(
         `[${requestId}] Step 2: Processing with flux-kontext-pro for style conversion`
       );
       const styledImageUrl = await this.processWithFluxKontextPro(
-        logoImageUrl,
-        request.prompt || this.getDefaultPrompt(request.style),
+        originalImageUrl, // Using original image directly since step 1 is disabled
+        request.prompt || "",
         request.style
       );
 
@@ -92,7 +92,7 @@ class ReplicateService {
         requestId,
         debug: {
           originalImage: originalImageUrl,
-          step1_logo: logoImageUrl, // Step 1: Logo added
+          step1_logo: "disabled", // Step 1: Logo addition disabled
           step2_styled: styledImageUrl, // Step 2: Style converted
           step3_final: finalImageUrl, // Step 3: Background removed
         },
@@ -122,13 +122,13 @@ class ReplicateService {
   ): Promise<string> {
     // flux-kontext-pro parameters - optimizado para estilo cartoon
     const input = {
-      prompt: "anime-style",
+      prompt: prompt,
       input_image: imageUrl,
       aspect_ratio: "match_input_image", //9:16
       output_format: "png" as const,
       safety_tolerance: 5,
       prompt_upsampling: true, // Activado para mejorar interpretación del prompt
-      seed: 81276873,
+      // seed: 81276873,
     };
 
     console.log(
@@ -163,63 +163,7 @@ class ReplicateService {
   }
 
   /**
-   * STEP 2: Process image with multi-image-kontext-max to add logo
-   */
-  private async processWithMultiImageKontext(
-    styledImageUrl: string,
-    requestId: string
-  ): Promise<string> {
-    const input = {
-      seed: 1401721543,
-      prompt:
-        "Just make this change: put the logo (image logo and text) on the person's shirt in the photo.",
-      aspect_ratio: "1:1",
-      input_image_1: LOGO_URL, // Fixed logo URL
-      input_image_2: styledImageUrl, // Result from step 1
-      output_format: "png",
-      safety_tolerance: 2,
-    };
-
-    console.log(
-      "Processing with multi-image-kontext-max to add logo:",
-      REPLICATE_MODELS.MULTI_IMAGE_KONTEXT.model
-    );
-    console.log("Logo URL:", LOGO_URL);
-    console.log("Styled image URL:", styledImageUrl);
-
-    const output = await retryWithBackoff(
-      async () => {
-        return await this.initReplicate().run(
-          `${REPLICATE_MODELS.MULTI_IMAGE_KONTEXT.model}` as any,
-          {
-            input,
-          }
-        );
-      },
-      3,
-      2000
-    );
-
-    // Handle the output - multi-image-kontext-max returns a FileOutput object
-    let imageUrl: string;
-    if (output && typeof output === "object" && "url" in output) {
-      imageUrl = (output as any).url();
-    } else if (typeof output === "string") {
-      imageUrl = output;
-    } else if (Array.isArray(output)) {
-      imageUrl = output[0] as string;
-    } else {
-      throw new Error(
-        "Unexpected output format from multi-image-kontext-max API"
-      );
-    }
-
-    // Download and upload to our storage
-    return await this.downloadAndUploadImage(imageUrl, `logo_${requestId}`);
-  }
-
-  /**
-   * STEP 3: Process image with BiRefNet to remove background
+   * STEP 3: Process image with BiRefNet to remove background.
    */
   private async processWithBiRefNet(
     logoImageUrl: string,

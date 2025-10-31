@@ -11,12 +11,12 @@ setGlobalOptions({
   region: "us-central1",
 });
 
-// Export the functions
+// Export the functions with new names for webcam-ia project
 export {
-  generateAIImage,
-  getProcessingStatus,
-  healthCheck,
-  sendToVTEX,
+  generateAIImage as webcamGenerateAI,
+  getProcessingStatus as webcamProcessingStatus,
+  healthCheck as webcamHealthCheck,
+  sendToVTEX as webcamSendToVTEX,
 } from "./controllers/imageController";
 
 // Legacy endpoint for backwards compatibility (if needed)

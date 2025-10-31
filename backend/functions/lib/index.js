@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.processWebcamImage = exports.sendToVTEX = exports.healthCheck = exports.getProcessingStatus = exports.generateAIImage = void 0;
+exports.processWebcamImage = exports.webcamSendToVTEX = exports.webcamHealthCheck = exports.webcamProcessingStatus = exports.webcamGenerateAI = void 0;
 const dotenv = __importStar(require("dotenv"));
 // Load environment variables
 dotenv.config();
@@ -43,12 +43,12 @@ const v2_1 = require("firebase-functions/v2");
     maxInstances: 10,
     region: "us-central1",
 });
-// Export the functions
+// Export the functions with new names for webcam-ia project
 var imageController_1 = require("./controllers/imageController");
-Object.defineProperty(exports, "generateAIImage", { enumerable: true, get: function () { return imageController_1.generateAIImage; } });
-Object.defineProperty(exports, "getProcessingStatus", { enumerable: true, get: function () { return imageController_1.getProcessingStatus; } });
-Object.defineProperty(exports, "healthCheck", { enumerable: true, get: function () { return imageController_1.healthCheck; } });
-Object.defineProperty(exports, "sendToVTEX", { enumerable: true, get: function () { return imageController_1.sendToVTEX; } });
+Object.defineProperty(exports, "webcamGenerateAI", { enumerable: true, get: function () { return imageController_1.generateAIImage; } });
+Object.defineProperty(exports, "webcamProcessingStatus", { enumerable: true, get: function () { return imageController_1.getProcessingStatus; } });
+Object.defineProperty(exports, "webcamHealthCheck", { enumerable: true, get: function () { return imageController_1.healthCheck; } });
+Object.defineProperty(exports, "webcamSendToVTEX", { enumerable: true, get: function () { return imageController_1.sendToVTEX; } });
 // Legacy endpoint for backwards compatibility (if needed)
 var imageController_2 = require("./controllers/imageController");
 Object.defineProperty(exports, "processWebcamImage", { enumerable: true, get: function () { return imageController_2.generateAIImage; } });

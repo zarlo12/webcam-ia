@@ -33,12 +33,18 @@ class ReplicateService {
             const optimizedBuffer = await (0, utils_1.optimizeImageForAI)(imageBuffer);
             // Upload original image to storage for processing
             const originalImageUrl = await (0, storage_1.uploadToStorage)(optimizedBuffer, "original-images", `original_${requestId}.jpg`);
-            // STEP 1: Add logo to the original image using multi-image-kontext-max
-            console.log(`[${requestId}] Step 1: Adding logo with multi-image-kontext-max`);
-            const logoImageUrl = await this.processWithMultiImageKontext(originalImageUrl, requestId);
+            // STEP 1: Add logo to the original image using multi-image-kontext-max (DISABLED)
+            // console.log(
+            //   `[${requestId}] Step 1: Adding logo with multi-image-kontext-max`
+            // );
+            // const logoImageUrl = await this.processWithMultiImageKontext(
+            //   originalImageUrl,
+            //   requestId
+            // );
             // STEP 2: Convert the logo image to anime style using flux-kontext-pro
             console.log(`[${requestId}] Step 2: Processing with flux-kontext-pro for style conversion`);
-            const styledImageUrl = await this.processWithFluxKontextPro(logoImageUrl, request.prompt || this.getDefaultPrompt(request.style), request.style);
+            const styledImageUrl = await this.processWithFluxKontextPro(originalImageUrl, // Using original image directly since step 1 is disabled
+            request.prompt || "", request.style);
             // STEP 3: Remove background using BiRefNet
             console.log(`[${requestId}] Step 3: Removing background with BiRefNet`);
             const finalImageUrl = await this.processWithBiRefNet(styledImageUrl, requestId);
@@ -50,7 +56,7 @@ class ReplicateService {
                 requestId,
                 debug: {
                     originalImage: originalImageUrl,
-                    step1_logo: logoImageUrl, // Step 1: Logo added
+                    step1_logo: "disabled", // Step 1: Logo addition disabled
                     step2_styled: styledImageUrl, // Step 2: Style converted
                     step3_final: finalImageUrl, // Step 3: Background removed
                 },
@@ -73,13 +79,13 @@ class ReplicateService {
     async processWithFluxKontextPro(imageUrl, prompt, style) {
         // flux-kontext-pro parameters - optimizado para estilo cartoon
         const input = {
-            prompt: "anime-style",
+            prompt: prompt,
             input_image: imageUrl,
             aspect_ratio: "match_input_image", //9:16
             output_format: "png",
             safety_tolerance: 5,
             prompt_upsampling: true, // Activado para mejorar interpretación del prompt
-            seed: 81276873,
+            // seed: 81276873,
         };
         console.log("Processing with flux-kontext-pro optimized for cartoon style:", config_1.REPLICATE_MODELS.FLUX_KONTEXT_PRO.model);
         console.log("Using cartoon illustration prompt:", "anime-style");
@@ -101,45 +107,7 @@ class ReplicateService {
         throw new Error("Unexpected output format from flux-kontext-pro API");
     }
     /**
-     * STEP 2: Process image with multi-image-kontext-max to add logo
-     */
-    async processWithMultiImageKontext(styledImageUrl, requestId) {
-        const input = {
-            seed: 1401721543,
-            prompt: "Just make this change: put the logo (image logo and text) on the person's shirt in the photo.",
-            aspect_ratio: "1:1",
-            input_image_1: config_1.LOGO_URL, // Fixed logo URL
-            input_image_2: styledImageUrl, // Result from step 1
-            output_format: "png",
-            safety_tolerance: 2,
-        };
-        console.log("Processing with multi-image-kontext-max to add logo:", config_1.REPLICATE_MODELS.MULTI_IMAGE_KONTEXT.model);
-        console.log("Logo URL:", config_1.LOGO_URL);
-        console.log("Styled image URL:", styledImageUrl);
-        const output = await (0, utils_1.retryWithBackoff)(async () => {
-            return await this.initReplicate().run(`${config_1.REPLICATE_MODELS.MULTI_IMAGE_KONTEXT.model}`, {
-                input,
-            });
-        }, 3, 2000);
-        // Handle the output - multi-image-kontext-max returns a FileOutput object
-        let imageUrl;
-        if (output && typeof output === "object" && "url" in output) {
-            imageUrl = output.url();
-        }
-        else if (typeof output === "string") {
-            imageUrl = output;
-        }
-        else if (Array.isArray(output)) {
-            imageUrl = output[0];
-        }
-        else {
-            throw new Error("Unexpected output format from multi-image-kontext-max API");
-        }
-        // Download and upload to our storage
-        return await this.downloadAndUploadImage(imageUrl, `logo_${requestId}`);
-    }
-    /**
-     * STEP 3: Process image with BiRefNet to remove background
+     * STEP 3: Process image with BiRefNet to remove background.
      */
     async processWithBiRefNet(logoImageUrl, requestId) {
         const input = {

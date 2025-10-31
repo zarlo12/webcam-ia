@@ -40,10 +40,10 @@ class AIImageService {
     } else {
       // Production URLs https://generateaiimage-buybcovkna-uc.a.run.app
       this.generateImageUrl =
-        "https://generateaiimage-buybcovkna-uc.a.run.app3";
-      this.healthCheckUrl = "https://healthcheck-buybcovkna-uc.a.run.app3";
+        "https://webcamgenerateai-buybcovkna-uc.a.run.app";
+      this.healthCheckUrl = "https://webcamhealthcheck-buybcovkna-uc.a.run.app";
       this.processingStatusUrl =
-        "https://getprocessingstatus-buybcovkna-uc.a.run.app3";
+        "https://webcamprocessingstatus-buybcovkna-uc.a.run.app";
     }
 
     console.log("🚀 AIImageService URLs:", {

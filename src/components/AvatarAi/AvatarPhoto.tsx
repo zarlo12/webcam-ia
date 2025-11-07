@@ -37,9 +37,9 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   const getPromptByGender = (gender: Gender): string => {
     switch (gender) {
       case Gender.MALE:
-        return "Dress him in an elegant, bright purple suit with a bluish undertone. Sparkling and full of glitter.";
+        return "Photorealistic Hollywood headshot of a man wearing an elegant bright purple suit with a bluish undertone, suit subtly sparkling. Rembrandt + softbox studio lighting, 85mm f/1.8, ISO 100, professional beauty retouch (frequency separation, natural skin smoothing, pores retained), razor-sharp eyes and lashes, high-frequency detail on hair, cinematic teal-orange color grade, high dynamic range, subtle film grain, slight vignette, shallow DOF, photorealistic, ultra-detailed.";
       case Gender.FEMALE:
-        return "Dress her in an elegant, bright purple suit with a bluish undertone. Sparkling and full of glitter.";
+        return "Cinematic Hollywood beauty portrait of a glamorous woman in a bright purple glitter suit with a bluish undertone, subtle sparkle on fabric. Studio lighting with softbox and reflector fill, 85mm lens f/1.8, shallow DOF, professional beauty retouch (perfect yet natural skin, pores retained), glowing highlights on cheekbones, glossy lips, smokey eyes, cinematic teal-orange color grade, HDR, film grain, ultra-detailed photorealistic look.";
       default:
         return "";
     }

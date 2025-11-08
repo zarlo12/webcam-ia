@@ -1,0 +1,265 @@
+.led-screen {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
+  color: white;
+  position: relative;
+  overflow: hidden;
+
+  // Animación de brillo de LED
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent
+    );
+    animation: ledScan 3s infinite;
+  }
+}
+
+@keyframes ledScan {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.screen-header {
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 2px solid #00ff88;
+  text-align: center;
+
+  h2 {
+    margin: 0;
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #00ff88;
+    text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88;
+  }
+}
+
+.screen-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.loading-state,
+.empty-state {
+  text-align: center;
+
+  .spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-top-color: #00ff88;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+  }
+
+  p {
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.image-display {
+  width: 100%;
+  max-width: 800px;
+  text-align: center;
+  position: relative;
+
+  .led-image {
+    width: 100%;
+    height: auto;
+    max-height: 70vh;
+    object-fit: contain;
+    border-radius: 20px;
+    box-shadow: 0 10px 50px rgba(0, 255, 136, 0.3);
+    border: 3px solid #00ff88;
+  }
+
+  .image-info {
+    margin-top: 30px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 15px;
+    border: 2px solid rgba(0, 255, 136, 0.3);
+
+    h3 {
+      margin: 0 0 10px 0;
+      font-size: 2rem;
+      color: #00ff88;
+      text-shadow: 0 0 10px #00ff88;
+    }
+
+    p {
+      margin: 0;
+      font-size: 1.3rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+  }
+
+  // 🔄 Indicador de precarga
+  .preloading-indicator {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .mini-spinner {
+      width: 30px;
+      height: 30px;
+      border: 3px solid rgba(255, 255, 255, 0.2);
+      border-top-color: #00ff88;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+  }
+}
+
+.fade-in {
+  animation: fadeInSmooth 0.8s ease-in-out;
+}
+
+@keyframes fadeInSmooth {
+  from {
+    opacity: 0;
+    transform: scale(0.98) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.screen-footer {
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.3);
+  border-top: 2px solid #00ff88;
+  text-align: center;
+
+  .screen-badge {
+    display: inline-block;
+    padding: 10px 30px;
+    background: linear-gradient(135deg, #00ff88 0%, #00cc70 100%);
+    color: #1e1e2e;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border-radius: 25px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    box-shadow: 0 5px 15px rgba(0, 255, 136, 0.4);
+  }
+}
+
+// Colores específicos por pantalla
+.screen-1 {
+  .screen-header h2,
+  .screen-footer .screen-badge {
+    color: #ff0080;
+    border-color: #ff0080;
+    text-shadow: 0 0 10px #ff0080, 0 0 20px #ff0080;
+  }
+
+  .led-image {
+    border-color: #ff0080;
+    box-shadow: 0 10px 50px rgba(255, 0, 128, 0.3);
+  }
+
+  .screen-footer .screen-badge {
+    background: linear-gradient(135deg, #ff0080 0%, #cc0066 100%);
+    box-shadow: 0 5px 15px rgba(255, 0, 128, 0.4);
+  }
+}
+
+.screen-2 {
+  .screen-header h2,
+  .screen-footer .screen-badge {
+    color: #00d4ff;
+    border-color: #00d4ff;
+    text-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff;
+  }
+
+  .led-image {
+    border-color: #00d4ff;
+    box-shadow: 0 10px 50px rgba(0, 212, 255, 0.3);
+  }
+
+  .screen-footer .screen-badge {
+    background: linear-gradient(135deg, #00d4ff 0%, #00a8cc 100%);
+    box-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
+  }
+}
+
+.screen-3 {
+  .screen-header h2,
+  .screen-footer .screen-badge {
+    color: #ffd700;
+    border-color: #ffd700;
+    text-shadow: 0 0 10px #ffd700, 0 0 20px #ffd700;
+  }
+
+  .led-image {
+    border-color: #ffd700;
+    box-shadow: 0 10px 50px rgba(255, 215, 0, 0.3);
+  }
+
+  .screen-footer .screen-badge {
+    background: linear-gradient(135deg, #ffd700 0%, #ccac00 100%);
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .screen-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .image-display {
+    .led-image {
+      max-height: 50vh;
+    }
+
+    .image-info h3 {
+      font-size: 1.5rem;
+    }
+
+    .image-info p {
+      font-size: 1rem;
+    }
+  }
+}

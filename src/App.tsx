@@ -4,10 +4,13 @@ import AvatarPhoto from "./components/AvatarAi/AvatarPhoto";
 import AvatarResult from "./components/AvatarAi/AvatarResult";
 import Waiting from "./components/AvatarWait/Waiting";
 import Policy from "./Policy";
+import AdminPanel from "./components/Admin/AdminPanel";
+import LEDScreensContainer from "./components/LEDScreens/LEDScreensContainer";
+import LEDScreen from "./components/LEDScreens/LEDScreen";
 
 function MainApp() {
   useEffect(() => {
-    fetch("https://proyectoshm.com/marco_pruebas/imagen/clear_image_data.php")
+    fetch("https://proyectoshm.com/marco_pruebas/imagen/clear_image_data_0.php")
       .then((response) => response.json())
       .then((data) => {
         console.log("Clear WS :", data.message);
@@ -81,7 +84,7 @@ function MainApp() {
       interval = setInterval(async () => {
         try {
           const response = await fetch(
-            "https://proyectoshm.com/marco_pruebas/imagen/callback.php"
+            "https://proyectoshm.com/marco_pruebas/imagen/callback_0.php"
           );
           const data = await response.json();
           // Si existe una imagen nueva, se actualiza el estado y se guarda en Firestore.
@@ -150,6 +153,11 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<MainApp />} />
+      <Route path="/admin-led" element={<AdminPanel />} />
+      <Route path="/led-screens" element={<LEDScreensContainer />} />
+      <Route path="/led-screen/1" element={<LEDScreen screenNumber={1} />} />
+      <Route path="/led-screen/2" element={<LEDScreen screenNumber={2} />} />
+      <Route path="/led-screen/3" element={<LEDScreen screenNumber={3} />} />
     </Routes>
   );
 }

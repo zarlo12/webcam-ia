@@ -16,7 +16,7 @@ const MergeImage: React.FC<MergeImageProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // 🎯 CONSTANTES PARA AJUSTAR LA POSICIÓN Y TAMAÑO DEL AVATAR
-  const AVATAR_SCALE = 1.4;           // Tamaño del avatar (60% del tamaño original)
+  const AVATAR_SCALE = 1.2;           // Tamaño del avatar (60% del tamaño original)
   const AVATAR_MARGIN_BOTTOM = -80;    // Margen desde el borde inferior
   const AVATAR_HORIZONTAL_CENTER = true; // Centrar horizontalmente
 

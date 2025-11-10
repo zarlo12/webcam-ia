@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
-import fondo from '../../assets/ban100/fondo.png'
-import logosimg from '../../assets/ban100/logosimg.png'
+import fondo from '../../assets/claro/fondo1.jpg'
+import logosimg from '../../assets/claro/logo.png'
 
 interface MergeImageProps {
   imageUrl: string; // URL de la imagen principal (avatar)
@@ -21,9 +21,9 @@ const MergeImage: React.FC<MergeImageProps> = ({
   const AVATAR_HORIZONTAL_CENTER = true; // Centrar horizontalmente
 
   // 🎯 CONSTANTES PARA AJUSTAR LA POSICIÓN Y TAMAÑO DEL LOGO
-  const LOGO_SCALE = 0.9;             // Tamaño del logo
-  const LOGO_X = 115;                  // Posición X del logo
-  const LOGO_Y = 130;                  // Posición Y del logo
+  const LOGO_SCALE = 0.1;             // Tamaño del logo
+  const LOGO_X = 1450;                  // Posición X del logo
+  const LOGO_Y = 250;                  // Posición Y del logo
 
   useEffect(() => {
     const canvas = canvasRef.current;

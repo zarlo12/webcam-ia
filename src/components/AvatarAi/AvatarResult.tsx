@@ -135,18 +135,21 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
                 <div className="loading-spinner" style={{
                   width: '60px',
                   height: '60px',
-                  border: '4px solid #f3f3f3',
-                  borderTop: '4px solid #007bff',
+                  border: '4px solid rgba(255, 215, 0, 0.2)',
+                  borderTop: '4px solid #FFD700',
                   borderRadius: '50%',
                   animation: 'spin 1s linear infinite',
-                  marginBottom: '20px'
+                  marginBottom: '20px',
+                  boxShadow: '0 0 20px rgba(255, 215, 0, 0.5)'
                 }}></div>
                 <p style={{
-                  color: '#333',
-                  fontSize: '18px',
-                  fontWeight: '500',
+                  color: '#FFD700',
+                  fontSize: '28px',
+                  fontWeight: '800',
                   textAlign: 'center',
-                  margin: '0'
+                  margin: '0',
+                  textShadow: '0 3px 6px rgba(196, 30, 58, 0.6), 0 0 15px rgba(255, 215, 0, 0.4)',
+                  letterSpacing: '1px'
                 }}>
                   {loadingMessage}
                 </p>

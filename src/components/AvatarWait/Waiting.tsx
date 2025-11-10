@@ -179,7 +179,7 @@ const Waiting: React.FC<WaitingProps> = ({
                   Consentimiento
                   <br />
                   <a
-                    href="https://www.ban100.com.co/politicas-de-tratamiento-de-datos" 
+                    href="https://empresasclaro.com.co/politica-de-privacidad%EF%BF%BC/" 
                     target="_blank"
                     className="linkColorVerde"
                   >

@@ -125,7 +125,7 @@ const Waiting: React.FC<WaitingProps> = ({
             </div>
           )}
 
-          {!aiImageReady && (
+          {/* {!aiImageReady && (
             <div className="avatar-container-wait">
               <div className="loading-spinner"></div>
               <p className="waiting-text">
@@ -133,7 +133,7 @@ const Waiting: React.FC<WaitingProps> = ({
                 
               </p>
             </div>
-          )}
+          )} */}
 
           <form className="waiting-form">
             <input

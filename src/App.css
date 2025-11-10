@@ -6,8 +6,9 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  max-width: none; /* Quita la limitación de 1280px */
+  max-width: none;
   padding: 0;
+  background: linear-gradient(135deg, #0a4d2e 0%, #165b33 50%, #0a4d2e 100%);
 }
 
 .logo {
@@ -15,9 +16,10 @@
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
+  filter: drop-shadow(0 4px 10px rgba(255, 215, 0, 0.4));
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+  filter: drop-shadow(0 6px 15px rgba(255, 215, 0, 0.6));
 }
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
@@ -40,6 +42,10 @@
 
 .card {
   padding: 2em;
+  /* background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 0 3px #ffd700;
+  border: 2px solid #c41e3a; */
 }
 
 .read-the-docs {

@@ -1,0 +1,283 @@
+/* ========================================
+   🎄 EFECTOS NAVIDEÑOS ADICIONALES 🎄
+   ======================================== */
+
+/* Efecto de luces navideñas parpadeantes */
+@keyframes christmas-lights {
+  0%,
+  100% {
+    text-shadow: 0 0 10px #ffd700, 0 0 20px #ffd700, 0 0 30px #c41e3a;
+  }
+  25% {
+    text-shadow: 0 0 15px #c41e3a, 0 0 25px #c41e3a, 0 0 35px #ffd700;
+  }
+  50% {
+    text-shadow: 0 0 10px #165b33, 0 0 20px #165b33, 0 0 30px #ffd700;
+  }
+  75% {
+    text-shadow: 0 0 15px #ffd700, 0 0 25px #ffd700, 0 0 35px #c41e3a;
+  }
+}
+
+/* Efecto de brillo dorado */
+@keyframes golden-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 40px rgba(255, 215, 0, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 215, 0, 0.6);
+  }
+}
+
+/* Efecto de estrellas brillantes */
+@keyframes starshine {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2) rotate(180deg);
+  }
+}
+
+/* Efecto de nieve acumulándose */
+.snow-accumulation {
+  position: relative;
+}
+
+.snow-accumulation::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.6) 50%,
+    transparent 100%
+  );
+  border-radius: 0 0 10px 10px;
+  box-shadow: inset 0 -2px 4px rgba(255, 255, 255, 0.5);
+}
+
+/* Clase para textos con efecto navideño */
+.christmas-text {
+  background: linear-gradient(135deg, #c41e3a 0%, #ffd700 50%, #165b33 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+  animation: christmas-gradient 3s ease infinite;
+}
+
+@keyframes christmas-gradient {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Borde animado navideño */
+.christmas-border {
+  position: relative;
+  border: 3px solid transparent;
+  background: linear-gradient(white, white) padding-box,
+    linear-gradient(135deg, #c41e3a, #ffd700, #165b33, #c41e3a) border-box;
+  animation: christmas-border-rotate 3s linear infinite;
+  background-size: 200% 200%;
+}
+
+@keyframes christmas-border-rotate {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+/* Efecto de confeti navideño */
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.confetti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background: #ffd700;
+  animation: confetti-fall 3s linear infinite;
+  z-index: 1000;
+}
+
+.confetti:nth-child(2n) {
+  background: #c41e3a;
+}
+.confetti:nth-child(3n) {
+  background: #165b33;
+}
+.confetti:nth-child(4n) {
+  background: #ffffff;
+}
+
+/* Efecto de escarcha (frost) */
+.frost-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.frost-effect::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 45%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0.3) 55%,
+    transparent 100%
+  );
+  animation: frost-sweep 3s ease-in-out infinite;
+}
+
+@keyframes frost-sweep {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Campanas navideñas */
+@keyframes bell-ring {
+  0%,
+  100% {
+    transform: rotate(-10deg);
+  }
+  25% {
+    transform: rotate(10deg);
+  }
+  50% {
+    transform: rotate(-10deg);
+  }
+  75% {
+    transform: rotate(10deg);
+  }
+}
+
+.christmas-bell {
+  display: inline-block;
+  animation: bell-ring 2s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+/* Guirnalda decorativa superior */
+.garland-top {
+  position: relative;
+  padding-top: 30px;
+}
+
+.garland-top::before {
+  content: "🎄 ⭐ 🎁 ⭐ 🎄 ⭐ 🎁 ⭐ 🎄";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 20px;
+  letter-spacing: 10px;
+  animation: garland-sway 3s ease-in-out infinite;
+}
+
+@keyframes garland-sway {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Efecto de "regalo envuelto" para botones */
+.gift-wrap-button {
+  position: relative;
+  background: repeating-linear-gradient(
+    90deg,
+    #c41e3a 0px,
+    #c41e3a 20px,
+    #ffd700 20px,
+    #ffd700 25px,
+    #c41e3a 25px,
+    #c41e3a 45px
+  );
+}
+
+.gift-wrap-button::after {
+  content: "🎀";
+  position: absolute;
+  top: -15px;
+  right: -10px;
+  font-size: 30px;
+  animation: bow-bounce 1s ease-in-out infinite;
+}
+
+@keyframes bow-bounce {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(10deg);
+  }
+}
+
+/* Efecto de árbol de Navidad brillante */
+.christmas-tree-glow {
+  filter: drop-shadow(0 0 10px #ffd700) drop-shadow(0 0 20px #c41e3a)
+    drop-shadow(0 0 30px #165b33);
+  animation: tree-glow-pulse 2s ease-in-out infinite;
+}
+
+@keyframes tree-glow-pulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 10px #ffd700) drop-shadow(0 0 20px #c41e3a)
+      drop-shadow(0 0 30px #165b33);
+  }
+  50% {
+    filter: drop-shadow(0 0 20px #ffd700) drop-shadow(0 0 30px #c41e3a)
+      drop-shadow(0 0 40px #165b33);
+  }
+}
+
+/* Hover especial navideño para cards */
+.christmas-card-hover {
+  transition: all 0.3s ease;
+}
+
+.christmas-card-hover:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 15px 40px rgba(196, 30, 58, 0.5), 0 0 0 4px #ffd700,
+    0 0 20px rgba(255, 215, 0, 0.6), inset 0 2px 20px rgba(255, 215, 0, 0.3);
+}

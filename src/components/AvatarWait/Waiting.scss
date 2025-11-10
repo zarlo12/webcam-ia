@@ -7,42 +7,118 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  // align-items: center;
   justify-content: center;
-  /* Fondo con división curveada */
+  /* Fondo navideño festivo */
   background: linear-gradient(
     to bottom,
-    #e6e6e6 0%,
-    #e6e6e6 45%,
-    #dedede 55%,
-    #dedede 100%
+    #0a4d2e 0%,
+    #165B33 30%,
+    #2d8659 50%,
+    #165B33 70%,
+    #0a4d2e 100%
   );
-  /* Agregar la curva usando una imagen SVG como overlay */
   position: relative;
   color: white;
-  overflow: hidden; /* Evita scroll innecesario */
+  overflow: hidden;
   justify-content: flex-start;
   
-  /* Pseudo-elemento para la división curveada perfecta - INVERTIDA */
-  &::before {
-    content: '';
-    position: absolute;
-    top: 45%;
-    left: 0;
-    width: 100%;
-    height: 10%;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0 Q600,120 1200,0 L1200,120 L0,120 Z' fill='%23dedede'/%3E%3C/svg%3E") no-repeat;
-    background-size: 100% 100%;
-    background-position: center;
-    z-index: 0;
-  }
-  
-  /* Asegurar que el contenido esté por encima de la curva */
+  /* Asegurar que el contenido esté por encima de la nieve */
   > * {
     position: relative;
-    z-index: 1;
+    z-index: 2;
   }
+}
 
+/* Animación simple de nieve cayendo verticalmente */
+@keyframes snowfall-simple {
+  0% {
+    transform: translateY(-10vh);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh);
+    opacity: 0;
+  }
+}
+
+/* Animación infinita de nieve cayendo */
+@keyframes snowfall-infinite {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+@keyframes snowfall-infinite-fast {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+@keyframes snowfall-fast {
+  0% {
+    transform: translateY(-10vh);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh);
+    opacity: 0;
+  }
+}
+
+/* Copos de nieve reales - capa 1 */
+.waiting-container::before {
+  content: '❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄';
+  position: absolute;
+  top: -100px;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  font-size: 30px;
+  color: white;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  line-height: 150px;
+  letter-spacing: 80px;
+  animation: snowfall-infinite 12s linear infinite;
+  pointer-events: none;
+  opacity: 0.9;
+  z-index: 1;
+}
+
+/* Copos de nieve reales - capa 2 (más rápidos) */
+.waiting-container::after {
+  content: '❅ ❅ ❅ ❅ ❅ ❅ ❅ ❅ ❅ ❅ ❅ ❅ ❅ ❅ ❅ ❅ ❅ ❅';
+  position: absolute;
+  top: -150px;
+  left: 50px;
+  width: 200%;
+  height: 100%;
+  font-size: 25px;
+  color: white;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+  line-height: 180px;
+  letter-spacing: 100px;
+  animation: snowfall-infinite-fast 8s linear infinite;
+  pointer-events: none;
+  opacity: 0.85;
+  z-index: 1;
 }
 
 
@@ -50,13 +126,18 @@
   color: #041e50;
 }
 
-/* Barra roja superior */
+/* Barra superior verde navideño */
 .header-bar {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 10px 0;
+  background: linear-gradient(135deg, #165B33 0%, #0a4d2e 100%);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border-bottom: 4px solid #f91b00;
+  z-index: 3;
 }
 
 /* Logo Scotia (ajusta el tamaño a tu gusto) */
@@ -66,52 +147,61 @@
     // margin-right: -157px;
 }
 
-/* Tarjeta central */
+/* Tarjeta central navideña */
 .waiting-card {
-      margin-top: -320px;
-  max-width: 400px;
+  margin-top: -320px;
+  max-width: 450px;
   width: 90%;
-  //margin: 20px auto; /* Centra horizontalmente */
   text-align: center;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 40px 30px;
+  border-radius: 30px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3),
+              0 0 0 3px #FFD700,
+              inset 0 2px 20px rgba(255, 215, 0, 0.2);
+  border: 2px solid #C41E3A;
 }
 
 /* Subtítulo "Avatar IA" */
 .subtitle {
-  font-size: 24px;
-  color: #282828;
+  font-size: 28px;
+  color: #C41E3A;
   font-weight: bold;
   margin: 15px 0;
+  text-shadow: 0 2px 4px rgba(196, 30, 58, 0.3);
 }
 
 .subtitleResult {
-
-  font-size: 21px;
-  color: #282828;
+  font-size: 24px;
+  color: #165B33;
   font-weight: bold;
   margin: 50px 0;
+  text-shadow: 0 2px 4px rgba(22, 91, 51, 0.3);
 }
 
 /* Texto de espera */
 .waiting-text {
-  color: #282828;
+  color: #165B33;
   font-size: 35px;
   font-weight: 700;
   line-height: 1.3;
   margin-bottom: 30px;
+  text-shadow: 0 2px 4px rgba(22, 91, 51, 0.2);
 }
 
 /* Cuando la imagen está lista */
 .subtitle-wait {
-  color: #282828;
-  font-size: 20px;
+  color: #165B33;
+  font-size: 22px;
   font-weight: 600;
   margin-bottom: 10px;
   margin-top: 10px;
+  text-shadow: 0 1px 3px rgba(22, 91, 51, 0.2);
 }
 
 .ready-text {
-  color: #555;
-  font-size: 14px;
+  color: #666;
+  font-size: 16px;
   margin-bottom: 20px;
 }
 
@@ -122,116 +212,146 @@
   align-items: center;
 }
 
-/* Inputs redondeados con fondo blanco semitransparente */ 
+/* Inputs navideños */ 
 .input {
   width: 100%;
-  max-width: 300px;
+  max-width: 320px;
   margin: 10px 0;
-  padding: 12px;
-  border: 2px solid #041e50; /* Contorno azul */
+  padding: 14px 20px;
+  border: 3px solid #FFD700;
   border-radius: 25px;
-  background-color: rgba(255, 255, 255, 0.5);
-  color: #000000;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 250, 240, 0.95) 100%);
+  color: #165B33;
   font-size: 16px;
+  font-weight: 600;
   outline: none;
-  text-align: center; /* Centra el texto y placeholder horizontalmente */
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(196, 30, 58, 0.2),
+              inset 0 2px 5px rgba(255, 215, 0, 0.1);
+  transition: all 0.3s ease;
 
-  /* Placeholder en negro, centrado */
+  /* Placeholder en verde navideño */
   &::placeholder {
-    color: #000000;
-    opacity: 0.7;
+    color: rgba(22, 91, 51, 0.6);
+    opacity: 1;
     text-align: center;
+    font-weight: 500;
   }
 
   /* Efecto hover */
   &:hover {
-    background-color: rgba(255, 255, 255, 0.7);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 250, 240, 1) 100%);
+    box-shadow: 0 6px 20px rgba(196, 30, 58, 0.3),
+                inset 0 2px 8px rgba(255, 215, 0, 0.2);
+    border-color: #C41E3A;
   }
 
   /* Efecto focus */
   &:focus {
-    background-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    background: #ffffff;
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4),
+                0 0 15px rgba(196, 30, 58, 0.3),
+                inset 0 2px 10px rgba(255, 215, 0, 0.15);
+    border-color: #C41E3A;
+    transform: translateY(-2px);
   }
 }
 
-/* Checkbox y su contenedor */
+/* Checkbox navideño */
 .checkbox-container {
   display: flex;
   align-items: center;
   font-size: 18px;
   margin-top: 10px;
-  color: #282828;
-  gap: 5px;
-  width: 80%;
-  margin: 10px auto;
+  color: #165B33;
+  gap: 8px;
+  width: 85%;
+  margin: 15px auto;
+  font-weight: 600;
 
   span {
     font-size: 14px;
+    text-shadow: 0 1px 2px rgba(22, 91, 51, 0.1);
   }
 }
 
 .checkbox {
   margin-right: 0;
-  border-radius: 4px;
-  width: 15px !important;
-  height: 15px !important;
-  min-width: 15px;
+  border-radius: 6px;
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px;
   appearance: none;
   background-color: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #282828;
+  cursor: pointer;
+  border: 3px solid #FFD700;
+  box-shadow: 0 3px 10px rgba(196, 30, 58, 0.2),
+              inset 0 1px 3px rgba(255, 215, 0, 0.2);
+  transition: all 0.2s ease;
+}
 
-  border: 2px solid transparent;
-  background-image:
-    linear-gradient(#ffffff, #ffffff),
-    linear-gradient(to right, #041e50, #041e50);
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
+.checkbox:hover {
+  border-color: #C41E3A;
+  box-shadow: 0 4px 15px rgba(196, 30, 58, 0.3),
+              inset 0 1px 5px rgba(255, 215, 0, 0.3);
+}
+
+.checkbox:checked {
+  background: linear-gradient(135deg, #C41E3A 0%, #8B1428 100%);
+  border-color: #FFD700;
 }
 
 .checkbox:checked:before {
-  background: linear-gradient(to right, #041e50, #041e50);
-  content: "";
-  width: 13px;
-  height: 10px;
-  display: flex;
-
-  justify-content: center;
-  align-content: center;
-  align-self: center;
+  content: "✓";
+  color: #FFD700;
+  font-size: 16px;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-/* Botón para "Ver avatar" */
+/* Botón principal navideño para "Ver avatar" */
 .buttontest {
-  width: 200px;
-  height: 50px;
+  width: 220px;
+  height: 60px;
   margin: 20px auto 0 auto;
-  background: rgba(255, 255, 255, 0.5);
-  color: black;
-  font-size: 25px;
-  font-weight: bold;
-  border: none;
-  border-radius: 12px;
+  background: linear-gradient(135deg, #C41E3A 0%, #8B1428 100%);
+  color: #FFD700;
+  font-size: 24px;
+  font-weight: 800;
+  border: 3px solid #FFD700;
+  border-radius: 30px;
   cursor: pointer;
-
-  /* Placeholder en negro */
-  &::placeholder {
-    color: #000000;
-    opacity: 0.7;
-  }
+  box-shadow: 0 6px 0 rgba(22, 91, 51, 0.6),
+              0 10px 25px rgba(0,0,0,0.4),
+              inset 0 2px 10px rgba(255, 215, 0, 0.2);
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  transition: transform .08s ease, box-shadow .08s ease;
 
   /* Efecto hover */
   &:hover {
-    background-color: rgba(255, 255, 255, 0.7);
+    background: linear-gradient(135deg, #D4243E 0%, #9C1A30 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 0 rgba(22, 91, 51, 0.7),
+                0 12px 30px rgba(0,0,0,0.5),
+                inset 0 2px 10px rgba(255, 215, 0, 0.3);
+  }
+
+  /* Efecto active */
+  &:active {
+    transform: translateY(2px);
+    box-shadow: 0 3px 0 rgba(22, 91, 51, 0.8),
+                0 5px 15px rgba(0,0,0,0.4);
   }
 
   /* Efecto focus */
   &:focus {
-    background-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    background: linear-gradient(135deg, #C41E3A 0%, #8B1428 100%);
+    box-shadow: 0 6px 0 rgba(22, 91, 51, 0.6),
+                0 0 20px rgba(255, 215, 0, 0.6),
+                0 10px 25px rgba(0,0,0,0.4);
   }
 }
 
@@ -239,29 +359,62 @@
 .btnVerAvatar{
   overflow: visible !important;
 }
-/* Botón dinámico para imagen generada */
+/* Botón dinámico navideño para imagen generada */
 .button {
   position: relative;
   overflow: hidden;
+  width: 220px;
+  height: 60px;
+  margin: 20px auto;
+  background: linear-gradient(135deg, #C41E3A 0%, #8B1428 100%);
+  color: #FFD700;
+  font-size: 22px;
+  font-weight: 800;
+  border: 3px solid #FFD700;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 6px 0 rgba(22, 91, 51, 0.6),
+              0 10px 25px rgba(0,0,0,0.4),
+              inset 0 2px 10px rgba(255, 215, 0, 0.2);
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  transition: transform .08s ease, box-shadow .08s ease, background .12s ease;
   
   /* Efecto de pulsación para estados de carga */
   &:disabled {
     cursor: not-allowed;
-    background: linear-gradient(#888888, #666666);
+    background: linear-gradient(135deg, #888888 0%, #666666 100%);
+    border-color: #999999;
+    color: #cccccc;
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.3),
+                0 6px 15px rgba(0,0,0,0.3);
     
     /* Animación de puntos para el estado "Procesando..." */
     &::after {
       content: "";
       position: absolute;
-      width: 4px;
-      height: 4px;
+      width: 5px;
+      height: 5px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.8);
-      right: 20px;
+      background: rgba(255, 215, 0, 0.8);
+      right: 25px;
       top: 50%;
       transform: translateY(-50%);
       animation: loading-dots 1.5s infinite linear;
     }
+  }
+  
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, #D4243E 0%, #9C1A30 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 0 rgba(22, 91, 51, 0.7),
+                0 12px 30px rgba(0,0,0,0.5),
+                inset 0 2px 10px rgba(255, 215, 0, 0.3);
+  }
+  
+  &:active:not(:disabled) {
+    transform: translateY(2px);
+    box-shadow: 0 3px 0 rgba(22, 91, 51, 0.8),
+                0 5px 15px rgba(0,0,0,0.4);
   }
 }
 
@@ -280,15 +433,18 @@
   }
 }
 
-/* Spinner de loading circular */
+/* Spinner de loading navideño */
 .loading-spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid rgba(255, 255, 255, 0.3);
-  border-top: 4px solid #041e50;
+  width: 60px;
+  height: 60px;
+  border: 5px solid rgba(255, 215, 0, 0.3);
+  border-top: 5px solid #C41E3A;
+  border-right: 5px solid #165B33;
   border-radius: 50%;
-  margin: 20px auto;
+  margin: 30px auto;
   animation: spin 1s linear infinite;
+  box-shadow: 0 4px 15px rgba(196, 30, 58, 0.3),
+              inset 0 0 10px rgba(255, 215, 0, 0.2);
 }
 
 @keyframes spin {

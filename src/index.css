@@ -4,8 +4,8 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: #242424;
-  background-color: #242424;
+  color: #165b33;
+  background: linear-gradient(135deg, #0a4d2e 0%, #165b33 50%, #0a4d2e 100%);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -28,6 +28,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background: linear-gradient(135deg, #0a4d2e 0%, #165b33 50%, #0a4d2e 100%);
 }
 
 h1 {
@@ -36,18 +37,22 @@ h1 {
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
+  border-radius: 28px;
+  border: 3px solid #ffd700;
   padding: 0.6em 1.2em;
   font-size: 1em;
-  font-weight: 500;
+  font-weight: 700;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background: linear-gradient(135deg, #c41e3a 0%, #8b1428 100%);
+  color: #ffffff;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 0 rgba(22, 91, 51, 0.6), 0 10px 25px rgba(0, 0, 0, 0.4);
 }
 button:hover {
-  border-color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 0 rgba(22, 91, 51, 0.7), 0 12px 30px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(135deg, #d4243e 0%, #9c1a30 100%);
 }
 /* button:focus,
 button:focus-visible {

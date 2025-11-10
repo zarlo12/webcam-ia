@@ -37,9 +37,9 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   const getPromptByGender = (gender: Gender): string => {
     switch (gender) {
       case Gender.MALE:
-        return "Photorealistic Hollywood headshot of a man wearing an elegant bright purple suit with a bluish undertone, suit subtly sparkling. Rembrandt + softbox studio lighting, 85mm f/1.8, ISO 100, professional beauty retouch (frequency separation, natural skin smoothing, pores retained), razor-sharp eyes and lashes, high-frequency detail on hair, cinematic teal-orange color grade, high dynamic range, subtle film grain, slight vignette, shallow DOF, photorealistic, ultra-detailed.";
+        return "Transform the photo of a man into a Nutcracker soldier while preserving his original facial features, hair, and expression. He should wear an ornate red and gold military-style uniform with gold buttons, shoulder epaulettes, a tall red shako hat with gold trim and a white plume. The lighting should be warm and festive, evoking a classic Christmas atmosphere, with cinematic detail, professional studio lighting, and shallow depth of field. Ultra-realistic, high detail, maintaining skin tone and identity accuracy.";
       case Gender.FEMALE:
-        return "Cinematic Hollywood beauty portrait of the same woman, preserving her natural skin tone and unique facial features. She wears a bright purple glitter suit with a bluish undertone, subtle sparkle on fabric. Studio lighting with softbox and reflector fill, 85mm lens f/1.8, shallow DOF, professional beauty retouch (perfect yet natural skin, pores retained), glowing highlights on cheekbones, glossy lips, smokey eyes, cinematic teal-orange color grade, HDR, film grain, ultra-detailed photorealistic look.";
+        return "Transform the photo of a woman into a Nutcracker ballerina while preserving her original facial features, hair, and smile. She should wear a red satin ballet bodice with gold embroidery and a white tulle tutu, standing gracefully in a ballet pose on pointe shoes. The background should have warm Christmas lights and a softly lit festive atmosphere, with cinematic studio lighting, realistic shadows, and shallow depth of field. Ultra-realistic, elegant, detailed, maintaining natural skin tone and identity accuracy.";
       default:
         return "";
     }

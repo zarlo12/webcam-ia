@@ -10,6 +10,7 @@ interface AvatarResultProps {
   caracteristicas: string;
   comprar: string;
   email: string;
+  empresa: string;
   marca: string;
   name: string;
   origem: string;
@@ -25,6 +26,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
   caracteristicas,
   comprar,
   email,
+  empresa,
   marca,
   name,
   origem,
@@ -66,6 +68,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
           Caracteristicas: caracteristicas,
           Comprar: comprar,
           email: email,
+          empresa: empresa,
           marca: marca,
           name: name,
           origem: origem,
@@ -104,7 +107,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
         }, 2000);
       }
     },
-    [caracteristicas, comprar, email, marca, name, origem, rangoEdad, renovar, telephone, terms]
+    [caracteristicas, comprar, email, empresa, marca, name, origem, rangoEdad, renovar, telephone, terms]
   );
 
   useEffect(() => {

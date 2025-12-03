@@ -20,6 +20,7 @@ function MainApp() {
   const [caracteristicas, setCaracteristicas] = useState("");
   const [comprar, setComprar] = useState("");
   const [email, setEmail] = useState("");
+  const [empresa, setEmpresa] = useState("");
   const [marca, setMarca] = useState("");
   const [name, setName] = useState("");
   const [origem] = useState("Feria del Hogar 2025");
@@ -38,6 +39,7 @@ function MainApp() {
     setCaracteristicas("");
     setComprar("");
     setEmail("");
+    setEmpresa("");
     setMarca("");
     setName("");
     setRangoEdad("");
@@ -60,6 +62,10 @@ function MainApp() {
 
   const handleEmailChange = (newEmail: string) => {
     setEmail(newEmail);
+  };
+
+  const handleEmpresaChange = (newEmpresa: string) => {
+    setEmpresa(newEmpresa);
   };
 
   const handleMarcaChange = (newMarca: string) => {
@@ -124,6 +130,7 @@ function MainApp() {
           caracteristicas={caracteristicas}
           comprar={comprar}
           email={email}
+          empresa={empresa}
           marca={marca}
           name={name}
           origem={origem}
@@ -137,6 +144,7 @@ function MainApp() {
           onCaracteristicasChange={handleCaracteristicasChange}
           onComprarChange={handleComprarChange}
           onEmailChange={handleEmailChange}
+          onEmpresaChange={handleEmpresaChange}
           onMarcaChange={handleMarcaChange}
           onNameChange={handleNameChange}
           onRangoEdadChange={handleRangoEdadChange}
@@ -153,6 +161,7 @@ function MainApp() {
           caracteristicas={caracteristicas}
           comprar={comprar}
           email={email}
+          empresa={empresa}
           marca={marca}
           name={name}
           origem={origem}

@@ -8,117 +8,18 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* Fondo navideño festivo */
   background: linear-gradient(
     to bottom,
-    #0a4d2e 0%,
-    #165B33 30%,
-    #2d8659 50%,
-    #165B33 70%,
-    #0a4d2e 100%
+    #000000 0%,
+    #1a1a1a 30%,
+    #2a2a2a 50%,
+    #1a1a1a 70%,
+    #000000 100%
   );
   position: relative;
   color: white;
   overflow: hidden;
   justify-content: flex-start;
-  
-  /* Asegurar que el contenido esté por encima de la nieve */
-  > * {
-    position: relative;
-    z-index: 2;
-  }
-}
-
-/* Animación simple de nieve cayendo verticalmente */
-@keyframes snowfall-simple {
-  0% {
-    transform: translateY(-10vh);
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(110vh);
-    opacity: 0;
-  }
-}
-
-/* Animación infinita de nieve cayendo */
-@keyframes snowfall-infinite {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(100vh);
-  }
-}
-
-@keyframes snowfall-infinite-fast {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(100vh);
-  }
-}
-
-@keyframes snowfall-fast {
-  0% {
-    transform: translateY(-10vh);
-    opacity: 0;
-  }
-  8% {
-    opacity: 1;
-  }
-  92% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(110vh);
-    opacity: 0;
-  }
-}
-
-/* Copos de nieve reales - capa 1 */
-.waiting-container::before {
-  content: '❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄';
-  position: absolute;
-  top: -100px;
-  left: 0;
-  width: 200%;
-  height: 100%;
-  font-size: 30px;
-  color: white;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-  line-height: 150px;
-  letter-spacing: 80px;
-  animation: snowfall-infinite 12s linear infinite;
-  pointer-events: none;
-  opacity: 0.9;
-  z-index: 1;
-}
-
-/* Copos de nieve reales - capa 2 (más rápidos) */
-.waiting-container::after {
-  content: '❅ ❅ ❅ ❅ ❅ ❅ ❅ ❅ ❅ ❅ ❅ ❅ ❅ ❅ ❅ ❅ ❅ ❅';
-  position: absolute;
-  top: -150px;
-  left: 50px;
-  width: 200%;
-  height: 100%;
-  font-size: 25px;
-  color: white;
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
-  line-height: 180px;
-  letter-spacing: 100px;
-  animation: snowfall-infinite-fast 8s linear infinite;
-  pointer-events: none;
-  opacity: 0.85;
-  z-index: 1;
 }
 
 
@@ -133,7 +34,7 @@
   justify-content: center;
   align-items: center;
   padding: 10px 0;
-  background: linear-gradient(135deg, #165B33 0%, #0a4d2e 100%);
+  background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3),
               inset 0 1px 0 rgba(255, 255, 255, 0.1);
   border-bottom: 4px solid #f91b00;
@@ -147,19 +48,19 @@
     // margin-right: -157px;
 }
 
-/* Tarjeta central navideña */
+/* Tarjeta central */
 .waiting-card {
   margin-top: -320px;
   max-width: 450px;
   width: 90%;
   text-align: center;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(0, 0, 0, 0.95);
   padding: 40px 30px;
   border-radius: 30px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3),
-              0 0 0 3px #FFD700,
-              inset 0 2px 20px rgba(255, 215, 0, 0.2);
-  border: 2px solid #C41E3A;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5),
+              0 0 0 3px #333333,
+              inset 0 2px 20px rgba(255, 255, 255, 0.05);
+  border: 2px solid #444444;
 }
 
 /* Subtítulo "Avatar IA" */

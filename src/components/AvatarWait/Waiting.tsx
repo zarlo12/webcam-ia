@@ -27,6 +27,7 @@ interface WaitingProps {
   caracteristicas: string;
   comprar: string;
   email: string;
+  empresa: string;
   marca: string;
   name: string;
   origem: string;
@@ -40,6 +41,7 @@ interface WaitingProps {
   onCaracteristicasChange: (caracteristicas: string) => void;
   onComprarChange: (comprar: string) => void;
   onEmailChange: (email: string) => void;
+  onEmpresaChange: (empresa: string) => void;
   onMarcaChange: (marca: string) => void;
   onNameChange: (name: string) => void;
   onRangoEdadChange: (rangoEdad: string) => void;
@@ -53,6 +55,7 @@ interface WaitingProps {
 const Waiting: React.FC<WaitingProps> = ({
 
   email,
+  empresa,
 
   name,
 
@@ -62,6 +65,7 @@ const Waiting: React.FC<WaitingProps> = ({
   imageUrl,
 
   onEmailChange,
+  onEmpresaChange,
 
   onNameChange,
 
@@ -138,9 +142,18 @@ const Waiting: React.FC<WaitingProps> = ({
           <form className="waiting-form">
             <input
               type="text"
-              placeholder="Nombre:"
+              placeholder="Nombre y Apellido:"
               value={name}
               onChange={(e) => onNameChange(e.target.value)}
+              className="input"
+              required
+            />
+
+            <input
+              type="text"
+              placeholder="Empresa:"
+              value={empresa}
+              onChange={(e) => onEmpresaChange(e.target.value)}
               className="input"
               required
             />

@@ -73,7 +73,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
         // console.log("🚀 ~ datosCRM:", datosCRM);
 
         // Guardar en Firestore
-        await addDoc(collection(db, "Claro-mundial2026"), datosFirestore);
+        await addDoc(collection(db, "Claro-empresas-mundial"), datosFirestore);
         
         setLoadingMessage("Generando avatar...");
         

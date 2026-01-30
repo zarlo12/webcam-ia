@@ -46,7 +46,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
 
         const storageRef = ref(
           storage,
-          `claro-empresas2025/${email}-${Date.now()}.png`
+          `claro-mundial2026/${email}-${Date.now()}.png`
         );
         await uploadString(storageRef, dataUrl, "data_url");
         const downloadURL = await getDownloadURL(storageRef);
@@ -73,7 +73,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
         // console.log("🚀 ~ datosCRM:", datosCRM);
 
         // Guardar en Firestore
-        await addDoc(collection(db, "Claro-empresas2025"), datosFirestore);
+        await addDoc(collection(db, "Claro-mundial2026"), datosFirestore);
         
         setLoadingMessage("Generando avatar...");
         

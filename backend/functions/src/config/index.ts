@@ -30,9 +30,9 @@ export const rateLimitConfig = {
 
 // Replicate models configurations
 export const REPLICATE_MODELS = {
-  // Primary model for anime/style conversion
-  FLUX_KONTEXT_PRO: {
-    model: "black-forest-labs/flux-kontext-pro",
+  // Primary model for 3D caricature style conversion
+  NANO_BANANA: {
+    model: "google/nano-banana",
     version: "latest",
   },
   // Model for adding logo to clothing

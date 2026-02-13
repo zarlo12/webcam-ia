@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import "./AvatarPhoto.scss";
 // import fondo from "../../assets/img/fondo.png";
-import logo from "../../assets/xnova/LogoXnova.png";
+// import logo from "../../assets/xnova/LogoXnova.png";
 
 import WebcamScene from "../WebcamScene";
 import axios from "axios";
@@ -27,10 +27,10 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
 
   // URLs de los endpoints según el estilo
   const realistaUrl = import.meta.env.VITE_REALISTA_WEBHOOK_URL || 
-    "https://xnova360.app.n8n.cloud/webhook/4c07f695-b8e7-48ed-81ae-4af3adc78b71";
+    "https://xnova360.app.n8n.cloud/webhook/123123";
   
   const caricaturaUrl = import.meta.env.VITE_CARICATURA_WEBHOOK_URL || 
-    "https://xnova360.app.n8n.cloud/webhook/7f744819-6e36-43f0-ac4a-2c8810426a52";
+    "https://xnova360.app.n8n.cloud/webhook/123123";
 
   // Función para obtener la URL según el estilo seleccionado
   const getWebhookUrl = () => {
@@ -93,14 +93,14 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
     e.preventDefault();
 
     // Validar que haya seleccionado un estilo
-    if (!selectedStyle) {
-      Swal.fire({
-        icon: "warning",
-        title: "Advertencia",
-        text: "Por favor selecciona un estilo (realista o caricatura).",
-      });
-      return;
-    }
+    // if (!selectedStyle) {
+    //   Swal.fire({
+    //     icon: "warning",
+    //     title: "Advertencia",
+    //     text: "Por favor selecciona un estilo (realista o caricatura).",
+    //   });
+    //   return;
+    // }
 
     if (!capturedImage) {
       Swal.fire({
@@ -117,9 +117,9 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
   return (
     <div className="container">
       {/* Cabecera superior con fondo rojo y logo centrado */}
-      <div className="header">
+      {/* <div className="header">
         <img src={logo} alt="Logo" className="logo" />
-      </div>
+      </div> */}
 
       {/* <img src={fondo} alt="Fondo" className="fondo" /> */}
       <div className="main-content">
@@ -141,7 +141,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
 
           <div className="buttons-container">
             {/* SELECT para elegir estilo */}
-            <div className="select-container">
+            <div className="select-container" style={{ display: "none" }}>
               <select
                 value={selectedStyle}
                 onChange={(e) => setSelectedStyle(e.target.value)}

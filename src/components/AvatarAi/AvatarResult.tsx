@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./AvatarPhoto.scss";
-import logo from "../../assets/xnova/LogoXnova.png";
+// import logo from "../../assets/xnova/LogoXnova.png";
 
 import { storage, db } from "../../firebaseConfig";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
@@ -40,7 +40,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
       try {
         const storageRef = ref(
           storage,
-          `Nutricia_avatars/${email}-${Date.now()}.png`
+          `EjemploPrueba2026/${email}-${Date.now()}.png`
         );
         await uploadString(storageRef, dataUrl, "data_url");
         const downloadURL = await getDownloadURL(storageRef);
@@ -56,7 +56,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
           correoEnviado: false,
         };
         console.log("🚀 ~ datosFirestore:", datosFirestore);
-        await addDoc(collection(db, "Nutricia"), datosFirestore);
+        await addDoc(collection(db, "EjemploPrueba2026"), datosFirestore);
         setUploadedImageUrl(downloadURL);
       } catch (error) {
         console.error("Error al subir imagen:", error);
@@ -91,9 +91,9 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
 
   return (
     <div className="containerResultFinal">
-      <div className="header-bar">
+      {/* <div className="header-bar">
         <img src={logo} alt="Logo" className="logo-scotia" />
-      </div>
+      </div> */}
 
       <div className="main-content">
         <div className="result-wrapper">

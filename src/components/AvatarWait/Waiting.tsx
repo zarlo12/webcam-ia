@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Waiting.scss";
-import logo from "../../assets/xnova/LogoXnova.png";
+// import logo from "../../assets/xnova/LogoXnova.png";
 import Swal from "sweetalert2";
 
 import MergeImage from "../AvatarAi/MergeImage"; // Asegúrate de la ruta correcta
@@ -155,9 +155,9 @@ const Waiting: React.FC<WaitingProps> = ({
 
   return (
     <div className="waiting-container">
-      <div className="header-bar">
+      {/* <div className="header-bar">
         <img src={logo} alt="Logo" className="logo-scotia" />
-      </div>
+      </div> */}
 
       <div className="main-content">
         <div className="waiting-card">
@@ -236,7 +236,7 @@ const Waiting: React.FC<WaitingProps> = ({
               Test vocacional
             </button> */}
 
-            <div className="checkbox-container">
+            <div className="checkbox-container" style={{ display: "none" }}>
               <input
                 type="checkbox"
                 className="checkbox"

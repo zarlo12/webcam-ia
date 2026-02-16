@@ -64,7 +64,7 @@
 /* Cabecera superior con fondo rojo */
 .header {
   width: 100%;
-  background: linear-gradient(to right, #2b3c90, #51338b);
+  background: linear-gradient(to right, #ffffff, #ffff);
   padding: 10px 0;
   display: flex;
   justify-content: center;
@@ -124,7 +124,7 @@
     font-family: 'Bariol Regular', Arial, sans-serif;
     width: 350px;
     height: 57px;
-    background: linear-gradient(to right, #2b3c90, #51338b);
+    background: linear-gradient(to right, #1B2FE7, #1B2FE7);
     color: #fff;
     font-weight: bold;
     font-size: 25px;
@@ -159,7 +159,7 @@
 /* Estilos específicos para las opciones del select */
 .select-container select option {
   background-color: #ffffff !important;
-  color: #2b3c90 !important;
+  color: #1B2FE7 !important;
   font-weight: bold !important;
   padding: 10px !important;
   font-size: 18px !important;
@@ -167,7 +167,7 @@
 }
 
 .select-container select option:checked {
-  background-color: #2b3c90 !important;
+  background-color: #1B2FE7 !important;
   color: #ffffff !important;
 }
 
@@ -238,7 +238,7 @@ form {
   width: 92%;
   padding: 10px;
   border-radius: 5px;
-  background: linear-gradient(to right, #2b3c90, #51338b);
+  background: linear-gradient(to right, #1B2FE7, #1B2FE7);
   color: #ffffff;
   border: 1px solid #555;
   font-size: 14px;
@@ -247,7 +247,7 @@ form {
 .button {
   width: 200px;
   height: 57px;
-  background: linear-gradient(to right, #2b3c90, #51338b);
+  background: linear-gradient(to right, #1B2FE7, #1B2FE7);
   color: #ffffff;
   font-weight: bold;
   font-family: 'Bariol Regular', Arial, sans-serif;
@@ -266,7 +266,7 @@ form {
 
   /* Efecto hover */
   &:hover {
-    background: linear-gradient(to right, #4a4a9a, #5f3f9c);
+    background: linear-gradient(to right, #0C1694, #1B2FE7);
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(57, 61, 137, 0.4);
     transition: all 0.3s ease;
@@ -274,7 +274,7 @@ form {
 
   /* Efecto focus */
   &:focus {
-    background: linear-gradient(to right, #4a4a9a, #5f3f9c);
+    background: linear-gradient(to right, #0C1694, #1B2FE7);
     box-shadow: 0 0 0 3px rgba(57, 61, 137, 0.3);
     outline: none;
     transition: all 0.3s ease;
@@ -283,7 +283,7 @@ form {
   /* Efecto active */
   &:active {
     transform: translateY(0);
-    background: linear-gradient(to right, #323678, #432a7a);
+    background: linear-gradient(to right, #0C1694, #0C1694);
   }
 
   /* Transición suave para todos los estados */
@@ -313,7 +313,7 @@ form {
 }
 .footerAlways {
   width: 100%;
-  background: linear-gradient(to right, #51338b, #51338b);
+  background: linear-gradient(to right, #1B2FE7, #1B2FE7);
   padding: 10px 0;
   display: flex;
   justify-content: center;
@@ -324,7 +324,7 @@ form {
 /* Estilos adicionales para máxima compatibilidad con opciones del select */
 select option {
   background: white !important;
-  color: #2b3c90 !important;
+  color: #1B2FE7 !important;
   font-weight: bold !important;
 }
 
@@ -336,14 +336,14 @@ select option:disabled {
 /* Para navegadores basados en WebKit (Chrome, Safari, Edge) */
 select option:hover {
   background: #e8f4fd !important;
-  color: #2b3c90 !important;
+  color: #1B2FE7 !important;
 }
 
 /* Para Firefox */
 @-moz-document url-prefix() {
   select option {
     background-color: white !important;
-    color: #2b3c90 !important;
+    color: #1B2FE7 !important;
   }
   
   select option:disabled {

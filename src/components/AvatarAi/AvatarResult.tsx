@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./AvatarPhoto.scss";
-// import logo from "../../assets/xnova/LogoXnova.png";
+import logo from "../../assets/xnova/LogoXnova.png";
 
 import { storage, db } from "../../firebaseConfig";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
@@ -91,9 +91,9 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
 
   return (
     <div className="containerResultFinal">
-      {/* <div className="header-bar">
+      <div className="header-bar">
         <img src={logo} alt="Logo" className="logo-scotia" />
-      </div> */}
+      </div>
 
       <div className="main-content">
         <div className="result-wrapper">
@@ -104,7 +104,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
                 <div className="loading-indicator" style={{textAlign: "center", padding: "40px 0"}}>
                   <span style={{fontSize: 22}}>Guardando avatar...</span>
                   <br />
-                  <div className="spinner" style={{margin: "20px auto", width: 40, height: 40, border: "4px solid #ccc", borderTop: "4px solid #51338b", borderRadius: "50%", animation: "spin 1s linear infinite"}} />
+                  <div className="spinner" style={{margin: "20px auto", width: 40, height: 40, border: "4px solid #ccc", borderTop: "4px solid #1B2FE7", borderRadius: "50%", animation: "spin 1s linear infinite"}} />
                 </div>
               ) : (
                 <img

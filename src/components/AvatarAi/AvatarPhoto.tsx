@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import "./AvatarPhoto.scss";
 // import fondo from "../../assets/img/fondo.png";
-// import logo from "../../assets/xnova/LogoXnova.png";
+import logo from "../../assets/xnova/LogoXnova.png";
 
 import WebcamScene from "../WebcamScene";
 import axios from "axios";
@@ -117,9 +117,9 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
   return (
     <div className="container">
       {/* Cabecera superior con fondo rojo y logo centrado */}
-      {/* <div className="header">
+      <div className="header">
         <img src={logo} alt="Logo" className="logo" />
-      </div> */}
+      </div>
 
       {/* <img src={fondo} alt="Fondo" className="fondo" /> */}
       <div className="main-content">

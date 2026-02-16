@@ -34,7 +34,7 @@
 /* Barra roja superior */
 .header-bar {
   width: 100%;
-  background: linear-gradient(to right, #2b3c90, #51338b);
+  background: linear-gradient(to right, #ffff, #ffff);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -172,13 +172,13 @@
   border: 2px solid transparent;
   background-image:
     linear-gradient(#ffffff, #ffffff),
-    linear-gradient(to right, #51338b, #51338b);
+    linear-gradient(to right, #1B2FE7, #1B2FE7);
   background-origin: border-box;
   background-clip: padding-box, border-box;
 }
 
 .checkbox:checked:before {
-  background: #51338b;
+  background: #1B2FE7;
   content: "";
   width: 13px;
   height: 10px;
@@ -193,7 +193,7 @@ color: #3c3c3c;
 .button {
   width: 200px;
   height: 57px;
-  background: linear-gradient(to right, #2b3c90, #51338b);
+  background: linear-gradient(to right, #1B2FE7, #1B2FE7);
   color: #ffffff;
   font-weight: bold;
   padding: 10px;
@@ -211,7 +211,7 @@ color: #3c3c3c;
 
   /* Efecto hover */
   &:hover {
-    background: linear-gradient(to right, #4a4a9a, #5f3f9c);
+    background: linear-gradient(to right, #1B2FE7, #1B2FE7);
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(57, 61, 137, 0.4);
     transition: all 0.3s ease;
@@ -219,7 +219,7 @@ color: #3c3c3c;
 
   /* Efecto focus */
   &:focus {
-    background: linear-gradient(to right, #4a4a9a, #5f3f9c);
+    background: linear-gradient(to right, #1B2FE7, #1B2FE7);
     box-shadow: 0 0 0 3px rgba(57, 61, 137, 0.3);
     outline: none;
     transition: all 0.3s ease;
@@ -228,7 +228,7 @@ color: #3c3c3c;
   /* Efecto active */
   &:active {
     transform: translateY(0);
-    background: linear-gradient(to right, #323678, #432a7a);
+    background: linear-gradient(to right, #0C1694, #0C1694);
   }
 
   /* Transición suave para todos los estados */

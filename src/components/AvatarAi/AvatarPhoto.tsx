@@ -26,21 +26,25 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
   const webcamRef = useRef<WebcamRef | null>(null);
 
   // URLs de los endpoints según el estilo
-  const realistaUrl = import.meta.env.VITE_REALISTA_WEBHOOK_URL || 
-    "https://xnova360.app.n8n.cloud/webhook/4c07f695-b8e7-48ed-81ae-4af3adc78b71";
+  const bebelacUrl = import.meta.env.VITE_BEBELAC_WEBHOOK_URL || 
+    "https://xnova360.app.n8n.cloud/webhook/6e47e1c8-2b1c-4ce9-be6e-a3d17997bf88";
   
-  const caricaturaUrl = import.meta.env.VITE_CARICATURA_WEBHOOK_URL || 
-    "https://xnova360.app.n8n.cloud/webhook/7f744819-6e36-43f0-ac4a-2c8810426a52";
+  const ejecutivoUrl = import.meta.env.VITE_EJECUTIVO_WEBHOOK_URL || 
+    "https://xnova360.app.n8n.cloud/webhook/7a6b4014-60e0-4b28-92c3-afaf3c981296";
 
+  const nutrilonUrl = import.meta.env.VITE_NUTRILON_WEBHOOK_URL || 
+    "https://xnova360.app.n8n.cloud/webhook/b6ab7969-aa77-43ca-a1f0-0e29ae4dca7a";
   // Función para obtener la URL según el estilo seleccionado
   const getWebhookUrl = () => {
     switch (selectedStyle) {
-      case "realista":
-        return realistaUrl;
-      case "caricatura":
-        return caricaturaUrl;
+      case "bebelac":
+        return bebelacUrl;
+      case "ejecutivo":
+        return ejecutivoUrl;
+      case "nutrilon":
+        return nutrilonUrl;
       default:
-        return realistaUrl; // Por defecto realista
+        return bebelacUrl; // Por defecto bebelac
     }
   };
 
@@ -97,7 +101,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
       Swal.fire({
         icon: "warning",
         title: "Advertencia",
-        text: "Por favor selecciona un estilo (realista o caricatura).",
+        text: "Por favor selecciona un estilo.",
       });
       return;
     }
@@ -149,8 +153,9 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
                 <option value="" disabled>
                   Selecciona el estilo
                 </option>
-                <option value="realista">Estilo Realista</option>
-                <option value="caricatura">Estilo Caricatura</option>
+                <option value="bebelac">Bebelac</option>
+                <option value="ejecutivo">Ejecutivo</option>
+                <option value="nutrilon">Nutrilon</option>
               </select>
               <span className="select-arrow">▼</span>
             </div>

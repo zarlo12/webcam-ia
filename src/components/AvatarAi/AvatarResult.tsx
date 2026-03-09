@@ -70,12 +70,8 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
   // Función para manejar el reset
   const handleReset = async () => {
     setIsResetting(true);
-    // Ya no necesitamos consultar el endpoint de limpieza de PHP
-    // porque ahora todo se maneja directamente con ComfyDeploy
-    setTimeout(() => {
-      setIsResetting(false);
-      onReset(); // Llamar a la función original de reset
-    }, 500);
+    // Recargar toda la página para iniciar desde cero
+    window.location.href = '/';
   };
 
   useEffect(() => {

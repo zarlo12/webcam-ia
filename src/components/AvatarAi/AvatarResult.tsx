@@ -67,20 +67,15 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
     [email, nombre, ciudad, formulario, consentimiento]
   );
 
-  // Función para manejar el reset con consulta automática
+  // Función para manejar el reset
   const handleReset = async () => {
     setIsResetting(true);
-    try {
-      console.log("Consultando endpoint de limpieza...");
-      const response = await fetch("https://proyectoshm.com/marco_pruebas/imagen/clear_image_data_nutricia2.php");
-      const data = await response.json();
-      console.log("Respuesta del endpoint de limpieza:", data);
-    } catch (error) {
-      console.error("Error al consultar el endpoint de limpieza:", error);
-    } finally {
+    // Ya no necesitamos consultar el endpoint de limpieza de PHP
+    // porque ahora todo se maneja directamente con ComfyDeploy
+    setTimeout(() => {
       setIsResetting(false);
       onReset(); // Llamar a la función original de reset
-    }
+    }, 500);
   };
 
   useEffect(() => {

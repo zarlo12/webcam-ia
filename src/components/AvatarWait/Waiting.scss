@@ -234,3 +234,258 @@ color: #3c3c3c;
   /* Transición suave para todos los estados */
   transition: all 0.3s ease;
 }
+
+/* ============================================
+   NUEVOS ESTILOS PARA UX/UI MEJORADA
+   ============================================ */
+
+/* Contenedor principal de espera */
+.avatar-container-wait {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  min-height: 300px;
+}
+
+/* Loader animado con efecto de IA */
+.ai-loader {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 30px;
+}
+
+.ai-loader-spinner {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 3px solid #e8e8e8;
+  border-top-color: #51338b;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.ai-loader-glow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2b3c90, #51338b);
+  opacity: 0.1;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Título principal de espera */
+.waiting-title {
+  font-family: 'Bariol Bold', Arial, sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #3c3c3c;
+  margin: 0 0 10px 0;
+  animation: fadeInDown 0.6s ease-out;
+}
+
+/* Mensaje de progreso descriptivo */
+.progress-message {
+  font-family: 'Bariol Regular', Arial, sans-serif;
+  font-size: 18px;
+  color: #666;
+  margin: 0 0 30px 0;
+  animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Contenedor de la barra de progreso */
+.progress-bar-container {
+  width: 100%;
+  max-width: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  animation: slideInUp 0.8s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Wrapper de la barra */
+.progress-bar-wrapper {
+  width: 100%;
+  height: 12px;
+  background: linear-gradient(to right, #e8e8e8, #f5f5f5);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+/* Barra de progreso con gradiente */
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #2b3c90, #51338b, #6744a8);
+  background-size: 200% 100%;
+  border-radius: 20px;
+  transition: width 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  animation: gradientShift 3s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Efecto shimmer sobre la barra */
+.progress-bar-shimmer {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Porcentaje de progreso */
+.progress-percentage {
+  font-family: 'Bariol Bold', Arial, sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #2b3c90;
+  letter-spacing: 1px;
+  animation: numberPulse 1s ease-in-out infinite;
+}
+
+@keyframes numberPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Indicador de cola (queued) */
+.queued-indicator {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.queued-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.queued-dots span {
+  width: 12px;
+  height: 12px;
+  background: linear-gradient(135deg, #2b3c90, #51338b);
+  border-radius: 50%;
+  animation: dotWave 1.4s ease-in-out infinite;
+}
+
+.queued-dots span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.queued-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.queued-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes dotWave {
+  0%, 60%, 100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  30% {
+    transform: scale(1.4);
+    opacity: 1;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .ai-loader {
+    width: 70px;
+    height: 70px;
+  }
+
+  .waiting-title {
+    font-size: 24px;
+  }
+
+  .progress-message {
+    font-size: 16px;
+  }
+
+  .progress-percentage {
+    font-size: 20px;
+  }
+
+  .progress-bar-container {
+    max-width: 300px;
+  }
+}

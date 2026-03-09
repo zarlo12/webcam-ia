@@ -1,19 +1,20 @@
 import { Routes, Route } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import AvatarPhoto from "./components/AvatarAi/AvatarPhoto";
 import AvatarResult from "./components/AvatarAi/AvatarResult";
 import Waiting from "./components/AvatarWait/Waiting";
 import Policy from "./Policy";
 
 function MainApp() {
-  useEffect(() => {
-    fetch("https://proyectoshm.com/marco_pruebas/imagen/clear_image_data_nutricia2.php")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Clear WS :", data.message);
-      })
-      .catch((error) => console.error("Error limpiando el archivo:", error));
-  }, []);
+  // Ya no necesitamos limpiar el archivo de PHP al iniciar
+  // useEffect(() => {
+  //   fetch("https://proyectoshm.com/marco_pruebas/imagen/clear_image_data_nutricia2.php")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log("Clear WS :", data.message);
+  //     })
+  //     .catch((error) => console.error("Error limpiando el archivo:", error));
+  // }, []);
 
   // "photo": para mostrar AvatarPhoto.
   // "waiting": para mostrar la pantalla de espera.
@@ -21,29 +22,29 @@ function MainApp() {
   // "policy": para mostrar la política de tratamiento de datos.
   const [step, setStep] = useState("photo");
   const [imageUrl, setImageUrl] = useState("");
-  const [lastImageUrl, setLastImageUrl] = useState("");
+  const [runId, setRunId] = useState(""); // ID del run de ComfyDeploy
   const [email, setEmail] = useState("");
   const [nombre, setNombre] = useState("");
 
   const [ciudad, setCiudad] = useState("");
   const [formulario, setFormulario] = useState("");
   const [consentimiento, setConsentimiento] = useState("");
-  const [imagenGenerada, setImagenGenerada] = useState(false); // Nueva bandera
   const [selectedStyle, setSelectedStyle] = useState<string>(""); // Estilo seleccionado (realista/caricatura)
 
 
-  // Esta función se invoca en AvatarPhoto al enviar la petición a n8n.
-  // Además, al cambiar a Waiting se limpia el email para que el usuario lo ingrese nuevamente.
-  const handleProcess = (style?: string) => {
+  // Esta función se invoca en AvatarPhoto al enviar la petición a ComfyDeploy.
+  const handleProcess = (style?: string, newRunId?: string) => {
     if (style) {
       setSelectedStyle(style); // Guardamos el estilo seleccionado
+    }
+    if (newRunId) {
+      setRunId(newRunId); // Guardamos el run ID
     }
     setEmail("");
     setNombre("");
     setCiudad("");
     setFormulario("");
     setConsentimiento("");
-    setImagenGenerada(false); // Reiniciamos la bandera al iniciar el proceso
     setStep("waiting");
   };
 
@@ -77,37 +78,9 @@ function MainApp() {
     setStep("result");
   };
 
-  useEffect(() => {
-    let interval: ReturnType<typeof setInterval>;
-
-    // Solo en el paso "waiting" se hace polling a la API de PHP.
-    if (step === "waiting") {
-      interval = setInterval(async () => {
-        try {
-          const response = await fetch(
-            "https://proyectoshm.com/marco_pruebas/imagen/callback_nutricia2.php"
-          );
-          const data = await response.json();
-          // Si existe una imagen nueva, se actualiza el estado y se guarda en Firestore.
-          if (
-            data.img_url &&
-            data.img_url !== "" &&
-            data.img_url !== lastImageUrl
-          ) {
-            setLastImageUrl(data.img_url);
-            setImageUrl(data.img_url);
-            setImagenGenerada(true); // Establecemos la bandera en true
-          }
-        } catch (error) {
-          console.error("Error al obtener la imagen:", error);
-        }
-      }, 2000); // Consulta cada 5 segundos
-    }
-
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [step, lastImageUrl, email, nombre, formulario, consentimiento]);
+  // Ya no necesitamos el polling al endpoint de PHP
+  // El polling ahora se maneja directamente en el componente Waiting
+  // usando el servicio de ComfyDeploy
 
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
@@ -121,7 +94,7 @@ function MainApp() {
           email={email}
           nombre={nombre}
           formulario={formulario}
-          imagenGenerada={imagenGenerada} // Prop bandera
+          runId={runId} // Pasar el runId en lugar de imagenGenerada
           imageUrl={imageUrl}
           ciudad={ciudad}
           selectedStyle={selectedStyle} // Pasar el estilo seleccionado
@@ -132,6 +105,7 @@ function MainApp() {
           onConsentimientoChange={handleConsentimientoChange}
           onShowPolicy={() => setStep("policy")}
           onContinue={handleContinue} // Función para pasar a AvatarResult
+          onImageUrlChange={setImageUrl} // Nueva prop para actualizar la imagen
         />
       )}
       {step === "result" && (

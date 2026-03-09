@@ -4,12 +4,12 @@ import "./AvatarPhoto.scss";
 import logo from "../../assets/xnova/LogoXnova.png";
 
 import WebcamScene from "../WebcamScene";
-import axios from "axios";
 import Swal from "sweetalert2"; // Import sweetalert2
+import { queueImageProcessing } from "../../services/comfyDeployService";
 // import { FaCamera } from "react-icons/fa";
 
 interface AvatarPhotoProps {
-  onProcess: (style?: string) => void;
+  onProcess: (style?: string, runId?: string) => void;
 }
 interface WebcamRef {
   captureImage: () => Promise<Blob>;
@@ -24,29 +24,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
   const [selectedStyle, setSelectedStyle] = useState<string>(""); // Nuevo estado para el estilo
 
   const webcamRef = useRef<WebcamRef | null>(null);
-
-  // URLs de los endpoints según el estilo
-  const bebelacUrl = import.meta.env.VITE_BEBELAC_WEBHOOK_URL || 
-    "https://xnova360.app.n8n.cloud/webhook/6e47e1c8-2b1c-4ce9-be6e-a3d17997bf88";
-  
-  const ejecutivoUrl = import.meta.env.VITE_EJECUTIVO_WEBHOOK_URL || 
-    "https://xnova360.app.n8n.cloud/webhook/7a6b4014-60e0-4b28-92c3-afaf3c981296";
-
-  const nutrilonUrl = import.meta.env.VITE_NUTRILON_WEBHOOK_URL || 
-    "https://xnova360.app.n8n.cloud/webhook/b6ab7969-aa77-43ca-a1f0-0e29ae4dca7a";
-  // Función para obtener la URL según el estilo seleccionado
-  const getWebhookUrl = () => {
-    switch (selectedStyle) {
-      case "bebelac":
-        return bebelacUrl;
-      case "ejecutivo":
-        return ejecutivoUrl;
-      case "nutrilon":
-        return nutrilonUrl;
-      default:
-        return bebelacUrl; // Por defecto bebelac
-    }
-  };
+  const [isProcessing, setIsProcessing] = useState(false);
 
   // Función para capturar la imagen desde el componente WebcamScene
   const handleCapture = async () => {
@@ -62,27 +40,33 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
     }
   };
 
-  // Envía la imagen capturada al endpoint de n8n
+  // Envía la imagen capturada a ComfyDeploy
   const handleProcessImage = async () => {
-    if (!capturedImage) return;
-    const formData = new FormData();
-    formData.append("image", capturedImage, "webcam-image.jpg");
+    if (!capturedImage || !selectedStyle) return;
     
-    const currentWebhookUrl = getWebhookUrl();
-  
+    setIsProcessing(true);
+    
     try {
-      console.log("Enviando imagen...");
-      console.log("Estilo seleccionado:", selectedStyle);
-      console.log("URL del webhook:", currentWebhookUrl);
+      console.log("📤 Enviando imagen a ComfyDeploy...");
+      console.log("🎨 Estilo seleccionado:", selectedStyle);
       
-      const responseFinal = await axios.post(currentWebhookUrl, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-        timeout: 600000,
-      });
-      console.log("Imagen enviada a n8n!", responseFinal);
-      // No necesitamos llamar onProcess aquí porque ya se llama en handleSubmit
+      const response = await queueImageProcessing(capturedImage, selectedStyle);
+      
+      console.log("✅ Imagen encolada en ComfyDeploy!");
+      console.log("🆔 Run ID:", response.run_id);
+      
+      // Pasar el run_id al componente padre para hacer polling
+      onProcess(selectedStyle, response.run_id);
     } catch (error) {
-      console.error("Error al procesar la imagen:", error);
+      console.error("❌ Error al procesar la imagen:", error);
+      
+      setIsProcessing(false);
+      
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se pudo procesar la imagen. Por favor, intenta de nuevo.",
+      });
     }
   };
 
@@ -114,7 +98,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
       });
       return;
     }
-    onProcess(selectedStyle); // Pasar el estilo seleccionado al callback
+    
     handleProcessImage();
   };
 
@@ -182,9 +166,9 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
             <button
               type="submit"
               className="button"
-              disabled={!capturedImageUrl}
+              disabled={!capturedImageUrl || isProcessing}
             >
-              Procesar
+              {isProcessing ? "Enviando..." : "Procesar"}
             </button>
           </form>
         </div>

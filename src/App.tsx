@@ -116,7 +116,6 @@ function MainApp() {
           ciudad={ciudad}
           formulario={formulario}
           consentimiento={consentimiento}
-          onReset={() => setStep("photo")}
         />
       )}
       {step === "policy" && <Policy onBack={() => setStep("waiting")} />}

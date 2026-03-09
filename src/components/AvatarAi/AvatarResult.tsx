@@ -13,7 +13,6 @@ interface AvatarResultProps {
   formulario: string;
   consentimiento: string;
   imageUrl: string; // Imagen ya fusionada
-  onReset: () => void;
 }
 
 
@@ -24,7 +23,6 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
   formulario,
   consentimiento,
   imageUrl,
-  onReset,
 }) => {
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string>(imageUrl);
   const [isLoading, setIsLoading] = useState<boolean>(true);

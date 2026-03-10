@@ -22,6 +22,7 @@ function MainApp() {
   // "policy": para mostrar la política de tratamiento de datos.
   const [step, setStep] = useState("photo");
   const [imageUrl, setImageUrl] = useState("");
+  const [originalImageUrl, setOriginalImageUrl] = useState(""); // URL de la imagen original
   const [runId, setRunId] = useState(""); // ID del run de ComfyDeploy
   const [email, setEmail] = useState("");
   const [nombre, setNombre] = useState("");
@@ -33,12 +34,15 @@ function MainApp() {
 
 
   // Esta función se invoca en AvatarPhoto al enviar la petición a ComfyDeploy.
-  const handleProcess = (style?: string, newRunId?: string) => {
+  const handleProcess = (style?: string, newRunId?: string, originalUrl?: string) => {
     if (style) {
       setSelectedStyle(style); // Guardamos el estilo seleccionado
     }
     if (newRunId) {
       setRunId(newRunId); // Guardamos el run ID
+    }
+    if (originalUrl) {
+      setOriginalImageUrl(originalUrl); // Guardamos la URL de la imagen original
     }
     setEmail("");
     setNombre("");
@@ -111,6 +115,7 @@ function MainApp() {
       {step === "result" && (
         <AvatarResult
           imageUrl={imageUrl}
+          originalImageUrl={originalImageUrl}
           email={email}
           nombre={nombre}
           ciudad={ciudad}

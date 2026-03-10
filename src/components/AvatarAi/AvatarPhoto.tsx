@@ -6,10 +6,12 @@ import logo from "../../assets/xnova/LogoXnova.png";
 import WebcamScene from "../WebcamScene";
 import Swal from "sweetalert2"; // Import sweetalert2
 import { queueImageProcessing } from "../../services/comfyDeployService";
+import { storage } from "../../firebaseConfig";
+import { ref, uploadString, getDownloadURL } from "firebase/storage";
 // import { FaCamera } from "react-icons/fa";
 
 interface AvatarPhotoProps {
-  onProcess: (style?: string, runId?: string) => void;
+  onProcess: (style?: string, runId?: string, originalImageUrl?: string) => void;
 }
 interface WebcamRef {
   captureImage: () => Promise<Blob>;
@@ -47,6 +49,28 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
     setIsProcessing(true);
     
     try {
+      console.log("📤 Subiendo imagen original a Firebase Storage...");
+      
+      // Convertir Blob a Data URL para subirlo a Firebase Storage
+      const reader = new FileReader();
+      const dataUrlPromise = new Promise<string>((resolve, reject) => {
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(capturedImage);
+      });
+      
+      const dataUrl = await dataUrlPromise;
+      
+      // Subir imagen original a Firebase Storage
+      const timestamp = Date.now();
+      const storageRef = ref(
+        storage,
+        `Nutricia_originals_2026/original-${timestamp}.png`
+      );
+      await uploadString(storageRef, dataUrl, "data_url");
+      const originalImageUrl = await getDownloadURL(storageRef);
+      
+      console.log("✅ Imagen original guardada:", originalImageUrl);
       console.log("📤 Enviando imagen a ComfyDeploy...");
       console.log("🎨 Estilo seleccionado:", selectedStyle);
       
@@ -55,8 +79,8 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
       console.log("✅ Imagen encolada en ComfyDeploy!");
       console.log("🆔 Run ID:", response.run_id);
       
-      // Pasar el run_id al componente padre para hacer polling
-      onProcess(selectedStyle, response.run_id);
+      // Pasar el run_id y la URL de la imagen original al componente padre
+      onProcess(selectedStyle, response.run_id, originalImageUrl);
     } catch (error) {
       console.error("❌ Error al procesar la imagen:", error);
       

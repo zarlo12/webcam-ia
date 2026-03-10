@@ -12,7 +12,8 @@ interface AvatarResultProps {
   ciudad: string;
   formulario: string;
   consentimiento: string;
-  imageUrl: string; // Imagen ya fusionada
+  imageUrl: string; // Imagen generada por IA
+  originalImageUrl: string; // Imagen original capturada
 }
 
 
@@ -23,6 +24,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
   formulario,
   consentimiento,
   imageUrl,
+  originalImageUrl,
 }) => {
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string>(imageUrl);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -49,6 +51,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
           ID: ciudad,
           telefono: formulario,
           imageUrl: downloadURL,
+          imagenOriginal: originalImageUrl, // Guardar URL de imagen original
           date: new Date(),
           consentimientoAceptado: consentimiento ? "Sí" : "No",
           correoEnviado: false,

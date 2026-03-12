@@ -146,12 +146,13 @@ const Waiting: React.FC<WaitingProps> = ({
           
           // Extraer mensaje de error
           const errorMessage = extractErrorMessage(status);
+          console.log("🚀 ~ checkRunStatus ~ errorMessage:", errorMessage)
           
           // Mostrar alerta
           await Swal.fire({
             icon: 'error',
             title: '¡Oops! Algo salió mal',
-            text: errorMessage || 'Hubo un error procesando tu imagen. Por favor, toma una nueva foto.',
+            text: 'Hubo un error procesando tu imagen. Por favor, toma una nueva foto.',
             confirmButtonText: 'Tomar nueva foto',
             confirmButtonColor: '#31afda',
             allowOutsideClick: false,

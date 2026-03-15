@@ -1,5 +1,4 @@
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
 import { useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import * as THREE from "three";
 
@@ -102,7 +101,6 @@ const WebcamScene = forwardRef<WebcamRef>((_, ref) => {
     >
       <ambientLight intensity={0.5} />
       <WebcamPlane ref={ref} />
-      <OrbitControls enableZoom={false} />
     </Canvas>
   );
 });

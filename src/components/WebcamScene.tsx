@@ -86,7 +86,7 @@ const WebcamPlane = forwardRef<WebcamRef>((_, ref) => {
   }));
 
   return (
-    <mesh ref={meshRef} scale={[11, 6, 1]}>
+    <mesh ref={meshRef} scale={[5, 6.6, 1]}>
       <planeGeometry />
       <meshBasicMaterial map={texture} toneMapped={false} />
     </mesh>

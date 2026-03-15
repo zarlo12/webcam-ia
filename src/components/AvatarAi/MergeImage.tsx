@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import fondo from '../../assets/img/TextIZQsup.png'
+import fondo from '../../assets/img/logo_final.png'
 
 interface MergeImageProps {
   imageUrl: string; // URL de la imagen principal (avatar)

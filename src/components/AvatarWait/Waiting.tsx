@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./Waiting.scss";
-import logo from "../../assets/img/empresas.png";
+import logo from "../../assets/img/logo_final.png";
 
 import MergeImage from "../AvatarAi/MergeImage"; // Asegúrate de la ruta correcta
 
@@ -52,7 +52,7 @@ const Waiting: React.FC<WaitingProps> = ({
   telephone,
   nombreEmpresa,
   cargo,
-  terms,
+  terms: _terms,
   aiImageReady,
   imageUrl,
   onEmailChange,
@@ -60,7 +60,7 @@ const Waiting: React.FC<WaitingProps> = ({
   onTelephoneChange,
   onNombreEmpresaChange,
   onCargoChange,
-  onTermsChange,
+  onTermsChange: _onTermsChange,
   onContinue,
 }) => {
   const [mergedImage, setMergedImage] = useState<string | null>(null);
@@ -122,10 +122,7 @@ const Waiting: React.FC<WaitingProps> = ({
           {!aiImageReady && (
             <div className="avatar-container-wait">
               <div className="loading-spinner"></div>
-              <p className="waiting-text">
-                Espera...
-                
-              </p>
+              
             </div>
           )}
 
@@ -181,15 +178,15 @@ const Waiting: React.FC<WaitingProps> = ({
 
            
 
-            <div className="checkbox-container">
+            {/* <div className="checkbox-container">
               <input
                 type="checkbox"
                 className="checkbox"
                 id="tratamiento"
-                checked={terms}
-                onChange={(e) => onTermsChange(e.target.checked)}
-              />
-              <label htmlFor="tratamiento">
+                checked={_terms}
+                onChange={(e) => _onTermsChange(e.target.checked)}
+              /> */}
+              {/* <label htmlFor="tratamiento">
                 <span>
                   Consentimiento
                   <br />
@@ -201,8 +198,8 @@ const Waiting: React.FC<WaitingProps> = ({
                     Ver política de tratamiento de datos
                   </a>
                 </span>
-              </label>
-            </div>
+              </label> */}
+            {/* </div> */}
 
             {/* Botón dinámico para ver la imagen generada */}
             <button

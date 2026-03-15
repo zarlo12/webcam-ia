@@ -82,8 +82,7 @@
 
 /* === HEADER MODERNO === */
 .header-bar {
-  width: 100%;
-  background: #e8e8e8;
+  // width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -92,10 +91,12 @@
 }
 
 .logo-scotia {
-  height: 80px;
+  height: 120px;
   filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.2));
   transition: all 0.3s ease;
   animation: fadeInUp 0.8s ease;
+  background: transparent;
+  mix-blend-mode: multiply; /* Hace transparente el fondo blanco/gris */
   
   &:hover {
     transform: scale(1.05) translateY(-2px);
@@ -484,7 +485,7 @@
   }
   
   .logo-scotia {
-    height: 60px;
+    height: 90px;
   }
   
   .waiting-text {
@@ -539,7 +540,7 @@
 /* === RESPONSIVE PARA TABLETS Y PANTALLAS MEDIANAS === */
 @media (min-width: 768px) {
   .logo-scotia {
-    height: 120px;
+    height: 180px;
   }
   
   .header-bar {
@@ -608,7 +609,7 @@
 /* === RESPONSIVE PARA PANTALLAS GRANDES (49" VERTICAL) === */
 @media (min-width: 1080px) and (orientation: portrait) {
   .logo-scotia {
-    height: 180px;
+    height: 270px;
   }
   
   .header-bar {
@@ -713,7 +714,7 @@
 /* === RESPONSIVE PARA PANTALLAS EXTRA GRANDES === */
 @media (min-width: 1440px) {
   .logo-scotia {
-    height: 220px;
+    height: 330px;
   }
   
   .waiting-card {

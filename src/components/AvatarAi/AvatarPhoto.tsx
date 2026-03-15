@@ -280,7 +280,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
                 required
               >
                 <option value="" disabled>
-                  Selecciona Estilo IA
+                  Estilo
                 </option>
                 <option value="realistic-photo">📷 Fotográfico Real</option>
                 <option value="disney-pixar">🎬 Disney Pixar</option>

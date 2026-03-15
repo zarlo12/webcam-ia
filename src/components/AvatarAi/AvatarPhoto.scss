@@ -104,20 +104,20 @@
 
 /* Cabecera superior */
 .header {
-  width: 100%;
-  padding: 10px 0;
-  background-color: #e8e8e8;
+  // width: 100%;
+  padding: 20px 0;
+  // background-color: #e8e8e8;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  z-index: 2; /* Menor que el card para que quede detrás */
+  // justify-content: center;
+  // align-items: center;
+  // position: relative;
+  // z-index: 2; /* Menor que el card para que quede detrás */
 }
 
 .header-bar {
   width: 100%;
   padding: 10px 0;
-  background-color: #e8e8e8;
+  // background-color: #e8e8e8;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -127,10 +127,13 @@
 }
 
 .logo {
-  height: 146px;
-    margin-top: -1px; margin-left: -26px;
+  height: 220px;
+  margin-top: -1px;
+  margin-left: -26px;
   position: relative;
-  z-index: 3; /* Asegurar que el logo esté visible */
+  z-index: 3;
+  background: transparent;
+  mix-blend-mode: multiply; /* Hace transparente el fondo blanco/gris */
   // margin-right: -157px;
 }
 
@@ -634,7 +637,7 @@ form {
 @media (min-width: 768px) {
   .logo,
   .logo-scotia {
-    height: 120px;
+    height: 180px;
   }
   
   .card {
@@ -692,7 +695,7 @@ form {
 @media (min-width: 1080px) and (orientation: portrait) {
   .logo,
   .logo-scotia {
-    height: 180px;
+    height: 270px;
   }
   
   .header,
@@ -817,7 +820,7 @@ form {
 @media (min-width: 1440px) {
   .logo,
   .logo-scotia {
-    height: 220px;
+    height: 330px;
   }
   
   .card {

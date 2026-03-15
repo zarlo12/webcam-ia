@@ -180,7 +180,7 @@
   margin-top: 2px;
 }
 
-/* SELECT con estilo de botón rojo */
+/* SELECT con estilo de botón azul */
 .select-container {
   width: 100%;
   display: flex;
@@ -191,12 +191,12 @@
   select {
     width: 350px;
     height: 57px;
-    background: linear-gradient(to right, #041e50, #041e50);
+    background: linear-gradient(#041e50, #041e50);
     color: #fff;
     font-weight: bold;
     font-size: 25px;
-    border: 2px solid white;
-    border-radius: 15px;
+    border: 2px solid #efefef;
+    border-radius: 28px;
     text-align: center;
     cursor: pointer;
     /* Quita el borde y el “outline” por defecto */
@@ -239,7 +239,7 @@
 
 /* Estilos mejorados para el select con efectos de botón */
 .select-container select {
-  background: linear-gradient(#f91b00, #f91b00) !important; // Gradiente rojo
+  background: linear-gradient(#041e50, #041e50) !important; // Gradiente azul
   border: 2px solid #efefef !important; // Borde claro
   border-radius: 28px !important; // Radio redondeado
   font-weight: 800 !important;
@@ -267,7 +267,7 @@
   box-shadow:
     0 7px 0 rgba(0,0,0,0.45),
     inset 0 2px 0 rgba(255,255,255,0.12) !important;
-  background: linear-gradient(#ff2e00, #ff2e00) !important;
+  background: linear-gradient(#052a6e, #052a6e) !important;
 }
 
 .select-container select:focus {
@@ -275,8 +275,8 @@
   box-shadow:
     0 7px 0 rgba(0,0,0,0.45),
     inset 0 2px 0 rgba(255,255,255,0.12),
-    0 0 0 3px rgba(249, 27, 0, 0.3) !important;
-  background: linear-gradient(#ff2e00, #ff2e00) !important;
+    0 0 0 3px rgba(4, 30, 80, 0.3) !important;
+  background: linear-gradient(#052a6e, #052a6e) !important;
 }
 
 .select-container select:active {
@@ -284,6 +284,20 @@
   box-shadow:
     0 2px 0 rgba(0,0,0,0.45),
     inset 0 2px 0 rgba(255,255,255,0.08) !important;
+}
+
+/* Estilos para las opciones del select (fix para Windows Chrome) */
+.select-container select option {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  padding: 10px !important;
+  font-weight: 600 !important;
+}
+
+.select-container select option:checked,
+.select-container select option:hover {
+  background-color: #041e50 !important;
+  color: #ffffff !important;
 }
 
 .avatar-container {
@@ -366,7 +380,7 @@ form {
   color: #ffffff;
   border-radius: 28px;        // radio grande para aspecto pill
   border: 2px solid #efefef; // borde claro exterior #041e50
-  background: linear-gradient(#f91b00, #f91b00); // gradiente azul
+  background: linear-gradient(#041e50, #041e50); // gradiente azul
   text-shadow: 0 1px 0 rgba(0,0,0,0.3);
   cursor: pointer;
   -webkit-appearance: none;
@@ -417,7 +431,7 @@ form {
   &:active {
     transform: translateY(1px);
     box-shadow: 0 3px 0 rgba(0,0,0,0.5);
-    background: linear-gradient(#d70000, #940000);
+    background: linear-gradient(#031640, #021230);
     
     // Ocultar el brillo superior en estado activo
     &::before {

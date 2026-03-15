@@ -265,14 +265,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
                 📱 Descarga tu Foto
               </h2>
               
-              <p style={{
-                fontSize: '14px',
-                color: '#666',
-                marginBottom: '25px',
-                lineHeight: '1.5'
-              }}>
-                Escanea el código QR con la cámara de tu celular para descargar la imagen
-              </p>
+           
 
               <div style={{
                 display: 'flex',
@@ -294,21 +287,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
                 />
               </div>
 
-              <div style={{
-                background: '#e3f2fd',
-                padding: '15px',
-                borderRadius: '10px',
-                marginBottom: '20px'
-              }}>
-                <p style={{
-                  fontSize: '13px',
-                  color: '#1976d2',
-                  margin: 0,
-                  lineHeight: '1.6'
-                }}>
-                  💡 <strong>Tip:</strong> Abre la app de cámara nativa de tu celular y apunta al código QR. Se abrirá automáticamente el enlace.
-                </p>
-              </div>
+            
 
               <button
                 onClick={() => setShowQRModal(false)}

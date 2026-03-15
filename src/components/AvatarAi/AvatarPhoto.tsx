@@ -345,11 +345,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
                   </div>
                 )}
                 
-                {referenceImageUrls.length > 0 && (
-                  <p className="reference-count">
-                    {referenceImageUrls.length} imagen(es) de referencia seleccionada(s)
-                  </p>
-                )}
+                
               </div>
             )}
           </div>

@@ -45,13 +45,13 @@ const MergeImage: React.FC<MergeImageProps> = ({
         ctx.drawImage(mainImg, 0, 0, canvas.width, canvas.height);
 
         // Dibujar el elemento overlay con posición y tamaño ajustables
-        const overlayScale = 0.7; // Hacer el overlay 70% de su tamaño original
+        const overlayScale = 0.4; // Hacer el overlay 70% de su tamaño original
         const overlayWidth = overlayImg.width * overlayScale;
         const overlayHeight = overlayImg.height * overlayScale;
         
         // 🎯 POSICIÓN MANUAL - Ajusta estos valores para mover el overlay
-        const overlayX = 450; // Posición X (horizontal) - aumenta para mover a la derecha
-        const overlayY = 1180; // Posición Y (vertical) - aumenta para mover hacia abajo
+        const overlayX = 380; // Posición X (horizontal) - aumenta para mover a la derecha
+        const overlayY = 1050; // Posición Y (vertical) - aumenta para mover hacia abajo
         
         console.log(`🔍 Debug posicionamiento:`);
         console.log(`Canvas: ${canvas.width}x${canvas.height}`);

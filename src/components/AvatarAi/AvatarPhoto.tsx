@@ -188,7 +188,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   // Función temporal para pruebass con imagen fija
   
   const handleTestWithFixedImage = () => {
-    const testImageUrl = "https://storage.googleapis.com/imagen-ia-845a3.firebasestorage.app/generated-images/business_1761234505975.png";
+    const testImageUrl = "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/CasaReina1%2F-1773594771102.png?alt=media&token=732ba120-4f1e-4b39-a219-210ef29ee09e";
     const testOriginalImageUrl = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="; // Imagen de prueba 1x1
     
     console.log("🧪 Iniciando prueba con imagen fija:", testImageUrl);
@@ -367,7 +367,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
                 marginTop: "10px",
                 backgroundColor: "#ff9900",
                 fontSize: "14px",
-                display: 'none'
+                
               }}
             >
               🧪 PRUEBA CON IMAGEN FIJA

@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 
 interface AvatarPhotoProps {
   onProcess: (email: string) => void;
-  onAiImageReady: (imageUrl: string) => void;
+  onAiImageReady: (imageUrl: string, originalImageDataUrl: string) => void;
 }
 interface WebcamRef {
   captureImage: () => Promise<Blob>;
@@ -133,6 +133,14 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
       console.log("🚀 Procesando imagen con IA...");
       console.log(`📸 Foto de usuario + ${referenceImages.length} imágenes de referencia`);
       
+      // Convertir la imagen original (capturedImage) a data URL para pasarla al parent
+      const reader = new FileReader();
+      const originalImageDataUrl = await new Promise<string>((resolve, reject) => {
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(capturedImage);
+      });
+      
       // Cambiar INMEDIATAMENTE a la pantalla de formulario sin esperar
       onProcess(email); // Pasa al formulario mientras la imagen se procesa en background
       
@@ -163,8 +171,8 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
 
       if (result.success && result.imageUrl) {
         console.log("✅ Imagen generada exitosamente:", result.imageUrl);
-        // La imagen estará disponible para el botón dinámico en Waiting
-        onAiImageReady(result.imageUrl); // Notificar que la imagen de IA está lista con su URL
+        // Pasar tanto la imagen generada como la original al parent
+        onAiImageReady(result.imageUrl, originalImageDataUrl);
         
       } else {
         console.error("❌ Error al generar imagen:", result.error);
@@ -181,6 +189,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   
   const handleTestWithFixedImage = () => {
     const testImageUrl = "https://storage.googleapis.com/imagen-ia-845a3.firebasestorage.app/generated-images/business_1761234505975.png";
+    const testOriginalImageUrl = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="; // Imagen de prueba 1x1
     
     console.log("🧪 Iniciando prueba con imagen fija:", testImageUrl);
     
@@ -190,7 +199,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
     // Simular un breve delay y luego notificar que la imagen está lista
     setTimeout(() => {
       console.log("🧪 Imagen de prueba lista");
-      onAiImageReady(testImageUrl);
+      onAiImageReady(testImageUrl, testOriginalImageUrl);
     }, 1000); // 2 segundos de delay para simular procesamiento
   };
 

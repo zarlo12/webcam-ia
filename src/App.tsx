@@ -22,6 +22,7 @@ function MainApp() {
   const [step, setStep] = useState("photo");
   const [imageUrl, setImageUrl] = useState("");
   const [lastImageUrl, setLastImageUrl] = useState("");
+  const [originalImageUrl, setOriginalImageUrl] = useState(""); // Imagen original capturada
   
   // Nuevos campos según especificación
   const [email, setEmail] = useState("");
@@ -81,11 +82,12 @@ function MainApp() {
   };
 
   // Función para manejar cuando la imagen de IA esté lista
-  const handleAiImageReady = (generatedImageUrl: string) => {
+  const handleAiImageReady = (generatedImageUrl: string, originalImageDataUrl: string) => {
     setAiImageReady(true);
     setImagenGenerada(true);
     setImageUrl(generatedImageUrl); // Establecer la URL de la imagen generada
     setLastImageUrl(generatedImageUrl);
+    setOriginalImageUrl(originalImageDataUrl); // Establecer la URL de la imagen original
   };
 
 
@@ -140,6 +142,7 @@ function MainApp() {
       {step === "result" && (
         <AvatarResult
           imageUrl={imageUrl}
+          originalImageUrl={originalImageUrl}
           email={email}
           nombreEmpresa={nombreEmpresa}
           cargo={cargo}

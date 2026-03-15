@@ -13,7 +13,8 @@ interface AvatarResultProps {
   cargo: string;
   telephone: string;
   terms: boolean;
-  imageUrl: string; // Imagen ya fusionada
+  imageUrl: string; // Imagen generada con IA
+  originalImageUrl: string; // Imagen original capturada
   onReset: () => void;
 }
 
@@ -25,6 +26,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
   telephone,
   terms,
   imageUrl,
+  originalImageUrl,
   onReset,
 }) => {
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string>(imageUrl);
@@ -36,49 +38,51 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
 
   // Memoiza la función para evitar que cambie en cada render
   const uploadMergedImage = useCallback(
-    async (dataUrl: string) => {
+    async (dataUrl: string, originalDataUrl: string) => {
       if (hasUploadedRef.current) return;
       hasUploadedRef.current = true;
 
       try {
         setIsLoading(true);
-        setLoadingMessage("Generando avatar...");
+        setLoadingMessage("Subiendo imagen generada...");
 
+        // Subir imagen generada con IA
         const storageRef = ref(
           storage,
-          `claro-mundial2026/${email}-${Date.now()}.png`
+          `CasaReina1/${email}-${Date.now()}.png`
         );
         await uploadString(storageRef, dataUrl, "data_url");
         const downloadURL = await getDownloadURL(storageRef);
 
-        setLoadingMessage("Generando avatar...");
+        setLoadingMessage("Subiendo imagen original...");
 
-        // Datos para Firestore
+        // Subir imagen original
+        const originalStorageRef = ref(
+          storage,
+          `CasaReina1/original-${email}-${Date.now()}.png`
+        );
+        await uploadString(originalStorageRef, originalDataUrl, "data_url");
+        const originalDownloadURL = await getDownloadURL(originalStorageRef);
+
+        setLoadingMessage("Guardando en base de datos...");
+
+        // Datos para Firestore con ambas imágenes
         const datosFirestore = {
-         
           email: email,
           name: name,
           nombreEmpresa: nombreEmpresa,
           cargo: cargo,
           telephone: telephone,
           terms: terms,
-          imageUrl: downloadURL,
+          imageUrl: downloadURL, // Imagen generada con IA
+          imagenOriginal: originalDownloadURL, // Imagen original capturada
           date: new Date(),
         };
 
-        // Datos para el CRM de VTEX (sin imageUrl y date)
-       
-
         console.log("🚀 ~ datosFirestore:", datosFirestore);
-        // console.log("🚀 ~ datosCRM:", datosCRM);
 
         // Guardar en Firestore
-        await addDoc(collection(db, "Claro-empresas-mundial"), datosFirestore);
-        
-        setLoadingMessage("Generando avatar...");
-        
-        // Enviar al CRM de VTEX
-        //await sendToVTEXCRM(datosCRM);
+        await addDoc(collection(db, "CasaReina1"), datosFirestore);
         
         setLoadingMessage("¡Listo!");
         setUploadedImageUrl(downloadURL);
@@ -89,21 +93,21 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
         }, 1000);
         
       } catch (error) {
-        console.error("Error al subir imagen:", error);
+        console.error("Error al subir imágenes:", error);
         setLoadingMessage("Error al guardar");
         setTimeout(() => {
           setIsLoading(false);
         }, 2000);
       }
     },
-    [ email, nombreEmpresa, cargo, name, telephone, terms]
+    [email, nombreEmpresa, cargo, name, telephone, terms]
   );
 
   useEffect(() => {
     if (!hasUploadedRef.current) {
-      uploadMergedImage(imageUrl);
+      uploadMergedImage(imageUrl, originalImageUrl);
     }
-  }, [imageUrl, uploadMergedImage]);
+  }, [imageUrl, originalImageUrl, uploadMergedImage]);
 
   return (
     <div className="containerResultFinal">

@@ -68,21 +68,41 @@ const MergeImage: React.FC<MergeImageProps> = ({
         // Guardar estado del canvas
         ctx.save();
         
-        // Dibujar sombra del círculo (efecto de elevación)
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
-        ctx.shadowBlur = 15;
+        // Dibujar sombra del círculo (efecto de elevación más pronunciado)
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
+        ctx.shadowBlur = 20;
         ctx.shadowOffsetX = 0;
-        ctx.shadowOffsetY = 5;
+        ctx.shadowOffsetY = 8;
         
-        // Dibujar círculo blanco de fondo
+        // 🌈 Crear gradiente radial vibrante y moderno
+        const gradient = ctx.createRadialGradient(
+          circleCenterX, circleCenterY, 0,
+          circleCenterX, circleCenterY, circleRadius
+        );
+        
+        // Gradiente con colores vibrantes (tipo holográfico/moderno)
+        gradient.addColorStop(0, '#ffffff');    // Centro blanco brillante
+        gradient.addColorStop(0.3, '#f0f9ff');  // Azul muy claro
+        gradient.addColorStop(0.6, '#dbeafe');  // Azul pastel
+        gradient.addColorStop(0.85, '#bfdbfe'); // Azul más intenso
+        gradient.addColorStop(1, '#93c5fd');    // Azul vibrante en borde
+        
+        // Dibujar círculo con gradiente
         ctx.beginPath();
         ctx.arc(circleCenterX, circleCenterY, circleRadius, 0, Math.PI * 2);
-        ctx.fillStyle = '#ffffff';
+        ctx.fillStyle = gradient;
         ctx.fill();
         
-        // Dibujar borde del círculo para mayor definición
-        ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
-        ctx.lineWidth = 2;
+        // Borde con efecto degradado doble para look premium
+        ctx.strokeStyle = 'rgba(59, 130, 246, 0.6)'; // Azul semitransparente
+        ctx.lineWidth = 3;
+        ctx.stroke();
+        
+        // Segundo borde interno más sutil
+        ctx.beginPath();
+        ctx.arc(circleCenterX, circleCenterY, circleRadius - 3, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.lineWidth = 1;
         ctx.stroke();
         
         // Resetear sombra para el logo

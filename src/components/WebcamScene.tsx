@@ -10,7 +10,7 @@ interface WebcamRef {
 // Función auxiliar para recortar la imagen
 const cropImage = (
   video: HTMLVideoElement,
-  targetSize: number = 512
+  targetSize: number = 2048
 ): Promise<Blob> => {
   return new Promise((resolve, reject) => {
     const canvas = document.createElement("canvas");
@@ -56,7 +56,7 @@ const cropImage = (
         else reject(new Error("No se pudo generar el blob de la imagen"));
       },
       "image/jpeg",
-      0.95
+      0.98
     );
   });
 };
@@ -69,7 +69,11 @@ const WebcamPlane = forwardRef<WebcamRef>((_, ref) => {
   useEffect(() => {
     navigator.mediaDevices
       .getUserMedia({
-        video: { width: { ideal: 1280 }, height: { ideal: 720 } },
+        video: { 
+          width: { ideal: 3840, min: 1920 }, 
+          height: { ideal: 2160, min: 1080 },
+          facingMode: 'user'
+        },
       })
       .then((stream) => {
         videoRef.current.srcObject = stream;

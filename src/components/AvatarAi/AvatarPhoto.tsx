@@ -367,7 +367,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
                 marginTop: "10px",
                 backgroundColor: "#ff9900",
                 fontSize: "14px",
-                
+                display: "none",
               }}
             >
               🧪 PRUEBA CON IMAGEN FIJA

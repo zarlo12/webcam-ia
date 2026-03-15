@@ -179,7 +179,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
                   onClick={() => setShowQRModal(true)}
                   style={{ 
                     width: "250px",
-                    marginBottom: "15px",
+                    marginBottom: "25px",
                     background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
                   }}
                 >
@@ -192,7 +192,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
                   onClick={onReset}
                   style={{ width: "250px" }}
                 >
-                  Generar nueva
+                  Nueva
                 </button>
               </>
             )}

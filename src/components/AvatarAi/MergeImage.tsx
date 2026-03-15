@@ -45,13 +45,13 @@ const MergeImage: React.FC<MergeImageProps> = ({
         ctx.drawImage(mainImg, 0, 0, canvas.width, canvas.height);
 
         // Dibujar el elemento overlay con posición y tamaño ajustables
-        const overlayScale = 0.4; // Hacer el overlay 70% de su tamaño original
+        const overlayScale = 0.3; // Hacer el overlay 40% de su tamaño original
         const overlayWidth = overlayImg.width * overlayScale;
         const overlayHeight = overlayImg.height * overlayScale;
         
         // 🎯 POSICIÓN MANUAL - Ajusta estos valores para mover el overlay
-        const overlayX = 380; // Posición X (horizontal) - aumenta para mover a la derecha
-        const overlayY = 1050; // Posición Y (vertical) - aumenta para mover hacia abajo
+        const overlayX = 475; // Posición X (horizontal) - aumenta para mover a la derecha
+        const overlayY = 1086; // Posición Y (vertical) - aumenta para mover hacia abajo
         
         console.log(`🔍 Debug posicionamiento:`);
         console.log(`Canvas: ${canvas.width}x${canvas.height}`);
@@ -59,7 +59,44 @@ const MergeImage: React.FC<MergeImageProps> = ({
         console.log(`Overlay escalado: ${overlayWidth}x${overlayHeight}`);
         console.log(`Posición manual: (${overlayX}, ${overlayY})`);
         
-        // Dibujar el overlay con el nuevo tamaño y posición
+        // 🎨 Crear marco circular tipo sticker para el logo
+        const circleCenterX = overlayX + overlayWidth / 2;
+        const circleCenterY = overlayY + overlayHeight / 2;
+        // 🎯 TAMAÑO DEL CÍRCULO - Reduce este número para círculo más pequeño
+        const circleRadius = 120; // Ajusta este valor (80 = pequeño, 120 = mediano, 150 = grande)
+        
+        // Guardar estado del canvas
+        ctx.save();
+        
+        // Dibujar sombra del círculo (efecto de elevación)
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+        ctx.shadowBlur = 15;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 5;
+        
+        // Dibujar círculo blanco de fondo
+        ctx.beginPath();
+        ctx.arc(circleCenterX, circleCenterY, circleRadius, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffffff';
+        ctx.fill();
+        
+        // Dibujar borde del círculo para mayor definición
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        // Resetear sombra para el logo
+        ctx.shadowColor = 'transparent';
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        
+        // Crear clip circular para el logo
+        ctx.beginPath();
+        ctx.arc(circleCenterX, circleCenterY, circleRadius - 10, 0, Math.PI * 2);
+        ctx.clip();
+        
+        // Dibujar el overlay (logo) dentro del círculo
         ctx.drawImage(
           overlayImg,
           overlayX,
@@ -67,6 +104,9 @@ const MergeImage: React.FC<MergeImageProps> = ({
           overlayWidth,
           overlayHeight
         );
+        
+        // Restaurar estado del canvas
+        ctx.restore();
 
         console.log(`🎯 Imagen base: ${mainImg.width}x${mainImg.height}`);
         console.log(`🎯 Overlay posicionado en: (${overlayX}, ${overlayY}) - Tamaño: ${Math.round(overlayWidth)}x${Math.round(overlayHeight)}`);

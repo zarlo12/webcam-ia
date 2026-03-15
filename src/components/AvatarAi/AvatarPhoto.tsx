@@ -312,9 +312,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
             {/* Selector de imágenes de referencia */}
             {capturedImageUrl && (
               <div className="reference-images-section">
-                <label className="reference-label">
-                  🌟 Selecciona personajes/famosos (hasta 5) - Opcional:
-                </label>
+               
                 <input
                   type="file"
                   accept="image/*"

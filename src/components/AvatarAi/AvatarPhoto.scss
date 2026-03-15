@@ -402,17 +402,32 @@ form {
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 10px rgba(0,0,0,0.35), inset 0 2px 0 rgba(255,255,255,0.06);
+    
+    // Ocultar el brillo superior en hover
+    &::before {
+      opacity: 0;
+    }
   }
 
   &:active {
     transform: translateY(1px);
     box-shadow: 0 3px 0 rgba(0,0,0,0.5);
     background: linear-gradient(#d70000, #940000);
+    
+    // Ocultar el brillo superior en estado activo
+    &::before {
+      opacity: 0;
+    }
   }
 
   &:focus {
     outline: none;
     box-shadow: 0 6px 0 rgba(0,0,0,0.45), 0 0 6px rgba(255,80,80,0.25);
+    
+    // Ocultar el brillo superior en focus
+    &::before {
+      opacity: 0;
+    }
   }
 }
 

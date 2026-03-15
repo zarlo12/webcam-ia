@@ -7,7 +7,7 @@ exports.sendToVTEX = exports.healthCheck = exports.getProcessingStatus = exports
 const v2_1 = require("firebase-functions/v2");
 const https_1 = require("firebase-functions/v2/https");
 const replicateService_1 = __importDefault(require("../services/replicateService"));
-// Simple multipart parser for Firebase Functions
+// Simple multipart parser for Firebase Functions with support for multiple files
 function parseMultipartData(body, boundary) {
     const fields = {};
     const files = {};
@@ -33,8 +33,14 @@ function parseMultipartData(body, boundary) {
             return;
         const fieldName = nameMatch[1];
         if (headers.includes("filename=")) {
-            // It's a file
-            files[fieldName] = content.slice(0, -2); // Remove trailing \r\n
+            // It's a file - support multiple files with same name or images[], image1, image2, etc.
+            const fileBuffer = content.slice(0, -2); // Remove trailing \r\n
+            // Initialize array if doesn't exist
+            if (!files[fieldName]) {
+                files[fieldName] = [];
+            }
+            // Add to array
+            files[fieldName].push(fileBuffer);
         }
         else {
             // It's a text field
@@ -157,37 +163,58 @@ const handleMultipartRequest = async (req, res) => {
 };
 async function processMultipartBody(body, boundary, res) {
     const { fields, files } = parseMultipartData(body, boundary);
-    if (!files.image) {
-        console.error("❌ No image file found");
+    // Collect all image files - support multiple naming conventions
+    const imageBuffers = [];
+    // Check for 'image' field (can be array)
+    if (files.image && files.image.length > 0) {
+        imageBuffers.push(...files.image);
+    }
+    // Check for 'images' field
+    if (files.images && files.images.length > 0) {
+        imageBuffers.push(...files.images);
+    }
+    // Check for numbered fields: image1, image2, image3, etc.
+    Object.keys(files).forEach((key) => {
+        if (key.match(/^image\d+$/)) {
+            imageBuffers.push(...files[key]);
+        }
+    });
+    if (imageBuffers.length === 0) {
+        console.error("❌ No image files found");
         console.log("Available files:", Object.keys(files));
         console.log("Available fields:", Object.keys(fields));
         res.status(400).json({
             success: false,
-            error: "No image file provided",
+            error: "No image files provided. Use 'image', 'images', or 'image1', 'image2', etc.",
         });
         return;
     }
-    const imageBuffer = files.image;
+    console.log(`✅ Received ${imageBuffers.length} image(s)`);
+    imageBuffers.forEach((buf, idx) => {
+        console.log(`   Image ${idx + 1}: ${buf.length} bytes`);
+    });
     const prompt = fields.prompt || "";
     const style = fields.style || "";
     const userId = fields.userId || "";
-    console.log(`✅ Image received: ${imageBuffer.length} bytes`);
-    console.log(`📋 Parameters: prompt="${prompt}", style="${style}", userId="${userId}"`);
-    // Convert buffer to base64 - detect image type from buffer
-    let mimeType = "image/jpeg"; // default
-    if (imageBuffer
-        .slice(0, 8)
-        .equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) {
-        mimeType = "image/png";
-    }
-    const base64Image = `data:${mimeType};base64,${imageBuffer.toString("base64")}`;
+    console.log(`📋 Parameters: prompt="${prompt.substring(0, 100)}...", style="${style}", userId="${userId}"`);
+    // Convert all buffers to base64 images
+    const base64Images = imageBuffers.map((imageBuffer) => {
+        let mimeType = "image/jpeg"; // default
+        if (imageBuffer
+            .slice(0, 8)
+            .equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) {
+            mimeType = "image/png";
+        }
+        return `data:${mimeType};base64,${imageBuffer.toString("base64")}`;
+    });
     const request = {
-        imageData: base64Image,
+        imageData: base64Images[0], // First image (backward compatibility)
+        images: base64Images, // All images for multi-image support
         prompt,
         style,
         userId,
     };
-    console.log("🤖 Sending to Replicate AI...");
+    console.log(`🤖 Sending ${base64Images.length} image(s) to Replicate AI...`);
     const result = await replicateService_1.default.generateImageFromWebcam(request);
     res.status(result.success ? 200 : 400).json(result);
 }

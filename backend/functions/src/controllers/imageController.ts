@@ -3,13 +3,13 @@ import { onRequest } from "firebase-functions/v2/https";
 import replicateService from "../services/replicateService";
 import { ImageGenerationRequest } from "../types";
 
-// Simple multipart parser for Firebase Functions
+// Simple multipart parser for Firebase Functions with support for multiple files
 function parseMultipartData(
   body: Buffer,
-  boundary: string
-): { fields: Record<string, string>; files: Record<string, Buffer> } {
+  boundary: string,
+): { fields: Record<string, string>; files: Record<string, Buffer[]> } {
   const fields: Record<string, string> = {};
-  const files: Record<string, Buffer> = {};
+  const files: Record<string, Buffer[]> = {};
 
   const boundaryBuffer = Buffer.from(`--${boundary}`);
   const parts = [];
@@ -38,8 +38,15 @@ function parseMultipartData(
     const fieldName = nameMatch[1];
 
     if (headers.includes("filename=")) {
-      // It's a file
-      files[fieldName] = content.slice(0, -2); // Remove trailing \r\n
+      // It's a file - support multiple files with same name or images[], image1, image2, etc.
+      const fileBuffer = content.slice(0, -2); // Remove trailing \r\n
+      // Initialize array if doesn't exist
+      if (!files[fieldName]) {
+        files[fieldName] = [];
+      }
+
+      // Add to array
+      files[fieldName].push(fileBuffer);
     } else {
       // It's a text field
       fields[fieldName] = content.toString().trim();
@@ -92,7 +99,7 @@ export const generateAIImage = onRequest(
         error: "Internal server error",
       });
     }
-  }
+  },
 );
 
 /**
@@ -178,49 +185,74 @@ const handleMultipartRequest = async (req: any, res: any): Promise<void> => {
 async function processMultipartBody(body: Buffer, boundary: string, res: any) {
   const { fields, files } = parseMultipartData(body, boundary);
 
-  if (!files.image) {
-    console.error("❌ No image file found");
+  // Collect all image files - support multiple naming conventions
+  const imageBuffers: Buffer[] = [];
+
+  // Check for 'image' field (can be array)
+  if (files.image && files.image.length > 0) {
+    imageBuffers.push(...files.image);
+  }
+
+  // Check for 'images' field
+  if (files.images && files.images.length > 0) {
+    imageBuffers.push(...files.images);
+  }
+
+  // Check for numbered fields: image1, image2, image3, etc.
+  Object.keys(files).forEach((key) => {
+    if (key.match(/^image\d+$/)) {
+      imageBuffers.push(...files[key]);
+    }
+  });
+
+  if (imageBuffers.length === 0) {
+    console.error("❌ No image files found");
     console.log("Available files:", Object.keys(files));
     console.log("Available fields:", Object.keys(fields));
     res.status(400).json({
       success: false,
-      error: "No image file provided",
+      error:
+        "No image files provided. Use 'image', 'images', or 'image1', 'image2', etc.",
     });
     return;
   }
 
-  const imageBuffer = files.image;
+  console.log(`✅ Received ${imageBuffers.length} image(s)`);
+  imageBuffers.forEach((buf, idx) => {
+    console.log(`   Image ${idx + 1}: ${buf.length} bytes`);
+  });
+
   const prompt = fields.prompt || "";
   const style = fields.style || "";
   const userId = fields.userId || "";
 
-  console.log(`✅ Image received: ${imageBuffer.length} bytes`);
   console.log(
-    `📋 Parameters: prompt="${prompt}", style="${style}", userId="${userId}"`
+    `📋 Parameters: prompt="${prompt.substring(0, 100)}...", style="${style}", userId="${userId}"`,
   );
 
-  // Convert buffer to base64 - detect image type from buffer
-  let mimeType = "image/jpeg"; // default
-  if (
-    imageBuffer
-      .slice(0, 8)
-      .equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))
-  ) {
-    mimeType = "image/png";
-  }
+  // Convert all buffers to base64 images
+  const base64Images = imageBuffers.map((imageBuffer) => {
+    let mimeType = "image/jpeg"; // default
+    if (
+      imageBuffer
+        .slice(0, 8)
+        .equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))
+    ) {
+      mimeType = "image/png";
+    }
 
-  const base64Image = `data:${mimeType};base64,${imageBuffer.toString(
-    "base64"
-  )}`;
+    return `data:${mimeType};base64,${imageBuffer.toString("base64")}`;
+  });
 
   const request: ImageGenerationRequest = {
-    imageData: base64Image,
+    imageData: base64Images[0], // First image (backward compatibility)
+    images: base64Images, // All images for multi-image support
     prompt,
     style,
     userId,
   };
 
-  console.log("🤖 Sending to Replicate AI...");
+  console.log(`🤖 Sending ${base64Images.length} image(s) to Replicate AI...`);
   const result = await replicateService.generateImageFromWebcam(request);
 
   res.status(result.success ? 200 : 400).json(result);
@@ -294,7 +326,7 @@ export const getProcessingStatus = https.onRequest(
         error: "Failed to get processing status",
       });
     }
-  }
+  },
 );
 
 /**
@@ -313,7 +345,7 @@ export const healthCheck = https.onRequest(
       message: "AI Image Generation Service is running",
       timestamp: new Date().toISOString(),
     });
-  }
+  },
 );
 
 /**
@@ -353,7 +385,7 @@ export const sendToVTEX = https.onRequest(
               "NRYXTDVWTORDSZKJFIMEVHONLMSOKREDDDFVOAAWTUHRPWPNUTYBLGPRCYYCJSKHVWGHPKZMKVRMARRUXNVSXRYIGWGPGTHGHJPCXNPYLAMCPAECVQPZFQALCBNJGXBZ",
           },
           body: JSON.stringify(data),
-        }
+        },
       );
 
       if (response.ok) {
@@ -369,7 +401,7 @@ export const sendToVTEX = https.onRequest(
         console.error(
           "❌ Error al enviar datos al CRM:",
           response.status,
-          errorText
+          errorText,
         );
         res.status(response.status).json({
           error: "Failed to send data to VTEX CRM",
@@ -383,5 +415,5 @@ export const sendToVTEX = https.onRequest(
         details: error instanceof Error ? error.message : "Unknown error",
       });
     }
-  }
+  },
 );

@@ -22,38 +22,45 @@ class ReplicateService {
         return this.replicate;
     }
     /**
-     * Generate AI image from webcam capture - Single step business style conversion
+     * Generate AI image from webcam capture - Multi-image composition
      */
     async generateImageFromWebcam(request) {
         const requestId = (0, utils_1.generateRequestId)();
         try {
-            console.log(`[${requestId}] Starting 3D caricature conversion with nano-banana`);
-            // Convert and optimize the image
-            const imageBuffer = (0, utils_1.base64ToBuffer)(request.imageData);
-            const optimizedBuffer = await (0, utils_1.optimizeImageForAI)(imageBuffer);
-            // Upload original image to storage for processing
-            const originalImageUrl = await (0, storage_1.uploadToStorage)(optimizedBuffer, "original-images", `original_${requestId}.jpg`);
-            // Single step: Convert to 3D caricature style using nano-banana
-            console.log(`[${requestId}] Processing with nano-banana for 3D caricature conversion`);
+            console.log(`[${requestId}] Starting multi-person photo composition with nano-banana-2`);
+            console.log(`[${requestId}] Processing ${request.images?.length || 1} image(s)`);
+            // Upload all images to storage
+            const imageUrls = [];
+            const imagesToProcess = request.images || [request.imageData];
+            for (let i = 0; i < imagesToProcess.length; i++) {
+                const imageBuffer = (0, utils_1.base64ToBuffer)(imagesToProcess[i]);
+                const optimizedBuffer = await (0, utils_1.optimizeImageForAI)(imageBuffer);
+                const imageUrl = await (0, storage_1.uploadToStorage)(optimizedBuffer, "original-images", `original_${requestId}_${i + 1}.jpg`);
+                imageUrls.push(imageUrl);
+                console.log(`[${requestId}] Uploaded image ${i + 1}: ${imageUrl}`);
+            }
+            // Process with nano-banana-2 using all image URLs
+            console.log(`[${requestId}] Processing with nano-banana-2 for multi-person composition`);
             const prompt = request.prompt || this.getDefaultPrompt(request.style);
-            console.log(`[${requestId}] Using prompt: "${prompt}"`);
-            const finalImageUrl = await this.processWithNanoBanana(originalImageUrl, prompt, request.style);
-            console.log(`[${requestId}] 3D caricature conversion completed successfully`);
+            console.log(`[${requestId}] Using prompt: "${prompt.substring(0, 100)}..."`);
+            const finalImageUrl = await this.processWithNanoBanana(imageUrls, prompt, request.style);
+            console.log(`[${requestId}] Multi-person photo composition completed successfully`);
             const resultFinal = {
                 success: true,
                 imageUrl: finalImageUrl,
-                message: "Image processed successfully with 3D caricature style",
+                message: "Image processed successfully with multi-person composition",
                 requestId,
                 debug: {
-                    originalImage: originalImageUrl,
+                    originalImages: imageUrls,
                     finalImage: finalImageUrl,
+                    imageCount: imageUrls.length,
                 },
             };
-            console.log(`[resultFinal 3D caricature]`, resultFinal);
+            console.log(`[resultFinal multi-person composition]`, resultFinal);
             return resultFinal;
         }
         catch (error) {
-            console.error(`[${requestId}] 3D caricature conversion failed:`, error);
+            console.error(`[${requestId}] Multi-person photo composition failed:`, error);
             return {
                 success: false,
                 error: error instanceof Error ? error.message : "Unknown error occurred",
@@ -62,18 +69,22 @@ class ReplicateService {
         }
     }
     /**
-     * Process image with nano-banana for 3D caricature conversion
+     * Process image with nano-banana-2 for multi-person photo composition
      */
-    async processWithNanoBanana(imageUrl, prompt, style) {
-        // nano-banana parameters - optimized for 3D caricature style
+    async processWithNanoBanana(imageUrls, prompt, style) {
+        // nano-banana-2 parameters - optimized for multi-image composition
         const input = {
             prompt: prompt,
-            image_input: [imageUrl],
-            aspect_ratio: "3:4",
+            resolution: "1K",
+            image_input: imageUrls, // Array of image URLs
+            aspect_ratio: "9:16",
+            image_search: false,
+            google_search: false,
             output_format: "jpg",
         };
-        console.log("Processing with nano-banana for 3D caricature:", config_1.REPLICATE_MODELS.NANO_BANANA.model);
-        console.log("Using 3D caricature prompt:", prompt);
+        console.log("Processing with nano-banana-2 for multi-person composition:", config_1.REPLICATE_MODELS.NANO_BANANA.model);
+        console.log(`Using ${imageUrls.length} image(s):`, imageUrls);
+        console.log("Using composition prompt:", prompt.substring(0, 200) + "...");
         const output = await (0, utils_1.retryWithBackoff)(async () => {
             return await this.initReplicate().run(`${config_1.REPLICATE_MODELS.NANO_BANANA.model}`, {
                 input,
@@ -91,11 +102,11 @@ class ReplicateService {
             imageUrl_result = output[0];
         }
         else {
-            throw new Error("Unexpected output format from nano-banana API");
+            throw new Error("Unexpected output format from nano-banana-2 API");
         }
         // Download and upload to our storage as final result
         const requestId = Date.now().toString();
-        return await this.downloadAndUploadImage(imageUrl_result, `caricature_${requestId}`);
+        return await this.downloadAndUploadImage(imageUrl_result, `composition_${requestId}`);
     }
     /**
      * Download generated image and upload to our storage
@@ -118,8 +129,8 @@ class ReplicateService {
      * Get default prompt based on style
      */
     getDefaultPrompt(style) {
-        // Default 3D caricature prompt for nano-banana
-        return 'Transform the uploaded photo into a high-quality 3D caricature style portrait with exaggerated but recognizable facial features.\n\nThe person must clearly remain the same individual: preserve exact facial structure, eye shape, nose, mouth, skin tone, hairline, and expression identity from the original photo. Do NOT change gender, age, or facial proportions beyond stylized exaggeration.\n\nStyle details:\n\nSemi-realistic 3D caricature, big expressive eyes, slightly enlarged head, smooth skin, detailed facial shading\n\nHighly expressive, joyful facial expression, wide smile, energetic pose\n\nClothing:\n\nRed soccer jersey with yellow and blue trim on the collar and sleeves\n\nWhite "Claro" logo centered on the chest\n\nJersey fit and fabric texture similar to a professional football uniform\n\nPose:\n\nUpper body visible\n\nBoth fists clenched in front of the chest in a celebratory pose\n\nBackground:\n\nStadium environment with blurred crowd\n\nWarm cinematic lighting\n\nFloating confetti and particles in the air\n\nDepth of field with strong subject focus\n\nLighting & quality:\n\nDramatic stadium lights\n\nHigh contrast, vibrant colors\n\nUltra high resolution, sharp focus, professional render\n\nImportant constraints:\n\nDo NOT replace the face with another person\n\nDo NOT alter facial identity\n\nKeep the same character style, jersey, and background for every transformation';
+        // Default prompt for nano-banana-2 multi-person photo composition
+        return 'Use the first attached image as the base photo containing the person or group of people. This image must remain the original foundation of the final result. Do not recreate, duplicate, replace, or modify the people in this first image. Preserve their faces, body proportions, clothing, expressions, and positions exactly as they appear, keeping them fully recognizable. Do not generate extra copies of them and do not add new people that were not provided.\n\nUse all other attached images (second, third, etc.) only as references for the characters or persons that will be added into the scene. Insert those characters naturally into the environment of the first photo so it looks like everyone was photographed together in the same moment. Place them beside the people from the base image in a natural and friendly way, making sure they do not block faces or alter the original subjects.\n\nCarefully match the camera perspective, angle, depth of field, lighting direction, color temperature, and shadows from the base photo so the added characters blend seamlessly with the scene. Respect realistic scale, distance, and positioning so the composition looks believable and naturally staged.\n\nApply a professional photography style and high-quality photo editing: balanced exposure, improved dynamic range, natural skin tones, subtle color grading, enhanced clarity, realistic shadows, refined contrast, and clean sharpening for a polished look. The result should feel like a professionally taken photograph, with cinematic yet natural lighting, smooth blending, and consistent color tones across all subjects.\n\nVery important: do not modify, duplicate, regenerate, or alter the people from the first image. Only add the characters from the additional attached images into the existing scene.\n\nAvoid distortions, extra limbs, duplicated faces, cloned people, floating objects, text, logos, watermarks, or artificial artifacts.\n\nThe final image should be vertical (aspect ratio 9:16), optimized for mobile viewing and social media stories, with a well-balanced composition, the main subjects centered, natural spacing, and a clean professional finish suitable for sharing on social media.';
     }
     /**
      * Check processing status (for async operations)

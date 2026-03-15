@@ -1,5 +1,6 @@
 export interface ImageGenerationRequest {
-  imageData: string; // Base64 encoded image
+  imageData: string; // Base64 encoded image (first/main image)
+  images?: string[]; // Array of base64 encoded images for multi-image support
   prompt?: string;
   style?: string;
   userId?: string;
@@ -16,7 +17,10 @@ export interface ImageGenerationResponse {
     step1_logo?: string; // Result from multi-image-kontext-max (logo added)
     step2_styled?: string; // Result from flux-kontext-pro (style converted)
     step3_final?: string; // Result from BiRefNet (background removed)
-    originalImage?: string; // Original uploaded image
+    originalImage?: string; // Original uploaded image (deprecated)
+    originalImages?: string[]; // Array of original images
+    finalImage?: string; // Final result
+    imageCount?: number; // Number of images processed
   };
 }
 

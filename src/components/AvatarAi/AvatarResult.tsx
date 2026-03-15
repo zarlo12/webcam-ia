@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./AvatarPhoto.scss";
 import logo from "../../assets/img/empresas.png";
+import { QRCodeSVG } from "qrcode.react";
 
 import { storage, db } from "../../firebaseConfig";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
@@ -32,6 +33,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string>(imageUrl);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [loadingMessage, setLoadingMessage] = useState<string>("Generando avatar...");
+  const [showQRModal, setShowQRModal] = useState<boolean>(false);
   const hasUploadedRef = useRef(false);
 
  
@@ -163,12 +165,27 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
                     alt="Avatar generado"
                   />
                 </div>
+                
                 {/* <h2 className="subtitleResult">
                   Comparte esta imagen 
                   <br />en Instagram y etiquétanos 
                   <br />
                   <div style={{ color: "#041e50" }}>@electrolux_co</div>
                 </h2> */}<br/> <br/>
+                
+                <button
+                  type="button"
+                  className="button btnResult"
+                  onClick={() => setShowQRModal(true)}
+                  style={{ 
+                    width: "250px",
+                    marginBottom: "15px",
+                    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+                  }}
+                >
+                  📱 Ver QR
+                </button>
+                
                 <button
                   type="button"
                   className="button btnResult"
@@ -182,6 +199,159 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Modal del Código QR */}
+      {showQRModal && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.75)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,
+            padding: '20px'
+          }}
+          onClick={() => setShowQRModal(false)}
+        >
+          <div 
+            style={{
+              background: 'white',
+              borderRadius: '20px',
+              padding: '40px',
+              maxWidth: '400px',
+              width: '100%',
+              position: 'relative',
+              boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
+              animation: 'modalFadeIn 0.3s ease-out'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Botón cerrar */}
+            <button
+              onClick={() => setShowQRModal(false)}
+              style={{
+                position: 'absolute',
+                top: '15px',
+                right: '15px',
+                background: 'transparent',
+                border: 'none',
+                fontSize: '28px',
+                cursor: 'pointer',
+                color: '#666',
+                lineHeight: '1',
+                padding: '5px',
+                transition: 'color 0.2s'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.color = '#f91b00'}
+              onMouseLeave={(e) => e.currentTarget.style.color = '#666'}
+            >
+              ×
+            </button>
+
+            {/* Contenido del modal */}
+            <div style={{ textAlign: 'center' }}>
+              <h2 style={{
+                fontSize: '24px',
+                fontWeight: 'bold',
+                color: '#333',
+                marginBottom: '10px',
+                marginTop: 0
+              }}>
+                📱 Descarga tu Foto
+              </h2>
+              
+              <p style={{
+                fontSize: '14px',
+                color: '#666',
+                marginBottom: '25px',
+                lineHeight: '1.5'
+              }}>
+                Escanea el código QR con la cámara de tu celular para descargar la imagen
+              </p>
+
+              <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                padding: '20px',
+                background: '#f8f9fa',
+                borderRadius: '15px',
+                marginBottom: '20px'
+              }}>
+                <QRCodeSVG 
+                  value={uploadedImageUrl}
+                  size={220}
+                  level="H"
+                  includeMargin={true}
+                  style={{
+                    maxWidth: '100%',
+                    height: 'auto'
+                  }}
+                />
+              </div>
+
+              <div style={{
+                background: '#e3f2fd',
+                padding: '15px',
+                borderRadius: '10px',
+                marginBottom: '20px'
+              }}>
+                <p style={{
+                  fontSize: '13px',
+                  color: '#1976d2',
+                  margin: 0,
+                  lineHeight: '1.6'
+                }}>
+                  💡 <strong>Tip:</strong> Abre la app de cámara nativa de tu celular y apunta al código QR. Se abrirá automáticamente el enlace.
+                </p>
+              </div>
+
+              <button
+                onClick={() => setShowQRModal(false)}
+                style={{
+                  width: '100%',
+                  padding: '14px',
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '10px',
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  transition: 'transform 0.2s, box-shadow 0.2s'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.02)';
+                  e.currentTarget.style.boxShadow = '0 5px 15px rgba(102, 126, 234, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                Cerrar
+              </button>
+            </div>
+          </div>
+
+          <style>{`
+            @keyframes modalFadeIn {
+              from {
+                opacity: 0;
+                transform: scale(0.9);
+              }
+              to {
+                opacity: 1;
+                transform: scale(1);
+              }
+            }
+          `}</style>
+        </div>
+      )}
     </div>
   );
 };

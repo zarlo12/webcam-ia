@@ -33,36 +33,55 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
       case "hombre":
         return `Transform the uploaded photo into a high-quality 3D caricature style portrait with exaggerated but recognizable facial features. The person must clearly remain the same individual: preserve exact facial structure, eye shape, nose, mouth, skin tone, hairline, and expression identity from the original photo. Do NOT change gender, age, or facial proportions beyond stylized exaggeration.
 
-            Style details: Semi-realistic 3D caricature, big expressive eyes, slightly enlarged head, smooth skin, detailed facial shading. Highly expressive, joyful facial expression, wide smile, energetic pose.
+Style details: Semi-realistic 3D caricature, big expressive eyes, slightly enlarged head, smooth skin, detailed facial shading. Highly expressive, joyful facial expression, wide smile, energetic pose.
 
-            Clothing: Bright saturated yellow soccer jersey with modern V-neck style, blue trim on the collar, thin red accent line along the shoulders, sleeve cuffs with thin blue edging. The jersey has subtle tonal floral and organic pattern textures embedded into the fabric (low contrast, elegant, almost embossed look). High-quality breathable polyester fabric with realistic folds and natural draping.
+Clothing: Bright saturated yellow soccer jersey with modern V-neck style, blue trim on the collar, thin red accent line along the shoulders, sleeve cuffs with thin blue edging. The jersey has subtle tonal floral and organic pattern textures embedded into the fabric (low contrast, elegant, almost embossed look). High-quality breathable polyester fabric with realistic folds and natural draping.
 
-            Logo details (CRITICAL): A clean, bold "Claro" logo centered on the chest in a strong solid RED color (not white, not light red, not orange). The red must be vivid and saturated (similar to official Claro branding), with high contrast against the yellow jersey. The logo must be perfectly visible, well integrated into the fabric, following realistic jersey printing style (not floating, not distorted, aligned with chest perspective). Do NOT change the logo color under any circumstance.
+LOGO RULES (STRICT - VERY IMPORTANT):
+- The ONLY visible logo on the jersey must be "Claro".
+- A clean, bold "Claro" logo centered on the chest in a strong solid RED color (not white, not light red, not orange).
+- The red must be vivid and saturated (similar to official Claro branding).
+- The logo must be perfectly visible, well integrated into the fabric, aligned with chest perspective.
+- Do NOT add any other logos, brands, symbols, sponsors, watermarks, or text on the jersey.
+- Explicitly forbidden: Nike, Adidas, Puma, or any other brand logos.
 
-            Pose: Upper body visible, both fists clenched in front of the chest in a celebratory pose.
+Pose: Upper body visible, both fists clenched in front of the chest in a celebratory pose.
 
-            Background: Stadium environment with blurred crowd, warm cinematic lighting, floating confetti and particles in the air, depth of field with strong subject focus.
+Background: Stadium environment with blurred crowd, warm cinematic lighting, floating confetti and particles in the air, depth of field with strong subject focus.
 
-            BOTTOM TEMPLATE INTEGRATION (VERY IMPORTANT):
-            Use "template_abajo.png" as a FIXED FULL-WIDTH BOTTOM BANNER.
-            - The template must span 100% of the image width from left edge to right edge.
-            - The template must be anchored to the very bottom edge of the final image (no margins, no padding, no floating).
-            - The template height must be clearly visible and proportional (approximately 20%–30% of total image height).
-            - The template must NOT appear small, cropped, repeated, or as a floating sticker.
-            - The template must maintain its original aspect ratio and design without any distortion, recoloring, or modifications.
-            - The main character must be positioned ABOVE the template, without covering or overlapping important elements of the template.
-            - Ensure a clean separation between the character area and the bottom banner.
+BOTTOM TEMPLATE INTEGRATION (CRITICAL - LAYOUT DEFINING ELEMENT):
+Use "template_abajo.png" as a STRUCTURAL FULL-WIDTH BOTTOM BANNER (not an overlay).
 
-            Lighting & quality: Dramatic stadium lights, high contrast, vibrant colors, ultra high resolution, sharp focus, professional render.
+MANDATORY RULES:
+- The template MUST span exactly 100% of the final image width (edge-to-edge, left to right).
+- The template MUST be perfectly aligned and attached to the bottom edge (no spacing, no margins, no floating).
+- The template MUST occupy a significant portion of the image height (between 25% and 35%).
+- The template MUST be clearly large and dominant, never small.
 
-            Important constraints:
-            Do NOT modify or recreate the template.
-            Do NOT place the template as a small object.
-            Do NOT crop the template.
-            The template must look like a professional lower banner integrated into the composition.
-            Do NOT replace the face with another person.
-            Do NOT alter facial identity.
-            The "Claro" logo must always remain red and clearly visible.`;
+SCALING BEHAVIOR:
+- Scale the template proportionally until it reaches full image width.
+- If necessary, adjust the canvas composition to fit the full template width.
+- NEVER downscale the template to a small size.
+- NEVER crop, cut, or truncate any part of the template.
+- The entire template must be fully visible and complete.
+
+VISUAL INTEGRATION:
+- The template must look like a professional lower banner, not a sticker.
+- The character must be fully positioned ABOVE the template.
+- Do NOT overlap important areas of the template.
+- Maintain a clean visual separation between subject and banner.
+
+Lighting & quality: Dramatic stadium lights, high contrast, vibrant colors, ultra high resolution, sharp focus, professional render.
+
+Important constraints:
+Do NOT modify, redesign, or recreate the template.
+Do NOT crop the template.
+Do NOT place the template as a small object.
+Do NOT allow incomplete visibility of the template.
+The template must always be full-width, fully visible, and properly integrated.
+Do NOT replace the face with another person.
+Do NOT alter facial identity.
+The "Claro" logo must always remain red and clearly visible.`;
       case "mujer":
         return `Transform the uploaded photo into a high-quality 3D caricature style portrait with exaggerated but recognizable facial features. The person must clearly remain the same individual: preserve exact facial structure, eye shape, nose, mouth, skin tone, hairline, and expression identity from the original photo. Do NOT change gender, age, or facial proportions beyond stylized exaggeration.
 
@@ -70,29 +89,48 @@ Style details: Semi-realistic 3D caricature, big expressive eyes, slightly enlar
 
 Clothing: Bright saturated yellow soccer jersey with modern V-neck style, blue trim on the collar, thin red accent line along the shoulders, sleeve cuffs with thin blue edging. The jersey has subtle tonal floral and organic pattern textures embedded into the fabric (low contrast, elegant, almost embossed look). High-quality breathable polyester fabric with realistic folds and natural draping.
 
-Logo details (CRITICAL): A clean, bold "Claro" logo centered on the chest in a strong solid RED color (not white, not light red, not orange). The red must be vivid and saturated (similar to official Claro branding), with high contrast against the yellow jersey. The logo must be perfectly visible, well integrated into the fabric, following realistic jersey printing style (not floating, not distorted, aligned with chest perspective). Do NOT change the logo color under any circumstance.
+LOGO RULES (STRICT - VERY IMPORTANT):
+- The ONLY visible logo on the jersey must be "Claro".
+- A clean, bold "Claro" logo centered on the chest in a strong solid RED color (not white, not light red, not orange).
+- The red must be vivid and saturated (similar to official Claro branding).
+- The logo must be perfectly visible, well integrated into the fabric, aligned with chest perspective.
+- Do NOT add any other logos, brands, symbols, sponsors, watermarks, or text on the jersey.
+- Explicitly forbidden: Nike, Adidas, Puma, or any other brand logos.
 
 Pose: Upper body visible, both fists clenched in front of the chest in a celebratory pose.
 
 Background: Stadium environment with blurred crowd, warm cinematic lighting, floating confetti and particles in the air, depth of field with strong subject focus.
 
-BOTTOM TEMPLATE INTEGRATION (VERY IMPORTANT):
-Use "template_abajo.png" as a FIXED FULL-WIDTH BOTTOM BANNER.
-- The template must span 100% of the image width from left edge to right edge.
-- The template must be anchored to the very bottom edge of the final image (no margins, no padding, no floating).
-- The template height must be clearly visible and proportional (approximately 20%–30% of total image height).
-- The template must NOT appear small, cropped, repeated, or as a floating sticker.
-- The template must maintain its original aspect ratio and design without any distortion, recoloring, or modifications.
-- The main character must be positioned ABOVE the template, without covering or overlapping important elements of the template.
-- Ensure a clean separation between the character area and the bottom banner.
+BOTTOM TEMPLATE INTEGRATION (CRITICAL - LAYOUT DEFINING ELEMENT):
+Use "template_abajo.png" as a STRUCTURAL FULL-WIDTH BOTTOM BANNER (not an overlay).
+
+MANDATORY RULES:
+- The template MUST span exactly 100% of the final image width (edge-to-edge, left to right).
+- The template MUST be perfectly aligned and attached to the bottom edge (no spacing, no margins, no floating).
+- The template MUST occupy a significant portion of the image height (between 25% and 35%).
+- The template MUST be clearly large and dominant, never small.
+
+SCALING BEHAVIOR:
+- Scale the template proportionally until it reaches full image width.
+- If necessary, adjust the canvas composition to fit the full template width.
+- NEVER downscale the template to a small size.
+- NEVER crop, cut, or truncate any part of the template.
+- The entire template must be fully visible and complete.
+
+VISUAL INTEGRATION:
+- The template must look like a professional lower banner, not a sticker.
+- The character must be fully positioned ABOVE the template.
+- Do NOT overlap important areas of the template.
+- Maintain a clean visual separation between subject and banner.
 
 Lighting & quality: Dramatic stadium lights, high contrast, vibrant colors, ultra high resolution, sharp focus, professional render.
 
 Important constraints:
-Do NOT modify or recreate the template.
-Do NOT place the template as a small object.
+Do NOT modify, redesign, or recreate the template.
 Do NOT crop the template.
-The template must look like a professional lower banner integrated into the composition.
+Do NOT place the template as a small object.
+Do NOT allow incomplete visibility of the template.
+The template must always be full-width, fully visible, and properly integrated.
 Do NOT replace the face with another person.
 Do NOT alter facial identity.
 The "Claro" logo must always remain red and clearly visible.`;

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import fondo from '../../assets/img/TextIZQsup.png'
+// import fondo from '../../assets/img/TextIZQsup.png' // Logo desactivado
 
 interface MergeImageProps {
   imageUrl: string; // URL de la imagen principal (avatar)
@@ -30,53 +30,26 @@ const MergeImage: React.FC<MergeImageProps> = ({
         img.src = src;
       });
 
-    console.log(`🎨 Fusionando imagen empresarial con overlay inferior derecho`);
+    console.log(`🎨 Procesando imagen sin overlay (logo desactivado)`);
 
-    Promise.all([
-      loadImage(imageUrl),   // imagen principal (avatar empresarial)
-      loadImage(fondo)       // elemento que va encima (superior izquierda)
-    ])
-      .then(([mainImg, overlayImg]) => {
+    // Solo cargar y retornar la imagen principal sin overlay
+    loadImage(imageUrl)
+      .then((mainImg) => {
         // Ajustamos el canvas al tamaño de la imagen principal (tamaño real)
         canvas.width = mainImg.width;
         canvas.height = mainImg.height;
 
-        // Dibujar la imagen principal como base (tamaño completo)
+        // Dibujar solo la imagen principal
         ctx.drawImage(mainImg, 0, 0, canvas.width, canvas.height);
 
-        // Dibujar el elemento overlay con posición y tamaño ajustables
-        const overlayScale = 0.7; // Hacer el overlay 70% de su tamaño original
-        const overlayWidth = overlayImg.width * overlayScale;
-        const overlayHeight = overlayImg.height * overlayScale;
-        
-        // 🎯 POSICIÓN MANUAL - Ajusta estos valores para mover el overlay
-        const overlayX = 450; // Posición X (horizontal) - aumenta para mover a la derecha
-        const overlayY = 1180; // Posición Y (vertical) - aumenta para mover hacia abajo
-        
-        console.log(`🔍 Debug posicionamiento:`);
-        console.log(`Canvas: ${canvas.width}x${canvas.height}`);
-        console.log(`Overlay original: ${overlayImg.width}x${overlayImg.height}`);
-        console.log(`Overlay escalado: ${overlayWidth}x${overlayHeight}`);
-        console.log(`Posición manual: (${overlayX}, ${overlayY})`);
-        
-        // Dibujar el overlay con el nuevo tamaño y posición
-        ctx.drawImage(
-          overlayImg,
-          overlayX,
-          overlayY,
-          overlayWidth,
-          overlayHeight
-        );
-
-        console.log(`🎯 Imagen base: ${mainImg.width}x${mainImg.height}`);
-        console.log(`🎯 Overlay posicionado en: (${overlayX}, ${overlayY}) - Tamaño: ${Math.round(overlayWidth)}x${Math.round(overlayHeight)}`);
+        console.log(`🎯 Imagen procesada: ${mainImg.width}x${mainImg.height} (sin overlay)`);
 
         // Convertir a Data URL y pasar al callback
         const mergedDataUrl = canvas.toDataURL("image/png");
         onMerged(mergedDataUrl);
       })
       .catch((error) => {
-        console.error("Error al cargar las imágenes:", error);
+        console.error("Error al cargar la imagen:", error);
       });
   }, [imageUrl, onMerged, tipoSuenio]);
 

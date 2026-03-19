@@ -6,7 +6,7 @@ import { ImageGenerationRequest } from "../types";
 // Simple multipart parser for Firebase Functions
 function parseMultipartData(
   body: Buffer,
-  boundary: string
+  boundary: string,
 ): { fields: Record<string, string>; files: Record<string, Buffer> } {
   const fields: Record<string, string> = {};
   const files: Record<string, Buffer> = {};
@@ -92,7 +92,7 @@ export const generateAIImage = onRequest(
         error: "Internal server error",
       });
     }
-  }
+  },
 );
 
 /**
@@ -108,7 +108,9 @@ export const generateCaricatureImage = onRequest(
   },
   async (req, res) => {
     try {
-      console.log(`📥 ${req.method} request received to generateCaricatureImage - using custom parser v4`);
+      console.log(
+        `📥 ${req.method} request received to generateCaricatureImage - using custom parser v4`,
+      );
 
       if (req.method !== "POST") {
         res.status(405).json({
@@ -142,15 +144,20 @@ export const generateCaricatureImage = onRequest(
         error: "Internal server error",
       });
     }
-  }
+  },
 );
 
 /**
  * Handle multipart/form-data requests for template-based processing
  */
-const handleMultipartRequestForTemplate = async (req: any, res: any): Promise<void> => {
+const handleMultipartRequestForTemplate = async (
+  req: any,
+  res: any,
+): Promise<void> => {
   try {
-    console.log("📥 Processing multipart request for template with custom parser");
+    console.log(
+      "📥 Processing multipart request for template with custom parser",
+    );
 
     const contentType = req.get("content-type") || "";
     const boundaryMatch = contentType.match(/boundary=(.+)$/);
@@ -223,7 +230,11 @@ const handleMultipartRequestForTemplate = async (req: any, res: any): Promise<vo
   }
 };
 
-async function processMultipartBodyForTemplate(body: Buffer, boundary: string, res: any) {
+async function processMultipartBodyForTemplate(
+  body: Buffer,
+  boundary: string,
+  res: any,
+) {
   const { fields, files } = parseMultipartData(body, boundary);
 
   if (!files.image) {
@@ -255,7 +266,7 @@ async function processMultipartBodyForTemplate(body: Buffer, boundary: string, r
   }
 
   const base64Image = `data:${mimeType};base64,${imageBuffer.toString(
-    "base64"
+    "base64",
   )}`;
 
   const request: ImageGenerationRequest = {
@@ -273,7 +284,10 @@ async function processMultipartBodyForTemplate(body: Buffer, boundary: string, r
 /**
  * Handle JSON requests for template-based processing
  */
-const handleJsonRequestForTemplate = async (req: any, res: any): Promise<void> => {
+const handleJsonRequestForTemplate = async (
+  req: any,
+  res: any,
+): Promise<void> => {
   const { imageData, prompt, userId } = req.body;
 
   if (!imageData) {
@@ -403,7 +417,7 @@ async function processMultipartBody(body: Buffer, boundary: string, res: any) {
 
   console.log(`✅ Image received: ${imageBuffer.length} bytes`);
   console.log(
-    `📋 Parameters: prompt="${prompt}", style="${style}", userId="${userId}"`
+    `📋 Parameters: prompt="${prompt}", style="${style}", userId="${userId}"`,
   );
 
   // Convert buffer to base64 - detect image type from buffer
@@ -417,7 +431,7 @@ async function processMultipartBody(body: Buffer, boundary: string, res: any) {
   }
 
   const base64Image = `data:${mimeType};base64,${imageBuffer.toString(
-    "base64"
+    "base64",
   )}`;
 
   const request: ImageGenerationRequest = {
@@ -501,7 +515,7 @@ export const getProcessingStatus = https.onRequest(
         error: "Failed to get processing status",
       });
     }
-  }
+  },
 );
 
 /**
@@ -520,7 +534,7 @@ export const healthCheck = https.onRequest(
       message: "AI Image Generation Service is running",
       timestamp: new Date().toISOString(),
     });
-  }
+  },
 );
 
 /**
@@ -560,7 +574,7 @@ export const sendToVTEX = https.onRequest(
               "NRYXTDVWTORDSZKJFIMEVHONLMSOKREDDDFVOAAWTUHRPWPNUTYBLGPRCYYCJSKHVWGHPKZMKVRMARRUXNVSXRYIGWGPGTHGHJPCXNPYLAMCPAECVQPZFQALCBNJGXBZ",
           },
           body: JSON.stringify(data),
-        }
+        },
       );
 
       if (response.ok) {
@@ -576,7 +590,7 @@ export const sendToVTEX = https.onRequest(
         console.error(
           "❌ Error al enviar datos al CRM:",
           response.status,
-          errorText
+          errorText,
         );
         res.status(response.status).json({
           error: "Failed to send data to VTEX CRM",
@@ -590,5 +604,5 @@ export const sendToVTEX = https.onRequest(
         details: error instanceof Error ? error.message : "Unknown error",
       });
     }
-  }
+  },
 );

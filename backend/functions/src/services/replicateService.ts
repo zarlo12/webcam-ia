@@ -1,5 +1,10 @@
 import Replicate from "replicate";
-import { replicateConfig, REPLICATE_MODELS, LOGO_URL, TEMPLATE_URL } from "../config";
+import {
+  replicateConfig,
+  REPLICATE_MODELS,
+  LOGO_URL,
+  TEMPLATE_URL,
+} from "../config";
 import {
   ImageGenerationRequest,
   ImageGenerationResponse,
@@ -307,7 +312,7 @@ class ReplicateService {
    * Get default prompt for template-based processing
    */
   private getDefaultTemplatePrompt(): string {
-    return 'Use the template image as the exact base design.\n\nReplace ONLY the person in the template with the person from the uploaded photo.\n\nKeep the same pose, framing, camera angle, lighting, and body position.\n\nThe face must match the uploaded person exactly (identity, skin tone, facial features).\n\nBlend the face naturally into the body so it looks realistic and professional.\n\nStrict Rules:\n\nDo NOT change anything else in the image.\n\nDo NOT modify colors, background, logos, icons, layout, or design.\n\nDo NOT move or resize elements.\n\nKeep everything identical to the template.';
+    return "Use the template image as the exact base design.\n\nReplace ONLY the person in the template with the person from the uploaded photo.\n\nKeep the same pose, framing, camera angle, lighting, and body position.\n\nThe face must match the uploaded person exactly (identity, skin tone, facial features).\n\nBlend the face naturally into the body so it looks realistic and professional.\n\nStrict Rules:\n\nDo NOT change anything else in the image.\n\nDo NOT modify colors, background, logos, icons, layout, or design.\n\nDo NOT move or resize elements.\n\nKeep everything identical to the template.";
   }
 
   /**

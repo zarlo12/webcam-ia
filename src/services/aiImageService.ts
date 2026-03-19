@@ -42,7 +42,8 @@ class AIImageService {
     } else {
       // Production URLs https://generateaiimage-buybcovkna-uc.a.run.app
       this.generateImageUrl = "https://generateaiimage-buybcovkna-uc.a.run.app";
-      this.generateCaricatureUrl = "https://generatecaricatureimage-buybcovkna-uc.a.run.app";
+      this.generateCaricatureUrl =
+        "https://generatecaricatureimage-buybcovkna-uc.a.run.app";
       this.healthCheckUrl = "https://healthcheck-buybcovkna-uc.a.run.app";
       this.processingStatusUrl =
         "https://getprocessingstatus-buybcovkna-uc.a.run.app";
@@ -97,7 +98,7 @@ class AIImageService {
   async generateCaricatureWithTemplate(
     imageBlob: Blob,
     prompt?: string,
-    userId?: string
+    userId?: string,
   ): Promise<AIImageResponse> {
     try {
       const formData = new FormData();
@@ -108,7 +109,7 @@ class AIImageService {
 
       console.log(
         "Sending image with FormData to Caricature generation service (nano-banana-2 with template)...",
-        formData
+        formData,
       );
 
       const response = await axios.post(this.generateCaricatureUrl, formData, {
@@ -146,7 +147,7 @@ class AIImageService {
     imageBlob: Blob,
     prompt?: string,
     style?: string,
-    userId?: string
+    userId?: string,
   ): Promise<AIImageResponse> {
     try {
       const formData = new FormData();
@@ -158,7 +159,7 @@ class AIImageService {
 
       console.log(
         "Sending image with FormData to AI generation service...",
-        formData
+        formData,
       );
 
       const response = await axios.post(this.generateImageUrl, formData, {
@@ -218,7 +219,7 @@ class AIImageService {
     try {
       const response = await axios.get(
         `${this.processingStatusUrl}?predictionId=${predictionId}`,
-        { timeout: 10000 }
+        { timeout: 10000 },
       );
       return response.data;
     } catch (error) {

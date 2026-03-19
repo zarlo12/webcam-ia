@@ -31,9 +31,37 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   const getPromptByGender = (gender: string): string => {
     switch (gender) {
       case "hombre":
-        return `Transform the uploaded photo into a high-quality 3D caricature style portrait with exaggerated but recognizable facial features. The person must clearly remain the same individual: preserve exact facial structure, eye shape, nose, mouth, skin tone, hairline, and expression identity from the original photo. Do NOT change gender, age, or facial proportions beyond stylized exaggeration. Style details: Semi-realistic 3D caricature, big expressive eyes, slightly enlarged head, smooth skin, detailed facial shading. Highly expressive, joyful facial expression, wide smile, energetic pose. Clothing: Bright saturated yellow soccer jersey with modern V-neck style, blue trim on the collar, thin red accent line along the shoulders, sleeve cuffs with thin blue edging. The jersey has subtle tonal floral and organic pattern textures embedded into the fabric (low contrast, elegant, almost embossed look). High-quality breathable polyester fabric with realistic folds and natural draping. IMPORTANT: NO logos, NO brand marks (no Nike, Adidas, etc.), NO national team crests or emblems, completely clean jersey without any text or symbols. Pose: Upper body visible, both fists clenched in front of the chest in a celebratory pose. Background: Stadium environment with blurred crowd, warm cinematic lighting, floating confetti and particles in the air, depth of field with strong subject focus. Lighting & quality: Dramatic stadium lights, high contrast, vibrant colors, ultra high resolution, sharp focus, professional render. Important constraints: Do NOT replace the face with another person, Do NOT alter facial identity, Do NOT add any logos or brand marks, keep the same character style, jersey, and background for every transformation.`;
+        return `Transform the uploaded photo into a high-quality 3D caricature style portrait with exaggerated but recognizable facial features. The person must clearly remain the same individual: preserve exact facial structure, eye shape, nose, mouth, skin tone, hairline, and expression identity from the original photo. Do NOT change gender, age, or facial proportions beyond stylized exaggeration.
+
+          Style details: Semi-realistic 3D caricature, big expressive eyes, slightly enlarged head, smooth skin, detailed facial shading. Highly expressive, joyful facial expression, wide smile, energetic pose.
+
+          Clothing: Bright saturated yellow soccer jersey with modern V-neck style, blue trim on the collar, thin red accent line along the shoulders, sleeve cuffs with thin blue edging. The jersey has subtle tonal floral and organic pattern textures embedded into the fabric (low contrast, elegant, almost embossed look). High-quality breathable polyester fabric with realistic folds and natural draping.
+
+          Logo details: A clean, white "Claro" logo centered on the chest, clearly visible, well integrated into the fabric, following realistic jersey printing style (not floating, not distorted, aligned with chest perspective).
+
+          Pose: Upper body visible, both fists clenched in front of the chest in a celebratory pose.
+
+          Background: Stadium environment with blurred crowd, warm cinematic lighting, floating confetti and particles in the air, depth of field with strong subject focus.
+
+          Lighting & quality: Dramatic stadium lights, high contrast, vibrant colors, ultra high resolution, sharp focus, professional render.
+
+          Important constraints: Do NOT replace the face with another person, Do NOT alter facial identity, keep the same character style, jersey, and background for every transformation.`;
       case "mujer":
-        return `Transform the uploaded photo into a high-quality 3D caricature style portrait with exaggerated but recognizable facial features. The person must clearly remain the same individual: preserve exact facial structure, eye shape, nose, mouth, skin tone, hairline, and expression identity from the original photo. Do NOT change gender, age, or facial proportions beyond stylized exaggeration. Style details: Semi-realistic 3D caricature, big expressive eyes, slightly enlarged head, smooth skin, detailed facial shading. Highly expressive, joyful facial expression, wide smile, energetic pose. Clothing: Bright saturated yellow soccer jersey with modern V-neck style, blue trim on the collar, thin red accent line along the shoulders, sleeve cuffs with thin blue edging. The jersey has subtle tonal floral and organic pattern textures embedded into the fabric (low contrast, elegant, almost embossed look). High-quality breathable polyester fabric with realistic folds and natural draping. IMPORTANT: NO logos, NO brand marks (no Nike, Adidas, etc.), NO national team crests or emblems, completely clean jersey without any text or symbols. Pose: Upper body visible, both fists clenched in front of the chest in a celebratory pose. Background: Stadium environment with blurred crowd, warm cinematic lighting, floating confetti and particles in the air, depth of field with strong subject focus. Lighting & quality: Dramatic stadium lights, high contrast, vibrant colors, ultra high resolution, sharp focus, professional render. Important constraints: Do NOT replace the face with another person, Do NOT alter facial identity, Do NOT add any logos or brand marks, keep the same character style, jersey, and background for every transformation.`;
+        return `Transform the uploaded photo into a high-quality 3D caricature style portrait with exaggerated but recognizable facial features. The person must clearly remain the same individual: preserve exact facial structure, eye shape, nose, mouth, skin tone, hairline, and expression identity from the original photo. Do NOT change gender, age, or facial proportions beyond stylized exaggeration.
+
+          Style details: Semi-realistic 3D caricature, big expressive eyes, slightly enlarged head, smooth skin, detailed facial shading. Highly expressive, joyful facial expression, wide smile, energetic pose.
+
+          Clothing: Bright saturated yellow soccer jersey with modern V-neck style, blue trim on the collar, thin red accent line along the shoulders, sleeve cuffs with thin blue edging. The jersey has subtle tonal floral and organic pattern textures embedded into the fabric (low contrast, elegant, almost embossed look). High-quality breathable polyester fabric with realistic folds and natural draping.
+
+          Logo details: A clean, white "Claro" logo centered on the chest, clearly visible, well integrated into the fabric, following realistic jersey printing style (not floating, not distorted, aligned with chest perspective).
+
+          Pose: Upper body visible, both fists clenched in front of the chest in a celebratory pose.
+
+          Background: Stadium environment with blurred crowd, warm cinematic lighting, floating confetti and particles in the air, depth of field with strong subject focus.
+
+          Lighting & quality: Dramatic stadium lights, high contrast, vibrant colors, ultra high resolution, sharp focus, professional render.
+
+          Important constraints: Do NOT replace the face with another person, Do NOT alter facial identity, keep the same character style, jersey, and background for every transformation.`;
       default:
         return "-";
     }

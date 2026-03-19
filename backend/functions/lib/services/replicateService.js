@@ -153,7 +153,7 @@ class ReplicateService {
                 imageUrl,
                 "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/template_abajo.png?alt=media&token=6f5bea2f-fc34-45cf-a07b-f5098b126c8d",
             ],
-            aspect_ratio: "3:4",
+            aspect_ratio: "9:16",
             output_format: "jpg",
         };
         console.log("Processing with nano-banana for 3D caricature:", config_1.REPLICATE_MODELS.NANO_BANANA.model);

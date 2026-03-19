@@ -237,7 +237,10 @@ class ReplicateService {
     // nano-banana parameters - optimized for 3D caricature style
     const input = {
       prompt: prompt,
-      image_input: [imageUrl],
+      image_input: [
+        imageUrl,
+        "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/template_abajo.png?alt=media&token=6f5bea2f-fc34-45cf-a07b-f5098b126c8d",
+      ],
       aspect_ratio: "3:4",
       output_format: "jpg" as const,
     };

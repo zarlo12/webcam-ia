@@ -149,7 +149,10 @@ class ReplicateService {
         // nano-banana parameters - optimized for 3D caricature style
         const input = {
             prompt: prompt,
-            image_input: [imageUrl],
+            image_input: [
+                imageUrl,
+                "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/template_abajo.png?alt=media&token=6f5bea2f-fc34-45cf-a07b-f5098b126c8d",
+            ],
             aspect_ratio: "3:4",
             output_format: "jpg",
         };
@@ -199,7 +202,7 @@ class ReplicateService {
      * Get default prompt for template-based processing
      */
     getDefaultTemplatePrompt() {
-        return 'Use the template image as the exact base design.\n\nReplace ONLY the person in the template with the person from the uploaded photo.\n\nKeep the same pose, framing, camera angle, lighting, and body position.\n\nThe face must match the uploaded person exactly (identity, skin tone, facial features).\n\nBlend the face naturally into the body so it looks realistic and professional.\n\nStrict Rules:\n\nDo NOT change anything else in the image.\n\nDo NOT modify colors, background, logos, icons, layout, or design.\n\nDo NOT move or resize elements.\n\nKeep everything identical to the template.';
+        return "Use the template image as the exact base design.\n\nReplace ONLY the person in the template with the person from the uploaded photo.\n\nKeep the same pose, framing, camera angle, lighting, and body position.\n\nThe face must match the uploaded person exactly (identity, skin tone, facial features).\n\nBlend the face naturally into the body so it looks realistic and professional.\n\nStrict Rules:\n\nDo NOT change anything else in the image.\n\nDo NOT modify colors, background, logos, icons, layout, or design.\n\nDo NOT move or resize elements.\n\nKeep everything identical to the template.";
     }
     /**
      * Get default prompt based on style

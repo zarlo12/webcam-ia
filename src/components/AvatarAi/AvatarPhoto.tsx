@@ -37,15 +37,34 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
 
           Clothing: Bright saturated yellow soccer jersey with modern V-neck style, blue trim on the collar, thin red accent line along the shoulders, sleeve cuffs with thin blue edging. The jersey has subtle tonal floral and organic pattern textures embedded into the fabric (low contrast, elegant, almost embossed look). High-quality breathable polyester fabric with realistic folds and natural draping.
 
-          Logo details: A clean, white "Claro" logo centered on the chest, clearly visible, well integrated into the fabric, following realistic jersey printing style (not floating, not distorted, aligned with chest perspective).
+          Logo details (CRITICAL): A clean, bold "Claro" logo centered on the chest in a strong solid RED color (not white, not light red, not orange). The red must be vivid and saturated (similar to official Claro branding), with high contrast against the yellow jersey. The logo must be perfectly visible, well integrated into the fabric, following realistic jersey printing style (not floating, not distorted, aligned with chest perspective). Do NOT change the logo color under any circumstance.
 
           Pose: Upper body visible, both fists clenched in front of the chest in a celebratory pose.
 
           Background: Stadium environment with blurred crowd, warm cinematic lighting, floating confetti and particles in the air, depth of field with strong subject focus.
 
+          Additional element (CRITICAL - MUST MATCH REFERENCE STYLE EXACTLY):
+          Add a wide horizontal fabric banner at the bottom of the image. The banner must look like real cloth (not a flat graphic), with subtle wrinkles, soft folds, and slight shading variations across the surface.
+
+          The main color of the banner is deep, saturated red with soft gradients and fabric texture. At the very top edge of the banner, include layered horizontal stripes in this exact order:
+          - a very thin red line at the top edge
+          - directly below it, a thick golden yellow stripe
+          - below that, a thinner dark blue stripe
+          - then the main red area continues
+
+          These stripes must look like part of a folded fabric edge, slightly curved and not perfectly straight, as if the cloth is stretched.
+
+          Centered on the red area, place two lines of large white uppercase text:
+          LA SEÑAL OFICIAL
+          DE LA SELECCIÓN COLOMBIA
+
+          Typography must be bold, condensed, tall, and sports-style (broadcast look), with clean edges and strong contrast. The text must be perfectly centered, evenly spaced, and occupy most of the banner width.
+
+          The entire banner should feel like an official Colombian football support banner, realistic printed fabric, slightly glossy, naturally integrated into the scene with perspective and lighting consistent with the stadium environment.
+
           Lighting & quality: Dramatic stadium lights, high contrast, vibrant colors, ultra high resolution, sharp focus, professional render.
 
-          Important constraints: Do NOT replace the face with another person, Do NOT alter facial identity, keep the same character style, jersey, and background for every transformation.`;
+          Important constraints: Do NOT replace the face with another person, Do NOT alter facial identity, keep the same character style, jersey, and background for every transformation. The bottom banner must always appear and match the described fabric style. The "Claro" logo must always remain red and clearly visible.`;
       case "mujer":
         return `Transform the uploaded photo into a high-quality 3D caricature style portrait with exaggerated but recognizable facial features. The person must clearly remain the same individual: preserve exact facial structure, eye shape, nose, mouth, skin tone, hairline, and expression identity from the original photo. Do NOT change gender, age, or facial proportions beyond stylized exaggeration.
 
@@ -53,15 +72,34 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
 
           Clothing: Bright saturated yellow soccer jersey with modern V-neck style, blue trim on the collar, thin red accent line along the shoulders, sleeve cuffs with thin blue edging. The jersey has subtle tonal floral and organic pattern textures embedded into the fabric (low contrast, elegant, almost embossed look). High-quality breathable polyester fabric with realistic folds and natural draping.
 
-          Logo details: A clean, white "Claro" logo centered on the chest, clearly visible, well integrated into the fabric, following realistic jersey printing style (not floating, not distorted, aligned with chest perspective).
+          Logo details (CRITICAL): A clean, bold "Claro" logo centered on the chest in a strong solid RED color (not white, not light red, not orange). The red must be vivid and saturated (similar to official Claro branding), with high contrast against the yellow jersey. The logo must be perfectly visible, well integrated into the fabric, following realistic jersey printing style (not floating, not distorted, aligned with chest perspective). Do NOT change the logo color under any circumstance.
 
           Pose: Upper body visible, both fists clenched in front of the chest in a celebratory pose.
 
           Background: Stadium environment with blurred crowd, warm cinematic lighting, floating confetti and particles in the air, depth of field with strong subject focus.
 
+          Additional element (CRITICAL - MUST MATCH REFERENCE STYLE EXACTLY):
+          Add a wide horizontal fabric banner at the bottom of the image. The banner must look like real cloth (not a flat graphic), with subtle wrinkles, soft folds, and slight shading variations across the surface.
+
+          The main color of the banner is deep, saturated red with soft gradients and fabric texture. At the very top edge of the banner, include layered horizontal stripes in this exact order:
+          - a very thin red line at the top edge
+          - directly below it, a thick golden yellow stripe
+          - below that, a thinner dark blue stripe
+          - then the main red area continues
+
+          These stripes must look like part of a folded fabric edge, slightly curved and not perfectly straight, as if the cloth is stretched.
+
+          Centered on the red area, place two lines of large white uppercase text:
+          LA SEÑAL OFICIAL
+          DE LA SELECCIÓN COLOMBIA
+
+          Typography must be bold, condensed, tall, and sports-style (broadcast look), with clean edges and strong contrast. The text must be perfectly centered, evenly spaced, and occupy most of the banner width.
+
+          The entire banner should feel like an official Colombian football support banner, realistic printed fabric, slightly glossy, naturally integrated into the scene with perspective and lighting consistent with the stadium environment.
+
           Lighting & quality: Dramatic stadium lights, high contrast, vibrant colors, ultra high resolution, sharp focus, professional render.
 
-          Important constraints: Do NOT replace the face with another person, Do NOT alter facial identity, keep the same character style, jersey, and background for every transformation.`;
+          Important constraints: Do NOT replace the face with another person, Do NOT alter facial identity, keep the same character style, jersey, and background for every transformation. The bottom banner must always appear and match the described fabric style. The "Claro" logo must always remain red and clearly visible.`;
       default:
         return "-";
     }

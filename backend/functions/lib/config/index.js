@@ -29,7 +29,7 @@ exports.rateLimitConfig = {
 exports.REPLICATE_MODELS = {
     // Primary model for multi-person photo composition
     NANO_BANANA: {
-        model: "google/nano-banana-2",
+        model: "google/nano-banana-pro",
         version: "latest",
     },
     // Model for adding logo to clothing

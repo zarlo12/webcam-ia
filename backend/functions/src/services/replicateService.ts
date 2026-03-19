@@ -239,7 +239,7 @@ class ReplicateService {
       prompt: prompt,
       image_input: [
         imageUrl,
-        "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/template_abajo.png?alt=media&token=6f5bea2f-fc34-45cf-a07b-f5098b126c8d",
+        "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/template_abajo.png?alt=media&token=d8e185c4-e34b-4c83-9f2b-31a4f992b208",
       ],
       aspect_ratio: "9:16",
       output_format: "jpg" as const,

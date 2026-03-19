@@ -96,6 +96,213 @@ export const generateAIImage = onRequest(
 );
 
 /**
+ * Generate AI Caricature Image - Dedicated endpoint for nano-banana model
+ * This is a separate endpoint to avoid conflicts with other AI models
+ */
+export const generateCaricatureImage = onRequest(
+  {
+    cors: true,
+    timeoutSeconds: 540,
+    memory: "2GiB",
+    maxInstances: 5,
+  },
+  async (req, res) => {
+    try {
+      console.log(`📥 ${req.method} request received to generateCaricatureImage - using custom parser v4`);
+
+      if (req.method !== "POST") {
+        res.status(405).json({
+          success: false,
+          error: "Method not allowed. Use POST.",
+        });
+        return;
+      }
+
+      // Handle multipart/form-data with custom parser
+      if (req.get("content-type")?.includes("multipart/form-data")) {
+        await handleMultipartRequestForTemplate(req, res);
+        return;
+      }
+
+      // Handle JSON requests
+      if (req.get("content-type")?.includes("application/json")) {
+        await handleJsonRequestForTemplate(req, res);
+        return;
+      }
+
+      res.status(400).json({
+        success: false,
+        error:
+          "Unsupported content type. Use multipart/form-data or application/json.",
+      });
+    } catch (error) {
+      console.error("❌ Error in generateCaricatureImage controller:", error);
+      res.status(500).json({
+        success: false,
+        error: "Internal server error",
+      });
+    }
+  }
+);
+
+/**
+ * Handle multipart/form-data requests for template-based processing
+ */
+const handleMultipartRequestForTemplate = async (req: any, res: any): Promise<void> => {
+  try {
+    console.log("📥 Processing multipart request for template with custom parser");
+
+    const contentType = req.get("content-type") || "";
+    const boundaryMatch = contentType.match(/boundary=(.+)$/);
+
+    if (!boundaryMatch) {
+      res.status(400).json({
+        success: false,
+        error: "No boundary found in content-type",
+      });
+      return;
+    }
+
+    const boundary = boundaryMatch[1].replace(/^-+/, "");
+    console.log(`🔍 Boundary: ${boundary}`);
+
+    let body: Buffer;
+
+    if (req.rawBody) {
+      console.log("📦 Using req.rawBody");
+      body = Buffer.isBuffer(req.rawBody)
+        ? req.rawBody
+        : Buffer.from(req.rawBody);
+    } else if (req.body) {
+      console.log("📦 Using req.body");
+      body = Buffer.isBuffer(req.body) ? req.body : Buffer.from(req.body);
+    } else {
+      console.log("📦 Reading from stream...");
+      const chunks: Buffer[] = [];
+
+      return new Promise((resolve) => {
+        req.on("data", (chunk: Buffer) => {
+          chunks.push(chunk);
+          console.log(`📦 Chunk: ${chunk.length} bytes`);
+        });
+
+        req.on("end", async () => {
+          try {
+            const streamBody = Buffer.concat(chunks);
+            await processMultipartBodyForTemplate(streamBody, boundary, res);
+            resolve();
+          } catch (error) {
+            console.error("❌ Stream processing error:", error);
+            res.status(400).json({
+              success: false,
+              error: "Failed to process stream data",
+            });
+            resolve();
+          }
+        });
+
+        req.on("error", (error: Error) => {
+          console.error("❌ Request stream error:", error);
+          res.status(400).json({
+            success: false,
+            error: "Request stream error",
+          });
+          resolve();
+        });
+      });
+    }
+
+    console.log(`📦 Body size: ${body.length} bytes`);
+    await processMultipartBodyForTemplate(body, boundary, res);
+  } catch (error) {
+    console.error("❌ Error processing multipart request:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to process image",
+    });
+  }
+};
+
+async function processMultipartBodyForTemplate(body: Buffer, boundary: string, res: any) {
+  const { fields, files } = parseMultipartData(body, boundary);
+
+  if (!files.image) {
+    console.error("❌ No image file found");
+    console.log("Available files:", Object.keys(files));
+    console.log("Available fields:", Object.keys(fields));
+    res.status(400).json({
+      success: false,
+      error: "No image file provided",
+    });
+    return;
+  }
+
+  const imageBuffer = files.image;
+  const prompt = fields.prompt || "";
+  const userId = fields.userId || "";
+
+  console.log(`✅ Image received: ${imageBuffer.length} bytes`);
+  console.log(`📋 Parameters: prompt="${prompt}", userId="${userId}"`);
+
+  // Convert buffer to base64
+  let mimeType = "image/jpeg";
+  if (
+    imageBuffer
+      .slice(0, 8)
+      .equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))
+  ) {
+    mimeType = "image/png";
+  }
+
+  const base64Image = `data:${mimeType};base64,${imageBuffer.toString(
+    "base64"
+  )}`;
+
+  const request: ImageGenerationRequest = {
+    imageData: base64Image,
+    prompt,
+    userId,
+  };
+
+  console.log("🤖 Sending to Replicate AI with template...");
+  const result = await replicateService.generateImageWithTemplate(request);
+
+  res.status(result.success ? 200 : 400).json(result);
+}
+
+/**
+ * Handle JSON requests for template-based processing
+ */
+const handleJsonRequestForTemplate = async (req: any, res: any): Promise<void> => {
+  const { imageData, prompt, userId } = req.body;
+
+  if (!imageData) {
+    res.status(400).json({
+      success: false,
+      error: "imageData is required",
+    });
+    return;
+  }
+
+  if (!imageData.startsWith("data:image/")) {
+    res.status(400).json({
+      success: false,
+      error: "Invalid image format. Must be base64 encoded image.",
+    });
+    return;
+  }
+
+  const request: ImageGenerationRequest = {
+    imageData,
+    prompt,
+    userId,
+  };
+
+  const result = await replicateService.generateImageWithTemplate(request);
+  res.status(result.success ? 200 : 400).json(result);
+};
+
+/**
  * Handle multipart/form-data requests using custom parser
  */
 const handleMultipartRequest = async (req: any, res: any): Promise<void> => {

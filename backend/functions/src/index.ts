@@ -14,6 +14,7 @@ setGlobalOptions({
 // Export the functions
 export {
   generateAIImage,
+  generateCaricatureImage,
   getProcessingStatus,
   healthCheck,
   sendToVTEX,

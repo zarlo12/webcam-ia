@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LOGO_URL = exports.REPLICATE_MODELS = exports.rateLimitConfig = exports.corsConfig = exports.firebaseConfig = exports.replicateConfig = void 0;
+exports.TEMPLATE_URL = exports.LOGO_URL = exports.REPLICATE_MODELS = exports.rateLimitConfig = exports.corsConfig = exports.firebaseConfig = exports.replicateConfig = void 0;
 exports.replicateConfig = {
     apiToken: process.env.REPLICATE_API_TOKEN || "",
     model: "black-forest-labs/flux-kontext-pro",
@@ -32,6 +32,11 @@ exports.REPLICATE_MODELS = {
         model: "google/nano-banana",
         version: "latest",
     },
+    // Model for template-based caricature with nano-banana-2
+    NANO_BANANA_2: {
+        model: "google/nano-banana-2",
+        version: "latest",
+    },
     // Model for adding logo to clothing
     MULTI_IMAGE_KONTEXT: {
         model: "flux-kontext-apps/multi-image-kontext-max",
@@ -57,4 +62,6 @@ exports.REPLICATE_MODELS = {
 };
 // Logo URL for the multi-image processing
 exports.LOGO_URL = "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/GUIAS%2FLOGO_FINAL.png?alt=media&token=16fc065b-d3e7-47a5-a480-78a7cf5956d7";
+// Template URL for nano-banana-2 processing
+exports.TEMPLATE_URL = "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/template.png?alt=media&token=bc7b1adf-9a6d-4b17-86ef-20dec6d835b8";
 //# sourceMappingURL=index.js.map

@@ -25,6 +25,7 @@ export enum ImageStyle {
 
 class AIImageService {
   private generateImageUrl: string;
+  private generateCaricatureUrl: string;
   private healthCheckUrl: string;
   private processingStatusUrl: string;
 
@@ -35,11 +36,13 @@ class AIImageService {
     if (baseUrl) {
       // Development or custom base URL
       this.generateImageUrl = `${baseUrl}/generateAIImage`;
+      this.generateCaricatureUrl = `${baseUrl}/generateCaricatureImage`;
       this.healthCheckUrl = `${baseUrl}/healthCheck`;
       this.processingStatusUrl = `${baseUrl}/getProcessingStatus`;
     } else {
       // Production URLs https://generateaiimage-buybcovkna-uc.a.run.app
       this.generateImageUrl = "https://generateaiimage-buybcovkna-uc.a.run.app";
+      this.generateCaricatureUrl = "https://generatecaricatureimage-buybcovkna-uc.a.run.app";
       this.healthCheckUrl = "https://healthcheck-buybcovkna-uc.a.run.app";
       this.processingStatusUrl =
         "https://getprocessingstatus-buybcovkna-uc.a.run.app";
@@ -47,6 +50,7 @@ class AIImageService {
 
     console.log("🚀 AIImageService URLs:", {
       generateImageUrl: this.generateImageUrl,
+      generateCaricatureUrl: this.generateCaricatureUrl,
       healthCheckUrl: this.healthCheckUrl,
       processingStatusUrl: this.processingStatusUrl,
     });
@@ -69,6 +73,54 @@ class AIImageService {
       return response.data;
     } catch (error) {
       console.error("Error generating AI image:", error);
+
+      if (axios.isAxiosError(error)) {
+        return {
+          success: false,
+          error:
+            error.response?.data?.error ||
+            error.message ||
+            "Network error occurred",
+        };
+      }
+
+      return {
+        success: false,
+        error: "An unexpected error occurred",
+      };
+    }
+  }
+
+  /**
+   * Generate image using FormData (for multipart upload) - Template-based with nano-banana-2
+   */
+  async generateCaricatureWithTemplate(
+    imageBlob: Blob,
+    prompt?: string,
+    userId?: string
+  ): Promise<AIImageResponse> {
+    try {
+      const formData = new FormData();
+      formData.append("image", imageBlob, "webcam-image.jpg");
+
+      if (prompt) formData.append("prompt", prompt);
+      if (userId) formData.append("userId", userId);
+
+      console.log(
+        "Sending image with FormData to Caricature generation service (nano-banana-2 with template)...",
+        formData
+      );
+
+      const response = await axios.post(this.generateCaricatureUrl, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        timeout: 600000, // 10 minutes timeout
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error("Error generating caricature image with template:", error);
 
       if (axios.isAxiosError(error)) {
         return {

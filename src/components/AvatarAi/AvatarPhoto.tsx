@@ -19,6 +19,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   const [capturedImageUrl, setCapturedImageUrl] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [selectedGender, setSelectedGender] = useState<string>(""); // Estado para el género seleccionado
+  const [personName, setPersonName] = useState<string>(""); // Estado para el nombre de la persona (YA EXISTE)
   
   // REALISTIC = "realistic",
   // ARTISTIC = "artistic",
@@ -27,16 +28,9 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   // VINTAGE = "vintage",
   const webcamRef = useRef<WebcamRef | null>(null);
 
-  // Función para generar el prompt basado en el género seleccionado
-  const getPromptByGender = (gender: string): string => {
-    switch (gender) {
-      case "hombre":
-        return `Transform the uploaded photo into a high-quality 3D caricature style portrait with exaggerated but recognizable facial features. The person must clearly remain the same individual: preserve exact facial structure, eye shape, nose, mouth, skin tone, hairline, and expression identity from the original photo. Do NOT change gender, age, or facial proportions beyond stylized exaggeration. Style details: Semi-realistic 3D caricature, big expressive eyes, slightly enlarged head, smooth skin, detailed facial shading. Highly expressive, joyful facial expression, wide smile, energetic pose. Clothing: Bright saturated yellow soccer jersey with modern V-neck style, blue trim on the collar, thin red accent line along the shoulders, sleeve cuffs with thin blue edging. The jersey has subtle tonal floral and organic pattern textures embedded into the fabric (low contrast, elegant, almost embossed look). High-quality breathable polyester fabric with realistic folds and natural draping. IMPORTANT: NO logos, NO brand marks (no Nike, Adidas, etc.), NO national team crests or emblems, completely clean jersey without any text or symbols. Pose: Upper body visible, both fists clenched in front of the chest in a celebratory pose. Background: Stadium environment with blurred crowd, warm cinematic lighting, floating confetti and particles in the air, depth of field with strong subject focus. Lighting & quality: Dramatic stadium lights, high contrast, vibrant colors, ultra high resolution, sharp focus, professional render. Important constraints: Do NOT replace the face with another person, Do NOT alter facial identity, Do NOT add any logos or brand marks, keep the same character style, jersey, and background for every transformation.`;
-      case "mujer":
-        return `Transform the uploaded photo into a high-quality 3D caricature style portrait with exaggerated but recognizable facial features. The person must clearly remain the same individual: preserve exact facial structure, eye shape, nose, mouth, skin tone, hairline, and expression identity from the original photo. Do NOT change gender, age, or facial proportions beyond stylized exaggeration. Style details: Semi-realistic 3D caricature, big expressive eyes, slightly enlarged head, smooth skin, detailed facial shading. Highly expressive, joyful facial expression, wide smile, energetic pose. Clothing: Bright saturated yellow soccer jersey with modern V-neck style, blue trim on the collar, thin red accent line along the shoulders, sleeve cuffs with thin blue edging. The jersey has subtle tonal floral and organic pattern textures embedded into the fabric (low contrast, elegant, almost embossed look). High-quality breathable polyester fabric with realistic folds and natural draping. IMPORTANT: NO logos, NO brand marks (no Nike, Adidas, etc.), NO national team crests or emblems, completely clean jersey without any text or symbols. Pose: Upper body visible, both fists clenched in front of the chest in a celebratory pose. Background: Stadium environment with blurred crowd, warm cinematic lighting, floating confetti and particles in the air, depth of field with strong subject focus. Lighting & quality: Dramatic stadium lights, high contrast, vibrant colors, ultra high resolution, sharp focus, professional render. Important constraints: Do NOT replace the face with another person, Do NOT alter facial identity, Do NOT add any logos or brand marks, keep the same character style, jersey, and background for every transformation.`;
-      default:
-        return "-";
-    }
+  // Función para generar el prompt basado en el nombre de la persona
+  const getPromptByGender = (name: string): string => {
+    return `Use this image "template.png" as the exact template and base design I will upload a photo of a person. Instructions: Replace ONLY the person in the template with the person from the uploaded photo. Keep the same pose, framing, camera angle, lighting, and body position. The face must match the uploaded person exactly (identity, skin tone, facial features). Blend the face naturally into the body so it looks realistic and professional. Text Change: Change the name "DIANA RUÍZ" to: "${name.toUpperCase()}" Keep the same font, size, style, and position. Strict Rules: Do NOT change anything else in the image. Do NOT modify colors, background, logos, icons, layout, or design. DO NOT move or resize elements. Keep everything identical to the template.`;
   };
 
   // Función para capturar la imagen desde el componente WebcamScene
@@ -70,14 +64,13 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
       // Cambiar INMEDIATAMENTE a la pantalla de formulario sin esperar
       onProcess(email); // Pasa al formulario mientras la imagen se procesa en background
       
-      // Procesar la imagen en background con prompt basado en género
-      const prompt = getPromptByGender(selectedGender);
+      // Procesar la imagen en background con prompt basado en género y nombre
+      const prompt = getPromptByGender(personName);
       console.log("Usando prompt:", prompt);
       
-      const result = await aiImageService.generateImageWithFormData(
+      const result = await aiImageService.generateCaricatureWithTemplate(
         capturedImage,
         prompt,
-        '',
         "user-" + Date.now()
       );
 
@@ -124,6 +117,15 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   // Validación del formulario y envío de la imagen
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!personName.trim()) {
+      Swal.fire({
+        icon: "warning",
+        title: "Advertencia",
+        text: "Por favor ingresa tu nombre.",
+      });
+      return;
+    }
 
     if (!selectedGender) {
       Swal.fire({
@@ -176,6 +178,17 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
           </div>
 
           <div className="buttons-container">
+            {/* Input de nombre */}
+            <input
+              type="text"
+              placeholder="Ingresa tu nombre"
+              value={personName}
+              onChange={(e) => setPersonName(e.target.value)}
+              className="input"
+              required
+              style={{ marginBottom: "10px" }}
+            />
+
             {/* Selector de género */}
             <div className="select-container">
               <select
@@ -214,7 +227,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
             <button
               type="submit"
               className="button"
-              disabled={!capturedImageUrl || !selectedGender || isProcessing}
+              disabled={!capturedImageUrl || !selectedGender || !personName.trim() || isProcessing}
             >
               {isProcessing ? "Generando..." : "Procesar"}
             </button>

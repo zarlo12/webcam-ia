@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./AvatarPhoto.scss";
-import logo from "../../assets/img/empresas.png";
+// import logo from "../../assets/img/empresas.png";
 import QRCode from "react-qr-code";
 
 import { storage, db } from "../../firebaseConfig";

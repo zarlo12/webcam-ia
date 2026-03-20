@@ -18,7 +18,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   const [capturedImage, setCapturedImage] = useState<Blob | null>(null);
   const [capturedImageUrl, setCapturedImageUrl] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const [selectedGender, setSelectedGender] = useState<string>(""); // Estado para el género seleccionado
+  const [selectedGender] = useState<string>("hombre"); // Género por defecto: hombre
   const [personName, setPersonName] = useState<string>(""); // Estado para el nombre de la persona (YA EXISTE)
   
   // REALISTIC = "realistic",
@@ -127,15 +127,6 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
       return;
     }
 
-    if (!selectedGender) {
-      Swal.fire({
-        icon: "warning",
-        title: "Advertencia",
-        text: "Por favor selecciona tu género.",
-      });
-      return;
-    }
-
     if (!capturedImage) {
       Swal.fire({
         icon: "warning",
@@ -155,9 +146,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   return (
     <div className="container">
       {/* Cabecera superior con fondo rojo y logo centrado */}
-      <div className="header">
-        <img src={logo} alt="Logo" className="logo" />
-      </div>
+      
 
       {/* <img src={fondo} alt="Fondo" className="fondo" /> */}
       <div className="main-content">
@@ -188,23 +177,6 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
               required
               style={{ marginBottom: "10px" }}
             />
-
-            {/* Selector de género */}
-            <div className="select-container">
-              <select
-                value={selectedGender}
-                onChange={(e) => setSelectedGender(e.target.value)}
-                className="input"
-                required
-              >
-                <option value="" disabled>
-                  Selecciona tu género
-                </option>
-                <option value="hombre">Hombre</option>
-                <option value="mujer">Mujer</option>
-              </select>
-              <span className="select-arrow">▼</span>
-            </div>
 
             <button
               type="button"

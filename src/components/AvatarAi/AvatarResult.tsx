@@ -109,9 +109,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
 
   return (
     <div className="containerResultFinal">
-      <div className="header-bar">
-        <img src={logo} alt="Logo" className="logo-scotia" />
-      </div>
+     
 
       <div className="main-content">
         <div className="result-wrapper">

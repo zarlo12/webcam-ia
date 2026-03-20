@@ -244,7 +244,9 @@ The shirt must contain ONLY the Claro logo and nothing else.`;
   return (
     <div className="container">
       {/* Cabecera superior con fondo rojo y logo centrado */}
-    
+      <div className="header" style={{display: "none"}}>
+        <img src={logo} alt="Logo" className="logo" />
+      </div>
 
       {/* <img src={fondo} alt="Fondo" className="fondo" /> */}
       <div className="main-content">

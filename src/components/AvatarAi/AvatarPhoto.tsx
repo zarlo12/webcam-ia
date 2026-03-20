@@ -31,121 +31,109 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   const getPromptByGender = (gender: string): string => {
     switch (gender) {
       case "hombre":
-        return `Transform the uploaded photo into a high-quality 3D caricature style portrait with exaggerated but recognizable facial features. The person must clearly remain the same individual: preserve exact facial structure, eye shape, nose, mouth, skin tone, hairline, and expression identity from the original photo. Do NOT change gender, age, or facial proportions beyond stylized exaggeration.
+        return `CRITICAL GLOBAL RULE (APPLIES TO ENTIRE IMAGE):
+The image must contain ZERO brand logos, ZERO sports brands, ZERO sponsor graphics, ZERO text, and ZERO symbols anywhere — EXCEPT for one single allowed logo: "Claro".
+If any other logo, brand, symbol, text, stripes, swoosh, badge, or marking appears, it must be completely removed.
+
+Transform the uploaded photo into a high-quality 3D caricature style portrait with exaggerated but recognizable facial features. The person must remain the same individual: preserve exact facial structure, eye shape, nose, mouth, skin tone, hairline, and identity from the original photo. Do NOT change gender, age, or facial proportions beyond stylized exaggeration.
 
 FINAL IMAGE COMPOSITION (ABSOLUTE PRIORITY):
-The final image MUST be vertically structured in two fixed sections:
+The final image must be vertically structured in two fixed sections:
 1) TOP section → character and background
 2) BOTTOM section → template_abajo.png
 
-The composition MUST be built starting from the template (NOT added later).
+The composition must be built starting from the template, not added later.
 
-CANVAS RULE (VERY IMPORTANT):
-- The final image must be a vertical poster (aspect ratio 4:5 or 9:16).
-- The canvas must be defined to perfectly fit the FULL template width.
-- The template determines the width of the entire image.
+CANVAS RULE:
+- Vertical poster format (4:5 or 9:16)
+- The template defines the full width
 
-BOTTOM TEMPLATE (HARD CONSTRAINT - NON-NEGOTIABLE):
-- "template_abajo.png" MUST be used as the BASE LAYER of the bottom section.
-- It MUST span EXACTLY 100% of the image width (edge-to-edge).
-- It MUST be placed FIRST, anchored to the bottom.
-- It MUST be scaled UP (never down) until it reaches full width.
-- The FULL template must be visible (no cropping, no cutting, no truncation).
-- The template must occupy between 30% and 40% of total image height.
-- NEVER resize it to a small element.
-- NEVER treat it as overlay, sticker, or decoration.
+BOTTOM TEMPLATE (HARD CONSTRAINT):
+- template_abajo.png must be base layer
+- Full width (100%), bottom aligned
+- Occupies 30–40% height
+- Never crop, never shrink, never cover
 
-STRICT FORBIDDEN:
-- Do NOT crop the template in any way.
-- Do NOT make it smaller to fit composition.
-- Do NOT cover it with the character.
-- Do NOT modify, recreate, or restyle the template.
+TOP SECTION:
+- Character fully above the template
+- Upper body, celebratory fists pose
 
-TOP SECTION (CHARACTER):
-- Place the character entirely ABOVE the template.
-- Adjust character size and position to fit remaining space.
-- If needed, scale or reposition the character (NOT the template).
+CLOTHING (VERY IMPORTANT):
+- Plain yellow shirt (generic, non-branded, not a real soccer jersey)
+- Do NOT create a real team uniform
+- Do NOT include any decorative elements that resemble sports brands
 
-Style details: Semi-realistic 3D caricature, big expressive eyes, slightly enlarged head, smooth skin, detailed facial shading. Highly expressive, joyful facial expression, wide smile, energetic pose.
+LOGO (ONLY EXCEPTION):
+- Add ONLY the word "Claro"
+- Centered on chest
+- Solid vivid red
+- Clean and readable
+- This must be the ONLY visible graphic on the shirt
 
-Clothing: Bright saturated yellow soccer jersey with modern V-neck style, blue trim on the collar, thin red accent line along the shoulders, sleeve cuffs with thin blue edging. Subtle tonal floral textures, realistic fabric.
+STYLE:
+Semi-realistic 3D caricature, expressive eyes, smooth skin, joyful expression, high detail.
 
-LOGO RULES (STRICT):
-- The ONLY visible logo must be "Claro".
-- Centered on chest, solid vivid RED.
-- Perfectly integrated into fabric.
-- NO other logos, brands, sponsors, or symbols allowed.
-- Forbidden: Nike, Adidas, Puma, or any brand.
+BACKGROUND:
+Stadium, blurred crowd, cinematic lighting, confetti.
 
-Pose: Upper body visible, both fists clenched in front of the chest in a celebratory pose.
-
-Background: Stadium environment with blurred crowd, cinematic lighting, confetti, depth of field.
-
-Lighting & quality: Dramatic stadium lights, high contrast, vibrant colors, ultra high resolution, sharp focus, professional render.
+QUALITY:
+Ultra high resolution, sharp focus, vibrant colors.
 
 FINAL ENFORCEMENT:
-- The template defines the layout. The rest adapts to it.
-- If there is a conflict, ALWAYS preserve the template size and visibility.
-- The template must ALWAYS be full-width, large, complete, and uncropped.
-- The "Claro" logo must always remain red and clearly visible.`;
+The template always wins over everything.
+The shirt must contain ONLY the Claro logo and nothing else.`;
       case "mujer":
-        return `Transform the uploaded photo into a high-quality 3D caricature style portrait with exaggerated but recognizable facial features. The person must clearly remain the same individual: preserve exact facial structure, eye shape, nose, mouth, skin tone, hairline, and expression identity from the original photo. Do NOT change gender, age, or facial proportions beyond stylized exaggeration.
+        return `CRITICAL GLOBAL RULE (APPLIES TO ENTIRE IMAGE):
+The image must contain ZERO brand logos, ZERO sports brands, ZERO sponsor graphics, ZERO text, and ZERO symbols anywhere — EXCEPT for one single allowed logo: "Claro".
+If any other logo, brand, symbol, text, stripes, swoosh, badge, or marking appears, it must be completely removed.
+
+Transform the uploaded photo into a high-quality 3D caricature style portrait with exaggerated but recognizable facial features. The person must remain the same individual: preserve exact facial structure, eye shape, nose, mouth, skin tone, hairline, and identity from the original photo. Do NOT change gender, age, or facial proportions beyond stylized exaggeration.
 
 FINAL IMAGE COMPOSITION (ABSOLUTE PRIORITY):
-The final image MUST be vertically structured in two fixed sections:
+The final image must be vertically structured in two fixed sections:
 1) TOP section → character and background
 2) BOTTOM section → template_abajo.png
 
-The composition MUST be built starting from the template (NOT added later).
+The composition must be built starting from the template, not added later.
 
-CANVAS RULE (VERY IMPORTANT):
-- The final image must be a vertical poster (aspect ratio 4:5 or 9:16).
-- The canvas must be defined to perfectly fit the FULL template width.
-- The template determines the width of the entire image.
+CANVAS RULE:
+- Vertical poster format (4:5 or 9:16)
+- The template defines the full width
 
-BOTTOM TEMPLATE (HARD CONSTRAINT - NON-NEGOTIABLE):
-- "template_abajo.png" MUST be used as the BASE LAYER of the bottom section.
-- It MUST span EXACTLY 100% of the image width (edge-to-edge).
-- It MUST be placed FIRST, anchored to the bottom.
-- It MUST be scaled UP (never down) until it reaches full width.
-- The FULL template must be visible (no cropping, no cutting, no truncation).
-- The template must occupy between 30% and 40% of total image height.
-- NEVER resize it to a small element.
-- NEVER treat it as overlay, sticker, or decoration.
+BOTTOM TEMPLATE (HARD CONSTRAINT):
+- template_abajo.png must be base layer
+- Full width (100%), bottom aligned
+- Occupies 30–40% height
+- Never crop, never shrink, never cover
 
-STRICT FORBIDDEN:
-- Do NOT crop the template in any way.
-- Do NOT make it smaller to fit composition.
-- Do NOT cover it with the character.
-- Do NOT modify, recreate, or restyle the template.
+TOP SECTION:
+- Character fully above the template
+- Upper body, celebratory fists pose
 
-TOP SECTION (CHARACTER):
-- Place the character entirely ABOVE the template.
-- Adjust character size and position to fit remaining space.
-- If needed, scale or reposition the character (NOT the template).
+CLOTHING (VERY IMPORTANT):
+- Plain yellow shirt (generic, non-branded, not a real soccer jersey)
+- Do NOT create a real team uniform
+- Do NOT include any decorative elements that resemble sports brands
 
-Style details: Semi-realistic 3D caricature, big expressive eyes, slightly enlarged head, smooth skin, detailed facial shading. Highly expressive, joyful facial expression, wide smile, energetic pose.
+LOGO (ONLY EXCEPTION):
+- Add ONLY the word "Claro"
+- Centered on chest
+- Solid vivid red
+- Clean and readable
+- This must be the ONLY visible graphic on the shirt
 
-Clothing: Bright saturated yellow soccer jersey with modern V-neck style, blue trim on the collar, thin red accent line along the shoulders, sleeve cuffs with thin blue edging. Subtle tonal floral textures, realistic fabric.
+STYLE:
+Semi-realistic 3D caricature, expressive eyes, smooth skin, joyful expression, high detail.
 
-LOGO RULES (STRICT):
-- The ONLY visible logo must be "Claro".
-- Centered on chest, solid vivid RED.
-- Perfectly integrated into fabric.
-- NO other logos, brands, sponsors, or symbols allowed.
-- Forbidden: Nike, Adidas, Puma, or any brand.
+BACKGROUND:
+Stadium, blurred crowd, cinematic lighting, confetti.
 
-Pose: Upper body visible, both fists clenched in front of the chest in a celebratory pose.
-
-Background: Stadium environment with blurred crowd, cinematic lighting, confetti, depth of field.
-
-Lighting & quality: Dramatic stadium lights, high contrast, vibrant colors, ultra high resolution, sharp focus, professional render.
+QUALITY:
+Ultra high resolution, sharp focus, vibrant colors.
 
 FINAL ENFORCEMENT:
-- The template defines the layout. The rest adapts to it.
-- If there is a conflict, ALWAYS preserve the template size and visibility.
-- The template must ALWAYS be full-width, large, complete, and uncropped.
-- The "Claro" logo must always remain red and clearly visible.`;
+The template always wins over everything.
+The shirt must contain ONLY the Claro logo and nothing else.`;
       default:
         return "-";
     }

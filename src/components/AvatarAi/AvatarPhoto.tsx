@@ -18,7 +18,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   const [capturedImage, setCapturedImage] = useState<Blob | null>(null);
   const [capturedImageUrl, setCapturedImageUrl] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const [selectedGender, setSelectedGender] = useState<string>(""); // Estado para el género seleccionado
+  const [selectedGender] = useState<string>("hombre"); // Género por defecto: hombre
   
   // REALISTIC = "realistic",
   // ARTISTIC = "artistic",
@@ -225,15 +225,6 @@ The shirt must contain ONLY the Claro logo and nothing else.`;
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!selectedGender) {
-      Swal.fire({
-        icon: "warning",
-        title: "Advertencia",
-        text: "Por favor selecciona tu género.",
-      });
-      return;
-    }
-
     if (!capturedImage) {
       Swal.fire({
         icon: "warning",
@@ -253,9 +244,7 @@ The shirt must contain ONLY the Claro logo and nothing else.`;
   return (
     <div className="container">
       {/* Cabecera superior con fondo rojo y logo centrado */}
-      <div className="header">
-        <img src={logo} alt="Logo" className="logo" />
-      </div>
+    
 
       {/* <img src={fondo} alt="Fondo" className="fondo" /> */}
       <div className="main-content">
@@ -276,23 +265,6 @@ The shirt must contain ONLY the Claro logo and nothing else.`;
           </div>
 
           <div className="buttons-container">
-            {/* Selector de género */}
-            <div className="select-container">
-              <select
-                value={selectedGender}
-                onChange={(e) => setSelectedGender(e.target.value)}
-                className="input"
-                required
-              >
-                <option value="" disabled>
-                  Selecciona tu género
-                </option>
-                <option value="hombre">Hombre</option>
-                <option value="mujer">Mujer</option>
-              </select>
-              <span className="select-arrow">▼</span>
-            </div>
-
             <button
               type="button"
               className="button button-camera"
@@ -314,7 +286,7 @@ The shirt must contain ONLY the Claro logo and nothing else.`;
             <button
               type="submit"
               className="button"
-              disabled={!capturedImageUrl || !selectedGender || isProcessing}
+              disabled={!capturedImageUrl || isProcessing}
             >
               {isProcessing ? "Generando..." : "Procesar"}
             </button>

@@ -30,7 +30,56 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
 
   // Función para generar el prompt basado en el nombre de la persona
   const getPromptByGender = (name: string): string => {
-    return `Use this image "template.png" as the exact template and base design I will upload a photo of a person. Instructions: Replace ONLY the person in the template with the person from the uploaded photo. Keep the same pose, framing, camera angle, lighting, and body position. The face must match the uploaded person exactly (identity, skin tone, facial features). Blend the face naturally into the body so it looks realistic and professional. Text Change: Change the name "DIANA RUÍZ" to: "${name.toUpperCase()}" Keep the same font, size, style, and position. Strict Rules: Do NOT change anything else in the image. Do NOT modify colors, background, logos, icons, layout, or design. DO NOT move or resize elements. Keep everything identical to the template.`;
+    return `CRITICAL GLOBAL RULE (APPLIES TO ENTIRE IMAGE):
+The final image must contain ZERO brand logos, ZERO sports brands, ZERO sponsor graphics, ZERO extra text, and ZERO symbols that were not originally part of the template.
+Do NOT generate, add, recreate, or hallucinate any logos, icons, badges, stripes, swooshes, or brand-like elements.
+If any unintended graphic appears, it must be completely removed.
+
+TEMPLATE PRIORITY RULE:
+Use "template.png" as the absolute base and final composition.
+Everything in the template must remain EXACTLY the same, including existing logos, layout, colors, icons, and design elements.
+
+PRIMARY TASK:
+Replace ONLY the person in the template with the person from the uploaded photo.
+
+IDENTITY PRESERVATION:
+The face must match the uploaded person exactly:
+- same identity
+- same skin tone
+- same facial features
+- natural integration into the body
+
+INTEGRATION RULE:
+Blend the face naturally into the body so it looks realistic and professional.
+Do NOT alter lighting, shadows, or color grading of the template.
+
+TEXT CHANGE (ONLY ALLOWED MODIFICATION):
+Change the name "DIANA RUÍZ" to:
+"${name.toUpperCase()}"
+
+Keep:
+- same font
+- same size
+- same style
+- same position
+
+STRICT IMMUTABILITY RULE:
+Do NOT change anything else in the image:
+- Do NOT modify colors
+- Do NOT modify background
+- Do NOT modify logos already present in the template
+- Do NOT add new logos or graphics
+- Do NOT move or resize elements
+- Do NOT add details to clothing
+- Do NOT enhance or redesign any part of the template
+
+FINAL ENFORCEMENT:
+The template always wins over everything.
+The ONLY changes allowed are:
+1) replacing the face/person
+2) updating the name text
+
+Any other modification is strictly forbidden.`;
   };
 
   // Función para capturar la imagen desde el componente WebcamScene

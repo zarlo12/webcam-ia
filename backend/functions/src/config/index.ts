@@ -70,4 +70,4 @@ export const LOGO_URL =
 
 // Template URL for nano-banana-2 processing
 export const TEMPLATE_URL =
-  "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/template.png?alt=media&token=bc7b1adf-9a6d-4b17-86ef-20dec6d835b8";
+  "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/template.png?alt=media&token=72dba6fb-2031-4358-8d3f-22277a785fdd";

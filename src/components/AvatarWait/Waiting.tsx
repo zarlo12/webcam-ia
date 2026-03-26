@@ -181,7 +181,7 @@ const Waiting: React.FC<WaitingProps> = ({
 
            
 
-            <div className="checkbox-container">
+            <div className="checkbox-container" style={{display: "none"}}>
               <input
                 type="checkbox"
                 className="checkbox"

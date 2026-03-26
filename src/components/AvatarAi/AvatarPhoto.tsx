@@ -20,6 +20,13 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [selectedGender] = useState<string>("hombre"); // Género por defecto: hombre
   
+  // Estados para los términos y condiciones
+  const [acceptTerms, setAcceptTerms] = useState<boolean>(false);
+  const [acceptHabeasData, setAcceptHabeasData] = useState<boolean>(false);
+  const [showTermsModal, setShowTermsModal] = useState<boolean>(false);
+  const [showHabeasModal, setShowHabeasModal] = useState<boolean>(false);
+  const [termsAccepted, setTermsAccepted] = useState<boolean>(false);
+  
   // REALISTIC = "realistic",
   // ARTISTIC = "artistic",
   // CARTOON = "cartoon",
@@ -221,6 +228,13 @@ The shirt must contain ONLY the Claro logo and nothing else.`;
     setCapturedImageUrl("");
   };
 
+  // Función para continuar después de aceptar los términos
+  const handleContinue = () => {
+    if (acceptTerms && acceptHabeasData) {
+      setTermsAccepted(true);
+    }
+  };
+
   // Validación del formulario y envío de la imagen
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -251,67 +265,210 @@ The shirt must contain ONLY the Claro logo and nothing else.`;
       {/* <img src={fondo} alt="Fondo" className="fondo" /> */}
       <div className="main-content">
         <div className="card">
-          {/* <h2 className="subtitle">AVATAR AI</h2> */}
-          <div className="avatar-container cam">
-            {capturedImageUrl ? (
-              // Si ya se capturó la imagen, se muestra la imagen fija
-              <img
-                src={capturedImageUrl}
-                alt="Foto capturada"
-                className="fotoCapturada"
-              />
-            ) : (
-              // Si no, se muestra el feed en vivo de la cámara
-              <WebcamScene ref={webcamRef} />
-            )}
-          </div>
+          {/* Pantalla de Términos y Condiciones */}
+          {!termsAccepted ? (
+            <div className="terms-section">
+              <h2 className="terms-title">Términos y Condiciones</h2>
+              <p className="terms-subtitle">Por favor, acepta los siguientes términos para continuar</p>
+              
+              <div className="terms-checkboxes">
+                <div className="checkbox-item">
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      checked={acceptTerms}
+                      onChange={(e) => setAcceptTerms(e.target.checked)}
+                      className="checkbox-input"
+                    />
+                    <span className="checkbox-text">
+                      Acepto uso de datos y video{" "}
+                      <button
+                        type="button"
+                        className="link-button"
+                        onClick={() => setShowTermsModal(true)}
+                      >
+                        (Ver términos)
+                      </button>
+                    </span>
+                  </label>
+                </div>
 
-          <div className="buttons-container">
-            <button
-              type="button"
-              className="button button-camera"
-              onClick={capturedImageUrl ? handleResetCapture : handleCapture}
-              disabled={isProcessing}
-            >
-              <div
-                style={{
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100%",
-                }}
-              >
-                {capturedImageUrl ? "Tomar otra" : "Tomar foto"}
+                <div className="checkbox-item">
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      checked={acceptHabeasData}
+                      onChange={(e) => setAcceptHabeasData(e.target.checked)}
+                      className="checkbox-input"
+                    />
+                    <span className="checkbox-text">
+                      Acepto Habeas Data{" "}
+                      <button
+                        type="button"
+                        className="link-button"
+                        onClick={() => setShowHabeasModal(true)}
+                      >
+                        (Ver habeas data)
+                      </button>
+                    </span>
+                  </label>
+                </div>
               </div>
-            </button>
-          </div>
-          <form onSubmit={handleSubmit}>
-            <button
-              type="submit"
-              className="button"
-              disabled={!capturedImageUrl || isProcessing}
-            >
-              {isProcessing ? "Generando..." : "Procesar"}
-            </button>
-            
-            {/* Botón temporal para pruebas */}
-            {<button
-              type="button"
-              className="button test-button"
-              onClick={handleTestWithFixedImage}
-              style={{ 
-                marginTop: "10px",
-                backgroundColor: "#ff9900",
-                fontSize: "14px",
-                display: 'none'
-              }}
-            >
-              🧪 PRUEBA CON IMAGEN FIJA
-            </button> }
-          </form>
+
+              <button
+                type="button"
+                className="button button-continue"
+                onClick={handleContinue}
+                disabled={!acceptTerms || !acceptHabeasData}
+              >
+                Continuar
+              </button>
+            </div>
+          ) : (
+            /* Pantalla de Captura de Foto */
+            <>
+              {/* <h2 className="subtitle">AVATAR AI</h2> */}
+              <div className="avatar-container cam">
+                {capturedImageUrl ? (
+                  // Si ya se capturó la imagen, se muestra la imagen fija
+                  <img
+                    src={capturedImageUrl}
+                    alt="Foto capturada"
+                    className="fotoCapturada"
+                  />
+                ) : (
+                  // Si no, se muestra el feed en vivo de la cámara
+                  <WebcamScene ref={webcamRef} />
+                )}
+              </div>
+
+              <div className="buttons-container">
+                <button
+                  type="button"
+                  className="button button-camera"
+                  onClick={capturedImageUrl ? handleResetCapture : handleCapture}
+                  disabled={isProcessing}
+                >
+                  <div
+                    style={{
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      width: "100%",
+                    }}
+                  >
+                    {capturedImageUrl ? "Tomar otra" : "Tomar foto"}
+                  </div>
+                </button>
+              </div>
+              <form onSubmit={handleSubmit}>
+                <button
+                  type="submit"
+                  className="button"
+                  disabled={!capturedImageUrl || isProcessing}
+                >
+                  {isProcessing ? "Generando..." : "Procesar"}
+                </button>
+                
+                {/* Botón temporal para pruebas */}
+                {<button
+                  type="button"
+                  className="button test-button"
+                  onClick={handleTestWithFixedImage}
+                  style={{ 
+                    marginTop: "10px",
+                    backgroundColor: "#ff9900",
+                    fontSize: "14px",
+                    display: 'none'
+                  }}
+                >
+                  🧪 PRUEBA CON IMAGEN FIJA
+                </button> }
+              </form>
+            </>
+          )}
         </div>
       </div>
 
-      
+      {/* Modal de Términos - PDF */}
+      {showTermsModal && (
+        <div className="modal-overlay" onClick={() => setShowTermsModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3 className="modal-title">Términos y Condiciones</h3>
+              <button
+                className="modal-close"
+                onClick={() => setShowTermsModal(false)}
+              >
+                ×
+              </button>
+            </div>
+            <div className="modal-body">
+              <iframe
+                src="https://firebasestorage.googleapis.com/v0/b/claro-canta-dev.firebasestorage.app/o/AUTORIZACION%20USO%20DE%20IMAGENES%20BMV.pdf?alt=media&token=36c717bc-ca85-43d0-a6a9-5363247b3c3f"
+                title="Términos y Condiciones"
+                className="pdf-viewer"
+              />
+            </div>
+            <div className="modal-footer">
+              <button
+                className="button button-modal"
+                onClick={() => setShowTermsModal(false)}
+              >
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Habeas Data */}
+      {showHabeasModal && (
+        <div className="modal-overlay" onClick={() => setShowHabeasModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3 className="modal-title">Habeas Data</h3>
+              <button
+                className="modal-close"
+                onClick={() => setShowHabeasModal(false)}
+              >
+                ×
+              </button>
+            </div>
+            <div className="modal-body">
+              <p className="modal-text">
+                MARCAS VITALES BMV SAS obrando en nombre de Claro Colombia y en calidad de 
+                encargado del tratamiento de los datos personales obtenidos a través del presente 
+                formato, solicita su autorización de manera previa, libre, expresa, informada y 
+                voluntaria para el tratamiento de estos. Lo anterior con el fin de enviar o tratar 
+                información promocional y/o publicitaria de la marca Claro, Los derechos que le 
+                asisten como titular son: conocer, actualizar, rectificar y suprimir su información 
+                personal de nuestras bases de datos, de los cuales podrá conocer su finalidad dentro 
+                de nuestra Política de Tratamientos de Datos relacionada en la página web{" "}
+                <a 
+                  href="https://mvitales.com/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="modal-link"
+                >
+                  https://mvitales.com/
+                </a>
+                . Usted podrá hacer valer sus peticiones, quejas o reclamos a través de comunicación 
+                escrita al correo: info@mvitales.com, Con la firma de este documento autorizo a la 
+                compañía de manera expresa e inequívoca a recolectar, almacenar, usar y tratar los 
+                datos que he suministrado.
+              </p>
+            </div>
+            <div className="modal-footer">
+              <button
+                className="button button-modal"
+                onClick={() => setShowHabeasModal(false)}
+              >
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

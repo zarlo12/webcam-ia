@@ -146,6 +146,8 @@ const Waiting: React.FC<WaitingProps> = ({
               onChange={(e) => onNameChange(e.target.value)}
               className="input"
               required
+              readOnly
+              style={{ backgroundColor: 'rgba(255,255,255,0.7)', cursor: 'not-allowed' }}
             />
 
              <input
@@ -179,7 +181,7 @@ const Waiting: React.FC<WaitingProps> = ({
 
            
 
-            <div className="checkbox-container">
+            <div className="checkbox-container" style={{ display: "none" }}>
               <input
                 type="checkbox"
                 className="checkbox"

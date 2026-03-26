@@ -37,12 +37,12 @@ function MainApp() {
 
   // Esta función se invoca en AvatarPhoto al enviar la petición a n8n.
   // Además, al cambiar a Waiting se limpia los campos para que el usuario los ingrese.
-  const handleProcess = () => {
+  const handleProcess = (email: string, name: string) => {
 
     setNombreEmpresa("");
-    setEmail("");
+    setEmail(email);
     setCargo("");
-    setName("");
+    setName(name); // Mantener el nombre que ya se ingresó
     setTelephone("");
     setTerms(false);
     setImagenGenerada(false); // Reiniciamos la bandera al iniciar el proceso

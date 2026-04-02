@@ -289,7 +289,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
                 <option value="3d-caricature">😄 Caricatura 3D</option>
                 <option value="promotional-cinematic">📸 Promocional Cinemático</option>
               </select>
-              <span className="select-arrow">▼</span>
+            
             </div>
 
             <button

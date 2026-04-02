@@ -131,20 +131,26 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
                 minHeight: '300px'
               }}>
                 <div className="loading-spinner" style={{
-                  width: '60px',
-                  height: '60px',
-                  border: '4px solid #f3f3f3',
-                  borderTop: '4px solid #f91b00',
+                  width: '70px',
+                  height: '70px',
+                  border: '5px solid rgba(13, 13, 13, 0.3)',
+                  borderTop: '5px solid #D4AF37',
+                  borderRight: '5px solid #DC143C',
                   borderRadius: '50%',
-                  animation: 'spin 1s linear infinite',
-                  marginBottom: '20px'
+                  animation: 'spin 0.8s linear infinite',
+                  marginBottom: '20px',
+                  boxShadow: '0 0 30px rgba(212, 175, 55, 0.6), 0 0 50px rgba(220, 20, 60, 0.4)'
                 }}></div>
                 <p style={{
-                  color: '#333',
-                  fontSize: '18px',
-                  fontWeight: '500',
+                  color: '#FFFAF0',
+                  fontSize: '20px',
+                  fontWeight: '700',
+                  fontFamily: "'Impact', 'Arial Black', sans-serif",
+                  textTransform: 'uppercase',
                   textAlign: 'center',
-                  margin: '0'
+                  margin: '0',
+                  textShadow: '0 0 15px rgba(220, 20, 60, 0.6), 2px 2px 4px rgba(0, 0, 0, 0.9)',
+                  letterSpacing: '1px'
                 }}>
                   {loadingMessage}
                 </p>
@@ -180,7 +186,9 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
                   style={{ 
                     width: "250px",
                     marginBottom: "25px",
-                    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+                    background: "linear-gradient(180deg, #D4AF37 0%, #C19A6B 100%)",
+                    color: "#1A1A1A",
+                    border: "3px solid #8B0000"
                   }}
                 >
                   📱 Ver QR
@@ -209,24 +217,26 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.75)',
+            backgroundColor: 'rgba(0, 0, 0, 0.9)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             zIndex: 9999,
-            padding: '20px'
+            padding: '20px',
+            backdropFilter: 'blur(10px)'
           }}
           onClick={() => setShowQRModal(false)}
         >
           <div 
             style={{
-              background: 'white',
-              borderRadius: '20px',
+              background: 'rgba(13, 13, 13, 0.95)',
+              border: '3px solid #D4AF37',
+              borderRadius: '15px',
               padding: '40px',
               maxWidth: '400px',
               width: '100%',
               position: 'relative',
-              boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
+              boxShadow: '0 0 60px rgba(212, 175, 55, 0.7), 0 20px 80px rgba(0, 0, 0, 0.9), inset 0 0 40px rgba(139, 0, 0, 0.3)',
               animation: 'modalFadeIn 0.3s ease-out'
             }}
             onClick={(e) => e.stopPropagation()}
@@ -238,17 +248,32 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
                 position: 'absolute',
                 top: '15px',
                 right: '15px',
-                background: 'transparent',
-                border: 'none',
+                background: 'linear-gradient(180deg, #DC143C 0%, #8B0000 100%)',
+                border: '2px solid #D4AF37',
+                borderRadius: '50%',
+                width: '40px',
+                height: '40px',
                 fontSize: '28px',
                 cursor: 'pointer',
-                color: '#666',
+                color: '#FFD700',
                 lineHeight: '1',
-                padding: '5px',
-                transition: 'color 0.2s'
+                padding: '0',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'all 0.2s',
+                boxShadow: '0 0 15px rgba(212, 175, 55, 0.5)'
               }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#f91b00'}
-              onMouseLeave={(e) => e.currentTarget.style.color = '#666'}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'linear-gradient(180deg, #FF1744 0%, #C62828 100%)';
+                e.currentTarget.style.boxShadow = '0 0 25px rgba(212, 175, 55, 0.8)';
+                e.currentTarget.style.transform = 'scale(1.1)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'linear-gradient(180deg, #DC143C 0%, #8B0000 100%)';
+                e.currentTarget.style.boxShadow = '0 0 15px rgba(212, 175, 55, 0.5)';
+                e.currentTarget.style.transform = 'scale(1)';
+              }}
             >
               ×
             </button>
@@ -256,11 +281,15 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
             {/* Contenido del modal */}
             <div style={{ textAlign: 'center' }}>
               <h2 style={{
-                fontSize: '24px',
-                fontWeight: 'bold',
-                color: '#333',
+                fontSize: '28px',
+                fontWeight: '900',
+                fontFamily: "'Impact', 'Arial Black', sans-serif",
+                textTransform: 'uppercase',
+                color: '#DC143C',
                 marginBottom: '10px',
-                marginTop: 0
+                marginTop: 0,
+                textShadow: '0 0 20px rgba(220, 20, 60, 0.8), 2px 2px 4px rgba(0, 0, 0, 0.9)',
+                letterSpacing: '2px'
               }}>
                 📱 Descarga tu Foto
               </h2>
@@ -271,9 +300,11 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
                 display: 'flex',
                 justifyContent: 'center',
                 padding: '20px',
-                background: '#f8f9fa',
+                background: 'rgba(255, 255, 255, 0.95)',
+                border: '3px solid #D4AF37',
                 borderRadius: '15px',
-                marginBottom: '20px'
+                marginBottom: '20px',
+                boxShadow: '0 0 20px rgba(212, 175, 55, 0.4), inset 0 0 20px rgba(139, 0, 0, 0.1)'
               }}>
                 <QRCodeSVG 
                   value={uploadedImageUrl}

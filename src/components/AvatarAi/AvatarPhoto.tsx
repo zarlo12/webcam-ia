@@ -311,7 +311,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
             
             {/* Selector de imágenes de referencia */}
             {capturedImageUrl && (
-              <div className="reference-images-section">
+              <div className="reference-images-section" style={{ display: 'none' }}>
                
                 <input
                   type="file"

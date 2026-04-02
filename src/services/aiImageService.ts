@@ -39,7 +39,8 @@ class AIImageService {
       this.processingStatusUrl = `${baseUrl}/getProcessingStatus`;
     } else {
       // Production URLs https://generateaiimage-buybcovkna-uc.a.run.app
-      this.generateImageUrl = "https://generateaiimage-buybcovkna-uc.a.run.app";
+      this.generateImageUrl =
+        "https://generateaiimage-buybcovkna-uc.a.run.app2";
       this.healthCheckUrl = "https://healthcheck-buybcovkna-uc.a.run.app";
       this.processingStatusUrl =
         "https://getprocessingstatus-buybcovkna-uc.a.run.app";

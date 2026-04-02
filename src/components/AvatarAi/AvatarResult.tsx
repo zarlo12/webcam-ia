@@ -36,6 +36,30 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
   const [showQRModal, setShowQRModal] = useState<boolean>(false);
   const hasUploadedRef = useRef(false);
 
+  // Función helper para convertir URL HTTP a data URL
+  const convertUrlToDataUrl = async (url: string): Promise<string> => {
+    // Si ya es una data URL, retornarla directamente
+    if (url.startsWith('data:')) {
+      return url;
+    }
+
+    // Si es una URL HTTP, descargarla y convertirla
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+    } catch (error) {
+      console.error("Error al convertir URL a data URL:", error);
+      throw error;
+    }
+  };
+
  
 
   // Memoiza la función para evitar que cambie en cada render
@@ -46,14 +70,20 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
 
       try {
         setIsLoading(true);
+        setLoadingMessage("Descargando imagen generada...");
+
+        // Convertir URLs a data URLs si es necesario
+        const aiDataUrl = await convertUrlToDataUrl(dataUrl);
+        const originalDataUrlConverted = await convertUrlToDataUrl(originalDataUrl);
+
         setLoadingMessage("Subiendo imagen generada...");
 
         // Subir imagen generada con IA
         const storageRef = ref(
           storage,
-          `CasaReina1/${email}-${Date.now()}.png`
+          `CircoTerror2026/${email}-${Date.now()}.png`
         );
-        await uploadString(storageRef, dataUrl, "data_url");
+        await uploadString(storageRef, aiDataUrl, "data_url");
         const downloadURL = await getDownloadURL(storageRef);
 
         setLoadingMessage("Subiendo imagen original...");
@@ -61,9 +91,9 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
         // Subir imagen original
         const originalStorageRef = ref(
           storage,
-          `CasaReina1/original-${email}-${Date.now()}.png`
+          `CircoTerror2026/original-${email}-${Date.now()}.png`
         );
-        await uploadString(originalStorageRef, originalDataUrl, "data_url");
+        await uploadString(originalStorageRef, originalDataUrlConverted, "data_url");
         const originalDownloadURL = await getDownloadURL(originalStorageRef);
 
         setLoadingMessage("Guardando en base de datos...");

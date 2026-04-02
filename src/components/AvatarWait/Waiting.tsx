@@ -1,7 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./Waiting.scss";
-
-import MergeImage from "../AvatarAi/MergeImage"; // Asegúrate de la ruta correcta
 
 declare global {
   interface Window {
@@ -31,7 +29,6 @@ interface WaitingProps {
   terms: boolean;
   imagenGenerada: boolean;
   aiImageReady: boolean;
-  imageUrl: string;
   
   onEmailChange: (email: string) => void;
 
@@ -42,7 +39,7 @@ interface WaitingProps {
   onCargoChange: (cargo: string) => void;
   onTermsChange: (terms: boolean) => void;
   onShowPolicy: () => void;
-  onContinue: (mergedUrl: string) => void;
+  onContinue: () => void;
 }
 
 const Waiting: React.FC<WaitingProps> = ({
@@ -53,7 +50,6 @@ const Waiting: React.FC<WaitingProps> = ({
   cargo: _cargo,
   terms: _terms,
   aiImageReady,
-  imageUrl,
   onEmailChange: _onEmailChange,
   onNameChange: _onNameChange,
   onTelephoneChange: _onTelephoneChange,
@@ -62,18 +58,8 @@ const Waiting: React.FC<WaitingProps> = ({
   onTermsChange: _onTermsChange,
   onContinue,
 }) => {
-  const [mergedImage, setMergedImage] = useState<string | null>(null);
-  const hasMergedRef = useRef(false);
   const [currentMessage, setCurrentMessage] = useState(0);
   const [currentTitle, setCurrentTitle] = useState(0);
-
-  // Función que se ejecuta cuando termina el merge
-  const handleMerged = (url: string) => {
-    if (!hasMergedRef.current && url) {
-      setMergedImage(url);
-      hasMergedRef.current = true;
-    }
-  };
 
   // Títulos dinámicos durante la generación
   const loadingTitles = [
@@ -149,31 +135,8 @@ const Waiting: React.FC<WaitingProps> = ({
             </div>
           )}
 
-          {/* ESTADO: PROCESANDO IMAGEN */}
-          {aiImageReady && !mergedImage && (
-            <div className="creation-show">
-              <div className="epic-spinner-container">
-                <div className="spinner-ring ring-1"></div>
-                <div className="spinner-ring ring-2"></div>
-                <div className="spinner-ring ring-3"></div>
-                <p className="loading-message">✨</p>
-              </div>
-            </div>
-          )}
-
-          {/* Componente que fusiona la imagen (oculto) */}
-          {aiImageReady && imageUrl && !mergedImage && (
-            <div style={{ display: 'none' }}>
-              <MergeImage
-                imageUrl={imageUrl}
-                onMerged={handleMerged}
-                tipoSuenio={''}
-              />
-            </div>
-          )}
-
           {/* ESTADO: ¡LISTO! - BOTÓN GIGANTE */}
-          {aiImageReady && mergedImage && (
+          {aiImageReady && (
             <div className="ready-show">
               <div className="success-icon-container">
                 <div className="success-icon">🎉</div>
@@ -182,7 +145,7 @@ const Waiting: React.FC<WaitingProps> = ({
               <button
                 type="button"
                 className="button-epic-reveal"
-                onClick={() => onContinue(mergedImage)}
+                onClick={onContinue}
               >
                 <span className="button-epic-text">
                   🎪 VER MI FOTO 🎪

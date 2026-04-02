@@ -93,11 +93,9 @@ function MainApp() {
 
 
   // Función para pasar a AvatarResult cuando el usuario haga clic en el botón.
-  const handleContinue = (mergedUrl: string) => {
-    setImageUrl(mergedUrl);
-    setLastImageUrl(mergedUrl); // Actualizar también el lastImageUrl
+  const handleContinue = () => {
+    // imageUrl ya está establecido desde handleAiImageReady
     console.log('lastImageUrl:', lastImageUrl);
-
     setStep("result");
   };
 
@@ -125,7 +123,6 @@ function MainApp() {
           terms={terms}
           imagenGenerada={imagenGenerada}
           aiImageReady={aiImageReady}
-          imageUrl={imageUrl}
         
       
           onEmailChange={handleEmailChange}

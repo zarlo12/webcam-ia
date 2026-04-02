@@ -322,7 +322,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
                   id="reference-input"
                   style={{ display: 'none' }}
                 />
-                <label htmlFor="reference-input" className="button button-file">
+                <label style={{ display: 'none' }}  htmlFor="reference-input" className="button button-file">
                   📷 Agregar imágenes
                 </label>
                 

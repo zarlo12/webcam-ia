@@ -17,50 +17,66 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   const [email] = useState("");
   const [capturedImage, setCapturedImage] = useState<Blob | null>(null);
   const [capturedImageUrl, setCapturedImageUrl] = useState<string>("");
-  const [referenceImages, setReferenceImages] = useState<Blob[]>([]); // Imágenes de referencia
-  const [referenceImageUrls, setReferenceImageUrls] = useState<string[]>([]); // URLs para mostrar previews
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const [selectedStyle, setSelectedStyle] = useState<string>(""); // Estado para el estilo de IA seleccionado
+  const [selectedMode, setSelectedMode] = useState<string>(""); // "terror" o "clasico"
+  const [selectedStyle, setSelectedStyle] = useState<string>(""); // Estilo específico del modo
   
-  // REALISTIC = "realistic",
-  // ARTISTIC = "artistic",
-  // CARTOON = "cartoon",
-  // PROFESSIONAL = "professional",
-  // VINTAGE = "vintage",
   const webcamRef = useRef<WebcamRef | null>(null);
 
-  // Función para generar el prompt basado en el estilo de IA seleccionado
-  const getPromptByStyle = (style: string): string => {
-    const baseInstructions = `Use the first attached image as the base photo containing the real person or group of people. This image must remain the original foundation of the final result. Preserve their facial features, expressions, and recognizable characteristics. IMPORTANT: Preserve the original background and environment from the base photo - keep the same location, setting, and surroundings.`;
+  // Función para generar el prompt basado en el modo y estilo seleccionado
+  const getPromptByStyle = (mode: string, style: string): string => {
+    const baseInstructions = `Transform the person or people in the photo into realistic circus characters. Maintain their facial features, expressions, and recognizable characteristics while applying the transformation. If there are multiple people, transform ALL of them into the same character style. Use photorealistic rendering with professional lighting and textures.`;
     
-    const referenceInstructions = referenceImages.length > 0 
-      ? `\n\nUse all other attached images (second, third, etc.) as references for characters that will be added into the scene. Insert those characters naturally beside the people from the base photo, interacting warmly (like placing an arm around shoulders or giving a friendly side hug). Make sure the characters do not cover the faces of the real people.`
-      : '';
+    const commonEnding = `\n\nEach person should be dressed in a detailed, realistic circus costume appropriate for the character. Place them in a matching circus environment with atmospheric lighting. The background should be immersive and thematic. Maintain photorealism throughout - no cartoons, no exaggerations. Professional photography quality with cinematic color grading.\n\nIf multiple people are present, ensure they all receive the same character transformation while maintaining their individual facial features and positioning. The final image should be vertical (aspect ratio 9:16), optimized for mobile viewing and social media stories. Avoid distortions, extra limbs, duplicated faces, text, logos, or watermarks.`;
     
-    const commonEnding = `\n\nCarefully match lighting, perspective, and scale. Avoid distortions, extra limbs, duplicated faces, text, logos, or watermarks.\n\nThe final image should be vertical (aspect ratio 9:16), optimized for mobile viewing and social media stories.`;
-    
-    switch (style) {
-      case "disney-pixar":
-        return `${baseInstructions}\n\nTransform the people in the photo into Disney Pixar 3D animation style: vibrant colors, expressive big eyes, smooth skin texture, exaggerated but appealing facial features, characteristic Pixar lighting with soft shadows and warm tones. The characters should look like they belong in a Pixar movie - friendly, appealing, and full of personality. Apply the same Disney Pixar 3D animation aesthetic to the background and environment from the original photo, converting it to match the Pixar movie style while keeping the same location and scene recognizable.${referenceInstructions}${commonEnding}`;
-      
-      case "funkos":
-        return `${baseInstructions}\n\nTransform the people into Funko Pop style: oversized square head, small body proportions (head should be 3x larger than body), big round black eyes, simplified facial features, smooth matte finish, characteristic Funko Pop aesthetic with clean lines and bold colors. Maintain the recognizable Funko collector figure look. Keep the original background and setting from the base photo, stylizing it slightly to match the Funko Pop aesthetic with simplified clean shapes and bold colors while preserving the recognizable location.${referenceInstructions}${commonEnding}`;
-      
-      case "anime":
-        return `${baseInstructions}\n\nTransform the people into anime/manga style: large expressive eyes with detailed highlights, smooth skin with subtle blush, detailed hair with dynamic flow and shine, vibrant colors, characteristic anime facial proportions and expressions. Style should resemble high-quality modern anime with clean linework and cel-shaded coloring. Apply the anime aesthetic to the background from the original photo as well, converting it to anime style with cel-shaded coloring and clean linework while maintaining the same location and environment.${referenceInstructions}${commonEnding}`;
-      
-      case "3d-caricature":
-        return `${baseInstructions}\n\nTransform the people into 3D caricature style: exaggerated but recognizable features, oversized expressive eyes, slightly enlarged head, smooth detailed skin, professional 3D rendering with realistic lighting and textures. Keep facial identity clear while adding artistic exaggeration. High-quality render with depth and dimension. Keep the original background and environment from the base photo, applying subtle 3D stylization to match the caricature aesthetic while preserving the location.${referenceInstructions}${commonEnding}`;
-      
-      case "promotional-cinematic":
-        return `${baseInstructions}${referenceInstructions}\n\nKeep the original background and environment from the base photo. Enhance it with vibrant promotional cinematic style: add warm modern lighting effects, colorful atmospheric enhancements, and professional color grading to create a lively energetic atmosphere. The person should look happy and enthusiastic. Apply vibrant cinematic lighting with dramatic warm tones, professional promotional poster aesthetic, ultra high resolution, colorful and eye-catching composition with rich saturated colors, dynamic lighting, and polished poster-quality finish. Maintain the original location but enhance it to look more vibrant and inviting.\n\nThe final image should be vertical (aspect ratio 9:16), optimized for mobile viewing and social media stories.`;
-      
-      case "realistic-photo":
-        return `${baseInstructions}${referenceInstructions}\n\nMaintain a completely realistic photographic style. Do NOT apply any artistic transformation, cartoon effects, or stylization. Keep the people looking exactly as they appear in real life - natural skin texture, realistic proportions, authentic facial features, and natural expressions. IMPORTANT: Preserve the original background and environment from the base photo exactly as it appears. Apply only subtle professional photo enhancements: balanced exposure, natural color correction, soft lighting adjustments, and clean sharpening. The result should look like a high-quality professional photograph taken with a professional camera, maintaining complete photorealism. Preserve natural skin tones, realistic hair texture, authentic clothing details, true-to-life appearance, and the original setting/location.${commonEnding}`;
-      
-      default:
-        return `${baseInstructions}${referenceInstructions}\n\nApply professional photography style with balanced exposure, natural skin tones, and cinematic color grading.${commonEnding}`;
+    // MODO TERROR
+    if (mode === "terror") {
+      switch (style) {
+        case "payaso-maldito":
+          return `${baseInstructions}\n\nTransform each person into a realistic Evil Clown character. Dress them in dark, menacing clown costumes with tattered red and black fabric, weathered face paint with sinister smile patterns, wild colorful hair. Their expressions should be unsettling but photorealistic. Place them in a dark abandoned circus tent with dim atmospheric lighting, fog, and shadows. Horror aesthetic with cinematic dark red and purple lighting.${commonEnding}`;
+        
+        case "dueno-circo-oscuro":
+          return `${baseInstructions}\n\nTransform each person into a realistic Dark Circus Master/Ringmaster. Dress them in elegant but sinister ringmaster outfits: black tailcoats with red velvet trim, top hats, ornate details. They should hold vintage canes or whips. Confident, mysterious expressions. Place them center stage in a gothic circus arena with dramatic theatrical lighting, red curtains, and dark atmospheric fog. Victorian horror aesthetic.${commonEnding}`;
+        
+        case "domador-salvaje":
+          return `${baseInstructions}\n\nTransform each person into a realistic Wild Beast Tamer character. Dress them in rugged leather outfits with metal studs, worn boots, protective gear. They should hold whips or chains. Intense, fearless expressions. Place them in a dark circus cage area with dramatic shadows, chains hanging, and moody theatrical lighting. Gritty, dangerous atmosphere with dark browns and reds.${commonEnding}`;
+        
+        case "acrobata-extremo":
+          return `${baseInstructions}\n\nTransform each person into a realistic Extreme Acrobat character. Dress them in dark, form-fitting performance outfits with gothic patterns, straps, and metallic details. Athletic poses suggesting danger and skill. Place them on or near aerial equipment (trapeze, silks, or ropes) high above a dark circus arena. Dramatic upward lighting with red and blue gels, creating an intense, vertigo-inducing atmosphere.${commonEnding}`;
+        
+        case "pesadilla-circo":
+          return `${baseInstructions}\n\nTransform each person into a realistic Circus Nightmare character. Dress them in haunting circus performer outfits mixing vintage and horror elements - torn fabrics, eerie masks or face paint, mysterious accessories. Enigmatic, otherworldly expressions. Place them in a surreal, nightmarish circus setting with distorted perspectives, eerie fog, and unsettling lighting in purples and greens. Dark fantasy aesthetic.${commonEnding}`;
+        
+        default:
+          return `${baseInstructions}\n\nCreate realistic dark circus characters with horror aesthetic and atmospheric lighting.${commonEnding}`;
+      }
     }
+    
+    // MODO CLÁSICO
+    if (mode === "clasico") {
+      switch (style) {
+        case "payaso-estrella":
+          return `${baseInstructions}\n\nTransform each person into a realistic Star Clown character. Dress them in vibrant, professional clown costumes with bright primary colors (red, yellow, blue), polished face paint with cheerful smiles, colorful wigs, bow ties, and oversized buttons. Joyful, entertaining expressions. Place them in a bright, classic circus ring with spotlights, red and white striped big top tent, and warm theatrical lighting. Traditional circus aesthetic with rich, saturated colors.${commonEnding}`;
+        
+        case "maestro-circo":
+          return `${baseInstructions}\n\nTransform each person into a realistic Grand Circus Master/Ringmaster. Dress them in elegant classic ringmaster outfits: red tailcoats with gold trim, white shirts, black bow ties, top hats, white gloves. They should hold decorative batons or megaphones. Confident, charismatic expressions. Place them center stage in a magnificent circus arena with grand curtains, bright spotlights, and classic circus decorations. Luxurious, prestigious atmosphere.${commonEnding}`;
+        
+        case "domador-legendario":
+          return `${baseInstructions}\n\nTransform each person into a realistic Legendary Animal Tamer character. Dress them in classic safari-style outfits with elegant details: fitted jackets, leather boots, decorative belts, holding ceremonial whips or staffs. Noble, commanding expressions. Place them in a grand circus arena with majestic big cats visible in background (safe distance), golden lighting, and luxurious circus decorations. Epic, heroic atmosphere with warm golden tones.${commonEnding}`;
+        
+        case "acrobata-profesional":
+          return `${baseInstructions}\n\nTransform each person into a realistic Professional Acrobat character. Dress them in elegant, form-fitting performance outfits in vibrant colors (gold, silver, blue) with sequins and graceful design. Athletic poses showing strength and elegance. Place them on or near circus apparatus (trapeze, rings, or silks) in a beautiful circus setting with warm spotlights, sparkles, and classic circus atmosphere. Glamorous, sophisticated aesthetic.${commonEnding}`;
+        
+        case "artista-espectaculo":
+          return `${baseInstructions}\n\nTransform each person into a realistic Spectacular Performer character. Dress them in dazzling circus costumes with sequins, feathers, and elaborate details in bright jewel tones. Showman poses with arms wide or holding props (juggling items, magic wands, or ribbons). Enthusiastic, captivating expressions. Place them in a grand circus stage with spotlights, confetti, sparkles, and audience blur in background. Celebratory, magical atmosphere with golden and warm lighting.${commonEnding}`;
+        
+        default:
+          return `${baseInstructions}\n\nCreate realistic classic circus characters with vibrant colors and warm theatrical lighting.${commonEnding}`;
+      }
+    }
+    
+    // Fallback
+    return `${baseInstructions}\n\nCreate realistic circus characters with professional costumes and atmospheric circus environment.${commonEnding}`;
   };
 
   // Función para capturar la imagen desde el componente WebcamScene
@@ -82,48 +98,13 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
     }
   };
 
-  // Manejar selección de imágenes de referencia
-  const handleReferenceImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
-
-    const fileArray = Array.from(files);
-    
-    // Validar que no exceda 5 imágenes de referencia
-    if (fileArray.length > 5) {
-      Swal.fire({
-        icon: "warning",
-        title: "Máximo 5 imágenes",
-        text: "Puedes seleccionar hasta 5 imágenes de referencia.",
-      });
-      return;
-    }
-
-    // Convertir archivos a Blobs y crear URLs para preview
-    const blobs: Blob[] = [];
-    const urls: string[] = [];
-
-    fileArray.forEach((file) => {
-      blobs.push(file);
-      urls.push(URL.createObjectURL(file));
-    });
-
-    setReferenceImages(blobs);
-    setReferenceImageUrls(urls);
-
-    console.log(`✅ ${blobs.length} imágenes de referencia seleccionadas`);
+  // Handler para cambio de modo (resetea el estilo seleccionado)
+  const handleModeChange = (mode: string) => {
+    setSelectedMode(mode);
+    setSelectedStyle(""); // Resetear estilo al cambiar de modo
   };
 
-  // Eliminar una imagen de referencia
-  const handleRemoveReferenceImage = (index: number) => {
-    const newImages = referenceImages.filter((_, i) => i !== index);
-    const newUrls = referenceImageUrls.filter((_, i) => i !== index);
-    
-    setReferenceImages(newImages);
-    setReferenceImageUrls(newUrls);
-  };
-
-  // Procesa la imagen usando el nuevo servicio de IA con múltiples imágenes
+  // Procesa la imagen con el prompt del modo y estilo seleccionado
   const handleProcessImage = async () => {
     if (!capturedImage) return;
     
@@ -131,7 +112,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
     
     try {
       console.log("🚀 Procesando imagen con IA...");
-      console.log(`📸 Foto de usuario + ${referenceImages.length} imágenes de referencia`);
+      console.log(`🎭 Modo: ${selectedMode}, Estilo: ${selectedStyle}`);
       
       // Convertir la imagen original (capturedImage) a data URL para pasarla al parent
       const reader = new FileReader();
@@ -141,33 +122,19 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
         reader.readAsDataURL(capturedImage);
       });
       
-      // Cambiar INMEDIATAMENTE a la pantalla de formulario sin esperar
-      onProcess(email); // Pasa al formulario mientras la imagen se procesa en background
+      // Cambiar INMEDIATAMENTE a la pantalla de espera sin esperar
+      onProcess(email);
       
-      // Procesar la imagen en background con prompt basado en estilo
-      const prompt = getPromptByStyle(selectedStyle);
-      console.log(`📝 Usando estilo: ${selectedStyle || 'default'}`);
+      // Procesar la imagen en background con prompt basado en modo y estilo
+      const prompt = getPromptByStyle(selectedMode, selectedStyle);
+      console.log(`📝 Prompt generado para transformación realista`);
       
-      let result;
-      
-      if (referenceImages.length > 0) {
-        // Usar el nuevo método para múltiples imágenes
-        result = await aiImageService.generateImageWithMultipleImages(
-          capturedImage,
-          referenceImages,
-          prompt,
-          '',
-          "user-" + Date.now()
-        );
-      } else {
-        // Si no hay referencias, usar el método original
-        result = await aiImageService.generateImageWithFormData(
-          capturedImage,
-          prompt,
-          '',
-          "user-" + Date.now()
-        );
-      }
+      const result = await aiImageService.generateImageWithFormData(
+        capturedImage,
+        prompt,
+        '',
+        "user-" + Date.now()
+      );
 
       if (result.success && result.imageUrl) {
         console.log("✅ Imagen generada exitosamente:", result.imageUrl);
@@ -208,23 +175,13 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   const handleResetCapture = () => {
     setCapturedImage(null);
     setCapturedImageUrl("");
-    // También limpiar las imágenes de referencia
-    setReferenceImages([]);
-    setReferenceImageUrls([]);
+    setSelectedMode("");
+    setSelectedStyle("");
   };
 
   // Validación del formulario y envío de la imagen
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!selectedStyle) {
-      Swal.fire({
-        icon: "warning",
-        title: "Advertencia",
-        text: "Por favor selecciona un estilo de IA.",
-      });
-      return;
-    }
 
     if (!capturedImage) {
       Swal.fire({
@@ -235,8 +192,23 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
       return;
     }
 
-    // Las imágenes de referencia ahora son OPCIONALES
-    // No validamos referenceImages.length
+    if (!selectedMode) {
+      Swal.fire({
+        icon: "warning",
+        title: "Advertencia",
+        text: "Por favor selecciona un modo (Terror o Clásico).",
+      });
+      return;
+    }
+
+    if (!selectedStyle) {
+      Swal.fire({
+        icon: "warning",
+        title: "Advertencia",
+        text: "Por favor selecciona un estilo de personaje.",
+      });
+      return;
+    }
 
     if (isProcessing) {
       return; // Evitar múltiples envíos
@@ -271,26 +243,57 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
           </div>
 
           <div className="buttons-container">
-            {/* Selector de estilo IA */}
+            {/* Selector de MODO */}
             <div className="select-container">
               <select
-                value={selectedStyle}
-                onChange={(e) => setSelectedStyle(e.target.value)}
+                value={selectedMode}
+                onChange={(e) => handleModeChange(e.target.value)}
                 className="input"
                 required
               >
                 <option value="" disabled>
-                  Estilo
+                  Selecciona Modo
                 </option>
-                <option value="realistic-photo">📷 Fotográfico Real</option>
-                <option value="disney-pixar">🎬 Disney Pixar</option>
-                <option value="funkos">🎭 Funkos</option>
-                <option value="anime">🎨 Anime/Manga</option>
-                <option value="3d-caricature">😄 Caricatura 3D</option>
-                <option value="promotional-cinematic">📸 Promocional Cinemático</option>
+                <option value="terror">😈 MODO TERROR</option>
+                <option value="clasico">✨ MODO CLÁSICO</option>
               </select>
-            
+              <span className="select-arrow">▼</span>
             </div>
+
+            {/* Selector de ESTILO (condicional según el modo) */}
+            {selectedMode && (
+              <div className="select-container">
+                <select
+                  value={selectedStyle}
+                  onChange={(e) => setSelectedStyle(e.target.value)}
+                  className="input"
+                  required
+                >
+                  <option value="" disabled>
+                    Selecciona Personaje
+                  </option>
+                  {selectedMode === "terror" && (
+                    <>
+                      <option value="payaso-maldito">🤡 Payaso Maldito</option>
+                      <option value="dueno-circo-oscuro">🎪 Dueño del Circo Oscuro</option>
+                      <option value="domador-salvaje">🦁 Domador Salvaje</option>
+                      <option value="acrobata-extremo">🎭 Acróbata Extremo</option>
+                      <option value="pesadilla-circo">👻 Pesadilla del Circo</option>
+                    </>
+                  )}
+                  {selectedMode === "clasico" && (
+                    <>
+                      <option value="payaso-estrella">🤡 Payaso Estrella</option>
+                      <option value="maestro-circo">🎪 Gran Maestro del Circo</option>
+                      <option value="domador-legendario">🦁 Domador Legendario</option>
+                      <option value="acrobata-profesional">🎭 Acróbata Profesional</option>
+                      <option value="artista-espectaculo">🎟️ Artista del Espectáculo</option>
+                    </>
+                  )}
+                </select>
+                <span className="select-arrow">▼</span>
+              </div>
+            )}
 
             <button
               type="button"
@@ -298,56 +301,8 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
               onClick={capturedImageUrl ? handleResetCapture : handleCapture}
               disabled={isProcessing}
             >
-              <div
-                style={{
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100%",
-                }}
-              >
-                {capturedImageUrl ? "Tomar otra" : "Tomar foto"}
-              </div>
+              {capturedImageUrl ? "Tomar otra" : "Tomar foto"}
             </button>
-            
-            {/* Selector de imágenes de referencia */}
-            {capturedImageUrl && (
-              <div className="reference-images-section" style={{ display: 'none' }}>
-               
-                <input
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  onChange={handleReferenceImagesChange}
-                  className="file-input"
-                  id="reference-input"
-                  style={{ display: 'none' }}
-                />
-                <label style={{ display: 'none' }}  htmlFor="reference-input" className="button button-file">
-                  📷 Agregar imágenes
-                </label>
-                
-                {/* Mostrar previews de las imágenes seleccionadas */}
-                {referenceImageUrls.length > 0 && (
-                  <div className="reference-previews">
-                    {referenceImageUrls.map((url, index) => (
-                      <div key={index} className="reference-preview">
-                        <img src={url} alt={`Referencia ${index + 1}`} />
-                        <button
-                          type="button"
-                          className="remove-btn"
-                          onClick={() => handleRemoveReferenceImage(index)}
-                          title="Eliminar"
-                        >
-                          ✕
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                
-                
-              </div>
-            )}
           </div>
           <form onSubmit={handleSubmit}>
             <button

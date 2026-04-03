@@ -38,9 +38,9 @@ IDENTITY PRESERVATION (HIGHEST PRIORITY):
 - Keep EXACT gender expression and body type
 - They must be INSTANTLY recognizable as themselves
 
-You are photographing THIS SPECIFIC PERSON wearing a circus costume and professional makeup/styling - like a professional portrait photographer would. The costume, lighting, and environment change - THE FACE DOES NOT. Shot with cinema camera (RED Komodo 6K), 50mm portrait lens, f/2.8 shallow depth of field.`;
+You are photographing THIS SPECIFIC PERSON wearing a circus costume and professional makeup/styling - like a professional portrait photographer would. The costume, lighting, and environment change - THE FACE DOES NOT.`;
     
-    const commonEnding = `\n\nREMEMBER: This is portrait photography of a REAL SPECIFIC PERSON in costume - not character creation. Their face, eyes, nose, mouth, skin tone, and hair color MUST remain EXACTLY as in the original photo. Only the costume, styling, lighting, and environment change to match the circus theme.\n\nLIGHTING: Three-point lighting setup with dramatic key light, soft fill, vibrant rim light. Volumetric fog/haze catching light rays. Cinematic color grading with rich saturated colors, deep blacks, glowing highlights.\n\nCOMPOSITION: Vertical 9:16 mobile format. Rule of thirds positioning, dynamic pose, eye contact with camera. Immersive themed background with atmospheric depth, practical lights, environmental details.\n\nQUALITY: 8K detail, magazine cover quality, Vogue/Vanity Fair editorial standard. Professional retouching maintaining natural skin texture, enhanced eye catchlights, subtle lens flare, film grain.\n\nMultiple people: Apply same costume/theme to each while preserving EVERY person's unique facial identity and position.\n\nAVOID: Changing face shape, eye color, skin tone, or hair color. No cartoon/anime style, no distorted anatomy, no extra limbs, no merged faces, no duplicate people, no text/watermarks, no plastic/overly smooth skin. Keep it photorealistic with their REAL face.`;
+    const commonEnding = `\n\nREMEMBER: This is portrait photography of a REAL SPECIFIC PERSON in costume - not character creation. Their face, eyes, nose, mouth, skin tone, and hair color MUST remain EXACTLY as in the original photo. Only the costume, styling, lighting, and environment change to match the circus theme.\n\nLIGHTING: Three-point lighting setup with dramatic key light, soft fill, vibrant rim light. Volumetric fog/haze catching light rays. Cinematic color grading with rich saturated colors, deep blacks, glowing highlights.\n\nCOMPOSITION: Vertical 9:16 mobile format. Rule of thirds positioning, dynamic pose, eye contact with camera. Immersive themed background with atmospheric depth, practical lights, environmental details.\n\nQUALITY: magazine cover quality, Vogue/Vanity Fair editorial standard. Professional retouching maintaining natural skin texture, enhanced eye catchlights, subtle lens flare, film grain.\n\nMultiple people: Apply same costume/theme to each while preserving EVERY person's unique facial identity and position.\n\nAVOID: Changing face shape, eye color, skin tone, or hair color. No cartoon/anime style, no distorted anatomy, no extra limbs, no merged faces, no duplicate people, no text/watermarks, no plastic/overly smooth skin. Keep it photorealistic with their REAL face.`;
     
     // MODO TERROR
     if (mode === "terror") {
@@ -143,7 +143,7 @@ You are photographing THIS SPECIFIC PERSON wearing a circus costume and professi
       console.log(`📝 Prompt generado para transformación realista`);
       
       // Usar nano-banana-pro por defecto (1 imagen)
-      const model = "google/nano-banana-pro";
+      const model = "google/nano-banana";
       console.log(`🤖 Usando modelo: ${model}`);
       
       const result = await aiImageService.generateImageWithFormData(

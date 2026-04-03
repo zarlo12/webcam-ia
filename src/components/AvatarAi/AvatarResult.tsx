@@ -194,12 +194,20 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
             ) : (
               // Result State
               <>
-                <div className="avatar-container">
-                  <img
-                    src={uploadedImageUrl}
-                    className="avatar"
-                    alt="Avatar generado"
-                  />
+                <div className="avatar-showcase">
+                  <div className="avatar-frame">
+                    <div className="avatar-glow-ring"></div>
+                    <div className="avatar-corner top-left"></div>
+                    <div className="avatar-corner top-right"></div>
+                    <div className="avatar-corner bottom-left"></div>
+                    <div className="avatar-corner bottom-right"></div>
+                    <img
+                      src={uploadedImageUrl}
+                      className="avatar-spectacular"
+                      alt="Avatar generado"
+                    />
+                    <div className="avatar-shine"></div>
+                  </div>
                 </div>
                 
                 {/* <h2 className="subtitleResult">
@@ -263,7 +271,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
               border: '3px solid #D4AF37',
               borderRadius: '15px',
               padding: '40px',
-              maxWidth: '400px',
+              maxWidth: '600px',
               width: '100%',
               position: 'relative',
               boxShadow: '0 0 60px rgba(212, 175, 55, 0.7), 0 20px 80px rgba(0, 0, 0, 0.9), inset 0 0 40px rgba(139, 0, 0, 0.3)',
@@ -310,26 +318,14 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
 
             {/* Contenido del modal */}
             <div style={{ textAlign: 'center' }}>
-              <h2 style={{
-                fontSize: '28px',
-                fontWeight: '900',
-                fontFamily: "'Impact', 'Arial Black', sans-serif",
-                textTransform: 'uppercase',
-                color: '#DC143C',
-                marginBottom: '10px',
-                marginTop: 0,
-                textShadow: '0 0 20px rgba(220, 20, 60, 0.8), 2px 2px 4px rgba(0, 0, 0, 0.9)',
-                letterSpacing: '2px'
-              }}>
-                📱 Descarga tu Foto
-              </h2>
+              
               
            
 
               <div style={{
                 display: 'flex',
                 justifyContent: 'center',
-                padding: '20px',
+                padding: '30px',
                 background: 'rgba(255, 255, 255, 0.95)',
                 border: '3px solid #D4AF37',
                 borderRadius: '15px',
@@ -338,7 +334,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
               }}>
                 <QRCodeSVG 
                   value={uploadedImageUrl}
-                  size={220}
+                  size={450}
                   level="H"
                   includeMargin={true}
                   style={{

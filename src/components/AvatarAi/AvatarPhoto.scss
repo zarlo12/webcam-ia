@@ -395,6 +395,370 @@
   // border-radius: 12px;
 }
 
+/* ============================================
+   AVATAR ESPECTACULAR - ESTILOS MEJORADOS
+   ============================================ */
+
+.avatar-showcase {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0 30px 0;
+  animation: showcaseEntrance 1s ease-out;
+}
+
+@keyframes showcaseEntrance {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(50px);
+  }
+  60% {
+    transform: scale(1.05) translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.avatar-frame {
+  position: relative;
+  width: 720px;
+  height: auto;
+  padding: 20px;
+  background: linear-gradient(135deg, 
+    rgba(13, 13, 13, 0.95) 0%,
+    rgba(26, 0, 0, 0.98) 50%,
+    rgba(13, 13, 13, 0.95) 100%
+  );
+  border: 5px solid #D4AF37;
+  border-radius: 20px;
+  box-shadow: 
+    0 0 60px rgba(212, 175, 55, 0.9),
+    0 0 120px rgba(255, 215, 0, 0.6),
+    0 0 180px rgba(220, 20, 60, 0.4),
+    0 20px 80px rgba(0, 0, 0, 0.9),
+    inset 0 0 50px rgba(139, 0, 0, 0.4),
+    inset 0 0 100px rgba(0, 0, 0, 0.6);
+  animation: framePulse 3s ease-in-out infinite;
+  
+  /* Borde interno brillante */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 10px;
+    border: 3px solid rgba(255, 215, 0, 0.4);
+    border-radius: 15px;
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  /* Resplandor exterior animado */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    background: radial-gradient(circle at 50% 50%,
+      rgba(212, 175, 55, 0.3) 0%,
+      rgba(220, 20, 60, 0.2) 40%,
+      transparent 70%
+    );
+    border-radius: 25px;
+    z-index: -1;
+    animation: glowPulse 2s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+}
+
+@keyframes framePulse {
+  0%, 100% {
+    box-shadow: 
+      0 0 60px rgba(212, 175, 55, 0.9),
+      0 0 120px rgba(255, 215, 0, 0.6),
+      0 0 180px rgba(220, 20, 60, 0.4),
+      0 20px 80px rgba(0, 0, 0, 0.9),
+      inset 0 0 50px rgba(139, 0, 0, 0.4),
+      inset 0 0 100px rgba(0, 0, 0, 0.6);
+    border-color: #D4AF37;
+  }
+  50% {
+    box-shadow: 
+      0 0 80px rgba(255, 215, 0, 1),
+      0 0 160px rgba(212, 175, 55, 0.8),
+      0 0 240px rgba(220, 20, 60, 0.6),
+      0 25px 100px rgba(0, 0, 0, 0.9),
+      inset 0 0 60px rgba(139, 0, 0, 0.5),
+      inset 0 0 120px rgba(0, 0, 0, 0.6);
+    border-color: #FFD700;
+  }
+}
+
+@keyframes glowPulse {
+  0% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+/* Anillo de resplandor rotatorio */
+.avatar-glow-ring {
+  position: absolute;
+  inset: -20px;
+  border-radius: 25px;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(255, 215, 0, 0.6) 60deg,
+    rgba(220, 20, 60, 0.6) 180deg,
+    rgba(255, 215, 0, 0.6) 300deg,
+    transparent 360deg
+  );
+  opacity: 0.4;
+  animation: rotateRing 8s linear infinite;
+  pointer-events: none;
+  z-index: -1;
+  filter: blur(15px);
+}
+
+@keyframes rotateRing {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Esquinas decorativas doradas */
+.avatar-corner {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 4px solid #FFD700;
+  z-index: 2;
+  animation: cornerShine 3s ease-in-out infinite;
+  
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    background: #FFD700;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+  }
+  
+  &::before {
+    width: 25px;
+    height: 3px;
+  }
+  
+  &::after {
+    width: 3px;
+    height: 25px;
+  }
+}
+
+.avatar-corner.top-left {
+  top: -5px;
+  left: -5px;
+  border-right: none;
+  border-bottom: none;
+  border-radius: 5px 0 0 0;
+  
+  &::before {
+    top: -4px;
+    left: -4px;
+  }
+  
+  &::after {
+    top: -4px;
+    left: -4px;
+  }
+}
+
+.avatar-corner.top-right {
+  top: -5px;
+  right: -5px;
+  border-left: none;
+  border-bottom: none;
+  border-radius: 0 5px 0 0;
+  
+  &::before {
+    top: -4px;
+    right: -4px;
+  }
+  
+  &::after {
+    top: -4px;
+    right: -4px;
+  }
+}
+
+.avatar-corner.bottom-left {
+  bottom: -5px;
+  left: -5px;
+  border-right: none;
+  border-top: none;
+  border-radius: 0 0 0 5px;
+  
+  &::before {
+    bottom: -4px;
+    left: -4px;
+  }
+  
+  &::after {
+    bottom: -4px;
+    left: -4px;
+  }
+}
+
+.avatar-corner.bottom-right {
+  bottom: -5px;
+  right: -5px;
+  border-left: none;
+  border-top: none;
+  border-radius: 0 0 5px 0;
+  
+  &::before {
+    bottom: -4px;
+    right: -4px;
+  }
+  
+  &::after {
+    bottom: -4px;
+    right: -4px;
+  }
+}
+
+@keyframes cornerShine {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.8));
+  }
+  50% {
+    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 1));
+  }
+}
+
+/* Imagen del avatar mejorada */
+.avatar-spectacular {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 850px;
+  max-height: 1000px;
+  object-fit: cover;
+  border-radius: 12px;
+  position: relative;
+  z-index: 1;
+  box-shadow: 
+    0 10px 40px rgba(0, 0, 0, 0.5),
+    inset 0 0 30px rgba(255, 215, 0, 0.1);
+  animation: avatarReveal 1.2s ease-out;
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.02);
+  }
+}
+
+@keyframes avatarReveal {
+  0% {
+    opacity: 0;
+    filter: brightness(0.3) blur(10px);
+    transform: scale(0.9);
+  }
+  50% {
+    filter: brightness(1.3) blur(0px);
+  }
+  100% {
+    opacity: 1;
+    filter: brightness(1) blur(0px);
+    transform: scale(1);
+  }
+}
+
+/* Efecto de brillo que atraviesa la imagen */
+.avatar-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  animation: shineSlide 4s ease-in-out infinite;
+  border-radius: 12px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+@keyframes shineSlide {
+  0% {
+    left: -100%;
+  }
+  20% {
+    left: 150%;
+  }
+  100% {
+    left: 150%;
+  }
+}
+
+/* Responsive para pantallas más pequeñas */
+@media (max-width: 768px) {
+  .avatar-frame {
+    width: 90vw;
+    max-width: 600px;
+    padding: 15px;
+  }
+  
+  .avatar-spectacular {
+    min-height: 650px;
+    max-height: 800px;
+  }
+  
+  .avatar-corner {
+    width: 30px;
+    height: 30px;
+    border-width: 3px;
+    
+    &::before {
+      width: 20px;
+      height: 2px;
+    }
+    
+    &::after {
+      width: 2px;
+      height: 20px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .avatar-frame {
+    padding: 12px;
+    border-width: 4px;
+  }
+  
+  .avatar-spectacular {
+    min-height: 550px;
+    max-height: 650px;
+  }
+  
+  .avatar-corner {
+    width: 25px;
+    height: 25px;
+  }
+}
+
 .fotoCapturada {
   width: 100%;
   height: 100%;

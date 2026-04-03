@@ -143,7 +143,7 @@ You are photographing THIS SPECIFIC PERSON wearing a circus costume and professi
       console.log(`📝 Prompt generado para transformación realista`);
       
       // Usar nano-banana-pro por defecto (1 imagen)
-      const model = "google/nano-banana";
+      const model = "google/nano-banana-pro";
       console.log(`🤖 Usando modelo: ${model}`);
       
       const result = await aiImageService.generateImageWithFormData(
@@ -340,7 +340,7 @@ You are photographing THIS SPECIFIC PERSON wearing a circus costume and professi
                 marginTop: "10px",
                 backgroundColor: "#ff9900",
                 fontSize: "14px",
-                display: "none",
+                display: "block",
               }}
             >
               🧪 PRUEBA CON IMAGEN FIJA

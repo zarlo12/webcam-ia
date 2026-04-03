@@ -47,10 +47,10 @@ function parseMultipartData(
       // It's a text field - aggressively clean up
       // Remove any trailing \r\n, --, or boundary markers
       let textContent = content.toString();
-      
+
       // Remove trailing whitespace and control characters
       textContent = textContent.replace(/[\r\n\-]+$/g, "").trim();
-      
+
       fields[fieldName] = textContent;
     }
   });

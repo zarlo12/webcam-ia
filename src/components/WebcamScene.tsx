@@ -65,6 +65,7 @@ const cropImage = (
 const WebcamPlane = forwardRef<WebcamRef>((_, ref) => {
   const meshRef = useRef<THREE.Mesh>(null);
   const videoRef = useRef<HTMLVideoElement>(document.createElement("video"));
+  const textureRef = useRef<THREE.VideoTexture | null>(null);
 
   useEffect(() => {
     navigator.mediaDevices
@@ -78,18 +79,41 @@ const WebcamPlane = forwardRef<WebcamRef>((_, ref) => {
       .then((stream) => {
         videoRef.current.srcObject = stream;
         videoRef.current.play();
+        
+        // Cuando el video está listo, configurar el crop de la textura
+        videoRef.current.onloadedmetadata = () => {
+          if (textureRef.current) {
+            const video = videoRef.current;
+            const videoAspect = video.videoWidth / video.videoHeight;
+            
+            if (videoAspect > 1) {
+              // Video más ancho que alto - mostrar solo la porción central cuadrada
+              const scale = video.videoHeight / video.videoWidth;
+              textureRef.current.repeat.set(scale, 1);
+              textureRef.current.offset.set((1 - scale) / 2, 0);
+            } else {
+              // Video más alto que ancho - mostrar solo la porción central cuadrada
+              const scale = video.videoWidth / video.videoHeight;
+              textureRef.current.repeat.set(1, scale);
+              textureRef.current.offset.set(0, (1 - scale) / 2);
+            }
+            
+            textureRef.current.needsUpdate = true;
+          }
+        };
       })
       .catch(console.error);
   }, []);
 
   const texture = new THREE.VideoTexture(videoRef.current);
+  textureRef.current = texture;
 
   useImperativeHandle(ref, () => ({
     captureImage: () => cropImage(videoRef.current),
   }));
 
   return (
-    <mesh ref={meshRef} scale={[7.5, 5.5, 1]}>
+    <mesh ref={meshRef} scale={[4.5, 4.5, 1]}>
       <planeGeometry />
       <meshBasicMaterial map={texture} toneMapped={false} />
     </mesh>
@@ -97,11 +121,16 @@ const WebcamPlane = forwardRef<WebcamRef>((_, ref) => {
 });
 
 // Tipamos el ref correctamente en WebcamScene
+// Tipamos el ref correctamente en WebcamScene
 const WebcamScene = forwardRef<WebcamRef>((_, ref) => {
   return (
     <Canvas
-      camera={{ position: [0, 0, 5], fov: 50 }}
-      style={{ width: "100%", height: "100%" }}
+      camera={{ 
+        position: [0, 0, 5], 
+        fov: 55, // FOV más amplio para ver más área
+        aspect: 1 // Forzar aspecto cuadrado 1:1
+      }}
+      style={{ width: "100%", height: "100%", display: "block" }}
     >
       <ambientLight intensity={0.5} />
       <WebcamPlane ref={ref} />

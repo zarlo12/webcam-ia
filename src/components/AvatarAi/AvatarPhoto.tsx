@@ -28,6 +28,86 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
 
   // Función para generar el prompt basado en el modo y estilo seleccionado
   const getPromptByStyle = (mode: string, style: string): string => {
+    // MODO ESPECIAL: FONDO TERRORÍFICO - Solo cambiar fondo, mantener TODO lo demás
+    if (mode === "fondo-terrorifico") {
+      return `PHOTOREALISTIC BACKGROUND REPLACEMENT - ABSOLUTE SUBJECT PRESERVATION:
+
+CRITICAL RULES - ZERO MODIFICATIONS TO PEOPLE (HIGHEST PRIORITY):
+- Keep 100% EXACT EVERYTHING about the person(s): their EXACT clothing/outfit they're wearing, their EXACT face, their EXACT hair (color, style, length), their EXACT pose and position
+- DO NOT change their clothes - they stay in the SAME outfit they're wearing in the input photo
+- DO NOT change hairstyles or hair color - keep their EXACT hair as shown
+- DO NOT alter faces, facial features, skin tone, or expressions
+- DO NOT modify their poses, positions, or body language
+- DO NOT add props or accessories they don't have
+- If multiple people: keep ALL people exactly as shown, same relative positions, same everything
+
+SINGLE OR MULTIPLE PEOPLE:
+- This photo may contain ONE person OR MULTIPLE people
+- Output must show the EXACT SAME NUMBER of people in EXACT SAME positions
+- ALL people maintain their EXACT appearance, clothing, poses, and spatial relationships
+- NO merging, NO swapping, NO adding/removing people
+
+YOUR ONLY TASK: REPLACE/ENHANCE THE BACKGROUND
+Create a TERRIFYING CIRCUS-THEMED BACKGROUND while keeping the subject(s) completely unchanged:
+
+BACKGROUND ATMOSPHERE - HORROR CIRCUS:
+- Abandoned vintage circus tent interior - torn red and white striped canvas with holes showing stormy night sky
+- Weathered circus environment: decaying wooden platforms, rusty metal framework, broken circus apparatus
+- Gothic Victorian circus aesthetic: tattered velvet curtains (burgundy/black), cracked circus mirrors reflecting eerie light
+- Atmospheric elements: thick volumetric fog rolling across ground, dust particles in light beams, cobwebs, aged props
+- Broken/damaged circus equipment: fallen trapeze, collapsed acrobat platforms, scattered vintage circus props
+- Mysterious shadows and silhouettes suggesting abandoned circus past
+- Eerie lighting: flickering gas lamps, moonlight through torn tent creating dramatic shadows, ghostly blue/purple light filtering through fog
+- Environmental details: weathered circus posters peeling from walls, antique carousel horse in shadows (damaged paint), old circus wagons barely visible in darkness, ravens perched on tent poles
+
+LIGHTING & MOOD:
+- Dark, moody, atmospheric lighting creating horror ambiance
+- Key light on subject(s) remains natural to preserve their exact appearance
+- Background lit with eerie colored lights: deep purples (#4B0082), midnight blues (#191970), sickly greens (#2F4F2F), blood reds (#8B0000)
+- Volumetric fog/haze catching light beams creating depth and mystery
+- Practical lighting sources in background: flickering oil lamps, mysterious glowing elements, lightning flashes illuminating tent
+- Subject(s) well-lit to maintain clarity while background adds horror atmosphere
+
+COMPOSITION:
+- Subject(s) in same position as input photo - DO NOT move or repose them
+- Terrifying circus background surrounds them creating dramatic contrast
+- 4:5 vertical format optimized for mobile
+- Depth created through atmospheric fog and layered background elements
+- Background should enhance drama without overpowering subjects
+
+CIRCUS LOGO INTEGRATION:
+A second reference image contains the circus logo. Incorporate it elegantly into the scene:
+- Position logo in corner or integrated into background environment (on tent wall, on vintage sign, floating with glow)
+- Add visual enhancements: glowing edges, ethereal light, subtle sparkle, metallic shine
+- Logo should fit the horror aesthetic: possibly aged/weathered look or glowing mysteriously
+- Keep logo clear and readable, 15-20% of image size
+- Logo lighting matches scene mood (could have eerie glow or vintage distressed appearance)
+
+QUALITY & STYLE:
+- Photorealistic horror cinema quality
+- Tim Burton meets Guillermo del Toro aesthetic
+- Natural film grain and subtle chromatic aberration adding authenticity
+- Rich atmospheric colors with crushed blacks and moody highlights
+- Professional color grading: desaturated with pushed horror tones
+- Sharp focus on subject(s), atmospheric depth in background
+
+STRICTLY PRESERVE:
+✅ Subject's EXACT clothing/outfit (DO NOT change to costume)
+✅ Subject's EXACT face, features, skin tone
+✅ Subject's EXACT hair color, style, length
+✅ Subject's EXACT pose and body position
+✅ Subject's EXACT accessories they're wearing
+✅ ALL people in photo (count and positions)
+✅ Spatial relationships between people if multiple
+
+ONLY CHANGE:
+❌ Background environment → Replace with terrifying circus setting
+❌ Lighting atmosphere → Add horror mood lighting
+❌ Background elements → Add circus horror details
+
+Think: Green screen photography - subject(s) perfectly preserved, background completely replaced with horror circus environment. The person(s) look EXACTLY as they walked in, but now they're in a terrifying abandoned circus. NO costume change, NO styling change, ONLY background replacement.`;
+    }
+
     const baseInstructions = `PHOTOREALISTIC PORTRAIT SESSION - ABSOLUTE FACE PRESERVATION CRITICAL: This is a professional photo shoot of the EXACT person(s) from the input image wearing circus-themed costumes. You are ONLY changing their outfit and background - NOTHING ELSE.
 
 IMPORTANT - SINGLE OR MULTIPLE PEOPLE:
@@ -120,7 +200,7 @@ IF MULTIPLE PEOPLE IN PHOTO:
 
 LIGHTING: Three-point lighting setup with dramatic key light, soft fill, vibrant rim light. Volumetric fog/haze catching light rays. Cinematic color grading with rich saturated colors, deep blacks, glowing highlights.
 
-COMPOSITION: Vertical 9:16 mobile format. Rule of thirds positioning, dynamic pose, eye contact with camera. Immersive themed background with atmospheric depth, practical lights, environmental details. Logo integrated elegantly into composition.
+COMPOSITION: Vertical 4:5 mobile format. Rule of thirds positioning, dynamic pose, eye contact with camera. Immersive themed background with atmospheric depth, practical lights, environmental details. Logo integrated elegantly into composition.
 
 QUALITY: Magazine cover quality, Vogue/Vanity Fair editorial standard. Professional retouching maintaining natural skin texture, enhanced eye catchlights, subtle lens flare, film grain. Logo appearing as premium branding element.
 
@@ -198,7 +278,12 @@ STRICTLY AVOID: Changing ANY facial features, face shape, eye color/shape, nose 
   // Handler para cambio de modo (resetea el estilo seleccionado)
   const handleModeChange = (mode: string) => {
     setSelectedMode(mode);
-    setSelectedStyle(""); // Resetear estilo al cambiar de modo
+    // Para "fondo-terrorifico" asignar estilo automático, para otros resetear
+    if (mode === "fondo-terrorifico") {
+      setSelectedStyle("background-only"); // Estilo dummy para este modo
+    } else {
+      setSelectedStyle(""); // Resetear estilo al cambiar de modo
+    }
   };
 
   // Procesa la imagen con el prompt del modo y estilo seleccionado
@@ -300,12 +385,13 @@ STRICTLY AVOID: Changing ANY facial features, face shape, eye color/shape, nose 
       Swal.fire({
         icon: "warning",
         title: "Advertencia",
-        text: "Por favor selecciona un modo (Terror o Clásico).",
+        text: "Por favor selecciona un modo (Terror, Clásico o Fondo Terrorífico).",
       });
       return;
     }
 
-    if (!selectedStyle) {
+    // Solo validar estilo si no es el modo "fondo-terrorifico"
+    if (selectedMode !== "fondo-terrorifico" && !selectedStyle) {
       Swal.fire({
         icon: "warning",
         title: "Advertencia",
@@ -360,12 +446,13 @@ STRICTLY AVOID: Changing ANY facial features, face shape, eye color/shape, nose 
                 </option>
                 <option value="terror">😈 MODO TERROR</option>
                 <option value="clasico">✨ MODO CLÁSICO</option>
+                <option value="fondo-terrorifico">🎃 FONDO TERRORÍFICO</option>
               </select>
               <span className="select-arrow">▼</span>
             </div>
 
             {/* Selector de ESTILO (condicional según el modo) */}
-            {selectedMode && (
+            {selectedMode && selectedMode !== "fondo-terrorifico" && (
               <div className="select-container">
                 <select
                   value={selectedStyle}

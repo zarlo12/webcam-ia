@@ -1,11 +1,7 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState } from "react";
 import "./AvatarPhoto.scss";
 import logo from "../../assets/img/logo_final.png";
 import { QRCodeSVG } from "qrcode.react";
-
-import { storage, db } from "../../firebaseConfig";
-import { ref, uploadString, getDownloadURL } from "firebase/storage";
-import { collection, addDoc } from "firebase/firestore";
 
 interface AvatarResultProps {
   email: string;
@@ -14,132 +10,16 @@ interface AvatarResultProps {
   cargo: string;
   telephone: string;
   terms: boolean;
-  imageUrl: string; // Imagen generada con IA
+  imageUrl: string; // Imagen generada con IA (ya guardada en Firebase)
   originalImageUrl: string; // Imagen original capturada
   onReset: () => void;
 }
 
 const AvatarResult: React.FC<AvatarResultProps> = ({
-  email,
-  nombreEmpresa,
-  cargo,
-  name,
-  telephone,
-  terms,
   imageUrl,
-  originalImageUrl,
   onReset,
 }) => {
-  const [uploadedImageUrl, setUploadedImageUrl] = useState<string>(imageUrl);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [loadingMessage, setLoadingMessage] = useState<string>("Generando avatar...");
   const [showQRModal, setShowQRModal] = useState<boolean>(false);
-  const hasUploadedRef = useRef(false);
-
-  // Función helper para convertir URL HTTP a data URL
-  const convertUrlToDataUrl = async (url: string): Promise<string> => {
-    // Si ya es una data URL, retornarla directamente
-    if (url.startsWith('data:')) {
-      return url;
-    }
-
-    // Si es una URL HTTP, descargarla y convertirla
-    try {
-      const response = await fetch(url);
-      const blob = await response.blob();
-      
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result as string);
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-      });
-    } catch (error) {
-      console.error("Error al convertir URL a data URL:", error);
-      throw error;
-    }
-  };
-
- 
-
-  // Memoiza la función para evitar que cambie en cada render
-  const uploadMergedImage = useCallback(
-    async (dataUrl: string, originalDataUrl: string) => {
-      if (hasUploadedRef.current) return;
-      hasUploadedRef.current = true;
-
-      try {
-        setIsLoading(true);
-        setLoadingMessage("Descargando imagen generada...");
-
-        // Convertir URLs a data URLs si es necesario
-        const aiDataUrl = await convertUrlToDataUrl(dataUrl);
-        const originalDataUrlConverted = await convertUrlToDataUrl(originalDataUrl);
-
-        setLoadingMessage("Subiendo imagen generada...");
-
-        // Subir imagen generada con IA
-        const storageRef = ref(
-          storage,
-          `CircoTerror2026/${email}-${Date.now()}.png`
-        );
-        await uploadString(storageRef, aiDataUrl, "data_url");
-        const downloadURL = await getDownloadURL(storageRef);
-
-        setLoadingMessage("Subiendo imagen original...");
-
-        // Subir imagen original
-        const originalStorageRef = ref(
-          storage,
-          `CircoTerror2026/original-${email}-${Date.now()}.png`
-        );
-        await uploadString(originalStorageRef, originalDataUrlConverted, "data_url");
-        const originalDownloadURL = await getDownloadURL(originalStorageRef);
-
-        setLoadingMessage("Guardando en base de datos...");
-
-        // Datos para Firestore con ambas imágenes
-        const datosFirestore = {
-          email: email,
-          name: name,
-          nombreEmpresa: nombreEmpresa,
-          cargo: cargo,
-          telephone: telephone,
-          terms: terms,
-          imageUrl: downloadURL, // Imagen generada con IA
-          imagenOriginal: originalDownloadURL, // Imagen original capturada
-          date: new Date(),
-        };
-
-        console.log("🚀 ~ datosFirestore:", datosFirestore);
-
-        // Guardar en Firestore
-        await addDoc(collection(db, "CasaReina1"), datosFirestore);
-        
-        setLoadingMessage("¡Listo!");
-        setUploadedImageUrl(downloadURL);
-        
-        // Esperar un poco antes de ocultar el loading para mostrar el mensaje de éxito
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 1000);
-        
-      } catch (error) {
-        console.error("Error al subir imágenes:", error);
-        setLoadingMessage("Error al guardar");
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 2000);
-      }
-    },
-    [email, nombreEmpresa, cargo, name, telephone, terms]
-  );
-
-  useEffect(() => {
-    if (!hasUploadedRef.current) {
-      uploadMergedImage(imageUrl, originalImageUrl);
-    }
-  }, [imageUrl, originalImageUrl, uploadMergedImage]);
 
   return (
     <div className="containerResultFinal">
@@ -150,98 +30,53 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
       <div className="main-content">
         <div className="result-wrapper">
           <div className="card">
-            {isLoading ? (
-              // Loading State
-              <div className="loading-container" style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '40px',
-                minHeight: '300px'
-              }}>
-                <div className="loading-spinner" style={{
-                  width: '70px',
-                  height: '70px',
-                  border: '5px solid rgba(13, 13, 13, 0.3)',
-                  borderTop: '5px solid #D4AF37',
-                  borderRight: '5px solid #DC143C',
-                  borderRadius: '50%',
-                  animation: 'spin 0.8s linear infinite',
-                  marginBottom: '20px',
-                  boxShadow: '0 0 30px rgba(212, 175, 55, 0.6), 0 0 50px rgba(220, 20, 60, 0.4)'
-                }}></div>
-                <p style={{
-                  color: '#FFFAF0',
-                  fontSize: '20px',
-                  fontWeight: '700',
-                  fontFamily: "'Impact', 'Arial Black', sans-serif",
-                  textTransform: 'uppercase',
-                  textAlign: 'center',
-                  margin: '0',
-                  textShadow: '0 0 15px rgba(220, 20, 60, 0.6), 2px 2px 4px rgba(0, 0, 0, 0.9)',
-                  letterSpacing: '1px'
-                }}>
-                  {loadingMessage}
-                </p>
-                <style>{`
-                  @keyframes spin {
-                    0% { transform: rotate(0deg); }
-                    100% { transform: rotate(360deg); }
-                  }
-                `}</style>
+            {/* Muestra el resultado directamente - sin loading */}
+            <div className="avatar-showcase">
+              <div className="avatar-frame">
+                <div className="avatar-glow-ring"></div>
+                <div className="avatar-corner top-left"></div>
+                <div className="avatar-corner top-right"></div>
+                <div className="avatar-corner bottom-left"></div>
+                <div className="avatar-corner bottom-right"></div>
+                <img
+                  src={imageUrl}
+                  className="avatar-spectacular"
+                  alt="Avatar generado"
+                />
+                <div className="avatar-shine"></div>
               </div>
-            ) : (
-              // Result State
-              <>
-                <div className="avatar-showcase">
-                  <div className="avatar-frame">
-                    <div className="avatar-glow-ring"></div>
-                    <div className="avatar-corner top-left"></div>
-                    <div className="avatar-corner top-right"></div>
-                    <div className="avatar-corner bottom-left"></div>
-                    <div className="avatar-corner bottom-right"></div>
-                    <img
-                      src={uploadedImageUrl}
-                      className="avatar-spectacular"
-                      alt="Avatar generado"
-                    />
-                    <div className="avatar-shine"></div>
-                  </div>
-                </div>
-                
-                {/* <h2 className="subtitleResult">
-                  Comparte esta imagen 
-                  <br />en Instagram y etiquétanos 
-                  <br />
-                  <div style={{ color: "#041e50" }}>@electrolux_co</div>
-                </h2> */}<br/> <br/>
-                
-                <button
-                  type="button"
-                  className="button btnResult"
-                  onClick={() => setShowQRModal(true)}
-                  style={{ 
-                    width: "250px",
-                    marginBottom: "25px",
-                    background: "linear-gradient(180deg, #D4AF37 0%, #C19A6B 100%)",
-                    color: "#1A1A1A",
-                    border: "3px solid #8B0000"
-                  }}
-                >
-                  📱 Ver QR
-                </button>
-                
-                <button
-                  type="button"
-                  className="button btnResult"
-                  onClick={onReset}
-                  style={{ width: "250px" }}
-                >
-                  Nueva
-                </button>
-              </>
-            )}
+            </div>
+            
+            {/* <h2 className="subtitleResult">
+              Comparte esta imagen 
+              <br />en Instagram y etiquétanos 
+              <br />
+              <div style={{ color: "#041e50" }}>@electrolux_co</div>
+            </h2> */}<br/> <br/>
+            
+            <button
+              type="button"
+              className="button btnResult"
+              onClick={() => setShowQRModal(true)}
+              style={{ 
+                width: "250px",
+                marginBottom: "25px",
+                background: "linear-gradient(180deg, #D4AF37 0%, #C19A6B 100%)",
+                color: "#1A1A1A",
+                border: "3px solid #8B0000"
+              }}
+            >
+              📱 Ver QR
+            </button>
+            
+            <button
+              type="button"
+              className="button btnResult"
+              onClick={onReset}
+              style={{ width: "250px" }}
+            >
+              Nueva
+            </button>
           </div>
         </div>
       </div>
@@ -333,7 +168,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
                 boxShadow: '0 0 20px rgba(212, 175, 55, 0.4), inset 0 0 20px rgba(139, 0, 0, 0.1)'
               }}>
                 <QRCodeSVG 
-                  value={uploadedImageUrl}
+                  value={imageUrl}
                   size={450}
                   level="H"
                   includeMargin={true}

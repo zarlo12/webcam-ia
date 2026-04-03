@@ -4,6 +4,9 @@ import AvatarPhoto from "./components/AvatarAi/AvatarPhoto";
 import AvatarResult from "./components/AvatarAi/AvatarResult";
 import Waiting from "./components/AvatarWait/Waiting";
 import Policy from "./Policy";
+import { storage, db } from "./firebaseConfig";
+import { ref, uploadString, getDownloadURL } from "firebase/storage";
+import { collection, addDoc } from "firebase/firestore";
 
 function MainApp() {
   useEffect(() => {
@@ -81,13 +84,93 @@ function MainApp() {
     setTerms(newTerms);
   };
 
+  // Función helper para convertir URL HTTP a data URL
+  const convertUrlToDataUrl = async (url: string): Promise<string> => {
+    // Si ya es una data URL, retornarla directamente
+    if (url.startsWith('data:')) {
+      return url;
+    }
+
+    // Si es una URL HTTP, descargarla y convertirla
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+    } catch (error) {
+      console.error("Error al convertir URL a data URL:", error);
+      throw error;
+    }
+  };
+
   // Función para manejar cuando la imagen de IA esté lista
-  const handleAiImageReady = (generatedImageUrl: string, originalImageDataUrl: string) => {
-    setAiImageReady(true);
-    setImagenGenerada(true);
-    setImageUrl(generatedImageUrl); // Establecer la URL de la imagen generada
-    setLastImageUrl(generatedImageUrl);
-    setOriginalImageUrl(originalImageDataUrl); // Establecer la URL de la imagen original
+  // Ahora también guarda en Firebase antes de mostrar el botón
+  const handleAiImageReady = async (generatedImageUrl: string, originalImageDataUrl: string) => {
+    try {
+      console.log("💾 Iniciando guardado en Firebase...");
+      
+      setImagenGenerada(true);
+      setImageUrl(generatedImageUrl);
+      setLastImageUrl(generatedImageUrl);
+      setOriginalImageUrl(originalImageDataUrl);
+
+      // Convertir URLs a data URLs si es necesario
+      const aiDataUrl = await convertUrlToDataUrl(generatedImageUrl);
+      const originalDataUrlConverted = await convertUrlToDataUrl(originalImageDataUrl);
+
+      // Subir imagen generada con IA
+      const storageRef = ref(
+        storage,
+        `CircoTerror2026/${email}-${Date.now()}.png`
+      );
+      await uploadString(storageRef, aiDataUrl, "data_url");
+      const downloadURL = await getDownloadURL(storageRef);
+
+      // Subir imagen original
+      const originalStorageRef = ref(
+        storage,
+        `CircoTerror2026/original-${email}-${Date.now()}.png`
+      );
+      await uploadString(originalStorageRef, originalDataUrlConverted, "data_url");
+      const originalDownloadURL = await getDownloadURL(originalStorageRef);
+
+      // Datos para Firestore con ambas imágenes
+      const datosFirestore = {
+        email: email,
+        name: name,
+        nombreEmpresa: nombreEmpresa,
+        cargo: cargo,
+        telephone: telephone,
+        terms: terms,
+        imageUrl: downloadURL, // Imagen generada con IA
+        imagenOriginal: originalDownloadURL, // Imagen original capturada
+        date: new Date(),
+      };
+
+      console.log("🚀 ~ datosFirestore:", datosFirestore);
+
+      // Guardar en Firestore
+      await addDoc(collection(db, "CasaReina1"), datosFirestore);
+      
+      // Actualizar la URL de la imagen para que AvatarResult use la URL de Firebase
+      setImageUrl(downloadURL);
+      setLastImageUrl(downloadURL);
+      
+      console.log("✅ Guardado completo en Firebase");
+      
+      // AHORA sí mostramos el botón porque TODO está listo
+      setAiImageReady(true);
+      
+    } catch (error) {
+      console.error("❌ Error al guardar en Firebase:", error);
+      // Aún así mostramos el botón para que el usuario pueda ver su imagen
+      setAiImageReady(true);
+    }
   };
 
 

@@ -23,11 +23,14 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   
   const webcamRef = useRef<WebcamRef | null>(null);
 
+  // URL del logo del circo que se agregará a todas las imágenes
+  const CIRCUS_LOGO_URL = "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/Circo%2Flogo.jpg?alt=media&token=38c82c33-7ffb-4296-b3e8-a202064110a2";
+
   // Función para generar el prompt basado en el modo y estilo seleccionado
   const getPromptByStyle = (mode: string, style: string): string => {
     const baseInstructions = `PHOTOREALISTIC PORTRAIT SESSION - ABSOLUTE FACE PRESERVATION CRITICAL: This is a professional photo shoot of the EXACT person(s) from the input image wearing circus-themed costumes. You are ONLY changing their outfit and background - NOTHING ELSE.
 
-🎭 IMPORTANT - SINGLE OR MULTIPLE PEOPLE:
+IMPORTANT - SINGLE OR MULTIPLE PEOPLE:
 - This photo may contain ONE person OR MULTIPLE people (2, 3, 4+ people)
 - Count how many people are in the input photo
 - Create the EXACT SAME NUMBER of people in the output - no more, no less
@@ -36,7 +39,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
 - Apply the circus theme to ALL people in the photo equally
 - Keep their relative positions, heights, and spatial relationships EXACTLY as shown
 
-⚠️ CRITICAL IDENTITY PRESERVATION RULES (HIGHEST PRIORITY - NON-NEGOTIABLE):
+CRITICAL IDENTITY PRESERVATION RULES (HIGHEST PRIORITY - NON-NEGOTIABLE):
 FOR EACH AND EVERY PERSON IN THE PHOTO:
 - Keep 100% EXACT facial structure: their specific jawline, their specific cheekbones, their specific chin shape, their specific forehead
 - Keep 100% EXACT eye shape, their EXACT eye color, their EXACT eye spacing, their EXACT eyebrow shape and natural position
@@ -50,7 +53,7 @@ FOR EACH AND EVERY PERSON IN THE PHOTO:
 - Keep 100% EXACT facial proportions and symmetry
 - EACH person MUST be IMMEDIATELY and OBVIOUSLY recognizable as themselves - family and friends should recognize them instantly
 
-🎭 MAKEUP & STYLING RULES - ZERO FACE MODIFICATIONS:
+MAKEUP & STYLING RULES - ZERO FACE MODIFICATIONS:
 - NO makeup of any kind - keep faces 100% bare and natural
 - NO face paint, NO theatrical makeup, NO cosmetic additions
 - NO dots, NO symbols, NO decorative marks on face
@@ -59,10 +62,10 @@ FOR EACH AND EVERY PERSON IN THE PHOTO:
 - Keep their skin exactly as it appears naturally
 - Hair styling: ONLY gentle combing/brushing - NEVER change color, never change texture
 
-🎪 CIRCUS TRANSFORMATION APPROACH:
+CIRCUS TRANSFORMATION APPROACH:
 You are creating a professional portrait photo where THESE SPECIFIC PEOPLE are wearing circus costumes for a themed photoshoot. Think: Actor headshot(s) in costume, NOT character replacement. The costume, props, lighting, and background create the circus theme - each person's face remains untouched and natural.`;
     
-    const commonEnding = `\n\n🚨 FINAL CRITICAL REMINDER - ABSOLUTE FACE PRESERVATION:
+    const commonEnding = `\n\nFINAL CRITICAL REMINDER - ABSOLUTE FACE PRESERVATION:
 This is portrait photography of the EXACT REAL PERSON(S) in circus costume(s). Their ENTIRE FACE(S) must remain 100% IDENTICAL to the input photo:
 - Their EXACT face shape, bone structure, proportions
 - Their EXACT eyes (color, shape, spacing), nose (exact shape), mouth (exact shape)  
@@ -73,7 +76,39 @@ This is portrait photography of the EXACT REAL PERSON(S) in circus costume(s). T
 
 Only change: Costume worn, background/environment, and professional photographic lighting. Think: Professional costume photoshoot, NOT face transformation.
 
-🎭 IF MULTIPLE PEOPLE IN PHOTO:
+CIRCUS LOGO INTEGRATION - CRITICAL:
+A second reference image contains the circus logo. You MUST incorporate this logo into the final composition in an ELEGANT and VISUALLY STRIKING way:
+
+LOGO PLACEMENT & STYLE:
+- Position the logo strategically in the composition - options: corner (top-left, top-right, bottom-left, or bottom-right), or elegantly integrated into the background/environment
+- The logo should be CLEARLY VISIBLE and PROMINENT but artistically integrated, not just pasted on
+- Transform the logo to match the circus aesthetic: add ENHANCED VISUAL EFFECTS making it spectacular:
+  * Glowing edges with golden or colored light emanating from the logo
+  * Subtle sparkle/shimmer effects around the logo borders
+  * Light reflections and lens flare effects making it catch the eye
+  * Enhance any metallic or gold elements in the logo with realistic shine
+  * Add depth with subtle shadow or 3D effect
+  * Optional: Floating magical particles or light wisps near the logo
+  * Make it look like premium branding - polished, professional, eye-catching
+
+LOGO ENHANCEMENTS:
+- If the logo has gold/metallic elements: make them gleam and reflect light beautifully
+- Add subtle glow/halo effect around logo perimeter (matching scene lighting - gold, red, or scene colors)
+- Ensure logo has crisp sharp edges while maintaining artistic integration
+- The logo should feel like part of the theatrical circus environment, not a sticker
+- Lighting on logo should match the scene's dramatic lighting (if scene has warm light, logo glows warm; if cool, logo has cool accents)
+- Optional decorative frame around logo using circus motifs (ornate borders, flourishes, ribbons)
+
+LOGO QUALITY:
+- Keep logo crystal clear and readable - NO blur, NO distortion on the logo itself
+- Enhance logo colors to be rich and vibrant
+- Logo should have premium quality appearance - like watermark in high-end magazine
+- PNG transparency handling: blend logo edges smoothly into scene
+- Size: prominent enough to be noticed but not overpowering the subject (roughly 15-20% of image dimension)
+
+The logo should feel like an elegant premium brand element that ENHANCES the overall composition's theatrical circus grandeur.
+
+IF MULTIPLE PEOPLE IN PHOTO:
 - Output the SAME NUMBER of people as in input (if 2 people in input → 2 people in output, if 3 → 3, etc.)
 - EACH person gets their own circus costume matching the selected theme/style
 - PRESERVE each person's unique identity 100% - Person A stays Person A, Person B stays Person B
@@ -85,11 +120,11 @@ Only change: Costume worn, background/environment, and professional photographic
 
 LIGHTING: Three-point lighting setup with dramatic key light, soft fill, vibrant rim light. Volumetric fog/haze catching light rays. Cinematic color grading with rich saturated colors, deep blacks, glowing highlights.
 
-COMPOSITION: Vertical 9:16 mobile format. Rule of thirds positioning, dynamic pose, eye contact with camera. Immersive themed background with atmospheric depth, practical lights, environmental details.
+COMPOSITION: Vertical 9:16 mobile format. Rule of thirds positioning, dynamic pose, eye contact with camera. Immersive themed background with atmospheric depth, practical lights, environmental details. Logo integrated elegantly into composition.
 
-QUALITY: Magazine cover quality, Vogue/Vanity Fair editorial standard. Professional retouching maintaining natural skin texture, enhanced eye catchlights, subtle lens flare, film grain.
+QUALITY: Magazine cover quality, Vogue/Vanity Fair editorial standard. Professional retouching maintaining natural skin texture, enhanced eye catchlights, subtle lens flare, film grain. Logo appearing as premium branding element.
 
-STRICTLY AVOID: Changing ANY facial features, face shape, eye color/shape, nose shape, lip shape, skin tone, hair color/texture. Adding or removing people. Merging people together. Duplicating a person. Swapping positions. No cartoon/anime style, no distorted anatomy, no extra limbs, no text/watermarks, no plastic/overly smooth skin. Keep it 100% photorealistic with their REAL unchanged face(s).`;
+STRICTLY AVOID: Changing ANY facial features, face shape, eye color/shape, nose shape, lip shape, skin tone, hair color/texture. Adding or removing people. Merging people together. Duplicating a person. Swapping positions. Blurry or distorted logo. Logo covering faces. No cartoon/anime style, no distorted anatomy, no extra limbs, no text/watermarks beyond the integrated logo, no plastic/overly smooth skin. Keep it 100% photorealistic with their REAL unchanged face(s) and a beautifully enhanced elegant logo.`;
     
     // MODO TERROR
     if (mode === "terror") {
@@ -189,18 +224,20 @@ STRICTLY AVOID: Changing ANY facial features, face shape, eye color/shape, nose 
       
       // Procesar la imagen en background con prompt basado en modo y estilo
       const prompt = getPromptByStyle(selectedMode, selectedStyle);
-      console.log(`📝 Prompt generado para transformación realista`);
+      console.log(`📝 Prompt generado para transformación realista con logo`);
       
-      // Usar nano-banana-pro por defecto (1 imagen)
+      // Usar nano-banana con imagen + URL del logo
       const model = "google/nano-banana";
       console.log(`🤖 Usando modelo: ${model}`);
+      console.log(`🖼️ Enviando imagen de usuario + URL del logo: ${CIRCUS_LOGO_URL}`);
       
       const result = await aiImageService.generateImageWithFormData(
         capturedImage,
         prompt,
         selectedStyle,
         "user-" + Date.now(),
-        model
+        model,
+        CIRCUS_LOGO_URL  // Pasar la URL del logo directamente
       );
 
       if (result.success && result.imageUrl) {

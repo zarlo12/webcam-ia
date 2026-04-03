@@ -101,6 +101,7 @@ class AIImageService {
     style?: string,
     userId?: string,
     model?: string,
+    logoUrl?: string,
   ): Promise<AIImageResponse> {
     try {
       const formData = new FormData();
@@ -110,11 +111,13 @@ class AIImageService {
       if (style) formData.append("style", style);
       if (userId) formData.append("userId", userId);
       if (model) formData.append("model", model);
+      if (logoUrl) formData.append("logoUrl", logoUrl);
 
-      console.log(
-        "Sending image with FormData to AI generation service...",
-        formData,
-      );
+      console.log("Sending image with FormData to AI generation service...", {
+        hasImage: true,
+        hasPrompt: !!prompt,
+        hasLogoUrl: !!logoUrl,
+      });
 
       const response = await axios.post(this.generateImageUrl, formData, {
         headers: {

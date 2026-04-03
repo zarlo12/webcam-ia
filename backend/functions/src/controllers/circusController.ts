@@ -213,11 +213,13 @@ async function processCircusMultipartBody(
   const style = fields.style || "";
   const userId = fields.userId || "";
   const model = fields.model || "google/nano-banana-pro"; // Default to nano-banana-pro
+  const logoUrl = fields.logoUrl || ""; // Logo URL for integration
 
   console.log(`🎪 📋 Parameters:`);
   console.log(`   - Model: "${model}"`);
   console.log(`   - Style/Mode: "${style}"`);
   console.log(`   - User ID: "${userId}"`);
+  console.log(`   - Logo URL: "${logoUrl}"`);
   console.log(`   - Prompt length: ${prompt.length} chars`);
   console.log(`   - Prompt preview: "${prompt.substring(0, 200)}..."`);
 
@@ -247,6 +249,7 @@ async function processCircusMultipartBody(
     style,
     userId,
     model,
+    logoUrl,
   };
 
   console.log(`🎪 🤖 Sending to Circus Replicate Service...`);

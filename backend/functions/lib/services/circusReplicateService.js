@@ -43,7 +43,7 @@ class CircusReplicateService {
             // Process with specified model or nano-banana-pro for identity-preserving transformation
             const model = request.model || "google/nano-banana-pro";
             console.log(`[CIRCUS-${requestId}] Processing with ${model} (identity preservation mode)`);
-            const finalImageUrl = await this.processCircusTransformation(originalImageUrl, request.prompt, requestId, model);
+            const finalImageUrl = await this.processCircusTransformation(originalImageUrl, request.prompt, requestId, model, request.logoUrl);
             console.log(`[CIRCUS-${requestId}] ✅ Circus transformation completed successfully`);
             return {
                 success: true,
@@ -72,13 +72,19 @@ class CircusReplicateService {
      * Process circus transformation with nano-banana-pro or nano-banana
      * Optimized parameters for facial identity preservation
      */
-    async processCircusTransformation(imageUrl, prompt, requestId, model) {
+    async processCircusTransformation(imageUrl, prompt, requestId, model, logoUrl) {
         // Use specified model or default to nano-banana-pro
         const selectedModel = model || "google/nano-banana-pro";
+        // Build image_input array: user image + logo (if provided)
+        const imageInputArray = [imageUrl];
+        if (logoUrl) {
+            imageInputArray.push(logoUrl);
+            console.log(`[CIRCUS-${requestId}] 🖼️ Including logo URL: ${logoUrl}`);
+        }
         const input = {
             prompt: prompt,
             resolution: "1K", // High quality for portrait details
-            image_input: [imageUrl], // Single image for identity preservation
+            image_input: imageInputArray, // User image + logo
             aspect_ratio: "9:16", // Vertical format for mobile/totem
             image_search: false, // Don't search for similar images
             google_search: false, // Don't add external references

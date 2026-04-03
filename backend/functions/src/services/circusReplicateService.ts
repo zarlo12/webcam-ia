@@ -75,6 +75,7 @@ class CircusReplicateService {
         request.prompt!,
         requestId,
         model,
+        request.logoUrl,
       );
 
       console.log(
@@ -116,14 +117,22 @@ class CircusReplicateService {
     prompt: string,
     requestId: string,
     model?: string,
+    logoUrl?: string,
   ): Promise<string> {
     // Use specified model or default to nano-banana-pro
     const selectedModel = model || "google/nano-banana-pro";
 
+    // Build image_input array: user image + logo (if provided)
+    const imageInputArray = [imageUrl];
+    if (logoUrl) {
+      imageInputArray.push(logoUrl);
+      console.log(`[CIRCUS-${requestId}] 🖼️ Including logo URL: ${logoUrl}`);
+    }
+
     const input = {
       prompt: prompt,
       resolution: "1K" as const, // High quality for portrait details
-      image_input: [imageUrl], // Single image for identity preservation
+      image_input: imageInputArray, // User image + logo
       aspect_ratio: "9:16" as const, // Vertical format for mobile/totem
       image_search: false, // Don't search for similar images
       google_search: false, // Don't add external references

@@ -5,6 +5,7 @@ export interface ImageGenerationRequest {
   style?: string;
   userId?: string;
   model?: string; // Replicate model to use (e.g., "google/nano-banana-pro" or "google/nano-banana")
+  logoUrl?: string; // URL of circus logo to integrate into generated image
 }
 
 export interface ImageGenerationResponse {

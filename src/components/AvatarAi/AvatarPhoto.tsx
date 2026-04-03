@@ -47,65 +47,56 @@ SINGLE OR MULTIPLE PEOPLE:
 - ALL people maintain their EXACT appearance, clothing, poses, and spatial relationships
 - NO merging, NO swapping, NO adding/removing people
 
-YOUR ONLY TASK: REPLACE/ENHANCE THE BACKGROUND
-Create a TERRIFYING CIRCUS-THEMED BACKGROUND while keeping the subject(s) completely unchanged:
+YOUR ONLY TASK: CREATE A DARK CIRCUS-THEMED BACKGROUND
+Replace the background with a terrifying circus atmosphere while keeping the subject(s) completely unchanged:
 
-BACKGROUND ATMOSPHERE - HORROR CIRCUS:
-- Abandoned vintage circus tent interior - torn red and white striped canvas with holes showing stormy night sky
-- Weathered circus environment: decaying wooden platforms, rusty metal framework, broken circus apparatus
-- Gothic Victorian circus aesthetic: tattered velvet curtains (burgundy/black), cracked circus mirrors reflecting eerie light
-- Atmospheric elements: thick volumetric fog rolling across ground, dust particles in light beams, cobwebs, aged props
-- Broken/damaged circus equipment: fallen trapeze, collapsed acrobat platforms, scattered vintage circus props
-- Mysterious shadows and silhouettes suggesting abandoned circus past
-- Eerie lighting: flickering gas lamps, moonlight through torn tent creating dramatic shadows, ghostly blue/purple light filtering through fog
-- Environmental details: weathered circus posters peeling from walls, antique carousel horse in shadows (damaged paint), old circus wagons barely visible in darkness, ravens perched on tent poles
+BACKGROUND CONCEPT - CREATIVE FREEDOM:
+- Dark, ominous circus environment with horror aesthetic
+- Include sinister circus elements: skulls, skeletons, creepy circus decorations
+- Atmospheric and mysterious - fog, shadows, dramatic lighting
+- Color palette: dark tones, deep purples, blood reds, midnight blues, eerie greens
+- Circus theme evident but with dark/macabre twist
+- Create unique variations - be creative with the specific elements and composition
 
-LIGHTING & MOOD:
-- Dark, moody, atmospheric lighting creating horror ambiance
-- Key light on subject(s) remains natural to preserve their exact appearance
-- Background lit with eerie colored lights: deep purples (#4B0082), midnight blues (#191970), sickly greens (#2F4F2F), blood reds (#8B0000)
-- Volumetric fog/haze catching light beams creating depth and mystery
-- Practical lighting sources in background: flickering oil lamps, mysterious glowing elements, lightning flashes illuminating tent
-- Subject(s) well-lit to maintain clarity while background adds horror atmosphere
+MOOD & LIGHTING:
+- Dark, moody, atmospheric horror ambiance
+- Subject(s) remain well-lit to preserve their exact appearance
+- Background has eerie, dramatic lighting creating mystery
+- Volumetric fog and atmospheric effects adding depth
+- Horror cinema aesthetic - Tim Burton meets dark carnival
 
 COMPOSITION:
-- Subject(s) in same position as input photo - DO NOT move or repose them
+- Subject(s) stay in same position as input photo - DO NOT move or repose them
 - Terrifying circus background surrounds them creating dramatic contrast
 - 4:5 vertical format optimized for mobile
-- Depth created through atmospheric fog and layered background elements
-- Background should enhance drama without overpowering subjects
+- Background enhances drama without overpowering subjects
 
 CIRCUS LOGO INTEGRATION:
-A second reference image contains the circus logo. Incorporate it elegantly into the scene:
-- Position logo in corner or integrated into background environment (on tent wall, on vintage sign, floating with glow)
-- Add visual enhancements: glowing edges, ethereal light, subtle sparkle, metallic shine
-- Logo should fit the horror aesthetic: possibly aged/weathered look or glowing mysteriously
-- Keep logo clear and readable, 15-20% of image size
-- Logo lighting matches scene mood (could have eerie glow or vintage distressed appearance)
+A second reference image contains the circus logo. Incorporate it into the scene:
+- Position elegantly in corner or integrated into background
+- Add visual enhancements: glowing edges, ethereal light, sparkle
+- Logo fits the horror aesthetic with aged or glowing appearance
+- Keep clear and readable, roughly 15-20% of image size
 
-QUALITY & STYLE:
+QUALITY:
 - Photorealistic horror cinema quality
-- Tim Burton meets Guillermo del Toro aesthetic
-- Natural film grain and subtle chromatic aberration adding authenticity
-- Rich atmospheric colors with crushed blacks and moody highlights
-- Professional color grading: desaturated with pushed horror tones
 - Sharp focus on subject(s), atmospheric depth in background
+- Professional color grading with horror tones
+- Natural film grain adding authenticity
 
 STRICTLY PRESERVE:
 ✅ Subject's EXACT clothing/outfit (DO NOT change to costume)
 ✅ Subject's EXACT face, features, skin tone
 ✅ Subject's EXACT hair color, style, length
 ✅ Subject's EXACT pose and body position
-✅ Subject's EXACT accessories they're wearing
 ✅ ALL people in photo (count and positions)
-✅ Spatial relationships between people if multiple
 
 ONLY CHANGE:
-❌ Background environment → Replace with terrifying circus setting
+❌ Background environment → Create terrifying circus setting with skulls and dark elements
 ❌ Lighting atmosphere → Add horror mood lighting
-❌ Background elements → Add circus horror details
+❌ Background composition → Be creative with circus horror details
 
-Think: Green screen photography - subject(s) perfectly preserved, background completely replaced with horror circus environment. The person(s) look EXACTLY as they walked in, but now they're in a terrifying abandoned circus. NO costume change, NO styling change, ONLY background replacement.`;
+Think: Green screen photography - subject(s) perfectly preserved, background completely replaced with creative dark circus horror environment featuring skulls and sinister elements. NO costume change, NO styling change, ONLY background replacement.`;
     }
 
     const baseInstructions = `PHOTOREALISTIC PORTRAIT SESSION - ABSOLUTE FACE PRESERVATION CRITICAL: This is a professional photo shoot of the EXACT person(s) from the input image wearing circus-themed costumes. You are ONLY changing their outfit and background - NOTHING ELSE.

@@ -142,11 +142,16 @@ You are photographing THIS SPECIFIC PERSON wearing a circus costume and professi
       const prompt = getPromptByStyle(selectedMode, selectedStyle);
       console.log(`📝 Prompt generado para transformación realista`);
       
+      // Usar nano-banana-pro por defecto (1 imagen)
+      const model = "google/nano-banana";
+      console.log(`🤖 Usando modelo: ${model}`);
+      
       const result = await aiImageService.generateImageWithFormData(
         capturedImage,
         prompt,
-        '',
-        "user-" + Date.now()
+        selectedStyle,
+        "user-" + Date.now(),
+        model
       );
 
       if (result.success && result.imageUrl) {

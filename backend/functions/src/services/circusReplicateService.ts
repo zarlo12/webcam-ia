@@ -64,15 +64,17 @@ class CircusReplicateService {
         `[CIRCUS-${requestId}] Original image uploaded: ${originalImageUrl}`,
       );
 
-      // Process with nano-banana-pro for identity-preserving transformation
+      // Process with specified model or nano-banana-pro for identity-preserving transformation
+      const model = request.model || "google/nano-banana-pro";
       console.log(
-        `[CIRCUS-${requestId}] Processing with nano-banana-pro (identity preservation mode)`,
+        `[CIRCUS-${requestId}] Processing with ${model} (identity preservation mode)`,
       );
 
       const finalImageUrl = await this.processCircusTransformation(
         originalImageUrl,
         request.prompt!,
         requestId,
+        model,
       );
 
       console.log(
@@ -106,14 +108,18 @@ class CircusReplicateService {
   }
 
   /**
-   * Process circus transformation with nano-banana-pro
+   * Process circus transformation with nano-banana-pro or nano-banana
    * Optimized parameters for facial identity preservation
    */
   private async processCircusTransformation(
     imageUrl: string,
     prompt: string,
     requestId: string,
+    model?: string,
   ): Promise<string> {
+    // Use specified model or default to nano-banana-pro
+    const selectedModel = model || "google/nano-banana-pro";
+
     const input = {
       prompt: prompt,
       resolution: "1K" as const, // High quality for portrait details
@@ -127,8 +133,9 @@ class CircusReplicateService {
       num_inference_steps: 50, // More steps for quality
     };
 
-    console.log(`[CIRCUS-${requestId}] 🎭 nano-banana-pro parameters:`, {
-      model: REPLICATE_MODELS.NANO_BANANA.model,
+    console.log(`[CIRCUS-${requestId}] 🎭 Using model: ${selectedModel}`);
+    console.log(`[CIRCUS-${requestId}] 🎭 Parameters:`, {
+      model: selectedModel,
       resolution: input.resolution,
       aspectRatio: input.aspect_ratio,
       promptLength: prompt.length,
@@ -136,10 +143,7 @@ class CircusReplicateService {
 
     const output = await retryWithBackoff(
       async () => {
-        return await this.initReplicate().run(
-          `${REPLICATE_MODELS.NANO_BANANA.model}` as any,
-          { input },
-        );
+        return await this.initReplicate().run(selectedModel as any, { input });
       },
       3, // Max retries
       2000, // Base delay

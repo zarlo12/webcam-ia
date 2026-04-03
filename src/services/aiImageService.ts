@@ -5,6 +5,7 @@ export interface AIImageRequest {
   prompt?: string;
   style?: string;
   userId?: string;
+  model?: string; // Replicate model to use (e.g., "google/nano-banana-pro" or "google/nano-banana")
 }
 
 export interface AIImageResponse {
@@ -99,6 +100,7 @@ class AIImageService {
     prompt?: string,
     style?: string,
     userId?: string,
+    model?: string,
   ): Promise<AIImageResponse> {
     try {
       const formData = new FormData();
@@ -107,6 +109,7 @@ class AIImageService {
       if (prompt) formData.append("prompt", prompt);
       if (style) formData.append("style", style);
       if (userId) formData.append("userId", userId);
+      if (model) formData.append("model", model);
 
       console.log(
         "Sending image with FormData to AI generation service...",

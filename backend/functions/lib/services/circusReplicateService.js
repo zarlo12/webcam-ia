@@ -40,9 +40,10 @@ class CircusReplicateService {
             const optimizedBuffer = await (0, utils_1.optimizeImageForAI)(imageBuffer);
             const originalImageUrl = await (0, storage_1.uploadToStorage)(optimizedBuffer, "circus-originals", `circus_original_${requestId}.jpg`);
             console.log(`[CIRCUS-${requestId}] Original image uploaded: ${originalImageUrl}`);
-            // Process with nano-banana-pro for identity-preserving transformation
-            console.log(`[CIRCUS-${requestId}] Processing with nano-banana-pro (identity preservation mode)`);
-            const finalImageUrl = await this.processCircusTransformation(originalImageUrl, request.prompt, requestId);
+            // Process with specified model or nano-banana-pro for identity-preserving transformation
+            const model = request.model || "google/nano-banana-pro";
+            console.log(`[CIRCUS-${requestId}] Processing with ${model} (identity preservation mode)`);
+            const finalImageUrl = await this.processCircusTransformation(originalImageUrl, request.prompt, requestId, model);
             console.log(`[CIRCUS-${requestId}] ✅ Circus transformation completed successfully`);
             return {
                 success: true,
@@ -68,10 +69,12 @@ class CircusReplicateService {
         }
     }
     /**
-     * Process circus transformation with nano-banana-pro
+     * Process circus transformation with nano-banana-pro or nano-banana
      * Optimized parameters for facial identity preservation
      */
-    async processCircusTransformation(imageUrl, prompt, requestId) {
+    async processCircusTransformation(imageUrl, prompt, requestId, model) {
+        // Use specified model or default to nano-banana-pro
+        const selectedModel = model || "google/nano-banana-pro";
         const input = {
             prompt: prompt,
             resolution: "1K", // High quality for portrait details
@@ -84,14 +87,15 @@ class CircusReplicateService {
             guidance_scale: 7.5, // Strong prompt adherence
             num_inference_steps: 50, // More steps for quality
         };
-        console.log(`[CIRCUS-${requestId}] 🎭 nano-banana-pro parameters:`, {
-            model: config_1.REPLICATE_MODELS.NANO_BANANA.model,
+        console.log(`[CIRCUS-${requestId}] 🎭 Using model: ${selectedModel}`);
+        console.log(`[CIRCUS-${requestId}] 🎭 Parameters:`, {
+            model: selectedModel,
             resolution: input.resolution,
             aspectRatio: input.aspect_ratio,
             promptLength: prompt.length,
         });
         const output = await (0, utils_1.retryWithBackoff)(async () => {
-            return await this.initReplicate().run(`${config_1.REPLICATE_MODELS.NANO_BANANA.model}`, { input });
+            return await this.initReplicate().run(selectedModel, { input });
         }, 3, // Max retries
         2000);
         // Handle nano-banana output format

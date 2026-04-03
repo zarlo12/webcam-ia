@@ -29,19 +29,23 @@ function parseMultipartData(body, boundary) {
         if (headerEnd === -1)
             return;
         const headers = part.slice(0, headerEnd).toString();
-        const content = part.slice(headerEnd + 4);
+        let content = part.slice(headerEnd + 4);
         const nameMatch = headers.match(/name="([^"]+)"/);
         if (!nameMatch)
             return;
         const fieldName = nameMatch[1];
         if (headers.includes("filename=")) {
-            // It's a file
-            const fileBuffer = content.slice(0, -2); // Remove trailing \r\n
+            // It's a file - remove trailing \r\n
+            const fileBuffer = content.slice(0, -2);
             files[fieldName] = fileBuffer;
         }
         else {
-            // It's a text field
-            fields[fieldName] = content.toString().trim();
+            // It's a text field - aggressively clean up
+            // Remove any trailing \r\n, --, or boundary markers
+            let textContent = content.toString();
+            // Remove trailing whitespace and control characters
+            textContent = textContent.replace(/[\r\n\-]+$/g, "").trim();
+            fields[fieldName] = textContent;
         }
     });
     return { fields, files };
@@ -179,7 +183,9 @@ async function processCircusMultipartBody(body, boundary, res) {
     const prompt = fields.prompt || "";
     const style = fields.style || "";
     const userId = fields.userId || "";
+    const model = fields.model || "google/nano-banana-pro"; // Default to nano-banana-pro
     console.log(`🎪 📋 Parameters:`);
+    console.log(`   - Model: "${model}"`);
     console.log(`   - Style/Mode: "${style}"`);
     console.log(`   - User ID: "${userId}"`);
     console.log(`   - Prompt length: ${prompt.length} chars`);
@@ -204,6 +210,7 @@ async function processCircusMultipartBody(body, boundary, res) {
         prompt,
         style,
         userId,
+        model,
     };
     console.log(`🎪 🤖 Sending to Circus Replicate Service...`);
     const result = await circusReplicateService_1.default.generateCircusTransformation(request);
@@ -215,7 +222,7 @@ async function processCircusMultipartBody(body, boundary, res) {
  * Handle JSON circus requests
  */
 const handleCircusJsonRequest = async (req, res) => {
-    const { imageData, prompt, style, userId } = req.body;
+    const { imageData, prompt, style, userId, model } = req.body;
     if (!imageData) {
         res.status(400).json({
             success: false,
@@ -238,6 +245,7 @@ const handleCircusJsonRequest = async (req, res) => {
         return;
     }
     console.log(`🎪 Processing JSON circus request`);
+    console.log(`   - Model: ${model || "google/nano-banana-pro (default)"}`);
     console.log(`   - Style: ${style}`);
     console.log(`   - Prompt length: ${prompt.length}`);
     const request = {
@@ -245,6 +253,7 @@ const handleCircusJsonRequest = async (req, res) => {
         prompt,
         style,
         userId,
+        model,
     };
     const result = await circusReplicateService_1.default.generateCircusTransformation(request);
     res.status(result.success ? 200 : 400).json(result);

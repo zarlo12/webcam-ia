@@ -32,7 +32,7 @@ function parseMultipartData(
     if (headerEnd === -1) return;
 
     const headers = part.slice(0, headerEnd).toString();
-    const content = part.slice(headerEnd + 4);
+    let content = part.slice(headerEnd + 4);
 
     const nameMatch = headers.match(/name="([^"]+)"/);
     if (!nameMatch) return;
@@ -40,12 +40,18 @@ function parseMultipartData(
     const fieldName = nameMatch[1];
 
     if (headers.includes("filename=")) {
-      // It's a file
-      const fileBuffer = content.slice(0, -2); // Remove trailing \r\n
+      // It's a file - remove trailing \r\n
+      const fileBuffer = content.slice(0, -2);
       files[fieldName] = fileBuffer;
     } else {
-      // It's a text field
-      fields[fieldName] = content.toString().trim();
+      // It's a text field - aggressively clean up
+      // Remove any trailing \r\n, --, or boundary markers
+      let textContent = content.toString();
+      
+      // Remove trailing whitespace and control characters
+      textContent = textContent.replace(/[\r\n\-]+$/g, "").trim();
+      
+      fields[fieldName] = textContent;
     }
   });
 
@@ -206,8 +212,10 @@ async function processCircusMultipartBody(
   const prompt = fields.prompt || "";
   const style = fields.style || "";
   const userId = fields.userId || "";
+  const model = fields.model || "google/nano-banana-pro"; // Default to nano-banana-pro
 
   console.log(`🎪 📋 Parameters:`);
+  console.log(`   - Model: "${model}"`);
   console.log(`   - Style/Mode: "${style}"`);
   console.log(`   - User ID: "${userId}"`);
   console.log(`   - Prompt length: ${prompt.length} chars`);
@@ -238,6 +246,7 @@ async function processCircusMultipartBody(
     prompt,
     style,
     userId,
+    model,
   };
 
   console.log(`🎪 🤖 Sending to Circus Replicate Service...`);
@@ -254,7 +263,7 @@ async function processCircusMultipartBody(
  * Handle JSON circus requests
  */
 const handleCircusJsonRequest = async (req: any, res: any): Promise<void> => {
-  const { imageData, prompt, style, userId } = req.body;
+  const { imageData, prompt, style, userId, model } = req.body;
 
   if (!imageData) {
     res.status(400).json({
@@ -281,6 +290,7 @@ const handleCircusJsonRequest = async (req: any, res: any): Promise<void> => {
   }
 
   console.log(`🎪 Processing JSON circus request`);
+  console.log(`   - Model: ${model || "google/nano-banana-pro (default)"}`);
   console.log(`   - Style: ${style}`);
   console.log(`   - Prompt length: ${prompt.length}`);
 
@@ -289,6 +299,7 @@ const handleCircusJsonRequest = async (req: any, res: any): Promise<void> => {
     prompt,
     style,
     userId,
+    model,
   };
 
   const result =

@@ -4,6 +4,7 @@ export interface ImageGenerationRequest {
   prompt?: string;
   style?: string;
   userId?: string;
+  model?: string; // Replicate model to use (e.g., "google/nano-banana-pro" or "google/nano-banana")
 }
 
 export interface ImageGenerationResponse {

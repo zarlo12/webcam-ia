@@ -21,6 +21,7 @@ export interface ImageGenerationResponse {
     originalImages?: string[]; // Array of original images
     finalImage?: string; // Final result
     imageCount?: number; // Number of images processed
+    mode?: string; // Style/character mode used for transformation
   };
 }
 

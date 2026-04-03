@@ -11,7 +11,14 @@ setGlobalOptions({
   region: "us-central1",
 });
 
-// Export the functions
+// Export the CIRCUS functions (project-specific)
+export {
+  generateCircusImage,
+  circusHealthCheck,
+  getCircusStatus,
+} from "./controllers/circusController";
+
+// Export the general functions (for other projects)
 export {
   generateAIImage,
   getProcessingStatus,

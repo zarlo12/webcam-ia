@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.processWebcamImage = exports.sendToVTEX = exports.healthCheck = exports.getProcessingStatus = exports.generateAIImage = void 0;
+exports.processWebcamImage = exports.sendToVTEX = exports.healthCheck = exports.getProcessingStatus = exports.generateAIImage = exports.getCircusStatus = exports.circusHealthCheck = exports.generateCircusImage = void 0;
 const dotenv = __importStar(require("dotenv"));
 // Load environment variables
 dotenv.config();
@@ -43,7 +43,12 @@ const v2_1 = require("firebase-functions/v2");
     maxInstances: 10,
     region: "us-central1",
 });
-// Export the functions
+// Export the CIRCUS functions (project-specific)
+var circusController_1 = require("./controllers/circusController");
+Object.defineProperty(exports, "generateCircusImage", { enumerable: true, get: function () { return circusController_1.generateCircusImage; } });
+Object.defineProperty(exports, "circusHealthCheck", { enumerable: true, get: function () { return circusController_1.circusHealthCheck; } });
+Object.defineProperty(exports, "getCircusStatus", { enumerable: true, get: function () { return circusController_1.getCircusStatus; } });
+// Export the general functions (for other projects)
 var imageController_1 = require("./controllers/imageController");
 Object.defineProperty(exports, "generateAIImage", { enumerable: true, get: function () { return imageController_1.generateAIImage; } });
 Object.defineProperty(exports, "getProcessingStatus", { enumerable: true, get: function () { return imageController_1.getProcessingStatus; } });

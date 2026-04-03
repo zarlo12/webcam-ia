@@ -34,18 +34,22 @@ class AIImageService {
     const baseUrl = null;
     if (baseUrl) {
       // Development or custom base URL
-      this.generateImageUrl = `${baseUrl}/generateAIImage`;
-      this.healthCheckUrl = `${baseUrl}/healthCheck`;
-      this.processingStatusUrl = `${baseUrl}/getProcessingStatus`;
+      this.generateImageUrl = `${baseUrl}/generateCircusImage`;
+      this.healthCheckUrl = `${baseUrl}/circusHealthCheck`;
+      this.processingStatusUrl = `${baseUrl}/getCircusStatus`;
     } else {
-      // Production URLs https://generateaiimage-buybcovkna-uc.a.run.app
-      this.generateImageUrl = "https://generateaiimage-buybcovkna-uc.a.run.app";
-      this.healthCheckUrl = "https://healthcheck-buybcovkna-uc.a.run.app";
+      // Production URLs - CIRCUS PROJECT SPECIFIC
+      // TODO: After deploying, update these URLs with your actual Firebase Functions URLs
+      // Deploy with: cd backend/functions && npm run deploy
+      // Then update these URLs from the deployment output
+      this.generateImageUrl =
+        "https://generatecircusimage-buybcovkna-uc.a.run.app";
+      this.healthCheckUrl = "https://circushealthcheck-buybcovkna-uc.a.run.app";
       this.processingStatusUrl =
-        "https://getprocessingstatus-buybcovkna-uc.a.run.app";
+        "https://getcircusstatus-buybcovkna-uc.a.run.app";
     }
 
-    console.log("🚀 AIImageService URLs:", {
+    console.log("🎪 Circus AI Service URLs:", {
       generateImageUrl: this.generateImageUrl,
       healthCheckUrl: this.healthCheckUrl,
       processingStatusUrl: this.processingStatusUrl,

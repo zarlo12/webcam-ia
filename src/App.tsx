@@ -155,7 +155,7 @@ function MainApp() {
       console.log("🚀 ~ datosFirestore:", datosFirestore);
 
       // Guardar en Firestore
-      await addDoc(collection(db, "CasaReina1"), datosFirestore);
+      await addDoc(collection(db, "CircoTerror2026"), datosFirestore);
       
       // Actualizar la URL de la imagen para que AvatarResult use la URL de Firebase
       setImageUrl(downloadURL);

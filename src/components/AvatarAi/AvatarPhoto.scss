@@ -126,13 +126,16 @@
 }
 
 .logo {
-  height: 220px;
+  height: 200px; /* Altura base reducida para ocupar menos espacio */
   margin-top: -1px;
   margin-left: -26px;
   position: relative;
   z-index: 3;
   background: transparent;
+  padding: 123px;
   mix-blend-mode: multiply; /* Hace transparente el fondo blanco/gris */
+  transform: scale(1.8); /* Agranda visualmente SIN mover layout */
+  transform-origin: center center; /* Crece desde el centro */
   // margin-right: -157px;
 }
 
@@ -1133,7 +1136,9 @@ form {
 @media (min-width: 768px) {
   .logo,
   .logo-scotia {
-    height: 180px;
+    height: 150px; /* Altura base reducida */
+    transform: scale(2.0); /* Más grande visualmente */
+    transform-origin: center center;
   }
   
   .card {
@@ -1198,7 +1203,9 @@ form {
 @media (min-width: 1080px) and (orientation: portrait) {
   .logo,
   .logo-scotia {
-    height: 270px;
+    height: 180px; /* Altura base reducida */
+    transform: scale(2.5); /* Mucho más grande visualmente */
+    transform-origin: center center;
   }
   
   .header,
@@ -1328,7 +1335,9 @@ form {
 @media (min-width: 1440px) {
   .logo,
   .logo-scotia {
-    height: 330px;
+    height: 200px; /* Altura base reducida */
+    transform: scale(2.8); /* Enorme visualmente */
+    transform-origin: center center;
   }
   
   .card {

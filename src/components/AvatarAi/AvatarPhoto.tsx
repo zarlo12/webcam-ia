@@ -334,21 +334,21 @@ STRICTLY AVOID: Changing ANY facial features, face shape, eye color/shape, nose 
 
   // Función temporal para pruebass con imagen fija
   
-  const handleTestWithFixedImage = () => {
-    const testImageUrl = "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/CasaReina1%2F-1773594771102.png?alt=media&token=732ba120-4f1e-4b39-a219-210ef29ee09e";
-    const testOriginalImageUrl = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="; // Imagen de prueba 1x1
+  // const handleTestWithFixedImage = () => {
+  //   const testImageUrl = "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/CasaReina1%2F-1773594771102.png?alt=media&token=732ba120-4f1e-4b39-a219-210ef29ee09e";
+  //   const testOriginalImageUrl = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="; // Imagen de prueba 1x1
     
-    console.log("🧪 Iniciando prueba con imagen fija:", testImageUrl);
+  //   console.log("🧪 Iniciando prueba con imagen fija:", testImageUrl);
     
-    // Cambiar inmediatamente al formulario
-    onProcess(email);
+  //   // Cambiar inmediatamente al formulario
+  //   onProcess(email);
     
-    // Simular un breve delay y luego notificar que la imagen está lista
-    setTimeout(() => {
-      console.log("🧪 Imagen de prueba lista");
-      onAiImageReady(testImageUrl, testOriginalImageUrl);
-    }, 1000); // 2 segundos de delay para simular procesamiento
-  };
+  //   // Simular un breve delay y luego notificar que la imagen está lista
+  //   setTimeout(() => {
+  //     console.log("🧪 Imagen de prueba lista");
+  //     onAiImageReady(testImageUrl, testOriginalImageUrl);
+  //   }, 1000); // 2 segundos de delay para simular procesamiento
+  // };
 
 
   // Permite reiniciar la captura para tomar otra foto

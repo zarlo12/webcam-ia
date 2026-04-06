@@ -60,6 +60,24 @@ const Waiting: React.FC<WaitingProps> = ({
 }) => {
   const [currentMessage, setCurrentMessage] = useState(0);
   const [currentTitle, setCurrentTitle] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+
+  // Función para entrar/salir de pantalla completa
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().then(() => {
+        setIsFullscreen(true);
+      }).catch((err) => {
+        console.error("Error al entrar en pantalla completa:", err);
+      });
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().then(() => {
+          setIsFullscreen(false);
+        });
+      }
+    }
+  };
 
   // Títulos dinámicos durante la generación
   const loadingTitles = [
@@ -114,6 +132,15 @@ const Waiting: React.FC<WaitingProps> = ({
 
   return (
     <div className="waiting-fullscreen">
+      {/* Botón discreto de pantalla completa */}
+      <button
+        onClick={toggleFullscreen}
+        className="fullscreen-button"
+        title={isFullscreen ? "Salir de pantalla completa" : "Pantalla completa"}
+      >
+        {isFullscreen ? "⛶" : "⛶"}
+      </button>
+
       <div className="waiting-card-show">
         
         {/* ESTADO: GENERANDO */}

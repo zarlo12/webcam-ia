@@ -20,9 +20,36 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
   onReset,
 }) => {
   const [showQRModal, setShowQRModal] = useState<boolean>(false);
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+
+  // Función para entrar/salir de pantalla completa
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().then(() => {
+        setIsFullscreen(true);
+      }).catch((err) => {
+        console.error("Error al entrar en pantalla completa:", err);
+      });
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().then(() => {
+          setIsFullscreen(false);
+        });
+      }
+    }
+  };
 
   return (
     <div className="containerResultFinal">
+      {/* Botón discreto de pantalla completa */}
+      <button
+        onClick={toggleFullscreen}
+        className="fullscreen-button"
+        title={isFullscreen ? "Salir de pantalla completa" : "Pantalla completa"}
+      >
+        {isFullscreen ? "⛶" : "⛶"}
+      </button>
+
       <div className="header-bar">
         <img src={logo} alt="Logo" className="logo-scotia" />
       </div>

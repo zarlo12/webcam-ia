@@ -20,6 +20,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [selectedMode, setSelectedMode] = useState<string>(""); // "terror" o "clasico"
   const [selectedStyle, setSelectedStyle] = useState<string>(""); // Estilo específico del modo
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   
   const webcamRef = useRef<WebcamRef | null>(null);
 
@@ -247,6 +248,25 @@ STRICTLY AVOID: Changing ANY facial features, face shape, eye color/shape, nose 
     return `${baseInstructions}\n\nCreate breathtaking, cinema-quality circus character portraits with professional cinematography, dramatic theatrical lighting, and editorial photography standards.${commonEnding}`;
   };
 
+  // Función para entrar/salir de pantalla completa
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      // Entrar a pantalla completa
+      document.documentElement.requestFullscreen().then(() => {
+        setIsFullscreen(true);
+      }).catch((err) => {
+        console.error("Error al entrar en pantalla completa:", err);
+      });
+    } else {
+      // Salir de pantalla completa
+      if (document.exitFullscreen) {
+        document.exitFullscreen().then(() => {
+          setIsFullscreen(false);
+        });
+      }
+    }
+  };
+
   // Función para capturar la imagen desde el componente WebcamScene
   const handleCapture = async () => {
     if (webcamRef.current && webcamRef.current.captureImage) {
@@ -400,6 +420,15 @@ STRICTLY AVOID: Changing ANY facial features, face shape, eye color/shape, nose 
 
   return (
     <div className="container">
+      {/* Botón discreto de pantalla completa */}
+      <button
+        onClick={toggleFullscreen}
+        className="fullscreen-button"
+        title={isFullscreen ? "Salir de pantalla completa" : "Pantalla completa"}
+      >
+        {isFullscreen ? "⛶" : "⛶"}
+      </button>
+
       {/* Cabecera superior con fondo rojo y logo centrado */}
       <div className="header">
         <img src={logo} alt="Logo" className="logo" />

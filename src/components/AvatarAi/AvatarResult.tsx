@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./AvatarPhoto.scss";
-import logo from "../../assets/img/logo_final.png";
+// import logo from "../../assets/img/logo_final.png";
 import { QRCodeSVG } from "qrcode.react";
 
 interface AvatarResultProps {
@@ -51,7 +51,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
       </button>
 
       <div className="header-bar">
-        <img src={logo} alt="Logo" className="logo-scotia" />
+        {/* <img src={logo} alt="Logo" className="logo-scotia" /> */}
       </div>
 
       <div className="main-content">

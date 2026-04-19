@@ -23,7 +23,118 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) 
   const webcamRef = useRef<WebcamRef | null>(null);
 
   const getBirthdayBeachPrompt = (): string => {
-    return `Transform ALL the people in the photo into a retro cartoon illustration inspired by classic Peanuts-style aesthetics (Snoopy vibe), with a playful and nostalgic beach theme. If there are multiple people, include every person and represent each one as a stylized cartoon character. Do not remove, crop, or ignore anyone. Maintain group composition and make sure everyone is visible. Each character should look like a cartoon version of the real person: simplified shapes, expressive faces, clean lines, and soft pastel colors. Keep their key features recognizable while adapting them into a charming retro cartoon style. Create a unique and unexpected composition every time: Vary camera angle (front, side, slightly top view, dynamic perspective) Vary character poses and interactions (walking, sitting, laughing, holding objects, interacting naturally) Randomize scene elements (surfboards, beach car, umbrellas, towels, signs, waves, sunset, clouds) Allow different layout structures (centered, asymmetrical, diagonal, layered) Place the characters in a beach environment, but allow creative reinterpretation of the scene — it can feel different each time while keeping the same retro coastal vibe. Use a soft pastel color palette consistent with a vintage beach invitation style, but allow variation in tones and combinations. Allow creative freedom in composition, pose, and environment — the result should feel like a new original illustration every time, not a repeated template. Add a medium-sized, readable logo that says: "Fiesta Jesus Avila 2026" The logo must: Be clearly readable Be secondary in importance Appear in different creative ways each time (for example: sign, sky text, sand writing, banner, object detail, etc.) Blend naturally into the scene IMPORTANT: Include ALL people from the original photo Do NOT cut people out or replace them Avoid repeating the same composition, pose, or layout Keep it friendly, cute, and elegant (not exaggerated or messy) Maintain visual harmony and softness All text must be exactly as written High resolution, clean illustration, modern-retro fusion, highly shareable`;
+    return `
+      Transform ALL the people in the provided photo into a retro cartoon illustration inspired by classic Peanuts-style aesthetics (Snoopy vibe), with a playful and nostalgic beach theme.
+
+STRICT RULE (VERY IMPORTANT):
+ONLY include the exact people present in the original photo.
+DO NOT add extra people.
+DO NOT generate new faces or background characters.
+DO NOT duplicate people.
+The number of characters in the final image MUST match the number of people in the input photo exactly.
+
+If there are multiple people, include every person and represent each one as a stylized cartoon character. Do not remove, crop, or ignore anyone. Maintain the original group composition and ensure all individuals are visible.
+
+Each character should look like a cartoon version of the real person: simplified shapes, expressive faces, clean lines, and soft pastel colors. Keep their key features recognizable while adapting them into a charming retro cartoon style.
+
+Create a unique and unexpected composition every time, while respecting the original number of people:
+
+Vary camera angle (front, side, slightly top view, dynamic perspective)
+Vary character poses and interactions (walking, sitting, laughing, holding objects, interacting naturally)
+Randomize scene elements (surfboards, umbrellas, towels, waves, sunset, clouds)
+Allow different layout structures (centered, asymmetrical, diagonal, layered)
+
+Place the characters in a beach environment, allowing creative reinterpretation of the scene, but NEVER adding extra people.
+
+Use a soft pastel color palette consistent with a vintage beach invitation style, with variation in tones and combinations.
+
+Allow creative freedom in composition, pose, and environment, but ALWAYS respecting the exact number of people from the original image.
+
+Add a medium-sized, readable logo that says:
+"Fiesta Jesus Avila 2026"
+
+MANDATORY LOGO PLACEMENT:
+The text MUST appear ONLY as a banner being pulled by a small airplane in the sky.
+The airplane must be visible in the sky.
+The banner must be attached to the airplane.
+The text must be fully readable.
+Do NOT place the text anywhere else.
+Do NOT use alternative placements (no signs, no sand, no objects, no sky writing).
+If the airplane with banner is missing, the image is incorrect.
+
+FINAL CONSTRAINTS (MANDATORY):
+The number of characters must be EXACTLY the same as the input photo.
+No extra people, no background silhouettes, no crowd elements.
+Do not repeat people.
+Do not invent faces.
+Keep it clean, friendly, cute, and elegant (not exaggerated or messy).
+Maintain visual harmony and softness.
+
+High resolution, clean illustration, modern-retro fusion, highly shareable.
+
+casi, pero ponlo tipo fondo de esta imagen tipo atardecer: 
+
+Imagen creada
+•
+Fiesta en la playa al atardecer
+NO TE DIJE QUE HAGAS IMAGEN, SOLO QUE MEJORES MI PROMOPT
+
+Transform ALL the people in the provided photo into a retro cartoon illustration inspired by classic Peanuts-style aesthetics (Snoopy vibe), using a warm sunset beach background similar to a soft pastel coastal atardecer (sun low on the horizon, orange-pink sky, calm ocean reflections, soft clouds, palm silhouettes).
+
+STRICT RULE (VERY IMPORTANT):
+ONLY include the exact people present in the original photo.
+DO NOT add extra people.
+DO NOT generate new faces or background characters.
+DO NOT duplicate people.
+The number of characters in the final image MUST match the number of people in the input photo exactly.
+
+If there are multiple people, include every person and represent each one as a stylized cartoon character. Do not remove, crop, or ignore anyone. Maintain the original group composition and ensure all individuals are visible.
+
+Each character should look like a cartoon version of the real person: simplified shapes, expressive faces, clean lines, and soft pastel colors. Keep their key features recognizable while adapting them into a charming retro cartoon style.
+
+Create a unique and unexpected composition every time, while respecting the original number of people:
+
+Vary camera angle (front, side, slightly top view, dynamic perspective)
+Vary character poses and interactions (walking, sitting, laughing, holding objects, interacting naturally)
+Randomize scene elements (surfboards, umbrellas, towels, waves, beach props)
+Allow different layout structures (centered, asymmetrical, diagonal, layered)
+
+ENVIRONMENT RULE:
+The scene MUST always be a beach at sunset (atardecer).
+Include a visible sun near the horizon.
+Use warm gradients (orange, pink, soft yellow, light purple).
+Water must reflect the sunset tones.
+Lighting must be soft, warm, and cohesive with sunset ambiance.
+Do not use daytime or night lighting.
+
+Place the characters naturally within this sunset beach environment without adding extra people.
+
+Use a soft pastel color palette consistent with a vintage beach invitation style, adapted to sunset tones.
+
+Allow creative freedom in composition, pose, and environment, but ALWAYS respecting the exact number of people from the original image.
+
+Add a medium-sized, readable logo that says:
+"Fiesta Jesus Avila 2026"
+
+MANDATORY LOGO PLACEMENT:
+The text MUST appear ONLY as a banner being pulled by a small airplane in the sky.
+The airplane must be visible in the sky.
+The banner must be attached to the airplane.
+The text must be fully readable.
+Do NOT place the text anywhere else.
+Do NOT use alternative placements (no signs, no sand, no objects, no sky writing).
+If the airplane with banner is missing, the image is incorrect.
+
+FINAL CONSTRAINTS (MANDATORY):
+The number of characters must be EXACTLY the same as the input photo.
+No extra people, no background silhouettes, no crowd elements.
+Do not repeat people.
+Do not invent faces.
+Keep it clean, friendly, cute, and elegant (not exaggerated or messy).
+Maintain visual harmony and softness.
+
+High resolution, clean illustration, modern-retro fusion, highly shareable.
+    `;
   };
 
   const toggleFullscreen = () => {

@@ -85,24 +85,24 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
               type="button"
               className="button btnResult"
               onClick={() => setShowQRModal(true)}
-              style={{ 
+              style={{
                 width: "250px",
                 marginBottom: "25px",
-                background: "linear-gradient(180deg, #D4AF37 0%, #C19A6B 100%)",
-                color: "#1A1A1A",
-                border: "3px solid #8B0000"
+                background: "linear-gradient(135deg, #4ECDC4 0%, #38B2AB 100%)",
+                color: "#FFFFFF",
+                border: "none"
               }}
             >
               📱 Ver QR
             </button>
-            
+
             <button
               type="button"
               className="button btnResult"
               onClick={onReset}
               style={{ width: "250px" }}
             >
-              Nueva
+              🎉 Nueva foto
             </button>
           </div>
         </div>
@@ -117,26 +117,26 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.9)',
+            backgroundColor: 'rgba(135, 206, 235, 0.85)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             zIndex: 9999,
             padding: '20px',
-            backdropFilter: 'blur(10px)'
+            backdropFilter: 'blur(15px)'
           }}
           onClick={() => setShowQRModal(false)}
         >
-          <div 
+          <div
             style={{
-              background: 'rgba(13, 13, 13, 0.95)',
-              border: '3px solid #D4AF37',
-              borderRadius: '15px',
+              background: 'rgba(255, 255, 255, 0.97)',
+              border: '3px solid #4ECDC4',
+              borderRadius: '20px',
               padding: '40px',
               maxWidth: '600px',
               width: '100%',
               position: 'relative',
-              boxShadow: '0 0 60px rgba(212, 175, 55, 0.7), 0 20px 80px rgba(0, 0, 0, 0.9), inset 0 0 40px rgba(139, 0, 0, 0.3)',
+              boxShadow: '0 0 50px rgba(78, 205, 196, 0.5), 0 20px 60px rgba(0, 0, 0, 0.15), inset 0 0 30px rgba(255, 230, 109, 0.1)',
               animation: 'modalFadeIn 0.3s ease-out'
             }}
             onClick={(e) => e.stopPropagation()}
@@ -148,30 +148,30 @@ const AvatarResult: React.FC<AvatarResultProps> = ({
                 position: 'absolute',
                 top: '15px',
                 right: '15px',
-                background: 'linear-gradient(180deg, #DC143C 0%, #8B0000 100%)',
-                border: '2px solid #D4AF37',
+                background: 'linear-gradient(135deg, #FF6B6B 0%, #E84343 100%)',
+                border: '2px solid #4ECDC4',
                 borderRadius: '50%',
                 width: '40px',
                 height: '40px',
                 fontSize: '28px',
                 cursor: 'pointer',
-                color: '#FFD700',
+                color: '#FFFFFF',
                 lineHeight: '1',
                 padding: '0',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 transition: 'all 0.2s',
-                boxShadow: '0 0 15px rgba(212, 175, 55, 0.5)'
+                boxShadow: '0 4px 15px rgba(255, 107, 107, 0.4)'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'linear-gradient(180deg, #FF1744 0%, #C62828 100%)';
-                e.currentTarget.style.boxShadow = '0 0 25px rgba(212, 175, 55, 0.8)';
+                e.currentTarget.style.background = 'linear-gradient(135deg, #FF7B7B 0%, #FF6B6B 100%)';
+                e.currentTarget.style.boxShadow = '0 6px 20px rgba(255, 107, 107, 0.6)';
                 e.currentTarget.style.transform = 'scale(1.1)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'linear-gradient(180deg, #DC143C 0%, #8B0000 100%)';
-                e.currentTarget.style.boxShadow = '0 0 15px rgba(212, 175, 55, 0.5)';
+                e.currentTarget.style.background = 'linear-gradient(135deg, #FF6B6B 0%, #E84343 100%)';
+                e.currentTarget.style.boxShadow = '0 4px 15px rgba(255, 107, 107, 0.4)';
                 e.currentTarget.style.transform = 'scale(1)';
               }}
             >

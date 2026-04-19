@@ -29,11 +29,9 @@ interface WaitingProps {
   terms: boolean;
   imagenGenerada: boolean;
   aiImageReady: boolean;
-  
+
   onEmailChange: (email: string) => void;
-
   onNameChange: (name: string) => void;
-
   onTelephoneChange: (telephone: string) => void;
   onNombreEmpresaChange: (nombreEmpresa: string) => void;
   onCargoChange: (cargo: string) => void;
@@ -62,7 +60,6 @@ const Waiting: React.FC<WaitingProps> = ({
   const [currentTitle, setCurrentTitle] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
 
-  // Función para entrar/salir de pantalla completa
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen().then(() => {
@@ -79,27 +76,24 @@ const Waiting: React.FC<WaitingProps> = ({
     }
   };
 
-  // Títulos dinámicos durante la generación
   const loadingTitles = [
-    "CREANDO MAGIA OSCURA",
-    "INVOCANDO ESPÍRITUS",
-    "TRANSFORMACIÓN EN VIVO",
-    "PREPARANDO EL SHOW",
-    "CAPTURANDO TU ESENCIA",
-    "EL CIRCO TE ESPERA"
+    "CREANDO TU CARICATURA",
+    "PINTANDO LA PLAYA",
+    "AÑADIENDO MAGIA RETRO",
+    "PREPARANDO LA FIESTA",
+    "ESTILO PEANUTS EN PROCESO",
+    "CASI LISTA TU ILUSTRACIÓN",
   ];
 
-  // Mensajes dinámicos durante la generación
   const loadingMessages = [
-    "🎪",
-    "💀",
-    "🎭",
-    "⚡",
-    "🔮",
-    "💀",
+    "🎉",
+    "🏖️",
+    "🌊",
+    "🎨",
+    "🎂",
+    "🌴",
   ];
 
-  // Cargar el script de Tally al montar el componente
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://tally.so/widgets/embed.js";
@@ -110,7 +104,6 @@ const Waiting: React.FC<WaitingProps> = ({
     };
   }, []);
 
-  // Cambiar títulos cada 2 segundos durante la carga
   useEffect(() => {
     if (!aiImageReady) {
       const interval = setInterval(() => {
@@ -120,7 +113,6 @@ const Waiting: React.FC<WaitingProps> = ({
     }
   }, [aiImageReady, loadingTitles.length]);
 
-  // Cambiar mensajes cada 3 segundos durante la carga
   useEffect(() => {
     if (!aiImageReady) {
       const interval = setInterval(() => {
@@ -132,7 +124,6 @@ const Waiting: React.FC<WaitingProps> = ({
 
   return (
     <div className="waiting-fullscreen">
-      {/* Botón discreto de pantalla completa */}
       <button
         onClick={toggleFullscreen}
         className="fullscreen-button"
@@ -142,44 +133,41 @@ const Waiting: React.FC<WaitingProps> = ({
       </button>
 
       <div className="waiting-card-show">
-        
-        {/* ESTADO: GENERANDO */}
+
         {!aiImageReady && (
-        <div className="creation-show">
-              <h1 className="show-title">
-                {loadingTitles[currentTitle]}
-              </h1>
-              
-              {/* Spinner épico con efectos */}
-              <div className="epic-spinner-container">
-                <div className="spinner-ring ring-1"></div>
-                <div className="spinner-ring ring-2"></div>
-                <div className="spinner-ring ring-3"></div>
-                <p className="loading-message">
-                  {loadingMessages[currentMessage]}
-                </p>
-              </div>
-            </div>
-          )}
+          <div className="creation-show">
+            <h1 className="show-title">
+              {loadingTitles[currentTitle]}
+            </h1>
 
-          {/* ESTADO: ¡LISTO! - BOTÓN GIGANTE */}
-          {aiImageReady && (
-            <div className="ready-show">
-              <div className="success-icon-container">
-                <div className="success-icon">🎉</div>
-              </div>
-
-              <button
-                type="button"
-                className="button-epic-reveal"
-                onClick={onContinue}
-              >
-                <span className="button-epic-text">
-                  🎪 VER MI FOTO 🎪
-                </span>
-              </button>
+            <div className="epic-spinner-container">
+              <div className="spinner-ring ring-1"></div>
+              <div className="spinner-ring ring-2"></div>
+              <div className="spinner-ring ring-3"></div>
+              <p className="loading-message">
+                {loadingMessages[currentMessage]}
+              </p>
             </div>
-          )}
+          </div>
+        )}
+
+        {aiImageReady && (
+          <div className="ready-show">
+            <div className="success-icon-container">
+              <div className="success-icon">🎉</div>
+            </div>
+
+            <button
+              type="button"
+              className="button-epic-reveal"
+              onClick={onContinue}
+            >
+              <span className="button-epic-text">
+                🏖️ VER MI ILUSTRACIÓN 🏖️
+              </span>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

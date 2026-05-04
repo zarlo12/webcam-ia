@@ -1,152 +1,69 @@
 import React, { useState, useEffect } from "react";
 import "./Waiting.scss";
 
-declare global {
-  interface Window {
-    Tally?: {
-      openPopup: (
-        formId: string,
-        options?: {
-          key?: string;
-          layout?: string;
-          width?: number;
-          height?: number;
-          overlay?: boolean;
-          emojiText?: string;
-          emojiAnimation?: string;
-        }
-      ) => void;
-    };
-  }
-}
-
 interface WaitingProps {
-  email: string;
-  name: string;
-  telephone: string;
-  nombreEmpresa: string;
-  cargo: string;
-  terms: boolean;
   imagenGenerada: boolean;
   aiImageReady: boolean;
-
-  onEmailChange: (email: string) => void;
-  onNameChange: (name: string) => void;
-  onTelephoneChange: (telephone: string) => void;
-  onNombreEmpresaChange: (nombreEmpresa: string) => void;
-  onCargoChange: (cargo: string) => void;
-  onTermsChange: (terms: boolean) => void;
-  onShowPolicy: () => void;
   onContinue: () => void;
 }
 
-const Waiting: React.FC<WaitingProps> = ({
-  email: _email,
-  name: _name,
-  telephone: _telephone,
-  nombreEmpresa: _nombreEmpresa,
-  cargo: _cargo,
-  terms: _terms,
-  aiImageReady,
-  onEmailChange: _onEmailChange,
-  onNameChange: _onNameChange,
-  onTelephoneChange: _onTelephoneChange,
-  onNombreEmpresaChange: _onNombreEmpresaChange,
-  onCargoChange: _onCargoChange,
-  onTermsChange: _onTermsChange,
-  onContinue,
-}) => {
-  const [currentMessage, setCurrentMessage] = useState(0);
+const loadingTitles = [
+  "GENERANDO TU PERSONAJE",
+  "APLICANDO PODER",
+  "FORJANDO TU ARMADURA",
+  "CARGANDO HABILIDADES",
+  "CASI LISTO GUERRERO",
+  "DESBLOQUEANDO TU PODER",
+];
+
+const loadingEmojis = ["⚔️", "🔥", "💥", "🛡️", "⚡", "🎮"];
+
+const Waiting: React.FC<WaitingProps> = ({ aiImageReady, onContinue }) => {
   const [currentTitle, setCurrentTitle] = useState(0);
-  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+  const [currentEmoji, setCurrentEmoji] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().then(() => {
-        setIsFullscreen(true);
-      }).catch((err) => {
-        console.error("Error al entrar en pantalla completa:", err);
-      });
+      document.documentElement.requestFullscreen()
+        .then(() => setIsFullscreen(true))
+        .catch(err => console.error('Fullscreen error:', err));
     } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen().then(() => {
-          setIsFullscreen(false);
-        });
-      }
+      document.exitFullscreen().then(() => setIsFullscreen(false));
     }
   };
 
-  const loadingTitles = [
-    "CREANDO TU CARICATURA",
-    "PINTANDO LA PLAYA",
-    "AÑADIENDO MAGIA RETRO",
-    "PREPARANDO LA FIESTA",
-    "ESTILO PEANUTS EN PROCESO",
-    "CASI LISTA TU ILUSTRACIÓN",
-  ];
-
-  const loadingMessages = [
-    "🎉",
-    "🏖️",
-    "🌊",
-    "🎨",
-    "🎂",
-    "🌴",
-  ];
+  useEffect(() => {
+    if (aiImageReady) return;
+    const interval = setInterval(() => {
+      setCurrentTitle(prev => (prev + 1) % loadingTitles.length);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [aiImageReady]);
 
   useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://tally.so/widgets/embed.js";
-    script.async = true;
-    document.body.appendChild(script);
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!aiImageReady) {
-      const interval = setInterval(() => {
-        setCurrentTitle((prev) => (prev + 1) % loadingTitles.length);
-      }, 2000);
-      return () => clearInterval(interval);
-    }
-  }, [aiImageReady, loadingTitles.length]);
-
-  useEffect(() => {
-    if (!aiImageReady) {
-      const interval = setInterval(() => {
-        setCurrentMessage((prev) => (prev + 1) % loadingMessages.length);
-      }, 3000);
-      return () => clearInterval(interval);
-    }
-  }, [aiImageReady, loadingMessages.length]);
+    if (aiImageReady) return;
+    const interval = setInterval(() => {
+      setCurrentEmoji(prev => (prev + 1) % loadingEmojis.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [aiImageReady]);
 
   return (
     <div className="waiting-fullscreen">
-      <button
-        onClick={toggleFullscreen}
-        className="fullscreen-button"
-        title={isFullscreen ? "Salir de pantalla completa" : "Pantalla completa"}
-      >
-        {isFullscreen ? "⛶" : "⛶"}
+      <button onClick={toggleFullscreen} className="fullscreen-button" title="Pantalla completa">
+        {isFullscreen ? '⛶' : '⛶'}
       </button>
 
       <div className="waiting-card-show">
-
         {!aiImageReady && (
           <div className="creation-show">
-            <h1 className="show-title">
-              {loadingTitles[currentTitle]}
-            </h1>
-
+            <h1 className="show-title">{loadingTitles[currentTitle]}</h1>
             <div className="epic-spinner-container">
-              <div className="spinner-ring ring-1"></div>
-              <div className="spinner-ring ring-2"></div>
-              <div className="spinner-ring ring-3"></div>
-              <p className="loading-message">
-                {loadingMessages[currentMessage]}
-              </p>
+              <div className="spinner-ring ring-1" />
+              <div className="spinner-ring ring-2" />
+              <div className="spinner-ring ring-3" />
+              <p className="loading-message">{loadingEmojis[currentEmoji]}</p>
             </div>
           </div>
         )}
@@ -154,17 +71,10 @@ const Waiting: React.FC<WaitingProps> = ({
         {aiImageReady && (
           <div className="ready-show">
             <div className="success-icon-container">
-              <div className="success-icon">🎉</div>
+              <div className="success-icon">⚡</div>
             </div>
-
-            <button
-              type="button"
-              className="button-epic-reveal"
-              onClick={onContinue}
-            >
-              <span className="button-epic-text">
-                🏖️ VER MI ILUSTRACIÓN 🏖️
-              </span>
+            <button type="button" className="button-epic-reveal" onClick={onContinue}>
+              <span className="button-epic-text">VER MI PERSONAJE</span>
             </button>
           </div>
         )}

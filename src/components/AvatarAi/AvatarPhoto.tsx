@@ -5,180 +5,184 @@ import WebcamScene from "../WebcamScene";
 import aiImageService from "../../services/aiImageService";
 import Swal from "sweetalert2";
 
+type Gender = 'hombre' | 'mujer';
+type CharacterStyle = 'guerrero' | 'cyberpunk';
+
 interface AvatarPhotoProps {
-  onProcess: (email: string) => void;
+  gender: Gender;
+  characterStyle: CharacterStyle;
+  onProcess: () => void;
   onAiImageReady: (imageUrl: string, originalImageDataUrl: string) => void;
 }
+
 interface WebcamRef {
   captureImage: () => Promise<Blob>;
 }
 
-const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onAiImageReady }) => {
-  const [email] = useState("");
+const IDENTITY_BLOCK = `
+IDENTITY PRESERVATION (MANDATORY — HIGHEST PRIORITY):
+This is a photo-to-character transformation. The output MUST be instantly recognizable as the same individual from the input photo.
+- Keep the EXACT face shape: jaw, cheekbones, forehead, chin
+- Keep the EXACT skin tone and complexion (do not lighten, darken, or alter ethnicity)
+- Keep the EXACT eye shape, color, and spacing
+- Keep the EXACT nose shape and size
+- Keep the EXACT lip shape
+- Keep the EXACT hair color, texture, and length as shown in the photo
+- Keep any distinctive features: beard, stubble, freckles, glasses, eyebrow shape, etc.
+- A person who knows this individual must recognize them immediately in the final result
+- Only change: clothing, armor, accessories, background, and overall art style
+- Do NOT replace the face with a generic or idealized face
+- Do NOT alter ethnicity, age, or gender presentation beyond the costume`;
+
+const PROMPTS: Record<`${Gender}-${CharacterStyle}`, string> = {
+  'mujer-guerrero': `Transform the uploaded photo of a real person into a powerful female fantasy warrior for a campaign called "Unlock Your Power".
+${IDENTITY_BLOCK}
+
+STYLE:
+- High-end cinematic 3D render
+- Clean, sharp, premium advertising look
+- Red gradient studio background
+
+CHARACTER:
+- Strong female warrior, confident and dominant presence
+- Fantasy armor (metal + leather), elegant but powerful
+- Subtle glowing accents (red or cyan)
+- Weapon: large sword or axe
+- Heroic grounded pose (standing firm, facing camera or slight angle)
+
+LIGHTING:
+- Dramatic cinematic lighting
+- Defined shadows, rim light for silhouette
+
+MOOD:
+- Power, confidence, leadership
+
+QUALITY:
+- Ultra detailed
+- Clean render, no noise, no dirty textures`,
+
+  'mujer-cyberpunk': `Transform the uploaded photo of a real person into a futuristic female cyberpunk character for a campaign called "Unlock Your Power".
+${IDENTITY_BLOCK}
+
+STYLE:
+- Futuristic, high-end 3D render
+- Clean sci-fi aesthetic (not grungy)
+- Red studio background with subtle neon accents
+
+CHARACTER:
+- Female cyberpunk / techwear style
+- Accessories: visor or high-tech glasses, headphones, light armor
+- Mechanical or digital elements (jetpack or energy device)
+- Neon accents (red + cyan)
+- Dynamic pose (floating slightly or with energy effect)
+
+LIGHTING:
+- Soft cinematic lighting + neon glow accents
+- Controlled reflections, very clean
+
+MOOD:
+- Innovation, intelligence, evolution
+
+QUALITY:
+- Ultra sharp, no noise, no distortion`,
+
+  'hombre-guerrero': `Transform the uploaded photo of a real person into a powerful male fantasy warrior for a campaign called "Unlock Your Power".
+${IDENTITY_BLOCK}
+
+STYLE:
+- Cinematic 3D render
+- Premium advertising look
+- Red gradient background
+
+CHARACTER:
+- Strong, battle-hardened warrior
+- Heavy armor (metal, leather, engraved details)
+- Large weapon (axe, hammer, or sword)
+- Muscular or imposing silhouette
+- Firm, grounded stance
+
+LIGHTING:
+- Dramatic contrast lighting
+- Strong shadows, defined edges
+
+MOOD:
+- Strength, resilience, dominance
+
+QUALITY:
+- Ultra detailed
+- Clean, polished render (no dirt, no noise)`,
+
+  'hombre-cyberpunk': `Transform the uploaded photo of a real person into a futuristic male cyberpunk character for a campaign called "Unlock Your Power".
+${IDENTITY_BLOCK}
+
+STYLE:
+- High-end sci-fi 3D render
+- Clean, polished aesthetic
+- Red background with neon lighting accents
+
+CHARACTER:
+- Futuristic outfit (techwear / cyber armor)
+- Accessories: visor, augmented elements, jetpack or energy gear
+- Subtle glowing lines (red + cyan)
+- Confident, slightly dynamic pose (walking, floating, or ready stance)
+
+LIGHTING:
+- Cinematic lighting + neon highlights
+- Clean reflections, no visual noise
+
+MOOD:
+- Power, speed, evolution
+
+QUALITY:
+- Ultra sharp
+- No artifacts, no blur, no grunge`,
+};
+
+const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
+  gender,
+  characterStyle,
+  onProcess,
+  onAiImageReady,
+}) => {
   const [capturedImage, setCapturedImage] = useState<Blob | null>(null);
-  const [capturedImageUrl, setCapturedImageUrl] = useState<string>("");
-  const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+  const [capturedImageUrl, setCapturedImageUrl] = useState<string>('');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const webcamRef = useRef<WebcamRef | null>(null);
 
-  const getBirthdayBeachPrompt = (): string => {
-    return `
-      Transform ALL the people in the provided photo into a retro cartoon illustration inspired by classic Peanuts-style aesthetics (Snoopy vibe), with a playful and nostalgic beach theme.
-
-STRICT RULE (VERY IMPORTANT):
-ONLY include the exact people present in the original photo.
-DO NOT add extra people.
-DO NOT generate new faces or background characters.
-DO NOT duplicate people.
-The number of characters in the final image MUST match the number of people in the input photo exactly.
-
-If there are multiple people, include every person and represent each one as a stylized cartoon character. Do not remove, crop, or ignore anyone. Maintain the original group composition and ensure all individuals are visible.
-
-Each character should look like a cartoon version of the real person: simplified shapes, expressive faces, clean lines, and soft pastel colors. Keep their key features recognizable while adapting them into a charming retro cartoon style.
-
-Create a unique and unexpected composition every time, while respecting the original number of people:
-
-Vary camera angle (front, side, slightly top view, dynamic perspective)
-Vary character poses and interactions (walking, sitting, laughing, holding objects, interacting naturally)
-Randomize scene elements (surfboards, umbrellas, towels, waves, sunset, clouds)
-Allow different layout structures (centered, asymmetrical, diagonal, layered)
-
-Place the characters in a beach environment, allowing creative reinterpretation of the scene, but NEVER adding extra people.
-
-Use a soft pastel color palette consistent with a vintage beach invitation style, with variation in tones and combinations.
-
-Allow creative freedom in composition, pose, and environment, but ALWAYS respecting the exact number of people from the original image.
-
-Add a medium-sized, readable logo that says:
-"Fiesta Jesus Avila 2026"
-
-MANDATORY LOGO PLACEMENT:
-The text MUST appear ONLY as a banner being pulled by a small airplane in the sky.
-The airplane must be visible in the sky.
-The banner must be attached to the airplane.
-The text must be fully readable.
-Do NOT place the text anywhere else.
-Do NOT use alternative placements (no signs, no sand, no objects, no sky writing).
-If the airplane with banner is missing, the image is incorrect.
-
-FINAL CONSTRAINTS (MANDATORY):
-The number of characters must be EXACTLY the same as the input photo.
-No extra people, no background silhouettes, no crowd elements.
-Do not repeat people.
-Do not invent faces.
-Keep it clean, friendly, cute, and elegant (not exaggerated or messy).
-Maintain visual harmony and softness.
-
-High resolution, clean illustration, modern-retro fusion, highly shareable.
-
-casi, pero ponlo tipo fondo de esta imagen tipo atardecer: 
-
-Imagen creada
-•
-Fiesta en la playa al atardecer
-NO TE DIJE QUE HAGAS IMAGEN, SOLO QUE MEJORES MI PROMOPT
-
-Transform ALL the people in the provided photo into a retro cartoon illustration inspired by classic Peanuts-style aesthetics (Snoopy vibe), using a warm sunset beach background similar to a soft pastel coastal atardecer (sun low on the horizon, orange-pink sky, calm ocean reflections, soft clouds, palm silhouettes).
-
-STRICT RULE (VERY IMPORTANT):
-ONLY include the exact people present in the original photo.
-DO NOT add extra people.
-DO NOT generate new faces or background characters.
-DO NOT duplicate people.
-The number of characters in the final image MUST match the number of people in the input photo exactly.
-
-If there are multiple people, include every person and represent each one as a stylized cartoon character. Do not remove, crop, or ignore anyone. Maintain the original group composition and ensure all individuals are visible.
-
-Each character should look like a cartoon version of the real person: simplified shapes, expressive faces, clean lines, and soft pastel colors. Keep their key features recognizable while adapting them into a charming retro cartoon style.
-
-Create a unique and unexpected composition every time, while respecting the original number of people:
-
-Vary camera angle (front, side, slightly top view, dynamic perspective)
-Vary character poses and interactions (walking, sitting, laughing, holding objects, interacting naturally)
-Randomize scene elements (surfboards, umbrellas, towels, waves, beach props)
-Allow different layout structures (centered, asymmetrical, diagonal, layered)
-
-ENVIRONMENT RULE:
-The scene MUST always be a beach at sunset (atardecer).
-Include a visible sun near the horizon.
-Use warm gradients (orange, pink, soft yellow, light purple).
-Water must reflect the sunset tones.
-Lighting must be soft, warm, and cohesive with sunset ambiance.
-Do not use daytime or night lighting.
-
-Place the characters naturally within this sunset beach environment without adding extra people.
-
-Use a soft pastel color palette consistent with a vintage beach invitation style, adapted to sunset tones.
-
-Allow creative freedom in composition, pose, and environment, but ALWAYS respecting the exact number of people from the original image.
-
-Add a medium-sized, readable logo that says:
-"Fiesta Jesus Avila 2026"
-
-MANDATORY LOGO PLACEMENT:
-The text MUST appear ONLY as a banner being pulled by a small airplane in the sky.
-The airplane must be visible in the sky.
-The banner must be attached to the airplane.
-The text must be fully readable.
-Do NOT place the text anywhere else.
-Do NOT use alternative placements (no signs, no sand, no objects, no sky writing).
-If the airplane with banner is missing, the image is incorrect.
-
-FINAL CONSTRAINTS (MANDATORY):
-The number of characters must be EXACTLY the same as the input photo.
-No extra people, no background silhouettes, no crowd elements.
-Do not repeat people.
-Do not invent faces.
-Keep it clean, friendly, cute, and elegant (not exaggerated or messy).
-Maintain visual harmony and softness.
-
-High resolution, clean illustration, modern-retro fusion, highly shareable.
-    `;
-  };
-
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().then(() => {
-        setIsFullscreen(true);
-      }).catch((err) => {
-        console.error("Error al entrar en pantalla completa:", err);
-      });
+      document.documentElement.requestFullscreen()
+        .then(() => setIsFullscreen(true))
+        .catch(err => console.error('Fullscreen error:', err));
     } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen().then(() => {
-          setIsFullscreen(false);
-        });
-      }
+      document.exitFullscreen().then(() => setIsFullscreen(false));
     }
   };
 
   const handleCapture = async () => {
-    if (webcamRef.current && webcamRef.current.captureImage) {
-      try {
-        const blob = await webcamRef.current.captureImage();
-        setCapturedImage(blob);
-        const url = URL.createObjectURL(blob);
-        setCapturedImageUrl(url);
-      } catch (error) {
-        console.error("Error al capturar la imagen:", error);
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "No se pudo capturar la imagen. Inténtalo de nuevo.",
-        });
-      }
+    if (!webcamRef.current?.captureImage) return;
+    try {
+      const blob = await webcamRef.current.captureImage();
+      setCapturedImage(blob);
+      setCapturedImageUrl(URL.createObjectURL(blob));
+    } catch (error) {
+      console.error('Error al capturar la imagen:', error);
+      Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo capturar la imagen. Inténtalo de nuevo.' });
     }
+  };
+
+  const handleResetCapture = () => {
+    setCapturedImage(null);
+    setCapturedImageUrl('');
   };
 
   const handleProcessImage = async () => {
     if (!capturedImage) return;
-
     setIsProcessing(true);
 
     try {
-      console.log("🎉 Procesando imagen para la fiesta...");
-
       const reader = new FileReader();
       const originalImageDataUrl = await new Promise<string>((resolve, reject) => {
         reader.onloadend = () => resolve(reader.result as string);
@@ -186,105 +190,88 @@ High resolution, clean illustration, modern-retro fusion, highly shareable.
         reader.readAsDataURL(capturedImage);
       });
 
-      onProcess(email);
+      onProcess();
 
-      const prompt = getBirthdayBeachPrompt();
-      console.log("🏖️ Prompt de Fiesta Jesus Avila 2026 generado");
-
-      const model = "google/nano-banana";
-      console.log(`🤖 Usando modelo: ${model}`);
-
+      const prompt = PROMPTS[`${gender}-${characterStyle}`];
       const result = await aiImageService.generateImageWithFormData(
         capturedImage,
         prompt,
-        "birthday-beach",
-        "user-" + Date.now(),
-        model
+        'unlock-your-power',
+        'user-' + Date.now(),
+        'google/nano-banana'
       );
 
       if (result.success && result.imageUrl) {
-        console.log("✅ Ilustración generada exitosamente:", result.imageUrl);
         onAiImageReady(result.imageUrl, originalImageDataUrl);
       } else {
-        console.error("❌ Error al generar ilustración:", result.error);
+        console.error('Error al generar imagen:', result.error);
       }
-
     } catch (error) {
-      console.error("❌ Error al procesar la imagen:", error);
+      console.error('Error al procesar la imagen:', error);
     } finally {
       setIsProcessing(false);
     }
   };
 
-  const handleResetCapture = () => {
-    setCapturedImage(null);
-    setCapturedImageUrl("");
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!capturedImage) {
-      Swal.fire({
-        icon: "warning",
-        title: "¡Ups!",
-        text: "Primero toma una foto para la fiesta.",
-      });
+      Swal.fire({ icon: 'warning', title: '¡Ups!', text: 'Primero toma una foto.' });
       return;
     }
-
-    if (isProcessing) return;
-
-    handleProcessImage();
+    if (!isProcessing) handleProcessImage();
   };
 
+  const styleLabel = characterStyle === 'guerrero' ? 'GUERRERO' : 'CYBERPUNK';
+  const genderLabel = gender === 'mujer' ? 'MUJER' : 'HOMBRE';
+
   return (
-    <div className="container">
-      <button
-        onClick={toggleFullscreen}
-        className="fullscreen-button"
-        title={isFullscreen ? "Salir de pantalla completa" : "Pantalla completa"}
-      >
-        {isFullscreen ? "⛶" : "⛶"}
+    <div className="photo-container">
+      <button onClick={toggleFullscreen} className="photo-fullscreen-btn" title="Pantalla completa">
+        {isFullscreen ? '⛶' : '⛶'}
       </button>
 
-     
+      <div className="photo-header">
+        <h1 className="photo-title">DESBLOQUEA TU PODER</h1>
+        <p className="photo-subtitle">es tu turno de jugar</p>
+        <div className="photo-badge">{genderLabel} · {styleLabel}</div>
+      </div>
 
-      <div className="main-content">
-        <div className="card">
-          <div className="avatar-container cam">
-            {capturedImageUrl ? (
-              <img
-                src={capturedImageUrl}
-                alt="Foto capturada"
-                className="fotoCapturada"
-              />
-            ) : (
-              <WebcamScene ref={webcamRef} />
-            )}
-          </div>
-
-          <div className="buttons-container">
-            <button
-              type="button"
-              className="button button-camera"
-              onClick={capturedImageUrl ? handleResetCapture : handleCapture}
-              disabled={isProcessing}
-            >
-              {capturedImageUrl ? "📸 Otra foto" : "📸 Tomar foto"}
-            </button>
-          </div>
-
-          <form onSubmit={handleSubmit}>
-            <button
-              type="submit"
-              className="button button-primary"
-              disabled={!capturedImageUrl || isProcessing}
-            >
-              {isProcessing ? "🎨 Creando..." : "🎉 ¡Crear ilustración!"}
-            </button>
-          </form>
+      <div className="photo-main">
+        <div className="photo-cam-wrapper">
+          {capturedImageUrl ? (
+            <img src={capturedImageUrl} alt="Foto capturada" className="photo-captured" />
+          ) : (
+            <WebcamScene ref={webcamRef} />
+          )}
+          <div className="photo-cam-corner photo-cam-corner--tl" />
+          <div className="photo-cam-corner photo-cam-corner--tr" />
+          <div className="photo-cam-corner photo-cam-corner--bl" />
+          <div className="photo-cam-corner photo-cam-corner--br" />
         </div>
+
+        <form className="photo-actions" onSubmit={handleSubmit}>
+          <button
+            type="button"
+            className="photo-btn photo-btn--secondary"
+            onClick={capturedImageUrl ? handleResetCapture : handleCapture}
+            disabled={isProcessing}
+          >
+            {capturedImageUrl ? 'OTRA FOTO' : 'TOMAR FOTO'}
+          </button>
+
+          <button
+            type="submit"
+            className="photo-btn photo-btn--primary"
+            disabled={!capturedImageUrl || isProcessing}
+          >
+            {isProcessing ? 'PROCESANDO...' : 'CREAR PERSONAJE'}
+          </button>
+        </form>
+      </div>
+
+      <div className="photo-footer">
+        <span>— Claro gaming —</span>
       </div>
     </div>
   );

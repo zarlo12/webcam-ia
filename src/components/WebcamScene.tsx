@@ -68,41 +68,42 @@ const WebcamPlane = forwardRef<WebcamRef>((_, ref) => {
   const textureRef = useRef<THREE.VideoTexture | null>(null);
 
   useEffect(() => {
+    const applyStream = (stream: MediaStream) => {
+      videoRef.current.srcObject = stream;
+      videoRef.current.play();
+
+      videoRef.current.onloadedmetadata = () => {
+        if (!textureRef.current) return;
+        const video = videoRef.current;
+        const videoAspect = video.videoWidth / video.videoHeight;
+
+        if (videoAspect > 1) {
+          const scale = video.videoHeight / video.videoWidth;
+          textureRef.current.repeat.set(scale, 1);
+          textureRef.current.offset.set((1 - scale) / 2, 0);
+        } else {
+          const scale = video.videoWidth / video.videoHeight;
+          textureRef.current.repeat.set(1, scale);
+          textureRef.current.offset.set(0, (1 - scale) / 2);
+        }
+
+        textureRef.current.needsUpdate = true;
+      };
+    };
+
+    // Intento 1: resolución alta ideal, sin mínimos obligatorios
     navigator.mediaDevices
-      .getUserMedia({
-        video: { 
-          width: { ideal: 3840, min: 1920 }, 
-          height: { ideal: 2160, min: 1080 },
-          facingMode: 'user'
-        },
-      })
-      .then((stream) => {
-        videoRef.current.srcObject = stream;
-        videoRef.current.play();
-        
-        // Cuando el video está listo, configurar el crop de la textura
-        videoRef.current.onloadedmetadata = () => {
-          if (textureRef.current) {
-            const video = videoRef.current;
-            const videoAspect = video.videoWidth / video.videoHeight;
-            
-            if (videoAspect > 1) {
-              // Video más ancho que alto - mostrar solo la porción central cuadrada
-              const scale = video.videoHeight / video.videoWidth;
-              textureRef.current.repeat.set(scale, 1);
-              textureRef.current.offset.set((1 - scale) / 2, 0);
-            } else {
-              // Video más alto que ancho - mostrar solo la porción central cuadrada
-              const scale = video.videoWidth / video.videoHeight;
-              textureRef.current.repeat.set(1, scale);
-              textureRef.current.offset.set(0, (1 - scale) / 2);
-            }
-            
-            textureRef.current.needsUpdate = true;
-          }
-        };
-      })
-      .catch(console.error);
+      .getUserMedia({ video: { width: { ideal: 1920 }, height: { ideal: 1080 }, facingMode: 'user' } })
+      .catch(() =>
+        // Intento 2: sin restricción de facingMode (algunas webcams Windows no lo soportan)
+        navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 1280 }, height: { ideal: 720 } } })
+      )
+      .catch(() =>
+        // Intento 3: cualquier cámara disponible
+        navigator.mediaDevices.getUserMedia({ video: true })
+      )
+      .then(applyStream)
+      .catch(err => console.error('No se pudo acceder a la cámara:', err));
   }, []);
 
   const texture = new THREE.VideoTexture(videoRef.current);

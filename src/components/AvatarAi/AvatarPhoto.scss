@@ -207,24 +207,27 @@ $border: rgba(227, 6, 19, 0.4);
   font-family: inherit;
 
   &--secondary {
-    background: transparent;
-    border: 1px solid $red;
-    color: $red;
+    background: rgba(0, 0, 0, 0.55);
+    border: 2px solid $white;
+    color: $white;
+    backdrop-filter: blur(6px);
 
     &:hover:not(:disabled) {
-      background: rgba(227, 6, 19, 0.12);
-      box-shadow: 0 0 16px $red-glow;
+      background: rgba(0, 0, 0, 0.75);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      transform: translateY(-1px);
     }
   }
 
   &--primary {
-    background: $red;
-    color: $white;
-    box-shadow: 0 4px 20px $red-glow;
+    background: $white;
+    color: #1a0000;
+    font-weight: 900;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
 
     &:hover:not(:disabled) {
-      background: lighten($red, 8%);
-      box-shadow: 0 6px 30px rgba(227, 6, 19, 0.5);
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: 0 6px 30px rgba(0, 0, 0, 0.45);
       transform: translateY(-1px);
     }
   }

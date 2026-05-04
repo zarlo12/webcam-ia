@@ -30,7 +30,7 @@ function MainApp() {
   const [gender, setGender] = useState<Gender>('hombre');
   const [characterStyle, setCharacterStyle] = useState<CharacterStyle>('guerrero');
   const [imageUrl, setImageUrl] = useState('');
-  const [lastImageUrl, setLastImageUrl] = useState('');
+  const [, setLastImageUrl] = useState('');
   const [originalImageUrl, setOriginalImageUrl] = useState('');
   const [imagenGenerada, setImagenGenerada] = useState(false);
   const [aiImageReady, setAiImageReady] = useState(false);

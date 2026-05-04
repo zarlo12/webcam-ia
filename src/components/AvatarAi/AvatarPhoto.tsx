@@ -19,29 +19,54 @@ interface WebcamRef {
   captureImage: () => Promise<Blob>;
 }
 
+const BACKGROUND_URL =
+  'https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/fondo_resultado.png?alt=media&token=49386813-9503-459c-ad91-7c81d96f6c76';
+
 const IDENTITY_BLOCK = `
 IDENTITY PRESERVATION (MANDATORY — HIGHEST PRIORITY):
-This is a photo-to-character transformation. The output MUST be instantly recognizable as the same individual from the input photo.
-- Keep the EXACT face shape: jaw, cheekbones, forehead, chin
-- Keep the EXACT skin tone and complexion (do not lighten, darken, or alter ethnicity)
-- Keep the EXACT eye shape, color, and spacing
-- Keep the EXACT nose shape and size
-- Keep the EXACT lip shape
-- Keep the EXACT hair color, texture, and length as shown in the photo
-- Keep any distinctive features: beard, stubble, freckles, glasses, eyebrow shape, etc.
-- A person who knows this individual must recognize them immediately in the final result
-- Only change: clothing, armor, accessories, background, and overall art style
-- Do NOT replace the face with a generic or idealized face
-- Do NOT alter ethnicity, age, or gender presentation beyond the costume`;
+This is a photo-to-character transformation. The person MUST be instantly recognizable in the final result.
+Preserve these features but RENDER THEM IN THE ARTISTIC STYLE OF THE CHARACTER (cinematic 3D, not a realistic photo):
+- Face structure: jaw, cheekbones, forehead, chin proportions
+- Skin tone and complexion (adapted to the 3D render style, not photorealistic)
+- Eye shape, color, and spacing
+- Nose shape and size
+- Lip shape
+- Hair color, texture, and length
+- Distinctive features: beard, stubble, freckles, glasses, eyebrow shape, etc.
+
+CRITICAL STYLE RULE:
+- The face MUST be rendered in the SAME cinematic 3D / artistic style as the rest of the character
+- Do NOT paste a photorealistic face onto a stylized body — everything must be cohesive
+- Think: "this person as a high-end video game character" — stylized but recognizable
+- A person who knows this individual must recognize them in the final stylized render
+- Do NOT replace the face with a generic face. Do NOT alter ethnicity or gender`;
+
+const BACKGROUND_BLOCK = `
+BACKGROUND & COMPOSITION (MANDATORY — ABSOLUTE RULES, NO EXCEPTIONS):
+
+BACKGROUND RULES:
+- Use the second image as the background EXACTLY as it is — same composition, same framing, same proportions, every pixel identical
+- The background must be shown COMPLETELY: all four edges fully visible, nothing cropped, nothing cut, nothing zoomed in
+- Do NOT pan, zoom, crop, reframe, recolor, or alter the background image in ANY way
+- The bottom edge, top edge, left edge, and right edge of the background must all appear in the final image
+
+CHARACTER RULES:
+- The character is a SMALL figure placed on top of the background — like a figurine in a wide scene
+- CHARACTER SIZE: the character height must be at most 35% of the total image height — very small relative to the scene
+- CHARACTER POSITION: centered horizontally, standing in the lower third of the image (bottom 35% area)
+- The character must NOT touch or go beyond the bottom edge of the image
+- The character must NOT reach above the midpoint of the image
+- All text, logos, and graphic elements in the background must remain 100% visible and unobstructed`;
+
 
 const PROMPTS: Record<`${Gender}-${CharacterStyle}`, string> = {
   'mujer-guerrero': `Transform the uploaded photo of a real person into a powerful female fantasy warrior for a campaign called "Unlock Your Power".
 ${IDENTITY_BLOCK}
+${BACKGROUND_BLOCK}
 
 STYLE:
 - High-end cinematic 3D render
 - Clean, sharp, premium advertising look
-- Red gradient studio background
 
 CHARACTER:
 - Strong female warrior, confident and dominant presence
@@ -51,7 +76,7 @@ CHARACTER:
 - Heroic grounded pose (standing firm, facing camera or slight angle)
 
 LIGHTING:
-- Dramatic cinematic lighting
+- Dramatic cinematic lighting adapted to the background scene
 - Defined shadows, rim light for silhouette
 
 MOOD:
@@ -63,11 +88,11 @@ QUALITY:
 
   'mujer-cyberpunk': `Transform the uploaded photo of a real person into a futuristic female cyberpunk character for a campaign called "Unlock Your Power".
 ${IDENTITY_BLOCK}
+${BACKGROUND_BLOCK}
 
 STYLE:
 - Futuristic, high-end 3D render
 - Clean sci-fi aesthetic (not grungy)
-- Red studio background with subtle neon accents
 
 CHARACTER:
 - Female cyberpunk / techwear style
@@ -77,7 +102,7 @@ CHARACTER:
 - Dynamic pose (floating slightly or with energy effect)
 
 LIGHTING:
-- Soft cinematic lighting + neon glow accents
+- Soft cinematic lighting + neon glow accents adapted to the background
 - Controlled reflections, very clean
 
 MOOD:
@@ -88,11 +113,11 @@ QUALITY:
 
   'hombre-guerrero': `Transform the uploaded photo of a real person into a powerful male fantasy warrior for a campaign called "Unlock Your Power".
 ${IDENTITY_BLOCK}
+${BACKGROUND_BLOCK}
 
 STYLE:
 - Cinematic 3D render
 - Premium advertising look
-- Red gradient background
 
 CHARACTER:
 - Strong, battle-hardened warrior
@@ -102,7 +127,7 @@ CHARACTER:
 - Firm, grounded stance
 
 LIGHTING:
-- Dramatic contrast lighting
+- Dramatic contrast lighting adapted to the background scene
 - Strong shadows, defined edges
 
 MOOD:
@@ -114,11 +139,11 @@ QUALITY:
 
   'hombre-cyberpunk': `Transform the uploaded photo of a real person into a futuristic male cyberpunk character for a campaign called "Unlock Your Power".
 ${IDENTITY_BLOCK}
+${BACKGROUND_BLOCK}
 
 STYLE:
 - High-end sci-fi 3D render
 - Clean, polished aesthetic
-- Red background with neon lighting accents
 
 CHARACTER:
 - Futuristic outfit (techwear / cyber armor)
@@ -127,7 +152,7 @@ CHARACTER:
 - Confident, slightly dynamic pose (walking, floating, or ready stance)
 
 LIGHTING:
-- Cinematic lighting + neon highlights
+- Cinematic lighting + neon highlights adapted to the background
 - Clean reflections, no visual noise
 
 MOOD:
@@ -198,7 +223,8 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
         prompt,
         'unlock-your-power',
         'user-' + Date.now(),
-        'google/nano-banana'
+        'google/nano-banana',
+        BACKGROUND_URL
       );
 
       if (result.success && result.imageUrl) {

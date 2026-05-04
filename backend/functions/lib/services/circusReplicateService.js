@@ -85,7 +85,7 @@ class CircusReplicateService {
             prompt: prompt,
             resolution: "1K", // High quality for portrait details
             image_input: imageInputArray, // User image + logo
-            aspect_ratio: "4:5", // Vertical format for mobile/totem
+            aspect_ratio: "9:16", // Vertical format for mobile/totem
             image_search: false, // Don't search for similar images
             google_search: false, // Don't add external references
             output_format: "jpg",

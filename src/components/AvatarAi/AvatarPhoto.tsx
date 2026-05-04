@@ -232,7 +232,11 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
       </button>
 
       <div className="photo-header">
-        <h1 className="photo-title">DESBLOQUEA TU PODER</h1>
+        <img
+          src="/referencias/titulo.png"
+          alt="Desbloquea Tu Poder"
+          className="photo-titulo-img"
+        />
         <p className="photo-subtitle">es tu turno de jugar</p>
         <div className="photo-badge">{genderLabel} · {styleLabel}</div>
       </div>

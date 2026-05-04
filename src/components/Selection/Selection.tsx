@@ -73,10 +73,11 @@ const Selection: React.FC<SelectionProps> = ({
       <div className="sel-content">
         <div className="sel-header">
           <span className="sel-tag">PLAYER ONE</span>
-          <h1 className="sel-title">
-            DESBLOQUEA<br />
-            <span className="sel-title-power">TU PODER</span>
-          </h1>
+          <img
+            src="/referencias/titulo.png"
+            alt="Desbloquea Tu Poder"
+            className="sel-titulo-img"
+          />
           <p className="sel-subtitle">es tu turno de jugar</p>
         </div>
 

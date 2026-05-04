@@ -36,7 +36,7 @@ $border: rgba(227, 6, 19, 0.35);
 .sel-container {
   width: 100vw;
   height: 100vh;
-  background: $bg;
+  background: $bg url('/referencias/fondo_registro.png') center center / cover no-repeat;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -143,6 +143,16 @@ $border: rgba(227, 6, 19, 0.35);
   margin-bottom: 28px;
 }
 
+.sel-titulo-img {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  margin: 10px auto 4px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 12px $red-glow);
+}
+
 .sel-tag {
   display: inline-block;
   font-size: 11px;
@@ -154,25 +164,6 @@ $border: rgba(227, 6, 19, 0.35);
   border: 1px solid rgba(255,255,255,0.1);
   padding: 4px 12px;
   border-radius: 2px;
-}
-
-.sel-title {
-  font-size: clamp(36px, 6vw, 54px);
-  font-weight: 900;
-  font-family: 'Impact', 'Arial Black', sans-serif;
-  color: $white;
-  margin: 0 0 6px;
-  line-height: 1;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  animation: sel-flicker 6s infinite;
-}
-
-.sel-title-power {
-  display: block;
-  color: $red;
-  font-size: clamp(42px, 7vw, 62px);
-  animation: sel-title-glow 2.5s ease-in-out infinite;
 }
 
 .sel-subtitle {

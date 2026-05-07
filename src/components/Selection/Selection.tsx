@@ -26,10 +26,11 @@ interface SelectionProps {
 const Selection: React.FC<SelectionProps> = ({
   nombre, apellidos, email, direccion, terms, gender, characterStyle,
   onNombreChange, onApellidosChange, onEmailChange, onDireccionChange,
-  onTermsChange, onGenderChange, onStyleChange, onShowPolicy, onNext,
+  onTermsChange, onGenderChange, onStyleChange, onShowPolicy: _onShowPolicy, onNext,
 }) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [showPolicyModal, setShowPolicyModal] = useState(false);
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
@@ -185,7 +186,7 @@ const Selection: React.FC<SelectionProps> = ({
             />
             <label htmlFor="terms-check" className="sel-terms-label">
               Acepto el{' '}
-              <button type="button" className="sel-policy-link" onClick={onShowPolicy}>
+              <button type="button" className="sel-policy-link" onClick={() => setShowPolicyModal(true)}>
                 tratamiento de datos personales
               </button>
             </label>
@@ -201,6 +202,24 @@ const Selection: React.FC<SelectionProps> = ({
           <span className="sel-footer-brand">— Claro gaming —</span>
         </div>
       </div>
+
+      {showPolicyModal && (
+        <div className="sel-modal-overlay" onClick={() => setShowPolicyModal(false)}>
+          <div className="sel-modal" onClick={e => e.stopPropagation()}>
+            <div className="sel-modal-header">
+              <span className="sel-modal-title">POLÍTICA DE TRATAMIENTO DE DATOS</span>
+              <button className="sel-modal-close" onClick={() => setShowPolicyModal(false)}>✕</button>
+            </div>
+            <div className="sel-modal-body">
+              <iframe
+                src="/aviso.html"
+                title="Tratamiento de Datos Personales"
+                className="sel-modal-iframe"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

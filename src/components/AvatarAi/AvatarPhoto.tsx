@@ -25,122 +25,101 @@ const STYLE_LABELS: Record<StyleChoice, string> = {
   3: 'VINTAGE',
 };
 
-const GROUP_LOCK = `
-CRITICAL GROUP PRESERVATION RULE — MANDATORY, NO EXCEPTIONS:
-Every single person visible in the original photo MUST appear in the final image.
-- Do NOT crop, remove, blur, merge, or hide any person.
-- Preserve exact number of people, their spacing and relative positions.
-- Preserve original facial identities: facial proportions, skin tone, age, hairstyle, distinctive features.
-- If canvas space is needed, EXPAND the image — never crop people.
-- Do NOT replace faces with generic or idealized versions.`;
-
-const LOGO_BLOCK = `
-LOGO & TEXT (MANDATORY):
-- The second attached image is the brand logo. Place it prominently at the top-center of the composition.
-- Keep the logo clearly visible, unmodified, and well-proportioned.
-- Add the text "Feliz Día de las Madres" in an elegant script or serif font.
-- The text must be readable and tasteful — not childish.`;
-
 const PROMPTS: Record<StyleChoice, string> = {
-  1: `Transform this family photo into a soft watercolor + subtle 3D hybrid Mother's Day portrait.
-${GROUP_LOCK}
-${LOGO_BLOCK}
+  1: `Use the first attached image and the second attached image as the brand logo.
 
-STYLE:
-- Soft watercolor illustration blended with subtle 3D painterly rendering.
-- Warm, romantic, hand-painted aesthetic.
+EXACT PEOPLE COUNT — CRITICAL:
+Count the number of people in the first image. Reproduce ONLY those exact people — no more, no less.
+Do NOT add, invent, generate, or hallucinate any additional person, figure, silhouette, or character that does not appear in the original photo.
+If the photo has 1 person → final image has exactly 1 person. If 3 people → exactly 3 people. Never add extras. Never fill empty space with invented figures.
+
+GROUP RULE — MANDATORY:
+All people from the original photo must appear in the final image. Do NOT crop anyone. Do NOT merge faces. Extend canvas if needed.
+
+FULL ARTISTIC TRANSFORMATION — WATERCOLOR + 3D HYBRID:
+Transform EVERY element — including ALL faces — into a soft watercolor illustrated style with subtle 3D depth.
+THIS IS NOT A PHOTO FILTER. Every person must look hand-painted and illustrated, not photorealistic.
+Faces must be rendered in the SAME watercolor + painterly 3D style as the rest of the image. No photorealistic faces.
+Use the original photo only as a structural reference for poses, arrangement, and general likeness.
+
+BACKGROUND:
+- Hand-painted floral garden backdrop
+- Soft watercolor roses and peonies
+- Pastel sky gradient (peach to pink)
+- Delicate golden sparkles
+- Elegant decorative illustrated frame around the group
+
+COMPOSITION: Vertical. Expand canvas if needed. Keep original group arrangement.
+
+BRANDING: Add "Feliz Día de las Madres". Place the logo (second image) elegantly at top.
+
+OUTPUT: High-resolution 4K. Fully consistent watercolor + illustrated style — faces, clothing, background, everything.`,
+
+  2: `Use the first attached image and the second attached image as the brand logo.
+
+EXACT PEOPLE COUNT — CRITICAL:
+Count the number of people in the first image. Reproduce ONLY those exact people — no more, no less.
+Do NOT add, invent, generate, or hallucinate any additional person, figure, silhouette, or character that does not appear in the original photo.
+If the photo has 1 person → final image has exactly 1 person. If 3 people → exactly 3 people. Never add extras. Never fill empty space with invented figures.
+
+GROUP RULE — MANDATORY:
+All people from the original photo must be visible. No cropping. No removal. No face merging. Extend background if needed.
+
+FULL ARTISTIC TRANSFORMATION — CINEMATIC 3D ANIMATION:
+Transform EVERY element — including ALL faces — into a high-end cinematic 3D animated style (think Pixar / Disney / high-budget animated film).
+THIS IS AN ILLUSTRATION, NOT A PHOTO. Every person must look like a 3D animated character, not a real photograph.
+Faces must be fully rendered in 3D animation style: smooth textures, stylized shading, expressive but not caricatured.
+The original photo is only a reference for pose, composition, and general likeness. Do NOT use the original as a texture.
+
+BACKGROUND:
+- Elegant stage-style floral backdrop
+- Hanging decorative flowers and ribbons
+- Soft pink and coral lighting
+- Subtle confetti particles
+- Warm spotlight glow behind the group
+- Decorative heart and floral accents (tasteful, not childish)
+
+LIGHTING: Cinematic contrast. Soft rim light. Premium glossy 3D finish.
+FRAMING: Vertical hero poster. All people clearly visible and balanced.
+
+BRANDING: Integrate the logo (second image) at top. Add bold elegant text: "Feliz Día de las Madres".
+OUTPUT: 4K vertical. Fully consistent 3D animated style — faces, clothing, background, everything.`,
+
+  3: `Use the first attached image as the photo reference and the second attached image as the brand logo.
+
+EXACT PEOPLE COUNT — CRITICAL:
+Count the number of people in the first image. Reproduce ONLY those exact people — no more, no less.
+Do NOT add, invent, generate, or hallucinate any additional person, figure, silhouette, or character that does not appear in the original photo.
+If the photo has 1 person → final image has exactly 1 person. If 3 people → exactly 3 people. Never add extras. Never fill empty space with invented figures.
+
+PEOPLE PRESERVATION — MANDATORY:
+ALL people visible in the original photo must appear in the final image. Do NOT crop, remove, blur, merge, or hide anyone.
+Preserve each person's face, facial identity, age, proportions, skin tone, and posture faithfully.
+Preserve original number of people, their spacing, and arrangement.
+If needed, expand or zoom out the canvas — never crop people out.
+
+STYLE: Vintage Warm Analog Film Portrait
+This is a photographic color grading and atmosphere treatment — NOT an artistic illustration.
+Apply the vintage aesthetic as a visual layer over the real photo:
+- Warm golden-amber color grade across the entire image
+- Subtle film grain texture on everything
+- Gentle vignetting at the edges
+- Slight light leak on one corner
+- Soft overall glow, boosted contrast, lifted shadows
+Faces must remain photorealistic, natural, and clearly recognizable — only warmed and toned by the vintage palette. Do NOT illustrate, paint, or distort faces.
 
 BACKGROUND REPLACEMENT:
-- Hand-painted floral garden backdrop.
-- Soft watercolor roses, peonies, and cherry blossoms.
-- Pastel sky gradient: peach fading into soft pink.
-- Delicate golden sparkles and light bokeh.
-- Elegant decorative illustrated frame around the group.
+Replace only the background behind the people with an elegant vintage garden party setting:
+- Lush floral arrangements with roses and peonies in muted warm tones
+- Warm fairy lights softly blurred in the background
+- Pastel fabric bunting and draping
+- Soft golden-hour backlight creating a warm halo behind the group
 
-COMPOSITION:
-- Vertical format (portrait orientation).
-- Maintain original group arrangement and postures.
-- Expand canvas if needed to fit everyone comfortably.
+COMPOSITION: Vertical portrait. All people fully visible (waist-up or full body matching the original). Centered and balanced.
 
-LIGHTING:
-- Soft, diffused, warm golden light from above.
-- Gentle rim light on subjects.
+BRANDING: Place the logo (second image) top-center. Below it, add "Feliz Día de las Madres" in an elegant classic serif script. Keep branding subtle and tasteful.
 
-MOOD:
-- Warm, loving, celebratory, elegant.
-
-OUTPUT:
-- High-resolution 4K vertical.
-- Consistent painterly style throughout.`,
-
-  2: `Transform this family photo into a vibrant cinematic 3D animated poster for Mother's Day.
-${GROUP_LOCK}
-${LOGO_BLOCK}
-
-STYLE:
-- Premium cinematic 3D animation render (similar to high-end animated film).
-- Glossy, polished finish. Clean and professional.
-- Do NOT exaggerate or caricature faces.
-
-BACKGROUND REPLACEMENT:
-- Elegant stage-style floral backdrop with large pink and coral roses.
-- Hanging decorative flower garlands and silk ribbons.
-- Soft pink and coral volumetric lighting with warm spotlight glow behind the group.
-- Subtle floating confetti particles and golden sparkles.
-- Tasteful decorative heart and floral accents — elegant, not childish.
-
-COMPOSITION:
-- Vertical hero poster format.
-- All people centered and clearly visible.
-- Balanced, harmonious arrangement.
-
-LIGHTING:
-- Cinematic contrast with soft rim light.
-- Warm spotlight from above-behind for glow effect.
-
-MOOD:
-- Festive, warm, premium, joyful.
-
-OUTPUT:
-- 4K vertical, social-media ready.
-- Consistent 3D animated style throughout.`,
-
-  3: `Transform this family photo into a vintage film-style Mother's Day portrait with warm analog tones.
-${GROUP_LOCK}
-${LOGO_BLOCK}
-
-STYLE:
-- Vintage analog film photography aesthetic.
-- Film grain texture, subtle light fade at edges, gentle vignetting.
-- Warm golden-amber colorcast throughout.
-- Soft, nostalgic, timeless quality.
-
-BACKGROUND REPLACEMENT:
-- Elegant outdoor garden party setting.
-- Vintage floral arrangements: peonies, wildflowers, garden roses.
-- Warm fairy lights strung above.
-- Pastel fabric bunting in the background.
-- Soft afternoon golden hour light filtering through foliage.
-
-CLOTHING & SUBJECTS:
-- Keep clothing and body proportions fully recognizable.
-- Allow gentle color harmonization to warm vintage palette.
-- Maintain full body or waist-up visibility as in original.
-
-COMPOSITION:
-- Vertical format.
-- Everyone fully visible, natural and candid feel.
-
-LIGHTING:
-- Warm golden hour sunlight.
-- Soft backlight creating gentle rim glow on subjects.
-
-MOOD:
-- Nostalgic, romantic, timeless, deeply personal.
-
-OUTPUT:
-- 4K vertical, poster-ready.
-- Consistent vintage film style throughout.`,
+OUTPUT: 4K vertical, poster-quality. Warm, cinematic, emotionally beautiful vintage photograph — people look like themselves, just bathed in golden analog warmth.`,
 };
 
 const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
@@ -202,7 +181,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
         prompt,
         'dia-madres',
         'user-' + Date.now(),
-        'google/nano-banana',
+        'google/nano-banana-2',
         LOGO_URL,
       );
 

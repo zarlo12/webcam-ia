@@ -1,18 +1,24 @@
-// === DESBLOQUEA TU PODER — Camera Screen ===
+// === DÍA DE LAS MADRES — Camera + Result Screens ===
 
-$red: #E30613;
-$red-dim: rgba(227, 6, 19, 0.5);
-$red-glow: rgba(227, 6, 19, 0.25);
-$cyan: #00D4FF;
-$cyan-dim: rgba(0, 212, 255, 0.4);
-$bg: #080808;
+$rose: #C9386E;
+$rose-light: #E8749A;
+$rose-dim: rgba(201, 56, 110, 0.45);
+$rose-glow: rgba(201, 56, 110, 0.2);
+$gold: #C49A38;
+$gold-dim: rgba(196, 154, 56, 0.4);
+$gold-glow: rgba(196, 154, 56, 0.2);
+$blush: #FFB3CE;
+$cream: #FFF5F8;
+$dark: #1C0A14;
+$dark-mid: #2D1020;
+$text: #3D1A26;
+$text-muted: #7A4A5A;
 $white: #FFFFFF;
-$gray: #AAAAAA;
-$border: rgba(227, 6, 19, 0.4);
+$gray: #C8A0B0;
 
 @keyframes cam-glow-pulse {
-  0%, 100% { box-shadow: 0 0 20px $red-dim, inset 0 0 10px rgba(0,0,0,0.5); }
-  50%       { box-shadow: 0 0 40px $red-dim, 0 0 80px $red-glow, inset 0 0 10px rgba(0,0,0,0.5); }
+  0%, 100% { box-shadow: 0 0 20px $rose-dim, inset 0 0 10px rgba(0,0,0,0.4); }
+  50%       { box-shadow: 0 0 40px $rose-dim, 0 0 80px $rose-glow, inset 0 0 10px rgba(0,0,0,0.4); }
 }
 
 @keyframes corner-blink {
@@ -21,7 +27,7 @@ $border: rgba(227, 6, 19, 0.4);
 }
 
 @keyframes avatarReveal {
-  from { opacity: 0; filter: brightness(0.5) blur(6px); transform: scale(0.95); }
+  from { opacity: 0; filter: brightness(0.5) blur(6px); transform: scale(0.96); }
   to   { opacity: 1; filter: brightness(1) blur(0); transform: scale(1); }
 }
 
@@ -32,13 +38,19 @@ $border: rgba(227, 6, 19, 0.4);
 }
 
 @keyframes framePulse {
-  0%, 100% { box-shadow: 0 0 40px $red-dim, 0 0 80px $red-glow, inset 0 0 20px rgba(0,0,0,0.3); border-color: $red; }
-  50%       { box-shadow: 0 0 60px $red-dim, 0 0 120px rgba(227,6,19,0.4), inset 0 0 30px rgba(0,0,0,0.3); border-color: lighten($red, 10%); }
+  0%, 100% {
+    box-shadow: 0 0 30px $rose-dim, 0 0 60px $rose-glow, inset 0 0 20px rgba(0,0,0,0.04);
+    border-color: $rose;
+  }
+  50% {
+    box-shadow: 0 0 50px $rose-dim, 0 0 100px rgba(201, 56, 110, 0.25), inset 0 0 30px rgba(0,0,0,0.04);
+    border-color: $rose-light;
+  }
 }
 
 @keyframes glowPulse {
-  0%   { opacity: 0.3; transform: scale(1); }
-  100% { opacity: 0.6; transform: scale(1.04); }
+  0%   { opacity: 0.2; transform: scale(1); }
+  100% { opacity: 0.45; transform: scale(1.04); }
 }
 
 @keyframes rotateRing {
@@ -53,15 +65,20 @@ $border: rgba(227, 6, 19, 0.4);
 }
 
 @keyframes cornerShine {
-  0%, 100% { filter: drop-shadow(0 0 4px $red-dim); }
-  50%       { filter: drop-shadow(0 0 12px rgba(227,6,19,0.9)); }
+  0%, 100% { filter: drop-shadow(0 0 3px $rose-dim); }
+  50%       { filter: drop-shadow(0 0 10px rgba(201, 56, 110, 0.9)); }
 }
 
-// === MAIN CONTAINER ===
+@keyframes title-pulse {
+  0%, 100% { color: $rose-light; }
+  50%       { color: $blush; }
+}
+
+// === CAMERA SCREEN ===
 .photo-container {
   width: 100vw;
   height: 100vh;
-  background: $bg url('/referencias/fondo_camara.png') center center / cover no-repeat;
+  background: linear-gradient(155deg, $dark 0%, $dark-mid 50%, #1A0A18 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -71,15 +88,14 @@ $border: rgba(227, 6, 19, 0.4);
   font-family: system-ui, 'Segoe UI', sans-serif;
 }
 
-// === FULLSCREEN ===
 .photo-fullscreen-btn {
   position: fixed;
   top: 16px;
   right: 16px;
   width: 36px;
   height: 36px;
-  background: rgba(20,20,20,0.8);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(20, 10, 16, 0.8);
+  border: 1px solid rgba(201, 56, 110, 0.25);
   border-radius: 6px;
   color: $gray;
   font-size: 18px;
@@ -91,30 +107,47 @@ $border: rgba(227, 6, 19, 0.4);
   transition: all 0.2s;
   padding: 0;
 
-  &:hover { border-color: $red; color: $white; }
+  &:hover { border-color: $rose; color: $white; }
 }
 
-// === HEADER ===
+// === CAMERA HEADER ===
 .photo-header {
   text-align: center;
-  padding: 24px 20px 0;
+  padding: 22px 20px 0;
 
-  .photo-titulo-img {
-    display: block;
-    width: 100%;
-    max-width: 380px;
-    height: auto;
-    margin: 0 auto 4px;
-    object-fit: contain;
-    filter: drop-shadow(0 0 12px $red-glow);
+  .photo-date-chip {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: $rose-light;
+    border: 1px solid $rose-dim;
+    background: rgba(201, 56, 110, 0.1);
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+  }
+
+  .photo-title-main {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(20px, 3.5vw, 32px);
+    font-weight: 700;
+    color: $white;
+    margin: 0 0 2px;
+    line-height: 1.2;
+  }
+
+  .photo-title-accent {
+    color: $rose-light;
+    font-style: italic;
+    animation: title-pulse 3s ease-in-out infinite;
   }
 
   .photo-subtitle {
     font-size: 12px;
     color: $gray;
-    letter-spacing: 3px;
-    margin: 6px 0 10px;
-    text-transform: lowercase;
+    letter-spacing: 2px;
+    margin: 6px 0 8px;
   }
 
   .photo-badge {
@@ -122,10 +155,11 @@ $border: rgba(227, 6, 19, 0.4);
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 3px;
-    color: $red;
-    border: 1px solid $red;
-    padding: 4px 14px;
-    border-radius: 2px;
+    color: $gold;
+    border: 1px solid $gold-dim;
+    background: rgba(196, 154, 56, 0.08);
+    padding: 3px 14px;
+    border-radius: 3px;
   }
 }
 
@@ -136,7 +170,7 @@ $border: rgba(227, 6, 19, 0.4);
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 16px 20px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -146,11 +180,11 @@ $border: rgba(227, 6, 19, 0.4);
   position: relative;
   width: min(600px, 88vw);
   height: min(600px, 88vw);
-  border: 2px solid rgba(227, 6, 19, 0.5);
-  border-radius: 4px;
+  border: 2px solid $rose-dim;
+  border-radius: 6px;
   overflow: hidden;
   animation: cam-glow-pulse 3s ease-in-out infinite;
-  background: #0a0a0a;
+  background: #0a0408;
 
   canvas {
     width: 100% !important;
@@ -171,7 +205,7 @@ $border: rgba(227, 6, 19, 0.4);
   position: absolute;
   width: 24px;
   height: 24px;
-  border-color: $red;
+  border-color: $rose;
   border-style: solid;
   z-index: 2;
   animation: corner-blink 2s ease-in-out infinite;
@@ -186,48 +220,47 @@ $border: rgba(227, 6, 19, 0.4);
 // === ACTIONS ===
 .photo-actions {
   display: flex;
-  gap: 16px;
-  margin-top: 20px;
+  gap: 14px;
+  margin-top: 18px;
   flex-wrap: wrap;
   justify-content: center;
   width: 100%;
 }
 
 .photo-btn {
-  height: 54px;
-  padding: 0 36px;
-  font-size: 14px;
+  height: 52px;
+  padding: 0 32px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 2px;
   text-transform: uppercase;
   border: none;
-  border-radius: 3px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s;
   font-family: inherit;
 
   &--secondary {
-    background: rgba(0, 0, 0, 0.55);
+    background: rgba(0, 0, 0, 0.45);
     border: 2px solid $white;
     color: $white;
     backdrop-filter: blur(6px);
 
     &:hover:not(:disabled) {
-      background: rgba(0, 0, 0, 0.75);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.65);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
       transform: translateY(-1px);
     }
   }
 
   &--primary {
-    background: $white;
-    color: #1a0000;
+    background: linear-gradient(135deg, $rose, $rose-light);
+    color: $white;
     font-weight: 900;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 4px 20px $rose-glow;
 
     &:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.88);
-      box-shadow: 0 6px 30px rgba(0, 0, 0, 0.45);
+      box-shadow: 0 6px 28px rgba(201, 56, 110, 0.4);
       transform: translateY(-1px);
     }
   }
@@ -239,29 +272,39 @@ $border: rgba(227, 6, 19, 0.4);
   }
 }
 
-// === FOOTER ===
+// === FOOTER (camera) ===
 .photo-footer {
-  padding: 12px;
+  padding: 10px;
   text-align: center;
   font-size: 12px;
-  letter-spacing: 3px;
-  color: rgba(255,255,255,0.2);
-  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: rgba(201, 56, 110, 0.3);
 }
 
-// === RESULT CONTAINER ===
+// === RESULT SCREEN ===
 .containerResultFinal {
   width: 100vw;
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  background: $bg;
+  background: linear-gradient(145deg, #FFF0F5 0%, #FFE8EF 50%, #FFF5F0 100%);
   position: relative;
-  color: $white;
+  color: $text;
   overflow: hidden;
 
   > * { position: relative; z-index: 1; }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 10% 5%, rgba(201, 56, 110, 0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 90% 95%, rgba(196, 154, 56, 0.06) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
 }
 
 .result-wrapper {
@@ -272,31 +315,31 @@ $border: rgba(227, 6, 19, 0.4);
   width: 100%;
 }
 
-// === AVATAR SHOWCASE (result screen) ===
+// === AVATAR SHOWCASE ===
 .avatar-showcase {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 20px 0 30px;
+  margin: 14px 0 20px;
   animation: showcaseEntrance 1s ease-out;
 }
 
 .avatar-frame {
   position: relative;
   width: min(720px, 90vw);
-  padding: 16px;
-  background: rgba(15, 15, 15, 0.98);
-  border: 2px solid $red;
-  border-radius: 4px;
-  box-shadow: 0 0 40px $red-dim, 0 0 80px $red-glow, 0 20px 60px rgba(0,0,0,0.5);
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 2px solid $rose;
+  border-radius: 8px;
+  box-shadow: 0 0 40px $rose-dim, 0 0 80px $rose-glow, 0 20px 60px rgba(0,0,0,0.1);
   animation: framePulse 3s ease-in-out infinite;
 
   &::after {
     content: '';
     position: absolute;
     inset: -12px;
-    background: radial-gradient(circle at 50% 50%, $red-glow 0%, transparent 70%);
-    border-radius: 8px;
+    background: radial-gradient(circle at 50% 50%, $rose-glow 0%, transparent 70%);
+    border-radius: 12px;
     z-index: -1;
     animation: glowPulse 2s ease-in-out infinite alternate;
     pointer-events: none;
@@ -306,16 +349,16 @@ $border: rgba(227, 6, 19, 0.4);
 .avatar-glow-ring {
   position: absolute;
   inset: -20px;
-  border-radius: 8px;
+  border-radius: 12px;
   background: conic-gradient(
     from 0deg,
     transparent 0deg,
-    $red-dim 60deg,
+    $rose-dim 60deg,
     transparent 180deg,
-    $cyan-dim 300deg,
+    $gold-dim 300deg,
     transparent 360deg
   );
-  opacity: 0.3;
+  opacity: 0.2;
   animation: rotateRing 8s linear infinite;
   pointer-events: none;
   z-index: -1;
@@ -324,9 +367,9 @@ $border: rgba(227, 6, 19, 0.4);
 
 .avatar-corner {
   position: absolute;
-  width: 30px;
-  height: 30px;
-  border: 2px solid $red;
+  width: 28px;
+  height: 28px;
+  border: 2px solid $rose;
   z-index: 2;
   animation: cornerShine 3s ease-in-out infinite;
   pointer-events: none;
@@ -341,10 +384,9 @@ $border: rgba(227, 6, 19, 0.4);
   display: block;
   width: 100%;
   height: auto;
-  // min-height: 700px;
   max-height: 900px;
   object-fit: cover;
-  border-radius: 2px;
+  border-radius: 4px;
   position: relative;
   z-index: 1;
   animation: avatarReveal 1.2s ease-out;
@@ -359,7 +401,7 @@ $border: rgba(227, 6, 19, 0.4);
   left: -100%;
   width: 50%;
   height: 100%;
-  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.18) 50%, transparent 100%);
   transform: skewX(-20deg);
   animation: shineSlide 4s ease-in-out infinite;
   pointer-events: none;
@@ -368,7 +410,7 @@ $border: rgba(227, 6, 19, 0.4);
 
 .header-bar {
   width: 100%;
-  padding: 10px 0;
+  padding: 8px 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -377,26 +419,25 @@ $border: rgba(227, 6, 19, 0.4);
 // === RESULT BUTTONS ===
 .button {
   display: inline-block;
-  height: 56px;
-  line-height: 56px;
-  padding: 0 32px;
-  font-size: 16px;
+  height: 52px;
+  line-height: 52px;
+  padding: 0 28px;
+  font-size: 14px;
   font-weight: 700;
   font-family: inherit;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: $white;
-  border-radius: 3px;
+  border-radius: 10px;
   border: none;
   cursor: pointer;
-  background: $red;
-  box-shadow: 0 4px 20px $red-glow;
+  background: linear-gradient(135deg, $rose, $rose-light);
+  box-shadow: 0 4px 20px $rose-glow;
   transition: all 0.2s;
   text-align: center;
 
   &:hover {
-    background: lighten($red, 8%);
-    box-shadow: 0 6px 30px rgba(227, 6, 19, 0.5);
+    box-shadow: 0 6px 28px rgba(201, 56, 110, 0.4);
     transform: translateY(-2px);
   }
 
@@ -405,20 +446,20 @@ $border: rgba(227, 6, 19, 0.4);
 }
 
 .btnResult {
-  margin-top: 16px !important;
+  margin-top: 12px !important;
 }
 
-// === FULLSCREEN BUTTON (shared) ===
+// === FULLSCREEN BUTTON (result screen) ===
 .fullscreen-button {
   position: fixed;
   top: 16px;
   right: 16px;
   width: 36px;
   height: 36px;
-  background: rgba(20,20,20,0.8);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid $rose-dim;
   border-radius: 6px;
-  color: $gray;
+  color: $text-muted;
   font-size: 18px;
   cursor: pointer;
   z-index: 9999;
@@ -427,17 +468,17 @@ $border: rgba(227, 6, 19, 0.4);
   justify-content: center;
   transition: all 0.2s;
   padding: 0;
+  backdrop-filter: blur(6px);
 
-  &:hover { border-color: $red; color: $white; }
+  &:hover { border-color: $rose; color: $rose; }
 }
 
-// === RESPONSIVE LARGE (totem portrait) ===
+// === RESPONSIVE (totem portrait) ===
 @media (min-width: 1080px) and (orientation: portrait) {
   .photo-header {
-    padding-top: 40px;
-
-    .photo-title { font-size: 52px; }
-    .photo-subtitle { font-size: 15px; }
+    padding-top: 36px;
+    .photo-title-main { font-size: 48px; }
+    .photo-subtitle { font-size: 14px; }
   }
 
   .photo-cam-wrapper {
@@ -446,9 +487,9 @@ $border: rgba(227, 6, 19, 0.4);
   }
 
   .photo-btn {
-    height: 70px;
+    height: 68px;
     font-size: 18px;
-    padding: 0 50px;
+    padding: 0 48px;
     letter-spacing: 3px;
   }
 
@@ -458,10 +499,10 @@ $border: rgba(227, 6, 19, 0.4);
   }
 
   .button {
-    height: 70px;
-    line-height: 70px;
-    font-size: 20px;
-    padding: 0 50px;
+    height: 68px;
+    line-height: 68px;
+    font-size: 19px;
+    padding: 0 48px;
   }
 }
 
@@ -472,8 +513,8 @@ $border: rgba(227, 6, 19, 0.4);
   }
 
   .photo-btn {
-    height: 80px;
+    height: 78px;
     font-size: 22px;
-    padding: 0 60px;
+    padding: 0 58px;
   }
 }

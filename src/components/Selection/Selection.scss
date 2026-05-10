@@ -1,70 +1,75 @@
-// === DESBLOQUEA TU PODER — Gaming Dark Theme ===
+// === DÍA DE LAS MADRES — Style Slider Screen ===
 
-$red: #E30613;
-$red-dim: rgba(227, 6, 19, 0.5);
-$red-glow: rgba(227, 6, 19, 0.25);
-$cyan: #00D4FF;
-$bg: #080808;
-$bg-panel: rgba(14, 14, 14, 0.97);
+$rose: #C9386E;
+$rose-light: #E8749A;
+$rose-dim: rgba(201, 56, 110, 0.35);
+$rose-glow: rgba(201, 56, 110, 0.15);
+$gold: #C49A38;
+$blush: #F9C0D0;
+$cream: #FFF5F8;
+$text: #3D1A26;
+$text-muted: #7A4A5A;
 $white: #FFFFFF;
-$gray: #AAAAAA;
-$border: rgba(227, 6, 19, 0.35);
+$border-light: rgba(201, 56, 110, 0.18);
 
-@keyframes sel-flicker {
-  0%, 100% { opacity: 1; }
-  92% { opacity: 1; }
-  93% { opacity: 0.85; }
-  94% { opacity: 1; }
+@keyframes float-petal {
+  0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.2; }
+  50%       { transform: translateY(-18px) rotate(12deg); opacity: 0.4; }
 }
 
-@keyframes sel-line-move {
-  from { transform: translateX(-100%) skewX(-15deg); }
-  to   { transform: translateX(200vw) skewX(-15deg); }
+@keyframes title-glow {
+  0%, 100% { color: $rose; }
+  50%       { color: $rose-light; }
 }
 
-@keyframes sel-title-glow {
-  0%, 100% { text-shadow: 0 0 20px $red-dim, 0 0 40px $red-glow; }
-  50%       { text-shadow: 0 0 40px rgba(227, 6, 19, 0.8), 0 0 80px $red-dim; }
+@keyframes slideEnter {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
-@keyframes sel-power-pulse {
-  0%, 100% { filter: drop-shadow(0 0 8px $red-dim); }
-  50%       { filter: drop-shadow(0 0 20px rgba(227, 6, 19, 0.9)); }
+@keyframes infoEnter {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer-bar {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
 }
 
 // === CONTAINER ===
 .sel-container {
   width: 100vw;
   height: 100vh;
-  background: $bg url('/referencias/fondo_registro.png') center center / cover no-repeat;
+  background: linear-gradient(145deg, #FFF0F5 0%, #FFE8EF 40%, #FFF5F0 70%, #FEF0F5 100%);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   position: relative;
+  isolation: isolate;
   overflow: hidden;
   font-family: system-ui, 'Segoe UI', sans-serif;
+  padding: 0 0 8px;
+  box-sizing: border-box;
 }
 
-// === BACKGROUND DECORATION ===
-.sel-bg-lines {
+// === FLOATING PETALS (solo en lados y abajo, nunca en el header) ===
+.sel-petals {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  overflow: hidden;
-  z-index: 0;
+  z-index: -1;
 }
 
-.sel-line {
+.sel-petal {
   position: absolute;
-  height: 2px;
-  width: 60%;
-  background: linear-gradient(90deg, transparent, $red, transparent);
-  opacity: 0.4;
-  animation: sel-line-move 8s linear infinite;
+  opacity: 0.18;
 
-  &.sel-line-1 { top: 15%; animation-duration: 12s; }
-  &.sel-line-2 { top: 50%; animation-duration: 9s; animation-delay: -3s; }
-  &.sel-line-3 { top: 82%; animation-duration: 14s; animation-delay: -7s; }
+  &.sel-petal-1 { top: 35%; left: 0%; font-size: 60px; animation: float-petal 7s ease-in-out infinite; }
+  &.sel-petal-2 { top: 30%; right: 0%; font-size: 44px; animation: float-petal 9s ease-in-out infinite; animation-delay: -2s; }
+  &.sel-petal-3 { bottom: 6%; left: 3%; font-size: 52px; animation: float-petal 8s ease-in-out infinite; animation-delay: -4s; }
+  &.sel-petal-4 { bottom: 10%; right: 2%; font-size: 48px; animation: float-petal 10s ease-in-out infinite; animation-delay: -1s; }
 }
 
 // === FULLSCREEN BUTTON ===
@@ -74,10 +79,10 @@ $border: rgba(227, 6, 19, 0.35);
   right: 16px;
   width: 36px;
   height: 36px;
-  background: rgba(20, 20, 20, 0.8);
-  border: 1px solid $border;
-  border-radius: 6px;
-  color: $gray;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid $border-light;
+  border-radius: 8px;
+  color: $text-muted;
   font-size: 18px;
   cursor: pointer;
   z-index: 9999;
@@ -86,477 +91,275 @@ $border: rgba(227, 6, 19, 0.35);
   justify-content: center;
   transition: all 0.2s;
   padding: 0;
+  backdrop-filter: blur(6px);
 
-  &:hover {
-    border-color: $red;
-    color: $white;
-  }
-}
-
-// === MAIN CONTENT ===
-.sel-content {
-  position: relative;
-  z-index: 1;
-  width: min(560px, 92vw);
-  max-height: 98vh;
-  overflow-y: auto;
-  background: $bg-panel;
-  border: 1px solid $border;
-  border-radius: 4px;
-  padding: 36px 40px 28px;
-  box-shadow:
-    0 0 60px $red-glow,
-    0 0 120px rgba(0, 0, 0, 0.8),
-    inset 0 1px 0 rgba(255,255,255,0.04);
-
-  // Corner brackets
-  &::before, &::after {
-    content: '';
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    border-color: $red;
-    border-style: solid;
-  }
-
-  &::before {
-    top: -1px;
-    left: -1px;
-    border-width: 2px 0 0 2px;
-  }
-
-  &::after {
-    bottom: -1px;
-    right: -1px;
-    border-width: 0 2px 2px 0;
-  }
-
-  // Hide scrollbar visually
-  &::-webkit-scrollbar { width: 4px; }
-  &::-webkit-scrollbar-track { background: transparent; }
-  &::-webkit-scrollbar-thumb { background: $border; border-radius: 2px; }
+  &:hover { border-color: $rose; color: $rose; }
 }
 
 // === HEADER ===
 .sel-header {
+  position: relative;
+  z-index: 10;
   text-align: center;
-  margin-bottom: 28px;
+  padding: 20px 20px 0;
+  flex-shrink: 0;
 }
 
-.sel-titulo-img {
-  display: block;
-  width: 100%;
-  max-width: 420px;
-  height: auto;
-  margin: 10px auto 4px;
-  object-fit: contain;
-  filter: drop-shadow(0 0 12px $red-glow);
-}
-
-.sel-tag {
+.sel-date-tag {
   display: inline-block;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 4px;
-  color: $gray;
-  text-transform: uppercase;
-  margin-bottom: 12px;
-  border: 1px solid rgba(255,255,255,0.1);
-  padding: 4px 12px;
-  border-radius: 2px;
-}
-
-.sel-subtitle {
-  font-size: 14px;
-  color: $gray;
   letter-spacing: 3px;
-  text-transform: lowercase;
-  margin: 8px 0 0;
-}
-
-// === SECTIONS ===
-.sel-section {
-  margin-bottom: 22px;
-}
-
-.sel-section-title {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 3px;
-  color: $gray;
-  text-transform: uppercase;
-  margin: 0 0 14px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid $border;
-}
-
-// === FORM FIELDS ===
-.sel-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.sel-field {
-  position: relative;
-}
-
-.sel-input {
-  width: 100%;
-  box-sizing: border-box;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 3px;
-  color: $white;
-  font-size: 15px;
-  padding: 12px 16px;
-  outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-
-  &::placeholder {
-    color: rgba(255,255,255,0.3);
-  }
-
-  &:focus {
-    border-color: $red;
-    box-shadow: 0 0 0 2px $red-glow;
-  }
-
-  &.sel-input--error {
-    border-color: rgba(255, 80, 80, 0.8);
-  }
-}
-
-.sel-error {
-  display: block;
-  font-size: 11px;
-  color: #FF6666;
-  margin-top: 4px;
-  padding-left: 4px;
-
-  &.sel-error--center {
-    text-align: center;
-    margin-top: 6px;
-  }
-}
-
-// === CHARACTER SELECTORS ===
-.sel-selector {
-  margin-bottom: 16px;
-
-  &:last-child { margin-bottom: 0; }
-}
-
-.sel-selector-label {
-  display: block;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: $gray;
-  text-transform: uppercase;
+  color: $rose;
+  border: 1px solid $rose-dim;
+  background: rgba(201, 56, 110, 0.06);
+  padding: 4px 16px;
+  border-radius: 20px;
   margin-bottom: 8px;
 }
 
-.sel-options {
-  display: flex;
-  gap: 10px;
-}
-
-.sel-option-btn {
-  flex: 1;
-  padding: 12px 8px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 3px;
-  color: $gray;
-  font-size: 13px;
+.sel-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(22px, 4vw, 34px);
   font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.2s;
+  color: $text;
+  margin: 0 0 4px;
+  line-height: 1.2;
 
-  &:hover {
-    border-color: $red-dim;
-    color: $white;
-    background: rgba(227, 6, 19, 0.08);
-  }
-
-  &.sel-option-btn--active {
-    background: $red;
-    border-color: $red;
-    color: $white;
-    box-shadow: 0 0 16px $red-glow;
+  span {
+    color: $rose;
+    font-style: italic;
+    animation: title-glow 3s ease-in-out infinite;
   }
 }
 
-// === TERMS ===
-.sel-terms {
+.sel-subtitle {
+  font-size: 12px;
+  color: $text-muted;
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+// === SLIDER ===
+.sel-slider {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 6px;
-  padding: 12px 14px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 3px;
-  transition: border-color 0.2s;
-
-  &.sel-terms--error {
-    border-color: rgba(255, 80, 80, 0.5);
-  }
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  padding: 0 16px;
+  box-sizing: border-box;
+  flex: 1;
+  min-height: 0;
 }
 
-.sel-checkbox {
-  width: 18px;
-  height: 18px;
-  min-width: 18px;
-  appearance: none;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 2px;
+.sel-slide-area {
+  flex: 1;
+  max-width: min(480px, 70vw);
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 3px solid rgba(201, 56, 110, 0.28);
+  box-shadow:
+    0 12px 48px rgba(201, 56, 110, 0.18),
+    0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.sel-slide-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  animation: slideEnter 0.35s ease-out;
+}
+
+// === ARROWS ===
+.sel-arrow {
+  width: 56px;
+  height: 56px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 2px solid rgba(201, 56, 110, 0.22);
+  border-radius: 50%;
+  color: $rose;
+  font-size: 32px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s;
+  box-shadow: 0 4px 16px rgba(201, 56, 110, 0.12);
+  flex-shrink: 0;
+  padding: 0;
+  line-height: 1;
+  user-select: none;
 
-  &:checked {
-    background: $red;
-    border-color: $red;
+  &:hover {
+    background: $rose;
+    color: $white;
+    border-color: $rose;
+    box-shadow: 0 6px 24px rgba(201, 56, 110, 0.35);
+    transform: scale(1.1);
+  }
 
-    &::before {
-      content: '✓';
-      color: $white;
-      font-size: 12px;
-      font-weight: bold;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      line-height: 1;
-    }
+  &:active { transform: scale(0.96); }
+}
+
+// === STYLE INFO ===
+.sel-info {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 0 20px;
+  flex-shrink: 0;
+}
+
+.sel-dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.sel-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(201, 56, 110, 0.2);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.25s;
+
+  &.sel-dot--active {
+    background: $rose;
+    width: 28px;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px rgba(201, 56, 110, 0.4);
+  }
+
+  &:hover:not(.sel-dot--active) {
+    background: rgba(201, 56, 110, 0.4);
+    transform: scale(1.2);
   }
 }
 
-.sel-terms-label {
-  font-size: 13px;
-  color: $gray;
-  cursor: pointer;
-  line-height: 1.4;
+.sel-style-name {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(20px, 3.5vw, 30px);
+  font-weight: 700;
+  color: $rose;
+  margin: 0 0 4px;
+  font-style: italic;
+  animation: infoEnter 0.35s ease-out;
 }
 
-.sel-policy-link {
-  background: none;
-  border: none;
-  padding: 0;
-  color: $red;
+.sel-style-desc {
   font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: underline;
-  font-family: inherit;
-
-  &:hover { color: lighten($red, 15%); }
+  color: $text-muted;
+  margin: 0;
+  line-height: 1.5;
+  max-width: 340px;
+  margin: 0 auto;
+  animation: infoEnter 0.35s ease-out;
 }
 
-// === SUBMIT BUTTON ===
+// === CTA ===
+.sel-cta {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 12px 24px 0;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
 .sel-submit-btn {
   width: 100%;
-  padding: 16px;
-  margin-top: 20px;
-  background: $red;
+  max-width: 440px;
+  display: block;
+  margin: 0 auto;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, $rose, $rose-light);
   border: none;
-  border-radius: 3px;
+  border-radius: 14px;
   color: $white;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 800;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
   text-transform: uppercase;
   cursor: pointer;
   transition: all 0.2s;
-  box-shadow: 0 4px 20px $red-glow;
+  box-shadow: 0 6px 24px rgba(201, 56, 110, 0.3);
+  font-family: inherit;
 
   &:hover {
-    background: lighten($red, 8%);
-    box-shadow: 0 6px 30px rgba(227, 6, 19, 0.5);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 32px rgba(201, 56, 110, 0.38);
   }
 
-  &:active {
-    transform: translateY(0);
-  }
+  &:active { transform: translateY(0); }
 }
 
 // === FOOTER ===
 .sel-footer {
-  text-align: center;
-  margin-top: 22px;
-  padding-top: 16px;
-  border-top: 1px solid $border;
-}
-
-.sel-footer-brand {
-  font-size: 12px;
-  letter-spacing: 3px;
-  color: rgba(255,255,255,0.25);
-  text-transform: uppercase;
-}
-
-// === POLICY MODAL ===
-.sel-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.88);
-  backdrop-filter: blur(8px);
-  z-index: 10000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.sel-modal {
   position: relative;
-  width: min(800px, 94vw);
-  max-height: 90vh;
-  background: #0f0f0f;
-  border: 1px solid $red;
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  box-shadow:
-    0 0 60px $red-glow,
-    0 0 120px rgba(0, 0, 0, 0.9);
-  overflow: hidden;
-
-  // Corner brackets
-  &::before, &::after {
-    content: '';
-    position: absolute;
-    width: 18px;
-    height: 18px;
-    border-color: $cyan;
-    border-style: solid;
-    z-index: 1;
-    pointer-events: none;
-  }
-
-  &::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
-  &::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
-}
-
-.sel-modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-  border-bottom: 1px solid $border;
-  background: rgba(227, 6, 19, 0.08);
-  flex-shrink: 0;
-}
-
-.sel-modal-title {
+  z-index: 1;
+  text-align: center;
+  padding: 8px;
   font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 3px;
-  color: $white;
-  text-transform: uppercase;
-}
-
-.sel-modal-close {
-  background: none;
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 3px;
-  color: $gray;
-  font-size: 16px;
-  width: 32px;
-  height: 32px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  transition: all 0.2s;
+  letter-spacing: 1px;
+  color: rgba(122, 74, 90, 0.4);
   flex-shrink: 0;
-
-  &:hover {
-    border-color: $red;
-    color: $white;
-    background: rgba(227, 6, 19, 0.15);
-  }
 }
 
-.sel-modal-body {
-  flex: 1;
-  overflow: hidden;
-  min-height: 0;
-}
-
-.sel-modal-iframe {
-  width: 100%;
-  height: 65vh;
-  border: none;
-  display: block;
-  background: #fff;
-}
-
-// === RESPONSIVE LARGE (totem 49") ===
+// === RESPONSIVE (totem portrait) ===
 @media (min-width: 1080px) and (orientation: portrait) {
-  .sel-content {
-    width: min(700px, 85vw);
-    padding: 50px 56px 40px;
+  .sel-header { padding-top: 32px; }
+  .sel-title { font-size: 52px; }
+
+  .sel-slide-area {
+    max-width: min(640px, 68vw);
   }
 
-  .sel-title { font-size: 72px; }
-  .sel-title-power { font-size: 82px; }
-
-  .sel-input {
-    font-size: 20px;
-    padding: 18px 22px;
+  .sel-arrow {
+    width: 72px;
+    height: 72px;
+    font-size: 42px;
   }
 
-  .sel-option-btn {
-    font-size: 16px;
-    padding: 18px;
-  }
+  .sel-style-name { font-size: 40px; }
+  .sel-style-desc { font-size: 18px; max-width: 480px; }
 
   .sel-submit-btn {
     font-size: 22px;
-    padding: 22px;
+    padding: 22px 32px;
+    max-width: 600px;
+    letter-spacing: 3px;
   }
 
-  .sel-section-title,
-  .sel-selector-label {
-    font-size: 13px;
-  }
+  .sel-dot { width: 12px; height: 12px; }
+  .sel-dot.sel-dot--active { width: 34px; }
 }
 
 @media (min-width: 1440px) {
-  .sel-content {
-    width: min(800px, 80vw);
-    padding: 60px 70px 50px;
+  .sel-title { font-size: 64px; }
+
+  .sel-slide-area { max-width: min(700px, 62vw); }
+
+  .sel-arrow {
+    width: 84px;
+    height: 84px;
+    font-size: 50px;
   }
 
-  .sel-title { font-size: 86px; }
-  .sel-title-power { font-size: 96px; }
-
-  .sel-input {
-    font-size: 24px;
-    padding: 22px 26px;
-  }
-
-  .sel-option-btn {
-    font-size: 18px;
-    padding: 20px;
-  }
+  .sel-style-name { font-size: 48px; }
+  .sel-style-desc { font-size: 20px; }
 
   .sel-submit-btn {
     font-size: 26px;
-    padding: 26px;
-    letter-spacing: 4px;
+    padding: 26px 36px;
+    max-width: 680px;
   }
-
-  .sel-terms-label,
-  .sel-policy-link { font-size: 16px; }
 }

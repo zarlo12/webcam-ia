@@ -4,13 +4,10 @@ import "./AvatarPhoto.scss";
 import WebcamScene from "../WebcamScene";
 import aiImageService from "../../services/aiImageService";
 import Swal from "sweetalert2";
-
-type Gender = 'hombre' | 'mujer';
-type CharacterStyle = 'guerrero' | 'cyberpunk';
+import { StyleChoice } from "../../App";
 
 interface AvatarPhotoProps {
-  gender: Gender;
-  characterStyle: CharacterStyle;
+  styleChoice: StyleChoice;
   onProcess: () => void;
   onAiImageReady: (imageUrl: string, originalImageDataUrl: string) => void;
 }
@@ -19,153 +16,135 @@ interface WebcamRef {
   captureImage: () => Promise<Blob>;
 }
 
-const BACKGROUND_URL =
-  'https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/fondo_resultado.png?alt=media&token=49386813-9503-459c-ad91-7c81d96f6c76';
+const LOGO_URL =
+  'https://replicate.delivery/pbxt/OgeG3mQ98GKDjIBB2PN0WUhQw8QmAJLgMN4Iad3lNMHhM86Z/LOGO.jpg';
 
-const IDENTITY_BLOCK = `
-IDENTITY PRESERVATION (MANDATORY — HIGHEST PRIORITY):
-This is a photo-to-character transformation. The person MUST be instantly recognizable in the final result.
-Preserve these features but RENDER THEM IN THE ARTISTIC STYLE OF THE CHARACTER (cinematic 3D, not a realistic photo):
-- Face structure: jaw, cheekbones, forehead, chin proportions
-- Skin tone and complexion (adapted to the 3D render style, not photorealistic)
-- Eye shape, color, and spacing
-- Nose shape and size
-- Lip shape
-- Hair color, texture, and length
-- Distinctive features: beard, stubble, freckles, glasses, eyebrow shape, etc.
+const STYLE_LABELS: Record<StyleChoice, string> = {
+  1: 'ACUARELA',
+  2: '3D ANIMADO',
+  3: 'VINTAGE',
+};
 
-CRITICAL STYLE RULE:
-- The face MUST be rendered in the SAME cinematic 3D / artistic style as the rest of the character
-- Do NOT paste a photorealistic face onto a stylized body — everything must be cohesive
-- Think: "this person as a high-end video game character" — stylized but recognizable
-- A person who knows this individual must recognize them in the final stylized render
-- Do NOT replace the face with a generic face. Do NOT alter ethnicity or gender`;
+const GROUP_LOCK = `
+CRITICAL GROUP PRESERVATION RULE — MANDATORY, NO EXCEPTIONS:
+Every single person visible in the original photo MUST appear in the final image.
+- Do NOT crop, remove, blur, merge, or hide any person.
+- Preserve exact number of people, their spacing and relative positions.
+- Preserve original facial identities: facial proportions, skin tone, age, hairstyle, distinctive features.
+- If canvas space is needed, EXPAND the image — never crop people.
+- Do NOT replace faces with generic or idealized versions.`;
 
-const BACKGROUND_BLOCK = `
-BACKGROUND & COMPOSITION (MANDATORY — ABSOLUTE RULES, NO EXCEPTIONS):
+const LOGO_BLOCK = `
+LOGO & TEXT (MANDATORY):
+- The second attached image is the brand logo. Place it prominently at the top-center of the composition.
+- Keep the logo clearly visible, unmodified, and well-proportioned.
+- Add the text "Feliz Día de las Madres" in an elegant script or serif font.
+- The text must be readable and tasteful — not childish.`;
 
-BACKGROUND RULES:
-- Use the second image as the background EXACTLY as it is — same composition, same framing, same proportions, every pixel identical
-- The background must be shown COMPLETELY: all four edges fully visible, nothing cropped, nothing cut, nothing zoomed in
-- Do NOT pan, zoom, crop, reframe, recolor, or alter the background image in ANY way
-- The bottom edge, top edge, left edge, and right edge of the background must all appear in the final image
-
-CHARACTER RULES:
-- The character is a SMALL figure placed on top of the background — like a figurine in a wide scene
-- CHARACTER SIZE: the character height must be at most 35% of the total image height — very small relative to the scene
-- CHARACTER POSITION: centered horizontally, standing in the lower third of the image (bottom 35% area)
-- The character must NOT touch or go beyond the bottom edge of the image
-- The character must NOT reach above the midpoint of the image
-- All text, logos, and graphic elements in the background must remain 100% visible and unobstructed`;
-
-
-const PROMPTS: Record<`${Gender}-${CharacterStyle}`, string> = {
-  'mujer-guerrero': `Transform the uploaded photo of a real person into a powerful female fantasy warrior for a campaign called "Unlock Your Power".
-${IDENTITY_BLOCK}
-${BACKGROUND_BLOCK}
+const PROMPTS: Record<StyleChoice, string> = {
+  1: `Transform this family photo into a soft watercolor + subtle 3D hybrid Mother's Day portrait.
+${GROUP_LOCK}
+${LOGO_BLOCK}
 
 STYLE:
-- High-end cinematic 3D render
-- Clean, sharp, premium advertising look
+- Soft watercolor illustration blended with subtle 3D painterly rendering.
+- Warm, romantic, hand-painted aesthetic.
 
-CHARACTER:
-- Strong female warrior, confident and dominant presence
-- Fantasy armor (metal + leather), elegant but powerful
-- Subtle glowing accents (red or cyan)
-- Weapon: large sword or axe
-- Heroic grounded pose (standing firm, facing camera or slight angle)
+BACKGROUND REPLACEMENT:
+- Hand-painted floral garden backdrop.
+- Soft watercolor roses, peonies, and cherry blossoms.
+- Pastel sky gradient: peach fading into soft pink.
+- Delicate golden sparkles and light bokeh.
+- Elegant decorative illustrated frame around the group.
+
+COMPOSITION:
+- Vertical format (portrait orientation).
+- Maintain original group arrangement and postures.
+- Expand canvas if needed to fit everyone comfortably.
 
 LIGHTING:
-- Dramatic cinematic lighting adapted to the background scene
-- Defined shadows, rim light for silhouette
+- Soft, diffused, warm golden light from above.
+- Gentle rim light on subjects.
 
 MOOD:
-- Power, confidence, leadership
+- Warm, loving, celebratory, elegant.
 
-QUALITY:
-- Ultra detailed
-- Clean render, no noise, no dirty textures`,
+OUTPUT:
+- High-resolution 4K vertical.
+- Consistent painterly style throughout.`,
 
-  'mujer-cyberpunk': `Transform the uploaded photo of a real person into a futuristic female cyberpunk character for a campaign called "Unlock Your Power".
-${IDENTITY_BLOCK}
-${BACKGROUND_BLOCK}
+  2: `Transform this family photo into a vibrant cinematic 3D animated poster for Mother's Day.
+${GROUP_LOCK}
+${LOGO_BLOCK}
 
 STYLE:
-- Futuristic, high-end 3D render
-- Clean sci-fi aesthetic (not grungy)
+- Premium cinematic 3D animation render (similar to high-end animated film).
+- Glossy, polished finish. Clean and professional.
+- Do NOT exaggerate or caricature faces.
 
-CHARACTER:
-- Female cyberpunk / techwear style
-- Accessories: visor or high-tech glasses, headphones, light armor
-- Mechanical or digital elements (jetpack or energy device)
-- Neon accents (red + cyan)
-- Dynamic pose (floating slightly or with energy effect)
+BACKGROUND REPLACEMENT:
+- Elegant stage-style floral backdrop with large pink and coral roses.
+- Hanging decorative flower garlands and silk ribbons.
+- Soft pink and coral volumetric lighting with warm spotlight glow behind the group.
+- Subtle floating confetti particles and golden sparkles.
+- Tasteful decorative heart and floral accents — elegant, not childish.
+
+COMPOSITION:
+- Vertical hero poster format.
+- All people centered and clearly visible.
+- Balanced, harmonious arrangement.
 
 LIGHTING:
-- Soft cinematic lighting + neon glow accents adapted to the background
-- Controlled reflections, very clean
+- Cinematic contrast with soft rim light.
+- Warm spotlight from above-behind for glow effect.
 
 MOOD:
-- Innovation, intelligence, evolution
+- Festive, warm, premium, joyful.
 
-QUALITY:
-- Ultra sharp, no noise, no distortion`,
+OUTPUT:
+- 4K vertical, social-media ready.
+- Consistent 3D animated style throughout.`,
 
-  'hombre-guerrero': `Transform the uploaded photo of a real person into a powerful male fantasy warrior for a campaign called "Unlock Your Power".
-${IDENTITY_BLOCK}
-${BACKGROUND_BLOCK}
+  3: `Transform this family photo into a vintage film-style Mother's Day portrait with warm analog tones.
+${GROUP_LOCK}
+${LOGO_BLOCK}
 
 STYLE:
-- Cinematic 3D render
-- Premium advertising look
+- Vintage analog film photography aesthetic.
+- Film grain texture, subtle light fade at edges, gentle vignetting.
+- Warm golden-amber colorcast throughout.
+- Soft, nostalgic, timeless quality.
 
-CHARACTER:
-- Strong, battle-hardened warrior
-- Heavy armor (metal, leather, engraved details)
-- Large weapon (axe, hammer, or sword)
-- Muscular or imposing silhouette
-- Firm, grounded stance
+BACKGROUND REPLACEMENT:
+- Elegant outdoor garden party setting.
+- Vintage floral arrangements: peonies, wildflowers, garden roses.
+- Warm fairy lights strung above.
+- Pastel fabric bunting in the background.
+- Soft afternoon golden hour light filtering through foliage.
 
-LIGHTING:
-- Dramatic contrast lighting adapted to the background scene
-- Strong shadows, defined edges
+CLOTHING & SUBJECTS:
+- Keep clothing and body proportions fully recognizable.
+- Allow gentle color harmonization to warm vintage palette.
+- Maintain full body or waist-up visibility as in original.
 
-MOOD:
-- Strength, resilience, dominance
-
-QUALITY:
-- Ultra detailed
-- Clean, polished render (no dirt, no noise)`,
-
-  'hombre-cyberpunk': `Transform the uploaded photo of a real person into a futuristic male cyberpunk character for a campaign called "Unlock Your Power".
-${IDENTITY_BLOCK}
-${BACKGROUND_BLOCK}
-
-STYLE:
-- High-end sci-fi 3D render
-- Clean, polished aesthetic
-
-CHARACTER:
-- Futuristic outfit (techwear / cyber armor)
-- Accessories: visor, augmented elements, jetpack or energy gear
-- Subtle glowing lines (red + cyan)
-- Confident, slightly dynamic pose (walking, floating, or ready stance)
+COMPOSITION:
+- Vertical format.
+- Everyone fully visible, natural and candid feel.
 
 LIGHTING:
-- Cinematic lighting + neon highlights adapted to the background
-- Clean reflections, no visual noise
+- Warm golden hour sunlight.
+- Soft backlight creating gentle rim glow on subjects.
 
 MOOD:
-- Power, speed, evolution
+- Nostalgic, romantic, timeless, deeply personal.
 
-QUALITY:
-- Ultra sharp
-- No artifacts, no blur, no grunge`,
+OUTPUT:
+- 4K vertical, poster-ready.
+- Consistent vintage film style throughout.`,
 };
 
 const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
-  gender,
-  characterStyle,
+  styleChoice,
   onProcess,
   onAiImageReady,
 }) => {
@@ -217,14 +196,14 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
 
       onProcess();
 
-      const prompt = PROMPTS[`${gender}-${characterStyle}`];
+      const prompt = PROMPTS[styleChoice];
       const result = await aiImageService.generateImageWithFormData(
         capturedImage,
         prompt,
-        'unlock-your-power',
+        'dia-madres',
         'user-' + Date.now(),
         'google/nano-banana',
-        BACKGROUND_URL
+        LOGO_URL,
       );
 
       if (result.success && result.imageUrl) {
@@ -248,9 +227,6 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
     if (!isProcessing) handleProcessImage();
   };
 
-  const styleLabel = characterStyle === 'guerrero' ? 'GUERRERO' : 'CYBERPUNK';
-  const genderLabel = gender === 'mujer' ? 'MUJER' : 'HOMBRE';
-
   return (
     <div className="photo-container">
       <button onClick={toggleFullscreen} className="photo-fullscreen-btn" title="Pantalla completa">
@@ -258,13 +234,10 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
       </button>
 
       <div className="photo-header">
-        <img
-          src="/referencias/titulo.png"
-          alt="Desbloquea Tu Poder"
-          className="photo-titulo-img"
-        />
-        <p className="photo-subtitle">es tu turno de jugar</p>
-        <div className="photo-badge">{genderLabel} · {styleLabel}</div>
+        <div className="photo-date-chip">🌸 10 DE MAYO 🌸</div>
+        <h1 className="photo-title-main">Día de las <span className="photo-title-accent">Madres</span></h1>
+        <p className="photo-subtitle">sonríe y toma tu foto familiar</p>
+        <div className="photo-badge">{STYLE_LABELS[styleChoice]}</div>
       </div>
 
       <div className="photo-main">
@@ -295,13 +268,13 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
             className="photo-btn photo-btn--primary"
             disabled={!capturedImageUrl || isProcessing}
           >
-            {isProcessing ? 'PROCESANDO...' : 'CREAR PERSONAJE'}
+            {isProcessing ? 'PROCESANDO...' : 'CREAR RECUERDO 💐'}
           </button>
         </form>
       </div>
 
       <div className="photo-footer">
-        <span>— Claro gaming —</span>
+        <span>— 💐 con amor · día de las madres —</span>
       </div>
     </div>
   );

@@ -127,7 +127,7 @@ class ReplicateService {
       prompt: prompt,
       resolution: "1K" as const,
       image_input: imageUrls, // Array of image URLs
-      aspect_ratio: "9:16" as const,
+      aspect_ratio: "4:5" as const,
       image_search: false,
       google_search: false,
       output_format: "jpg" as const,

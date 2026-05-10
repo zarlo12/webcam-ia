@@ -30,30 +30,39 @@ const AvatarResult: React.FC<AvatarResultProps> = ({ imageUrl, onReset }) => {
 
       <div className="header-bar" />
 
-      <div style={{ textAlign: 'center', padding: '20px 0 0' }}>
-        <h1 style={{
-          fontFamily: "'Impact', 'Arial Black', sans-serif",
-          fontSize: 'clamp(24px, 4vw, 42px)',
-          fontWeight: 900,
+      <div style={{ textAlign: 'center', padding: '16px 20px 0' }}>
+        <div style={{
+          display: 'inline-block',
+          fontSize: '11px',
+          fontWeight: 700,
           letterSpacing: '3px',
-          color: '#FFFFFF',
+          color: '#C9386E',
+          border: '1px solid rgba(201,56,110,0.35)',
+          background: 'rgba(201,56,110,0.06)',
+          padding: '4px 16px',
+          borderRadius: '20px',
+          marginBottom: '10px',
+        }}>
+          🌸 10 DE MAYO 🌸
+        </div>
+        <h1 style={{
+          fontFamily: "Georgia, 'Times New Roman', serif",
+          fontSize: 'clamp(22px, 3.5vw, 36px)',
+          fontWeight: 700,
+          color: '#3D1A26',
           margin: 0,
-          textTransform: 'uppercase',
+          lineHeight: 1.2,
         }}>
-          ESTÁS LISTO PARA
+          ¡Tu recuerdo está listo!
         </h1>
-        <h1 style={{
-          fontFamily: "'Impact', 'Arial Black', sans-serif",
-          fontSize: 'clamp(28px, 5vw, 50px)',
-          fontWeight: 900,
-          letterSpacing: '3px',
-          color: '#E30613',
-          margin: '4px 0 0',
-          textTransform: 'uppercase',
-          textShadow: '0 0 20px rgba(227,6,19,0.6)',
+        <p style={{
+          fontSize: '14px',
+          color: '#7A4A5A',
+          margin: '6px 0 0',
+          letterSpacing: '1px',
         }}>
-          EL JUEGO
-        </h1>
+          Feliz Día de las Madres 💐
+        </p>
       </div>
 
       <div className="result-wrapper">
@@ -65,21 +74,21 @@ const AvatarResult: React.FC<AvatarResultProps> = ({ imageUrl, onReset }) => {
               <div className="avatar-corner top-right" />
               <div className="avatar-corner bottom-left" />
               <div className="avatar-corner bottom-right" />
-              <img src={imageUrl} className="avatar-spectacular" alt="Tu personaje" />
+              <img src={imageUrl} className="avatar-spectacular" alt="Tu recuerdo del Día de las Madres" />
               <div className="avatar-shine" />
             </div>
           </div>
 
-          <div style={{ textAlign: 'center', marginTop: '8px' }}>
+          <div style={{ textAlign: 'center', marginTop: '6px' }}>
             <button
               type="button"
               className="button btnResult"
               onClick={() => setShowQRModal(true)}
               style={{
-                marginRight: '16px',
+                marginRight: '14px',
                 background: 'transparent',
-                border: '1px solid #E30613',
-                color: '#E30613',
+                border: '2px solid #C9386E',
+                color: '#C9386E',
                 boxShadow: 'none',
               }}
             >
@@ -90,7 +99,7 @@ const AvatarResult: React.FC<AvatarResultProps> = ({ imageUrl, onReset }) => {
               className="button btnResult"
               onClick={onReset}
             >
-              NUEVA FOTO
+              NUEVA FOTO 📸
             </button>
           </div>
         </div>
@@ -98,20 +107,19 @@ const AvatarResult: React.FC<AvatarResultProps> = ({ imageUrl, onReset }) => {
 
       <div style={{
         textAlign: 'center',
-        padding: '12px',
+        padding: '10px',
         fontSize: '12px',
-        letterSpacing: '3px',
-        color: 'rgba(255,255,255,0.2)',
-        textTransform: 'uppercase',
+        letterSpacing: '2px',
+        color: 'rgba(122,74,90,0.35)',
       }}>
-        — Claro gaming —
+        — 💐 con amor · día de las madres —
       </div>
 
       {showQRModal && (
         <div
           style={{
             position: 'fixed', inset: 0,
-            backgroundColor: 'rgba(0,0,0,0.92)',
+            backgroundColor: 'rgba(61,26,38,0.85)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             zIndex: 9999, padding: '20px',
             backdropFilter: 'blur(10px)',
@@ -120,54 +128,73 @@ const AvatarResult: React.FC<AvatarResultProps> = ({ imageUrl, onReset }) => {
         >
           <div
             style={{
-              background: '#0f0f0f',
-              border: '1px solid #E30613',
-              borderRadius: '4px',
+              background: '#FFFFFF',
+              border: '1px solid rgba(201,56,110,0.3)',
+              borderRadius: '20px',
               padding: '36px',
-              maxWidth: '520px',
+              maxWidth: '500px',
               width: '100%',
               position: 'relative',
-              boxShadow: '0 0 60px rgba(227,6,19,0.3)',
+              boxShadow: '0 20px 60px rgba(201,56,110,0.2)',
               animation: 'modalFadeIn 0.25s ease-out',
             }}
             onClick={e => e.stopPropagation()}
           >
+            <div style={{
+              position: 'absolute', top: 0, left: 0, right: 0, height: '4px',
+              background: 'linear-gradient(90deg, #C9386E, #C49A38, #E8749A)',
+              borderRadius: '20px 20px 0 0',
+            }} />
+
             <button
               onClick={() => setShowQRModal(false)}
               style={{
-                position: 'absolute', top: '12px', right: '12px',
-                background: '#E30613', border: 'none', borderRadius: '50%',
-                width: '36px', height: '36px', fontSize: '20px',
-                cursor: 'pointer', color: '#FFFFFF',
+                position: 'absolute', top: '14px', right: '14px',
+                background: 'none',
+                border: '1px solid rgba(201,56,110,0.25)',
+                borderRadius: '8px',
+                width: '32px', height: '32px', fontSize: '16px',
+                cursor: 'pointer', color: '#7A4A5A',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontWeight: 'bold',
               }}
             >
-              ×
+              ✕
             </button>
 
             <p style={{
-              textAlign: 'center', color: '#AAAAAA',
-              fontSize: '11px', letterSpacing: '3px',
+              textAlign: 'center', color: '#7A4A5A',
+              fontSize: '11px', letterSpacing: '2px',
               textTransform: 'uppercase', marginBottom: '20px',
+              marginTop: '4px',
             }}>
-              Escanea para descargar tu imagen
+              Escanea para descargar tu foto
             </p>
 
             <div style={{
               display: 'flex', justifyContent: 'center',
-              padding: '20px',
-              background: '#FFFFFF',
-              borderRadius: '3px',
+              padding: '16px',
+              background: '#FFF5F8',
+              borderRadius: '10px',
+              border: '1px solid rgba(201,56,110,0.12)',
             }}>
               <QRCodeSVG
                 value={imageUrl}
-                size={380}
+                size={340}
                 level="H"
                 marginSize={2}
                 style={{ maxWidth: '100%', height: 'auto' }}
               />
             </div>
+
+            <p style={{
+              textAlign: 'center',
+              marginTop: '14px',
+              fontSize: '12px',
+              color: 'rgba(122,74,90,0.5)',
+            }}>
+              💐 Feliz Día de las Madres
+            </p>
           </div>
 
           <style>{`

@@ -8,15 +8,15 @@ interface WaitingProps {
 }
 
 const loadingTitles = [
-  "GENERANDO TU PERSONAJE",
-  "APLICANDO PODER",
-  "FORJANDO TU ARMADURA",
-  "CARGANDO HABILIDADES",
-  "CASI LISTO GUERRERO",
-  "DESBLOQUEANDO TU PODER",
+  "CREANDO TU RECUERDO",
+  "PINTANDO LAS FLORES",
+  "CAPTURANDO EL AMOR",
+  "CASI LISTA TU FOTO",
+  "UN MOMENTO MÁS",
+  "FINALIZANDO CON AMOR",
 ];
 
-const loadingEmojis = ["⚔️", "🔥", "💥", "🛡️", "⚡", "🎮"];
+const loadingEmojis = ["🌸", "💐", "🌺", "💝", "✨", "🎀"];
 
 const Waiting: React.FC<WaitingProps> = ({ aiImageReady, onContinue }) => {
   const [currentTitle, setCurrentTitle] = useState(0);
@@ -51,13 +51,14 @@ const Waiting: React.FC<WaitingProps> = ({ aiImageReady, onContinue }) => {
 
   return (
     <div className="waiting-fullscreen">
-      <button onClick={toggleFullscreen} className="fullscreen-button" title="Pantalla completa">
+      <button onClick={toggleFullscreen} className="waiting-fullscreen-btn" title="Pantalla completa">
         {isFullscreen ? '⛶' : '⛶'}
       </button>
 
       <div className="waiting-card-show">
         {!aiImageReady && (
           <div className="creation-show">
+            <div className="waiting-date-tag">🌸 10 DE MAYO 🌸</div>
             <h1 className="show-title">{loadingTitles[currentTitle]}</h1>
             <div className="epic-spinner-container">
               <div className="spinner-ring ring-1" />
@@ -65,16 +66,18 @@ const Waiting: React.FC<WaitingProps> = ({ aiImageReady, onContinue }) => {
               <div className="spinner-ring ring-3" />
               <p className="loading-message">{loadingEmojis[currentEmoji]}</p>
             </div>
+            <p className="waiting-hint">Estamos creando algo hermoso para ti</p>
           </div>
         )}
 
         {aiImageReady && (
           <div className="ready-show">
             <div className="success-icon-container">
-              <div className="success-icon">⚡</div>
+              <div className="success-icon">💐</div>
             </div>
+            <h2 className="ready-title">¡Lista con amor!</h2>
             <button type="button" className="button-epic-reveal" onClick={onContinue}>
-              <span className="button-epic-text">VER MI PERSONAJE</span>
+              <span className="button-epic-text">VER NUESTRA FOTO 🌸</span>
             </button>
           </div>
         )}

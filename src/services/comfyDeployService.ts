@@ -12,6 +12,7 @@ const FUNCTIONS_BASE_URL =
 
 // URLs específicas de cada función
 const PROCESS_IMAGE_URL = `${FUNCTIONS_BASE_URL}/processImage`;
+const PROCESS_IMAGE_CABEZOXXOZ_URL = `${FUNCTIONS_BASE_URL}/processImageCabezoxxoz`;
 const GET_RUN_STATUS_URL = `${FUNCTIONS_BASE_URL}/getRunStatus`;
 
 /**
@@ -55,6 +56,46 @@ export const queueImageProcessing = async (
     } as ComfyDeployQueueResponse;
   } catch (error) {
     console.error("❌ Error en queueImageProcessing:", error);
+    throw error;
+  }
+};
+
+/**
+ * Envía una imagen a ComfyDeploy para el proyecto Cabezoxxoz (sin selección de estilo)
+ */
+export const queueImageProcessingCabezoxxoz = async (
+  imageBlob: Blob,
+): Promise<ComfyDeployQueueResponse> => {
+  try {
+    console.log("📤 [Cabezoxxoz] Enviando imagen a Cloud Function...");
+
+    const formData = new FormData();
+    formData.append("image", imageBlob, "webcam-image.jpg");
+
+    const response = await fetch(PROCESS_IMAGE_CABEZOXXOZ_URL, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response
+        .json()
+        .catch(() => ({ error: "Error desconocido" }));
+      console.error("❌ [Cabezoxxoz] Error en Cloud Function:", errorData);
+      throw new Error(
+        errorData.error || `HTTP error! status: ${response.status}`,
+      );
+    }
+
+    const data = await response.json();
+    console.log("✅ [Cabezoxxoz] Respuesta de Cloud Function:", data);
+
+    return {
+      run_id: data.runId,
+      status: "queued",
+    } as ComfyDeployQueueResponse;
+  } catch (error) {
+    console.error("❌ [Cabezoxxoz] Error en queueImageProcessingCabezoxxoz:", error);
     throw error;
   }
 };

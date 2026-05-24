@@ -1,110 +1,86 @@
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
-import { useEffect, useRef, forwardRef, useImperativeHandle } from "react";
-import * as THREE from "three";
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 
-// Interfaz para definir los métodos que el ref puede exponer
 interface WebcamRef {
   captureImage: () => Promise<Blob>;
 }
 
-// Función auxiliar para recortar la imagen
-const cropImage = (
-  video: HTMLVideoElement,
-  targetSize: number = 512
-): Promise<Blob> => {
+const cropToSquare = (video: HTMLVideoElement, size = 1024): Promise<Blob> => {
   return new Promise((resolve, reject) => {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    
-    if (!ctx) {
-      reject(new Error("No se pudo obtener el contexto 2D"));
-      return;
-    }
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) { reject(new Error('No canvas context')); return; }
 
-    // Calculamos las dimensiones para el recorte cuadrado
-    const videoAspect = video.videoWidth / video.videoHeight;
-    let sourceWidth, sourceHeight, sourceX, sourceY;
+    const { videoWidth: vw, videoHeight: vh } = video;
+    const side = Math.min(vw, vh);
+    const sx = (vw - side) / 2;
+    const sy = (vh - side) / 2;
 
-    if (videoAspect > 1) {
-      // Video más ancho que alto
-      sourceHeight = video.videoHeight;
-      sourceWidth = sourceHeight;
-      sourceX = (video.videoWidth - sourceHeight) / 2;
-      sourceY = 0;
-    } else {
-      // Video más alto que ancho
-      sourceWidth = video.videoWidth;
-      sourceHeight = sourceWidth;
-      sourceX = 0;
-      sourceY = (video.videoHeight - sourceWidth) / 2;
-    }
-
-    // Configuramos el canvas para el resultado final
-    canvas.width = targetSize;
-    canvas.height = targetSize;
-
-    // Dibujamos la porción recortada en el canvas
-    ctx.drawImage(
-      video,
-      sourceX, sourceY, sourceWidth, sourceHeight,  // área de origen
-      0, 0, targetSize, targetSize                  // área de destino
-    );
+    canvas.width = size;
+    canvas.height = size;
+    ctx.drawImage(video, sx, sy, side, side, 0, 0, size, size);
 
     canvas.toBlob(
-      (blob) => {
-        if (blob) resolve(blob);
-        else reject(new Error("No se pudo generar el blob de la imagen"));
-      },
-      "image/jpeg",
-      0.95
+      blob => blob ? resolve(blob) : reject(new Error('toBlob failed')),
+      'image/jpeg',
+      0.92
     );
   });
 };
 
-// Tipamos el ref correctamente en forwardRef
-const WebcamPlane = forwardRef<WebcamRef>((_, ref) => {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const videoRef = useRef<HTMLVideoElement>(document.createElement("video"));
+const WebcamScene = forwardRef<WebcamRef>((_, ref) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
+    let stream: MediaStream | null = null;
+
     navigator.mediaDevices
       .getUserMedia({
-        video: { width: { ideal: 1280 }, height: { ideal: 720 } },
+        video: {
+          facingMode: 'user',          // cámara frontal en móvil
+          width:  { ideal: 1280 },
+          height: { ideal: 720 },
+        },
+        audio: false,
       })
-      .then((stream) => {
-        videoRef.current.srcObject = stream;
-        videoRef.current.play();
+      .then(s => {
+        stream = s;
+        if (videoRef.current) {
+          videoRef.current.srcObject = s;
+        }
       })
       .catch(console.error);
+
+    return () => {
+      // Liberar cámara al desmontar
+      stream?.getTracks().forEach(t => t.stop());
+    };
   }, []);
 
-  const texture = new THREE.VideoTexture(videoRef.current);
-
   useImperativeHandle(ref, () => ({
-    captureImage: () => cropImage(videoRef.current),
+    captureImage: () => {
+      const video = videoRef.current;
+      if (!video) return Promise.reject(new Error('Video no disponible'));
+      return cropToSquare(video);
+    },
   }));
 
   return (
-    <mesh ref={meshRef} scale={[11, 6, 1]}>
-      <planeGeometry />
-      <meshBasicMaterial map={texture} toneMapped={false} />
-    </mesh>
+    <video
+      ref={videoRef}
+      autoPlay
+      playsInline   // obligatorio para autoplay en iOS
+      muted         // obligatorio para autoplay sin gesto en móvil
+      style={{
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        display: 'block',
+        transform: 'scaleX(-1)', // efecto espejo natural para selfie
+        pointerEvents: 'none',   // evita cualquier interacción táctil sobre el video
+      }}
+    />
   );
 });
 
-// Tipamos el ref correctamente en WebcamScene
-const WebcamScene = forwardRef<WebcamRef>((_, ref) => {
-  return (
-    <Canvas
-      camera={{ position: [0, 0, 5], fov: 50 }}
-      style={{ width: "100%", height: "100%" }}
-    >
-      <ambientLight intensity={0.5} />
-      <WebcamPlane ref={ref} />
-      <OrbitControls enableZoom={false} />
-    </Canvas>
-  );
-});
-
+WebcamScene.displayName = 'WebcamScene';
 export default WebcamScene;

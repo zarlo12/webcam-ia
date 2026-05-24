@@ -90,7 +90,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onBack }) => {
               <div className="camera__webcam">
                 <WebcamScene ref={webcamRef} />
               </div>
-              <div className="camera__silhouette">👤</div>
+              {/* <div className="camera__silhouette">👤</div> */}
             </>
           )}
 
@@ -107,7 +107,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onBack }) => {
         {capturedUrl ? (
           <div className="camera__btn-stack">
             <button className="pill-btn" onClick={handleConfirm} disabled={isProcessing}>
-              {isProcessing ? 'Creando avatar...' : '¡Crear mi avatar! 🚀'}
+              {isProcessing ? 'Creando avatar...' : '¡Crear mi avatar!'}
             </button>
             <button className="pill-btn pill-btn--outline" onClick={handleRetake} disabled={isProcessing}>
               Tomar otra foto

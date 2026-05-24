@@ -41,15 +41,14 @@
   }
 
   &__subtitle {
-    font-size: clamp(14px, 2.5vw, 18px);
-    color: #777777;
+    font-size: clamp(16px, 4vw, 20px);
+    color: #444444;
     line-height: 1.5;
   }
 
   &__logo-bottom {
     height: clamp(44px, 5.5vh, 60px);
     width: auto;
-    opacity: 0.5;
   }
 }
 

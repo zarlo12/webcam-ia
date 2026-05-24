@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const admin = require("firebase-admin");
 const Busboy = require("busboy");
+const corsLib = require("cors");
 const { onRequest } = require("firebase-functions/v2/https");
 
 admin.initializeApp();
@@ -18,6 +19,21 @@ const DEPLOYMENT_IDS = {
 
 // Cabezoxxoz: deployment único
 const CABEZOXXOZ_DEPLOYMENT_ID = process.env.COMFY_DEPLOYMENT_CABEZOXXOZ;
+
+// CORS — orígenes permitidos desde variable de entorno (separados por coma)
+// Ejemplo: CORS_ORIGINS=https://tudominio.com,http://localhost:5173
+const allowedOrigins = process.env.CORS_ORIGINS
+  ? process.env.CORS_ORIGINS.split(",").map((o) => o.trim())
+  : true; // true = permitir cualquier origen si no se configura
+
+const corsHandler = corsLib({ origin: allowedOrigins });
+
+// Promisifica cors para usarlo con async/await en gen2
+function runCors(req, res) {
+  return new Promise((resolve, reject) => {
+    corsHandler(req, res, (err) => (err ? reject(err) : resolve()));
+  });
+}
 
 // ─── Helpers compartidos ──────────────────────────────────────────────────────
 
@@ -44,12 +60,7 @@ function parseMultipart(req) {
       const chunks = [];
       file.on("data", (chunk) => chunks.push(chunk));
       file.on("end", () =>
-        uploads.push({
-          fieldname,
-          buffer: Buffer.concat(chunks),
-          filename,
-          mimeType,
-        }),
+        uploads.push({ fieldname, buffer: Buffer.concat(chunks), filename, mimeType })
       );
     });
 
@@ -67,10 +78,7 @@ async function uploadToStorage(buffer, filename, mimeType) {
   const bucket = admin.storage().bucket();
   const path = `temp_uploads/${Date.now()}_${filename}`;
   const file = bucket.file(path);
-  await file.save(buffer, {
-    metadata: { contentType: mimeType },
-    public: true,
-  });
+  await file.save(buffer, { metadata: { contentType: mimeType }, public: true });
   return `https://storage.googleapis.com/${bucket.name}/${path}`;
 }
 
@@ -79,20 +87,17 @@ async function uploadToStorage(buffer, filename, mimeType) {
  * Retorna el runId.
  */
 async function queueAndSave(imageUrl, deploymentId, style) {
-  const comfyResponse = await fetch(
-    `${COMFY_DEPLOY_BASE_URL}/deployment/queue`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${COMFY_DEPLOY_API_KEY}`,
-      },
-      body: JSON.stringify({
-        deployment_id: deploymentId,
-        inputs: { imageInput: imageUrl },
-      }),
+  const comfyResponse = await fetch(`${COMFY_DEPLOY_BASE_URL}/deployment/queue`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${COMFY_DEPLOY_API_KEY}`,
     },
-  );
+    body: JSON.stringify({
+      deployment_id: deploymentId,
+      inputs: { imageInput: imageUrl },
+    }),
+  });
 
   if (!comfyResponse.ok) {
     const errorText = await comfyResponse.text();
@@ -103,18 +108,14 @@ async function queueAndSave(imageUrl, deploymentId, style) {
   const { run_id: runId } = await comfyResponse.json();
   console.log("✅ Run ID:", runId);
 
-  await admin
-    .firestore()
-    .collection("ComfyDeployRuns")
-    .doc(runId)
-    .set({
-      runId,
-      status: "queued",
-      style: style || null,
-      imageUrl,
-      created_at: admin.firestore.FieldValue.serverTimestamp(),
-      updated_at: admin.firestore.FieldValue.serverTimestamp(),
-    });
+  await admin.firestore().collection("ComfyDeployRuns").doc(runId).set({
+    runId,
+    status: "queued",
+    style: style || null,
+    imageUrl,
+    created_at: admin.firestore.FieldValue.serverTimestamp(),
+    updated_at: admin.firestore.FieldValue.serverTimestamp(),
+  });
 
   return runId;
 }
@@ -124,11 +125,14 @@ async function queueAndSave(imageUrl, deploymentId, style) {
 /**
  * POST /processImage
  * Body FormData: { image, style }
- * Proyecto Nutricia — estilos: bebelac / ejecutivo / nutrilon
+ * Estilos: bebelac / ejecutivo / nutrilon
  */
 exports.processImage = onRequest(
-  { timeoutSeconds: 540, memory: "1GiB", cors: true },
+  { timeoutSeconds: 540, memory: "1GiB" },
   async (req, res) => {
+    await runCors(req, res);
+    if (res.headersSent) return; // OPTIONS preflight ya fue respondido
+
     if (req.method !== "POST") {
       return res.status(405).json({ error: "Method not allowed" });
     }
@@ -164,29 +168,28 @@ exports.processImage = onRequest(
       });
     } catch (error) {
       console.error("❌ Error procesando imagen:", error);
-      return res
-        .status(500)
-        .json({ error: "Error al procesar la imagen", message: error.message });
+      return res.status(500).json({ error: "Error al procesar la imagen", message: error.message });
     }
-  },
+  }
 );
 
 /**
  * POST /processImageCabezoxxoz
  * Body FormData: { image }
- * Proyecto Cabezoxxoz — deployment único, sin selección de estilo
+ * Deployment único, sin selección de estilo
  */
 exports.processImageCabezoxxoz = onRequest(
-  { timeoutSeconds: 540, memory: "1GiB", cors: true },
+  { timeoutSeconds: 540, memory: "1GiB" },
   async (req, res) => {
+    await runCors(req, res);
+    if (res.headersSent) return;
+
     if (req.method !== "POST") {
       return res.status(405).json({ error: "Method not allowed" });
     }
 
     if (!CABEZOXXOZ_DEPLOYMENT_ID) {
-      return res
-        .status(500)
-        .json({ error: "Deployment ID de Cabezoxxoz no configurado" });
+      return res.status(500).json({ error: "Deployment ID de Cabezoxxoz no configurado" });
     }
 
     try {
@@ -200,11 +203,7 @@ exports.processImageCabezoxxoz = onRequest(
       const imageUrl = await uploadToStorage(buffer, filename, mimeType);
       console.log("📤 [Cabezoxxoz] Imagen subida:", imageUrl);
 
-      const runId = await queueAndSave(
-        imageUrl,
-        CABEZOXXOZ_DEPLOYMENT_ID,
-        null,
-      );
+      const runId = await queueAndSave(imageUrl, CABEZOXXOZ_DEPLOYMENT_ID, null);
 
       return res.status(200).json({
         success: true,
@@ -213,11 +212,9 @@ exports.processImageCabezoxxoz = onRequest(
       });
     } catch (error) {
       console.error("❌ [Cabezoxxoz] Error procesando imagen:", error);
-      return res
-        .status(500)
-        .json({ error: "Error al procesar la imagen", message: error.message });
+      return res.status(500).json({ error: "Error al procesar la imagen", message: error.message });
     }
-  },
+  }
 );
 
 /**
@@ -226,15 +223,18 @@ exports.processImageCabezoxxoz = onRequest(
  * Compartido entre todos los proyectos.
  */
 exports.getRunStatus = onRequest(
-  { timeoutSeconds: 60, cors: true },
+  { timeoutSeconds: 60 },
   async (req, res) => {
+    await runCors(req, res);
+    if (res.headersSent) return;
+
     if (req.method !== "GET") {
       return res.status(405).json({ error: "Method not allowed" });
     }
 
     const { runId } = req.query;
     if (!runId) {
-      return res.status(400).json({ error: "runId es requerido.." });
+      return res.status(400).json({ error: "runId es requerido" });
     }
 
     try {
@@ -251,32 +251,24 @@ exports.getRunStatus = onRequest(
       }
 
       const data = await response.json();
-      console.log(
-        `📊 Status: ${data.status} (${Math.round(data.progress * 100)}%)`,
-      );
+      console.log(`📊 Status: ${data.status} (${Math.round(data.progress * 100)}%)`);
 
-      await admin
-        .firestore()
-        .collection("ComfyDeployRuns")
-        .doc(runId)
-        .update({
-          status: data.status,
-          progress: data.progress,
-          live_status: data.live_status,
-          outputs: data.outputs || [],
-          ended_at: data.ended_at,
-          updated_at: admin.firestore.FieldValue.serverTimestamp(),
-          lastChecked: admin.firestore.FieldValue.serverTimestamp(),
-        });
+      await admin.firestore().collection("ComfyDeployRuns").doc(runId).update({
+        status: data.status,
+        progress: data.progress,
+        live_status: data.live_status,
+        outputs: data.outputs || [],
+        ended_at: data.ended_at,
+        updated_at: admin.firestore.FieldValue.serverTimestamp(),
+        lastChecked: admin.firestore.FieldValue.serverTimestamp(),
+      });
 
       return res.status(200).json(data);
     } catch (error) {
       console.error("❌ Error obteniendo status:", error);
-      return res
-        .status(500)
-        .json({ error: "Error al obtener status", message: error.message });
+      return res.status(500).json({ error: "Error al obtener status", message: error.message });
     }
-  },
+  }
 );
 
 /**
@@ -284,26 +276,28 @@ exports.getRunStatus = onRequest(
  * Webhook de notificaciones de ComfyDeploy.
  * Compartido entre todos los proyectos.
  */
-exports.comfyDeployWebhook = onRequest({ cors: true }, async (req, res) => {
-  try {
-    const { run_id, status, outputs } = req.body;
+exports.comfyDeployWebhook = onRequest(
+  {},
+  async (req, res) => {
+    await runCors(req, res);
+    if (res.headersSent) return;
 
-    if (run_id) {
-      await admin
-        .firestore()
-        .collection("ComfyDeployRuns")
-        .doc(run_id)
-        .update({
+    try {
+      const { run_id, status, outputs } = req.body;
+
+      if (run_id) {
+        await admin.firestore().collection("ComfyDeployRuns").doc(run_id).update({
           status,
           outputs: outputs || [],
           updated_at: admin.firestore.FieldValue.serverTimestamp(),
         });
-      console.log(`✅ Run ${run_id} actualizado vía webhook: ${status}`);
-    }
+        console.log(`✅ Run ${run_id} actualizado vía webhook: ${status}`);
+      }
 
-    return res.status(200).json({ received: true });
-  } catch (error) {
-    console.error("❌ Error en webhook:", error);
-    return res.status(500).json({ error: error.message });
+      return res.status(200).json({ received: true });
+    } catch (error) {
+      console.error("❌ Error en webhook:", error);
+      return res.status(500).json({ error: error.message });
+    }
   }
-});
+);

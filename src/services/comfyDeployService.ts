@@ -63,12 +63,14 @@ export const queueImageProcessing = async (
  */
 export const queueImageProcessingCabezoxxoz = async (
   imageBlob: Blob,
+  sessionId?: string | null,
 ): Promise<ComfyDeployQueueResponse> => {
   try {
     console.log("📤 [Cabezoxxoz] Enviando imagen a Cloud Function...");
 
     const formData = new FormData();
     formData.append("image", imageBlob, "webcam-image.jpg");
+    if (sessionId) formData.append("sessionId", sessionId);
 
     const response = await fetch(PROCESS_IMAGE_CABEZOXXOZ_URL, {
       method: "POST",

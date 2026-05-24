@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { storage } from '../../firebaseConfig';
 import { ref, uploadString, getDownloadURL } from 'firebase/storage';
 import { queueImageProcessingCabezoxxoz } from '../../services/comfyDeployService';
+import { getSessionId } from '../../services/sessionService';
 
 interface WebcamRef {
   captureImage: () => Promise<Blob>;
@@ -57,7 +58,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onBack }) => {
       await getDownloadURL(storageRef);
 
       // Queue on ComfyDeploy
-      const response = await queueImageProcessingCabezoxxoz(capturedBlob);
+      const response = await queueImageProcessingCabezoxxoz(capturedBlob, getSessionId());
       onProcess(response.run_id);
     } catch (error) {
       console.error('Error al procesar imagen:', error);

@@ -86,7 +86,7 @@ async function uploadToStorage(buffer, filename, mimeType) {
  * Encola un run en ComfyDeploy y guarda el registro en Firestore.
  * Retorna el runId.
  */
-async function queueAndSave(imageUrl, deploymentId, style) {
+async function queueAndSave(imageUrl, deploymentId, style, sessionId) {
   const comfyResponse = await fetch(`${COMFY_DEPLOY_BASE_URL}/deployment/queue`, {
     method: "POST",
     headers: {
@@ -113,6 +113,7 @@ async function queueAndSave(imageUrl, deploymentId, style) {
     status: "queued",
     style: style || null,
     imageUrl,
+    sessionId: sessionId || null,
     created_at: admin.firestore.FieldValue.serverTimestamp(),
     updated_at: admin.firestore.FieldValue.serverTimestamp(),
   });
@@ -193,7 +194,7 @@ exports.processImageCabezoxxoz = onRequest(
     }
 
     try {
-      const { uploads } = await parseMultipart(req);
+      const { uploads, fields } = await parseMultipart(req);
 
       if (uploads.length === 0) {
         return res.status(400).json({ error: "No se recibió imagen" });
@@ -203,7 +204,7 @@ exports.processImageCabezoxxoz = onRequest(
       const imageUrl = await uploadToStorage(buffer, filename, mimeType);
       console.log("📤 [Cabezoxxoz] Imagen subida:", imageUrl);
 
-      const runId = await queueAndSave(imageUrl, CABEZOXXOZ_DEPLOYMENT_ID, null);
+      const runId = await queueAndSave(imageUrl, CABEZOXXOZ_DEPLOYMENT_ID, null, fields.sessionId || null);
 
       return res.status(200).json({
         success: true,

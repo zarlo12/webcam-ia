@@ -57,6 +57,50 @@ function getUTMs(): Record<string, string> {
   return utms;
 }
 
+function getWebGLInfo(): Record<string, unknown> {
+  try {
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl') ?? canvas.getContext('experimental-webgl') as WebGLRenderingContext | null;
+    if (!gl) return {};
+    const ext = gl.getExtension('WEBGL_debug_renderer_info');
+    return {
+      webglVendor:   ext ? gl.getParameter(ext.UNMASKED_VENDOR_WEBGL)   : gl.getParameter(gl.VENDOR),
+      webglRenderer: ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER),
+    };
+  } catch {
+    return {};
+  }
+}
+
+function getPerformanceMemory(): Record<string, unknown> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const mem = (performance as any).memory;
+  if (!mem) return {};
+  return {
+    jsHeapLimit_mb: Math.round(mem.jsHeapSizeLimit / 1048576),
+    jsHeapTotal_mb: Math.round(mem.totalJSHeapSize / 1048576),
+    jsHeapUsed_mb:  Math.round(mem.usedJSHeapSize  / 1048576),
+  };
+}
+
+function getNavigationTiming(): Record<string, unknown> {
+  try {
+    const [nav] = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];
+    if (!nav) return {};
+    return {
+      navType:           nav.type,                                           // navigate | reload | back_forward
+      dns_ms:            Math.round(nav.domainLookupEnd - nav.domainLookupStart),
+      tcp_ms:            Math.round(nav.connectEnd - nav.connectStart),
+      ttfb_ms:           Math.round(nav.responseStart - nav.requestStart),
+      domInteractive_ms: Math.round(nav.domInteractive),
+      domComplete_ms:    Math.round(nav.domComplete),
+      loadEvent_ms:      Math.round(nav.loadEventEnd),
+    };
+  } catch {
+    return {};
+  }
+}
+
 async function getBatteryInfo(): Promise<Record<string, unknown>> {
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -121,6 +165,10 @@ let _docId: string | null = null;
 let _sessionId: string | null = null;
 const _phaseTimestamps: Record<string, string> = {};
 
+export function getSessionId(): string | null {
+  return _sessionId;
+}
+
 // ─── Public API ───────────────────────────────────────────────────────────────
 
 export async function initSession(): Promise<void> {
@@ -156,10 +204,16 @@ export async function initSession(): Promise<void> {
       cpuCores:         navigator.hardwareConcurrency ?? null,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       deviceMemory_gb:  (navigator as any).deviceMemory ?? null,
+      ...getWebGLInfo(),
+      ...getPerformanceMemory(),
 
       // ── Pantalla ─────────────────────────────────────────────────────
       screenWidth:      screen.width,
       screenHeight:     screen.height,
+      screenAvailWidth: screen.availWidth,
+      screenAvailHeight: screen.availHeight,
+      windowOuterWidth: window.outerWidth,
+      windowOuterHeight: window.outerHeight,
       viewportWidth:    window.innerWidth,
       viewportHeight:   window.innerHeight,
       pixelRatio:       window.devicePixelRatio,
@@ -180,13 +234,19 @@ export async function initSession(): Promise<void> {
       // ── Tráfico ───────────────────────────────────────────────────────
       referrer:         document.referrer || null,
       url:              window.location.href,
+      historyLength:    window.history.length,
       utms:             getUTMs(),
 
-      // ── Rendimiento ───────────────────────────────────────────────────
+      // ── Capacidades del navegador ─────────────────────────────────────
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      pageLoadTime_ms:  Math.round((performance as any).timing
-        ? performance.now()
-        : 0),
+      pluginsCount:     (navigator as any).plugins?.length ?? null,
+      pdfViewerEnabled: (navigator as any).pdfViewerEnabled ?? null,
+      webdriver:        (navigator as any).webdriver ?? false,
+      visibilityState:  document.visibilityState,
+
+      // ── Rendimiento ───────────────────────────────────────────────────
+      pageLoadTime_ms:  Math.round(performance.now()),
+      ...getNavigationTiming(),
     };
 
     const docRef = await addDoc(collection(db, 'cabezoxxoz_sessions'), baseData);

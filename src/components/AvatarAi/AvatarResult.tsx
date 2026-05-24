@@ -1,122 +1,46 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import "./AvatarPhoto.scss";
-import logo from "../../assets/xnova/LogoXnova.png";
-
-import { storage, db } from "../../firebaseConfig";
-import { ref, uploadString, getDownloadURL } from "firebase/storage";
-import { collection, addDoc } from "firebase/firestore";
+import React from 'react';
+import './AvatarResult.scss';
+import oxxoLogo from '../../assets/Oxxo_Logo.svg';
 
 interface AvatarResultProps {
-  email: string;
-  nombre: string;
-  ciudad: string;
-  formulario: string;
-  consentimiento: string;
-  imageUrl: string; // Imagen generada por IA
-  originalImageUrl: string; // Imagen original capturada
+  imageUrl: string;
+  onReset: () => void;
 }
 
-
-const AvatarResult: React.FC<AvatarResultProps> = ({
-  email,
-  nombre,
-  ciudad,
-  formulario,
-  consentimiento,
-  imageUrl,
-  originalImageUrl,
-}) => {
-  const [uploadedImageUrl, setUploadedImageUrl] = useState<string>(imageUrl);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isResetting, setIsResetting] = useState<boolean>(false);
-  const hasUploadedRef = useRef(false);
-
-  // Memoiza la función para evitar que cambie en cada render
-  const uploadMergedImage = useCallback(
-    async (dataUrl: string) => {
-      if (hasUploadedRef.current) return;
-      hasUploadedRef.current = true;
-      setIsLoading(true);
+const AvatarResult: React.FC<AvatarResultProps> = ({ imageUrl, onReset }) => {
+  const handleShare = async () => {
+    if (navigator.share) {
       try {
-        const storageRef = ref(
-          storage,
-          `Nutricia_avatars_2026/${email}-${Date.now()}.png`
-        );
-        await uploadString(storageRef, dataUrl, "data_url");
-        const downloadURL = await getDownloadURL(storageRef);
-
-        const datosFirestore = {
-          email,
-          nombre,
-          ID: ciudad,
-          telefono: formulario,
-          imageUrl: downloadURL,
-          imagenOriginal: originalImageUrl, // Guardar URL de imagen original
-          date: new Date(),
-          consentimientoAceptado: consentimiento ? "Sí" : "No",
-          correoEnviado: false,
-        };
-        console.log("🚀 ~ datosFirestore:", datosFirestore);
-        await addDoc(collection(db, "Nutricia_avatars_2026"), datosFirestore);
-        setUploadedImageUrl(downloadURL);
-      } catch (error) {
-        console.error("Error al subir imagen:", error);
-      } finally {
-        setIsLoading(false);
+        await navigator.share({
+          title: 'Mi avatar futbolero OXXO',
+          text: '¡Mira mi avatar futbolero creado con IA en OXXO!',
+          url: imageUrl,
+        });
+      } catch {
+        // User cancelled — do nothing
       }
-    },
-    [email, nombre, ciudad, formulario, consentimiento]
-  );
-
-  // Función para manejar el reset
-  const handleReset = async () => {
-    setIsResetting(true);
-    // Recargar toda la página para iniciar desde cero
-    window.location.href = '/';
+    } else {
+      window.open(imageUrl, '_blank');
+    }
   };
 
-  useEffect(() => {
-    if (!hasUploadedRef.current) {
-      uploadMergedImage(imageUrl);
-    }
-  }, [imageUrl, uploadMergedImage]);
-
   return (
-    <div className="containerResultFinal">
-      <div className="header-bar">
-        <img src={logo} alt="Logo" className="logo-scotia" />
+    <div className="result">
+      <div className="result__logo-area">
+        <img src={oxxoLogo} alt="OXXO" className="result__logo" />
       </div>
 
-      <div className="main-content">
-        <div className="result-wrapper">
-          <div className="card">
-            <h2 className="subtitleResult">AVATAR IA</h2>
-            <div className="avatar-container">
-              {isLoading ? (
-                <div className="loading-indicator" style={{textAlign: "center", padding: "40px 0"}}>
-                  <span style={{fontSize: 22}}>Guardando avatar...</span>
-                  <br />
-                  <div className="spinner" style={{margin: "20px auto", width: 40, height: 40, border: "4px solid #ccc", borderTop: "4px solid #51338b", borderRadius: "50%", animation: "spin 1s linear infinite"}} />
-                </div>
-              ) : (
-                <img
-                  src={uploadedImageUrl}
-                  className="avatar"
-                  alt="Avatar generado"
-                />
-              )}
-            </div>
-            <button
-              type="button"
-              className="button"
-              onClick={handleReset}
-              style={{ width: "250px" }}
-              disabled={isLoading || isResetting}
-            >
-              {isResetting ? "Limpiando..." : "Generar nueva"}
-            </button>
-          </div>
-        </div>
+      <div className="result__image-wrap">
+        <img src={imageUrl} alt="Tu avatar futbolero" className="result__image" />
+      </div>
+
+      <div className="result__actions">
+        <button className="pill-btn" onClick={handleShare}>
+          Compartir en Instagram
+        </button>
+        <button className="pill-btn pill-btn--outline" onClick={onReset}>
+          Crear otro avatar
+        </button>
       </div>
     </div>
   );

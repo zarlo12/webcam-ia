@@ -1,204 +1,122 @@
-import React, { useState, useRef } from "react";
-import "./AvatarPhoto.scss";
-// import fondo from "../../assets/img/fondo.png";
-import logo from "../../assets/xnova/LogoXnova.png";
+import React, { useState, useRef } from 'react';
+import './AvatarPhoto.scss';
+import oxxoLogo from '../../assets/Oxxo_Logo.svg';
+import WebcamScene from '../WebcamScene';
+import Swal from 'sweetalert2';
+import { storage } from '../../firebaseConfig';
+import { ref, uploadString, getDownloadURL } from 'firebase/storage';
+import { queueImageProcessingCabezoxxoz } from '../../services/comfyDeployService';
 
-import WebcamScene from "../WebcamScene";
-import Swal from "sweetalert2"; // Import sweetalert2
-import { queueImageProcessing } from "../../services/comfyDeployService";
-import { storage } from "../../firebaseConfig";
-import { ref, uploadString, getDownloadURL } from "firebase/storage";
-// import { FaCamera } from "react-icons/fa";
-
-interface AvatarPhotoProps {
-  onProcess: (style?: string, runId?: string, originalImageUrl?: string) => void;
-}
 interface WebcamRef {
   captureImage: () => Promise<Blob>;
 }
 
-const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
-  onProcess,
-}) => {
-  // const [email] = useState("");
-  const [capturedImage, setCapturedImage] = useState<Blob | null>(null);
-  const [capturedImageUrl, setCapturedImageUrl] = useState<string>("");
-  const [selectedStyle, setSelectedStyle] = useState<string>(""); // Nuevo estado para el estilo
+interface AvatarPhotoProps {
+  onProcess: (runId: string) => void;
+  onBack: () => void;
+}
 
-  const webcamRef = useRef<WebcamRef | null>(null);
+const AvatarPhoto: React.FC<AvatarPhotoProps> = ({ onProcess, onBack }) => {
+  const [capturedBlob, setCapturedBlob] = useState<Blob | null>(null);
+  const [capturedUrl, setCapturedUrl] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // Función para capturar la imagen desde el componente WebcamScene
+  const webcamRef = useRef<WebcamRef | null>(null);
+
   const handleCapture = async () => {
-    if (webcamRef.current && webcamRef.current.captureImage) {
-      try {
-        const blob = await webcamRef.current.captureImage();
-        setCapturedImage(blob);
-        const url = URL.createObjectURL(blob);
-        setCapturedImageUrl(url);
-      } catch (error) {
-        console.error("Error al capturar la imagen:", error);
-      }
+    if (!webcamRef.current?.captureImage) return;
+    try {
+      const blob = await webcamRef.current.captureImage();
+      setCapturedBlob(blob);
+      setCapturedUrl(URL.createObjectURL(blob));
+    } catch {
+      Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo capturar la foto. Inténtalo de nuevo.' });
     }
   };
 
-  // Envía la imagen capturada a ComfyDeploy
-  const handleProcessImage = async () => {
-    if (!capturedImage || !selectedStyle) return;
-    
+  const handleRetake = () => {
+    setCapturedBlob(null);
+    setCapturedUrl('');
+  };
+
+  const handleConfirm = async () => {
+    if (!capturedBlob || isProcessing) return;
     setIsProcessing(true);
-    
+
     try {
-      console.log("📤 Subiendo imagen original a Firebase Storage...");
-      
-      // Convertir Blob a Data URL para subirlo a Firebase Storage
+      // Upload original to Firebase Storage
       const reader = new FileReader();
-      const dataUrlPromise = new Promise<string>((resolve, reject) => {
+      const dataUrl = await new Promise<string>((resolve, reject) => {
         reader.onloadend = () => resolve(reader.result as string);
         reader.onerror = reject;
-        reader.readAsDataURL(capturedImage);
+        reader.readAsDataURL(capturedBlob);
       });
-      
-      const dataUrl = await dataUrlPromise;
-      
-      // Subir imagen original a Firebase Storage
-      const timestamp = Date.now();
-      const storageRef = ref(
-        storage,
-        `Nutricia_originals_2026/original-${timestamp}.png`
-      );
-      await uploadString(storageRef, dataUrl, "data_url");
-      const originalImageUrl = await getDownloadURL(storageRef);
-      
-      console.log("✅ Imagen original guardada:", originalImageUrl);
-      console.log("📤 Enviando imagen a ComfyDeploy...");
-      console.log("🎨 Estilo seleccionado:", selectedStyle);
-      
-      const response = await queueImageProcessing(capturedImage, selectedStyle);
-      
-      console.log("✅ Imagen encolada en ComfyDeploy!");
-      console.log("🆔 Run ID:", response.run_id);
-      
-      // Pasar el run_id y la URL de la imagen original al componente padre
-      onProcess(selectedStyle, response.run_id, originalImageUrl);
+
+      const storageRef = ref(storage, `Cabezoxxoz_originals/${Date.now()}.jpg`);
+      await uploadString(storageRef, dataUrl, 'data_url');
+      await getDownloadURL(storageRef);
+
+      // Queue on ComfyDeploy
+      const response = await queueImageProcessingCabezoxxoz(capturedBlob);
+      onProcess(response.run_id);
     } catch (error) {
-      console.error("❌ Error al procesar la imagen:", error);
-      
+      console.error('Error al procesar imagen:', error);
       setIsProcessing(false);
-      
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "No se pudo procesar la imagen. Por favor, intenta de nuevo.",
-      });
+      Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo procesar la imagen. Inténtalo de nuevo.' });
     }
-  };
-
-  // Permite reiniciar la captura para tomar otra foto
-  const handleResetCapture = () => {
-    setCapturedImage(null);
-    setCapturedImageUrl("");
-  };
-
-  // Validación del formulario y envío de la imagen
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // Validar que haya seleccionado un estilo
-    if (!selectedStyle) {
-      Swal.fire({
-        icon: "warning",
-        title: "Advertencia",
-        text: "Por favor selecciona un estilo.",
-      });
-      return;
-    }
-
-    if (!capturedImage) {
-      Swal.fire({
-        icon: "warning",
-        title: "Advertencia",
-        text: "Primero toma una foto.",
-      });
-      return;
-    }
-    
-    handleProcessImage();
   };
 
   return (
-    <div className="container">
-      {/* Cabecera superior con fondo rojo y logo centrado */}
-      <div className="header">
-        <img src={logo} alt="Logo" className="logo" />
+    <div className="camera">
+      {/* Top bar */}
+      <div className="camera__topbar">
+        <button className="camera__back" onClick={onBack} aria-label="Volver">‹</button>
+        <img src={oxxoLogo} alt="OXXO" className="camera__logo" />
+        <div className="camera__spacer" />
       </div>
 
-      {/* <img src={fondo} alt="Fondo" className="fondo" /> */}
-      <div className="main-content">
-        <div className="card">
-          <h2 className="subtitle">AVATAR AI</h2>
-          <div className="avatar-container cam">
-            {capturedImageUrl ? (
-              // Si ya se capturó la imagen, se muestra la imagen fija
-              <img
-                src={capturedImageUrl}
-                alt="Foto capturada"
-                className="fotoCapturada"
-              />
-            ) : (
-              // Si no, se muestra el feed en vivo de la cámara
-              <WebcamScene ref={webcamRef} />
-            )}
-          </div>
+      {/* Instruction */}
+      <p className="camera__instruction">
+        {capturedUrl ? '¡Foto lista! ¿La usamos?' : 'Colócate dentro del marco'}
+      </p>
 
-          <div className="buttons-container">
-            {/* SELECT para elegir estilo */}
-            <div className="select-container">
-              <select
-                value={selectedStyle}
-                onChange={(e) => setSelectedStyle(e.target.value)}
-              >
-                <option value="" disabled>
-                  Selecciona el estilo
-                </option>
-                <option value="bebelac">Bebelac</option>
-                <option value="ejecutivo">Ejecutivo</option>
-                <option value="nutrilon">Nutrilon</option>
-              </select>
-              <span className="select-arrow">▼</span>
-            </div>
-
-            <button
-              type="button"
-              className="button button-camera"
-              onClick={capturedImageUrl ? handleResetCapture : handleCapture}
-            >
-              <div
-                style={{
-                  // display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100%",
-                }}
-              >
-                {/* <FaCamera size={38} style={{ marginRight: "8px" }} /> */}
-                {capturedImageUrl ? "Tomar otra" : "Tomar foto"}
+      {/* Camera frame */}
+      <div className="camera__frame-wrap">
+        <div className="camera__frame">
+          {capturedUrl ? (
+            <img src={capturedUrl} alt="Foto capturada" className="camera__captured" />
+          ) : (
+            <>
+              <div className="camera__webcam">
+                <WebcamScene ref={webcamRef} />
               </div>
-            </button>
-          </div>
-          <form onSubmit={handleSubmit}>
-            <button
-              type="submit"
-              className="button"
-              disabled={!capturedImageUrl || isProcessing}
-            >
-              {isProcessing ? "Enviando..." : "Procesar"}
-            </button>
-          </form>
+              <div className="camera__silhouette">👤</div>
+            </>
+          )}
+
+          {/* Corner markers */}
+          <div className="camera__corner camera__corner--tl" />
+          <div className="camera__corner camera__corner--tr" />
+          <div className="camera__corner camera__corner--bl" />
+          <div className="camera__corner camera__corner--br" />
         </div>
       </div>
 
-      
+      {/* Actions */}
+      <div className="camera__actions">
+        {capturedUrl ? (
+          <div className="camera__btn-stack">
+            <button className="pill-btn" onClick={handleConfirm} disabled={isProcessing}>
+              {isProcessing ? 'Creando avatar...' : '¡Crear mi avatar! 🚀'}
+            </button>
+            <button className="pill-btn pill-btn--outline" onClick={handleRetake} disabled={isProcessing}>
+              Tomar otra foto
+            </button>
+          </div>
+        ) : (
+          <button className="camera__capture-btn" onClick={handleCapture} aria-label="Capturar foto" />
+        )}
+      </div>
     </div>
   );
 };

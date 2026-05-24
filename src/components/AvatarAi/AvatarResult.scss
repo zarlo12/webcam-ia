@@ -1,0 +1,78 @@
+$stadium: linear-gradient(180deg,
+  #050e1f 0%,
+  #08152e 18%,
+  #0d2346 38%,
+  #0f3020 62%,
+  #174a1a 80%,
+  #1a5c1e 100%
+);
+
+.result {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: $stadium;
+  position: relative;
+  overflow: hidden;
+  padding: 0 24px 48px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 10, 40, 0.48);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  > * { position: relative; z-index: 1; width: 100%; }
+
+  // ── Logo ────────────────────────────────────────────────────────────────
+  &__logo-area {
+    padding-top: clamp(32px, 5vh, 60px);
+    display: flex;
+    justify-content: center;
+  }
+
+  &__logo {
+    height: clamp(52px, 7vh, 72px);
+    width: auto;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
+  }
+
+  // ── Avatar image ────────────────────────────────────────────────────────
+  &__image-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    padding: clamp(16px, 3vh, 32px) 0;
+  }
+
+  &__image {
+    max-width: min(360px, 80vw);
+    max-height: 100%;
+    border-radius: 20px;
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.55);
+    object-fit: contain;
+    animation: fadeUp 0.45s ease-out;
+  }
+
+  // ── Actions ─────────────────────────────────────────────────────────────
+  &__actions {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 440px;
+    margin: 0 auto;
+  }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

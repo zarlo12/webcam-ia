@@ -5,12 +5,10 @@ import type {
   ComfyDeployStatusResponse,
 } from "../types/comfyDeploy";
 
-// URLs de las Cloud Functions - cambiar según el ambiente
 const FUNCTIONS_BASE_URL =
   import.meta.env.VITE_FUNCTIONS_BASE_URL ||
-  "http://127.0.0.1:5001/YOUR_PROJECT_ID/us-central1"; // Cambiar en producción
+  "http://127.0.0.1:5001/cabezoxxoz-2/us-central1";
 
-// URLs específicas de cada función
 const PROCESS_IMAGE_URL = `${FUNCTIONS_BASE_URL}/processImage`;
 const PROCESS_IMAGE_CABEZOXXOZ_URL = `${FUNCTIONS_BASE_URL}/processImageCabezoxxoz`;
 const GET_RUN_STATUS_URL = `${FUNCTIONS_BASE_URL}/getRunStatus`;
@@ -101,29 +99,43 @@ export const queueImageProcessingCabezoxxoz = async (
 };
 
 /**
- * Obtiene el estado actual de un run (vía Cloud Function)
+ * Obtiene el estado actual de un run en ComfyDeploy dado una URL base.
+ */
+const fetchRunStatus = async (url: string): Promise<ComfyDeployStatusResponse> => {
+  const response = await fetch(url, { method: "GET" });
+  if (!response.ok) {
+    const errorData = await response
+      .json()
+      .catch(() => ({ error: "Error desconocido" }));
+    throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+  }
+  return response.json() as Promise<ComfyDeployStatusResponse>;
+};
+
+/**
+ * Obtiene el estado actual de un run — Proyecto Nutricia
  */
 export const getRunStatus = async (
   runId: string,
 ): Promise<ComfyDeployStatusResponse> => {
   try {
-    const response = await fetch(`${GET_RUN_STATUS_URL}?runId=${runId}`, {
-      method: "GET",
-    });
-
-    if (!response.ok) {
-      const errorData = await response
-        .json()
-        .catch(() => ({ error: "Error desconocido" }));
-      throw new Error(
-        errorData.error || `HTTP error! status: ${response.status}`,
-      );
-    }
-
-    const data = await response.json();
-    return data as ComfyDeployStatusResponse;
+    return await fetchRunStatus(`${GET_RUN_STATUS_URL}?runId=${runId}`);
   } catch (error) {
     console.error("❌ Error en getRunStatus:", error);
+    throw error;
+  }
+};
+
+/**
+ * Obtiene el estado actual de un run — Proyecto Cabezoxxoz
+ */
+export const getRunStatusCabezoxxoz = async (
+  runId: string,
+): Promise<ComfyDeployStatusResponse> => {
+  try {
+    return await fetchRunStatus(`${GET_RUN_STATUS_URL}?runId=${runId}`);
+  } catch (error) {
+    console.error("❌ [Cabezoxxoz] Error en getRunStatusCabezoxxoz:", error);
     throw error;
   }
 };

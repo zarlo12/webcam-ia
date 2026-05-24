@@ -7,6 +7,7 @@ import {
   extractGeneratedImageUrl,
   extractErrorMessage,
 } from '../../services/comfyDeployService';
+import { updateSessionPhase } from '../../services/sessionService';
 
 interface WaitingProps {
   runId: string;
@@ -30,6 +31,7 @@ const Waiting: React.FC<WaitingProps> = ({ runId, onComplete }) => {
         } else if (status.status === 'failed') {
           if (intervalRef.current) clearInterval(intervalRef.current);
           const msg = extractErrorMessage(status) ?? 'Hubo un error procesando tu imagen.';
+          updateSessionPhase('failed', { resultStatus: 'failed', failureReason: msg });
           await Swal.fire({
             icon: 'error',
             title: '¡Oops! Algo salió mal',

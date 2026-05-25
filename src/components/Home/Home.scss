@@ -11,7 +11,7 @@ $stadium: linear-gradient(180deg,
 
 .home {
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,7 +19,7 @@ $stadium: linear-gradient(180deg,
   // → swap with: background-image: url('/fondo.png'); background-size: cover; background-position: center;
   position: relative;
   overflow: hidden;
-  padding: 0 32px 56px;
+  padding: 0 32px max(56px, calc(env(safe-area-inset-bottom) + 32px));
 
   // Dark overlay for contrast
   &::before {
@@ -35,7 +35,7 @@ $stadium: linear-gradient(180deg,
 
   // ── Logo ───────────────────────────────────────────────────────────────
   &__logo-area {
-    padding-top: clamp(40px, 6vh, 72px);
+    padding-top: max(clamp(40px, 6vh, 72px), calc(env(safe-area-inset-top) + 16px));
     display: flex;
     justify-content: center;
   }

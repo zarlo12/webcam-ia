@@ -1,12 +1,12 @@
 .waiting {
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   background: #ffffff;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: clamp(40px, 6vh, 72px) 32px;
+  padding: max(clamp(40px, 6vh, 72px), calc(env(safe-area-inset-top) + 16px)) 32px max(clamp(40px, 6vh, 72px), calc(env(safe-area-inset-bottom) + 16px));
 
   &__logo {
     height: clamp(56px, 7vh, 76px);

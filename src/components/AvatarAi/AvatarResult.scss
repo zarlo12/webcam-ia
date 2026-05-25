@@ -9,14 +9,14 @@ $stadium: linear-gradient(180deg,
 
 .result {
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
   background: $stadium;
   position: relative;
   overflow: hidden;
-  padding: 0 24px 48px;
+  padding: 0 24px max(48px, calc(env(safe-area-inset-bottom) + 24px));
 
   &::before {
     content: '';
@@ -31,7 +31,7 @@ $stadium: linear-gradient(180deg,
 
   // ── Logo ────────────────────────────────────────────────────────────────
   &__logo-area {
-    padding-top: clamp(32px, 5vh, 60px);
+    padding-top: max(clamp(32px, 5vh, 60px), calc(env(safe-area-inset-top) + 12px));
     display: flex;
     justify-content: center;
   }

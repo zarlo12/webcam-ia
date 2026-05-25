@@ -259,11 +259,10 @@ export async function initSession(): Promise<void> {
       getGPSLocation(),
     ]).then(([battery, ipLoc, gps]) => {
       if (_docId) {
-        updateDoc(doc(db, 'cabezoxxoz_sessions', _docId), {
-          ...battery,
-          ...ipLoc,
-          ...gps,
-        }).catch(() => {});
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        updateDoc(doc(db, 'cabezoxxoz_sessions', _docId),
+          { ...battery, ...ipLoc, ...gps } as any
+        ).catch(() => {});
       }
     });
 

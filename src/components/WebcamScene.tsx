@@ -36,9 +36,9 @@ const WebcamScene = forwardRef<WebcamRef>((_, ref) => {
     navigator.mediaDevices
       .getUserMedia({
         video: {
-          facingMode: 'user',          // cámara frontal en móvil
-          width:  { ideal: 1280 },
-          height: { ideal: 720 },
+          facingMode: 'user',
+          width:  { ideal: 1080 },
+          height: { ideal: 1080 },
         },
         audio: false,
       })

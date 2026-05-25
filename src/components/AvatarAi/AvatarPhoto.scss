@@ -84,17 +84,19 @@ $stadium: linear-gradient(180deg,
     align-items: center;
     justify-content: center;
     min-height: 0;
-    padding: 4px 0;
+    padding: 8px 0;
+    width: 100%;
   }
 
   &__frame {
     position: relative;
-    // On mobile: fill as much height as possible while keeping 3:4 ratio
-    height: min(62vh, calc(100vw * 4 / 3 - 48px));
-    aspect-ratio: 3 / 4;
-    border-radius: 1px;
+    // Square frame matches the 1:1 square crop from the camera
+    width: min(calc(100vw - 80px), 42dvh);
+    aspect-ratio: 1 / 1;
+    border-radius: 20px;
     overflow: hidden;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.5);
+    flex-shrink: 0;
   }
 
   &__webcam {

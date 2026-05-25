@@ -92,7 +92,7 @@ $stadium: linear-gradient(180deg,
     // On mobile: fill as much height as possible while keeping 3:4 ratio
     height: min(62vh, calc(100vw * 4 / 3 - 48px));
     aspect-ratio: 3 / 4;
-    border-radius: 20px;
+    border-radius: 1px;
     overflow: hidden;
     background: rgba(0, 0, 0, 0.4);
   }

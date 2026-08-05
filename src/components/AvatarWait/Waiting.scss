@@ -1,18 +1,18 @@
-// === DÍA DE LAS MADRES — Waiting Screen ===
+// === CLARO · ANTIOQUIA — Waiting Screen ===
 
-$rose: #C9386E;
-$rose-light: #E8749A;
-$rose-dim: rgba(201, 56, 110, 0.5);
-$rose-glow: rgba(201, 56, 110, 0.22);
-$gold: #C49A38;
-$gold-dim: rgba(196, 154, 56, 0.45);
-$blush: #FFB3CE;
-$dark: #1C0A14;
-$dark-mid: #2D1020;
-$dark-panel: rgba(40, 14, 28, 0.97);
+$rose: #E30613;
+$rose-light: #FF4A57;
+$rose-dim: rgba(227, 6, 19, 0.55);
+$rose-glow: rgba(227, 6, 19, 0.24);
+$gold: #FFC24A;
+$gold-dim: rgba(255, 194, 74, 0.45);
+$blush: #FFB3BA;
+$dark: #2E020A;
+$dark-mid: #4A0410;
+$dark-panel: rgba(74, 4, 16, 0.62);
 $white: #FFFFFF;
-$gray: #C8A0B0;
-$text-muted: #9E7A88;
+$gray: #E7BEC3;
+$text-muted: #C79AA0;
 
 @keyframes spin {
   from { transform: rotate(0deg); }
@@ -59,37 +59,36 @@ $text-muted: #9E7A88;
 .waiting-fullscreen {
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(155deg, $dark 0%, $dark-mid 50%, #1A0A18 100%);
+  background: $dark;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
+  isolation: isolate;
   font-family: system-ui, 'Segoe UI', sans-serif;
+}
 
-  // Decorative petals
-  &::before {
-    content: '🌸';
-    position: absolute;
-    font-size: 80px;
-    top: 5%;
-    left: 3%;
-    opacity: 0.08;
-    animation: float-petal-wait 8s ease-in-out infinite;
-    pointer-events: none;
-  }
+// Arte de campaña difuminado (ver AvatarPhoto.scss)
+.waiting-bg {
+  position: absolute;
+  inset: -6%;
+  z-index: 0;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: blur(26px) saturate(1.15) brightness(0.7);
+  pointer-events: none;
+}
 
-  &::after {
-    content: '🌺';
-    position: absolute;
-    font-size: 70px;
-    bottom: 8%;
-    right: 4%;
-    opacity: 0.08;
-    animation: float-petal-wait 10s ease-in-out infinite;
-    animation-delay: -4s;
-    pointer-events: none;
-  }
+.waiting-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 45%, rgba(227, 6, 19, 0.18) 0%, transparent 70%),
+    linear-gradient(180deg, rgba(46, 1, 10, 0.62) 0%, rgba(40, 1, 9, 0.74) 50%, rgba(46, 1, 10, 0.68) 100%);
 }
 
 // === FULLSCREEN BUTTON ===
@@ -119,8 +118,8 @@ $text-muted: #9E7A88;
 .waiting-card-show {
   width: min(680px, 88vw);
   background: $dark-panel;
-  border: 1px solid $rose-dim;
-  border-radius: 20px;
+  border: 1px solid rgba(255, 170, 180, 0.35);
+  border-radius: 26px;
   padding: 72px 56px;
   text-align: center;
   box-shadow:
@@ -131,7 +130,9 @@ $text-muted: #9E7A88;
   align-items: center;
   justify-content: center;
   position: relative;
+  z-index: 2;
   overflow: hidden;
+  backdrop-filter: blur(4px);
 
   // Top accent line
   &::before {
@@ -164,11 +165,11 @@ $text-muted: #9E7A88;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 3px;
-  color: $rose-light;
-  border: 1px solid $rose-dim;
-  background: rgba(201, 56, 110, 0.1);
-  padding: 4px 14px;
-  border-radius: 20px;
+  color: $white;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: rgba(227, 6, 19, 0.5);
+  padding: 5px 16px;
+  border-radius: 999px;
   margin-bottom: 16px;
 }
 
@@ -182,12 +183,13 @@ $text-muted: #9E7A88;
 }
 
 .show-title {
-  font-size: clamp(26px, 3.8vw, 46px);
+  font-size: clamp(24px, 3.4vh, 52px);
   font-weight: 900;
-  font-family: 'Impact', 'Arial Black', sans-serif;
+  font-family: inherit;
   color: $white;
   margin: 0;
-  letter-spacing: 2px;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
   text-transform: uppercase;
   animation: titleBreathe 3s ease-in-out infinite;
 }
@@ -278,12 +280,12 @@ $text-muted: #9E7A88;
 }
 
 .ready-title {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: clamp(22px, 3vw, 34px);
-  font-weight: 700;
+  font-family: inherit;
+  font-size: clamp(24px, 3.4vh, 52px);
+  font-weight: 900;
+  letter-spacing: -0.01em;
   color: $white;
   margin: -10px 0 0;
-  font-style: italic;
 }
 
 // === REVEAL BUTTON ===
@@ -295,15 +297,15 @@ $text-muted: #9E7A88;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: $white;
-  background: linear-gradient(135deg, $rose, $rose-light);
+  background: $rose;
   border: none;
-  border-radius: 14px;
+  border-radius: 999px;
   cursor: pointer;
   animation: pulseGlowButton 2s ease-in-out infinite;
   transition: background 0.2s;
 
   &:hover {
-    background: linear-gradient(135deg, $rose-light, $rose);
+    background: $rose-light;
   }
 
   &:active {

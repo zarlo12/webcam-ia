@@ -1,20 +1,20 @@
-// === DÍA DE LAS MADRES — Camera + Result Screens ===
+// === CLARO · ANTIOQUIA — Camera + Result Screens ===
 
-$rose: #C9386E;
-$rose-light: #E8749A;
-$rose-dim: rgba(201, 56, 110, 0.45);
-$rose-glow: rgba(201, 56, 110, 0.2);
-$gold: #C49A38;
-$gold-dim: rgba(196, 154, 56, 0.4);
-$gold-glow: rgba(196, 154, 56, 0.2);
-$blush: #FFB3CE;
-$cream: #FFF5F8;
-$dark: #1C0A14;
-$dark-mid: #2D1020;
-$text: #3D1A26;
-$text-muted: #7A4A5A;
+$rose: #E30613;          // rojo Claro
+$rose-light: #FF4A57;
+$rose-dim: rgba(227, 6, 19, 0.5);
+$rose-glow: rgba(227, 6, 19, 0.22);
+$gold: #FFC24A;
+$gold-dim: rgba(255, 194, 74, 0.4);
+$gold-glow: rgba(255, 194, 74, 0.2);
+$blush: #FFB3BA;
+$cream: #FFF2F3;
+$dark: #2E020A;
+$dark-mid: #4A0410;
+$text: #FFFFFF;
+$text-muted: #E7BEC3;
 $white: #FFFFFF;
-$gray: #C8A0B0;
+$gray: #E7BEC3;
 
 @keyframes cam-glow-pulse {
   0%, 100% { box-shadow: 0 0 20px $rose-dim, inset 0 0 10px rgba(0,0,0,0.4); }
@@ -39,12 +39,12 @@ $gray: #C8A0B0;
 
 @keyframes framePulse {
   0%, 100% {
-    box-shadow: 0 0 30px $rose-dim, 0 0 60px $rose-glow, inset 0 0 20px rgba(0,0,0,0.04);
-    border-color: $rose;
+    box-shadow: 0 0 30px $rose-dim, 0 0 60px $rose-glow, 0 18px 50px rgba(0,0,0,0.45);
+    border-color: rgba(255, 170, 180, 0.55);
   }
   50% {
-    box-shadow: 0 0 50px $rose-dim, 0 0 100px rgba(201, 56, 110, 0.25), inset 0 0 30px rgba(0,0,0,0.04);
-    border-color: $rose-light;
+    box-shadow: 0 0 50px $rose-dim, 0 0 100px rgba(227, 6, 19, 0.28), 0 18px 50px rgba(0,0,0,0.45);
+    border-color: rgba(255, 255, 255, 0.9);
   }
 }
 
@@ -78,14 +78,38 @@ $gray: #C8A0B0;
 .photo-container {
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(155deg, $dark 0%, $dark-mid 50%, #1A0A18 100%);
+  background: $dark;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   overflow: hidden;
   position: relative;
+  isolation: isolate;
   font-family: system-ui, 'Segoe UI', sans-serif;
+}
+
+// El arte de campaña se difumina en estas pantallas: aporta color y textura
+// sin que el titular impreso en la imagen compita con la interfaz.
+.photo-bg {
+  position: absolute;
+  inset: -6%;
+  z-index: 0;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: blur(26px) saturate(1.15) brightness(0.7);
+  pointer-events: none;
+}
+
+.photo-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 42%, rgba(227, 6, 19, 0.18) 0%, transparent 70%),
+    linear-gradient(180deg, rgba(46, 1, 10, 0.62) 0%, rgba(40, 1, 9, 0.74) 50%, rgba(46, 1, 10, 0.68) 100%);
 }
 
 .photo-fullscreen-btn {
@@ -112,59 +136,48 @@ $gray: #C8A0B0;
 
 // === CAMERA HEADER ===
 .photo-header {
+  position: relative;
+  z-index: 2;
   text-align: center;
-  padding: 22px 20px 0;
-
-  .photo-date-chip {
-    display: inline-block;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    color: $rose-light;
-    border: 1px solid $rose-dim;
-    background: rgba(201, 56, 110, 0.1);
-    padding: 4px 14px;
-    border-radius: 20px;
-    margin-bottom: 8px;
-  }
+  padding: 5vh 20px 0;
 
   .photo-title-main {
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: clamp(20px, 3.5vw, 32px);
-    font-weight: 700;
+    font-size: clamp(22px, 3.6vh, 56px);
+    font-weight: 900;
+    line-height: 1.02;
+    letter-spacing: -0.01em;
     color: $white;
-    margin: 0 0 2px;
-    line-height: 1.2;
-  }
-
-  .photo-title-accent {
-    color: $rose-light;
-    font-style: italic;
-    animation: title-pulse 3s ease-in-out infinite;
+    margin: 0 0 10px;
+    text-shadow: 0 3px 18px rgba(0, 0, 0, 0.5);
   }
 
   .photo-subtitle {
-    font-size: 12px;
-    color: $gray;
-    letter-spacing: 2px;
-    margin: 6px 0 8px;
+    font-size: clamp(13px, 1.9vh, 28px);
+    font-weight: 700;
+    color: $blush;
+    letter-spacing: 0;
+    margin: 0 0 10px;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
   }
 
   .photo-badge {
     display: inline-block;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    color: $gold;
-    border: 1px solid $gold-dim;
-    background: rgba(196, 154, 56, 0.08);
-    padding: 3px 14px;
-    border-radius: 3px;
+    font-size: clamp(11px, 1.5vh, 22px);
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: $white;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: rgba(227, 6, 19, 0.55);
+    padding: 5px 18px;
+    border-radius: 999px;
   }
 }
 
 // === MAIN AREA ===
 .photo-main {
+  position: relative;
+  z-index: 2;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -235,7 +248,7 @@ $gray: #C8A0B0;
   letter-spacing: 2px;
   text-transform: uppercase;
   border: none;
-  border-radius: 10px;
+  border-radius: 999px;
   cursor: pointer;
   transition: all 0.2s;
   font-family: inherit;
@@ -272,15 +285,6 @@ $gray: #C8A0B0;
   }
 }
 
-// === FOOTER (camera) ===
-.photo-footer {
-  padding: 10px;
-  text-align: center;
-  font-size: 12px;
-  letter-spacing: 2px;
-  color: rgba(201, 56, 110, 0.3);
-}
-
 // === RESULT SCREEN ===
 .containerResultFinal {
   width: 100vw;
@@ -288,26 +292,73 @@ $gray: #C8A0B0;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  background: linear-gradient(145deg, #FFF0F5 0%, #FFE8EF 50%, #FFF5F0 100%);
+  background: $dark;
   position: relative;
+  isolation: isolate;
   color: $text;
   overflow: hidden;
+  font-family: system-ui, 'Segoe UI', sans-serif;
+}
 
-  > * { position: relative; z-index: 1; }
+.result-bg {
+  position: absolute;
+  inset: -6%;
+  z-index: 0;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: blur(26px) saturate(1.15) brightness(0.7);
+  pointer-events: none;
+}
 
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 60% 40% at 10% 5%, rgba(201, 56, 110, 0.06) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 40% at 90% 95%, rgba(196, 154, 56, 0.06) 0%, transparent 60%);
-    pointer-events: none;
-    z-index: 0;
+.result-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 45%, rgba(227, 6, 19, 0.18) 0%, transparent 70%),
+    linear-gradient(180deg, rgba(46, 1, 10, 0.62) 0%, rgba(40, 1, 9, 0.74) 50%, rgba(46, 1, 10, 0.68) 100%);
+}
+
+.result-head {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 22px 20px 0;
+
+  h1 {
+    font-size: clamp(22px, 3.6vh, 56px);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: $white;
+    margin: 0;
+    text-shadow: 0 3px 18px rgba(0, 0, 0, 0.5);
+  }
+
+  p {
+    font-size: clamp(13px, 1.9vh, 28px);
+    font-weight: 700;
+    color: $blush;
+    margin: 8px 0 0;
   }
 }
 
+.result-actions {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  margin-top: 6px;
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 .result-wrapper {
+  position: relative;
+  z-index: 2;
   flex: 1;
   display: flex;
   align-items: center;
@@ -327,10 +378,10 @@ $gray: #C8A0B0;
 .avatar-frame {
   position: relative;
   width: min(720px, 90vw);
-  padding: 14px;
-  background: rgba(255, 255, 255, 0.96);
-  border: 2px solid $rose;
-  border-radius: 8px;
+  padding: 12px;
+  background: rgba(24, 2, 8, 0.85);
+  border: 2px solid rgba(255, 170, 180, 0.55);
+  border-radius: 22px;
   box-shadow: 0 0 40px $rose-dim, 0 0 80px $rose-glow, 0 20px 60px rgba(0,0,0,0.1);
   animation: framePulse 3s ease-in-out infinite;
 
@@ -386,7 +437,7 @@ $gray: #C8A0B0;
   height: auto;
   max-height: 900px;
   object-fit: cover;
-  border-radius: 4px;
+  border-radius: 14px;
   position: relative;
   z-index: 1;
   animation: avatarReveal 1.2s ease-out;
@@ -428,21 +479,33 @@ $gray: #C8A0B0;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: $white;
-  border-radius: 10px;
+  border-radius: 999px;
   border: none;
   cursor: pointer;
-  background: linear-gradient(135deg, $rose, $rose-light);
-  box-shadow: 0 4px 20px $rose-glow;
+  background: $rose;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4);
   transition: all 0.2s;
   text-align: center;
 
   &:hover {
-    box-shadow: 0 6px 28px rgba(201, 56, 110, 0.4);
+    background: $rose-light;
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.48);
     transform: translateY(-2px);
   }
 
   &:active { transform: translateY(0); }
   &:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  &--ghost {
+    background: rgba(0, 0, 0, 0.32);
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(6px);
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.5);
+      border-color: $white;
+    }
+  }
 }
 
 .btnResult {
@@ -452,15 +515,15 @@ $gray: #C8A0B0;
 // === FULLSCREEN BUTTON (result screen) ===
 .fullscreen-button {
   position: fixed;
-  top: 16px;
-  right: 16px;
-  width: 36px;
-  height: 36px;
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid $rose-dim;
-  border-radius: 6px;
-  color: $text-muted;
-  font-size: 18px;
+  top: 14px;
+  right: 14px;
+  width: 38px;
+  height: 38px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 17px;
   cursor: pointer;
   z-index: 9999;
   display: flex;
@@ -470,7 +533,7 @@ $gray: #C8A0B0;
   padding: 0;
   backdrop-filter: blur(6px);
 
-  &:hover { border-color: $rose; color: $rose; }
+  &:hover { border-color: $white; color: $white; }
 }
 
 // === RESPONSIVE (totem portrait) ===

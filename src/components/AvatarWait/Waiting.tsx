@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Waiting.scss";
+import fondo from "../../assets/claro/fondo.jpeg";
+import useFullscreen from "../../hooks/useFullscreen";
 
 interface WaitingProps {
   imagenGenerada: boolean;
@@ -8,30 +10,20 @@ interface WaitingProps {
 }
 
 const loadingTitles = [
-  "CREANDO TU RECUERDO",
-  "PINTANDO LAS FLORES",
-  "CAPTURANDO EL AMOR",
-  "CASI LISTA TU FOTO",
+  "CREANDO TU FOTO",
+  "SEMBRANDO LAS FLORES",
+  "ARMANDO LA SILLETA",
+  "PINTANDO ANTIOQUIA",
   "UN MOMENTO MÁS",
-  "FINALIZANDO CON AMOR",
+  "YA CASI LLEGAMOS LEJOS",
 ];
 
-const loadingEmojis = ["🌸", "💐", "🌺", "💝", "✨", "🎀"];
+const loadingEmojis = ["🌺", "💐", "🌻", "🌼", "✨", "🌸"];
 
 const Waiting: React.FC<WaitingProps> = ({ aiImageReady, onContinue }) => {
   const [currentTitle, setCurrentTitle] = useState(0);
   const [currentEmoji, setCurrentEmoji] = useState(0);
-  const [isFullscreen, setIsFullscreen] = useState(false);
-
-  const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen()
-        .then(() => setIsFullscreen(true))
-        .catch(err => console.error('Fullscreen error:', err));
-    } else {
-      document.exitFullscreen().then(() => setIsFullscreen(false));
-    }
-  };
+  const { isFullscreen, toggleFullscreen } = useFullscreen();
 
   useEffect(() => {
     if (aiImageReady) return;
@@ -51,6 +43,9 @@ const Waiting: React.FC<WaitingProps> = ({ aiImageReady, onContinue }) => {
 
   return (
     <div className="waiting-fullscreen">
+      <div className="waiting-bg" style={{ backgroundImage: `url(${fondo})` }} />
+      <div className="waiting-veil" aria-hidden="true" />
+
       <button onClick={toggleFullscreen} className="waiting-fullscreen-btn" title="Pantalla completa">
         {isFullscreen ? '⛶' : '⛶'}
       </button>
@@ -58,7 +53,7 @@ const Waiting: React.FC<WaitingProps> = ({ aiImageReady, onContinue }) => {
       <div className="waiting-card-show">
         {!aiImageReady && (
           <div className="creation-show">
-            <div className="waiting-date-tag">🌸 10 DE MAYO 🌸</div>
+            <div className="waiting-date-tag">ANTIOQUIA NOS ENSEÑA A LLEGAR LEJOS</div>
             <h1 className="show-title">{loadingTitles[currentTitle]}</h1>
             <div className="epic-spinner-container">
               <div className="spinner-ring ring-1" />
@@ -66,7 +61,7 @@ const Waiting: React.FC<WaitingProps> = ({ aiImageReady, onContinue }) => {
               <div className="spinner-ring ring-3" />
               <p className="loading-message">{loadingEmojis[currentEmoji]}</p>
             </div>
-            <p className="waiting-hint">Estamos creando algo hermoso para ti</p>
+            <p className="waiting-hint">Estamos creando tu foto de la Feria</p>
           </div>
         )}
 
@@ -75,9 +70,9 @@ const Waiting: React.FC<WaitingProps> = ({ aiImageReady, onContinue }) => {
             <div className="success-icon-container">
               <div className="success-icon">💐</div>
             </div>
-            <h2 className="ready-title">¡Lista con amor!</h2>
+            <h2 className="ready-title">¡Tu foto está lista!</h2>
             <button type="button" className="button-epic-reveal" onClick={onContinue}>
-              <span className="button-epic-text">VER NUESTRA FOTO 🌸</span>
+              <span className="button-epic-text">VER MI FOTO</span>
             </button>
           </div>
         )}

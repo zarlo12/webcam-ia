@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./AvatarPhoto.scss";
 import { QRCodeSVG } from "qrcode.react";
+import fondo from "../../assets/claro/fondo.jpeg";
+import useFullscreen from "../../hooks/useFullscreen";
 
 interface AvatarResultProps {
   imageUrl: string;
@@ -10,59 +12,20 @@ interface AvatarResultProps {
 
 const AvatarResult: React.FC<AvatarResultProps> = ({ imageUrl, onReset }) => {
   const [showQRModal, setShowQRModal] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
-
-  const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen()
-        .then(() => setIsFullscreen(true))
-        .catch(err => console.error('Fullscreen error:', err));
-    } else {
-      document.exitFullscreen().then(() => setIsFullscreen(false));
-    }
-  };
+  const { isFullscreen, toggleFullscreen } = useFullscreen();
 
   return (
     <div className="containerResultFinal">
+      <div className="result-bg" style={{ backgroundImage: `url(${fondo})` }} />
+      <div className="result-veil" aria-hidden="true" />
+
       <button onClick={toggleFullscreen} className="fullscreen-button" title="Pantalla completa">
         {isFullscreen ? '⛶' : '⛶'}
       </button>
 
-      <div className="header-bar" />
-
-      <div style={{ textAlign: 'center', padding: '16px 20px 0' }}>
-        <div style={{
-          display: 'inline-block',
-          fontSize: '11px',
-          fontWeight: 700,
-          letterSpacing: '3px',
-          color: '#C9386E',
-          border: '1px solid rgba(201,56,110,0.35)',
-          background: 'rgba(201,56,110,0.06)',
-          padding: '4px 16px',
-          borderRadius: '20px',
-          marginBottom: '10px',
-        }}>
-          🌸 10 DE MAYO 🌸
-        </div>
-        <h1 style={{
-          fontFamily: "Georgia, 'Times New Roman', serif",
-          fontSize: 'clamp(22px, 3.5vw, 36px)',
-          fontWeight: 700,
-          color: '#3D1A26',
-          margin: 0,
-          lineHeight: 1.2,
-        }}>
-          ¡Tu recuerdo está listo!
-        </h1>
-        <p style={{
-          fontSize: '14px',
-          color: '#7A4A5A',
-          margin: '6px 0 0',
-          letterSpacing: '1px',
-        }}>
-          Feliz Día de las Madres 💐
-        </p>
+      <div className="result-head">
+        <h1>¡Tu foto está lista!</h1>
+        <p>Antioquia nos enseña a llegar lejos</p>
       </div>
 
       <div className="result-wrapper">
@@ -74,23 +37,16 @@ const AvatarResult: React.FC<AvatarResultProps> = ({ imageUrl, onReset }) => {
               <div className="avatar-corner top-right" />
               <div className="avatar-corner bottom-left" />
               <div className="avatar-corner bottom-right" />
-              <img src={imageUrl} className="avatar-spectacular" alt="Tu recuerdo del Día de las Madres" />
+              <img src={imageUrl} className="avatar-spectacular" alt="Tu foto de la campaña Antioquia" />
               <div className="avatar-shine" />
             </div>
           </div>
 
-          <div style={{ textAlign: 'center', marginTop: '6px' }}>
+          <div className="result-actions">
             <button
               type="button"
-              className="button btnResult"
+              className="button button--ghost btnResult"
               onClick={() => setShowQRModal(true)}
-              style={{
-                marginRight: '14px',
-                background: 'transparent',
-                border: '2px solid #C9386E',
-                color: '#C9386E',
-                boxShadow: 'none',
-              }}
             >
               VER QR
             </button>
@@ -99,27 +55,17 @@ const AvatarResult: React.FC<AvatarResultProps> = ({ imageUrl, onReset }) => {
               className="button btnResult"
               onClick={onReset}
             >
-              NUEVA FOTO 📸
+              NUEVA FOTO
             </button>
           </div>
         </div>
-      </div>
-
-      <div style={{
-        textAlign: 'center',
-        padding: '10px',
-        fontSize: '12px',
-        letterSpacing: '2px',
-        color: 'rgba(122,74,90,0.35)',
-      }}>
-        — 💐 con amor · día de las madres —
       </div>
 
       {showQRModal && (
         <div
           style={{
             position: 'fixed', inset: 0,
-            backgroundColor: 'rgba(61,26,38,0.85)',
+            backgroundColor: 'rgba(24, 2, 8, 0.88)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             zIndex: 9999, padding: '20px',
             backdropFilter: 'blur(10px)',
@@ -129,21 +75,21 @@ const AvatarResult: React.FC<AvatarResultProps> = ({ imageUrl, onReset }) => {
           <div
             style={{
               background: '#FFFFFF',
-              border: '1px solid rgba(201,56,110,0.3)',
-              borderRadius: '20px',
+              border: '1px solid rgba(255,170,180,0.4)',
+              borderRadius: '24px',
               padding: '36px',
               maxWidth: '500px',
               width: '100%',
               position: 'relative',
-              boxShadow: '0 20px 60px rgba(201,56,110,0.2)',
+              boxShadow: '0 24px 70px rgba(0,0,0,0.5)',
               animation: 'modalFadeIn 0.25s ease-out',
             }}
             onClick={e => e.stopPropagation()}
           >
             <div style={{
-              position: 'absolute', top: 0, left: 0, right: 0, height: '4px',
-              background: 'linear-gradient(90deg, #C9386E, #C49A38, #E8749A)',
-              borderRadius: '20px 20px 0 0',
+              position: 'absolute', top: 0, left: 0, right: 0, height: '5px',
+              background: 'linear-gradient(90deg, #E30613, #FFC24A, #E30613)',
+              borderRadius: '24px 24px 0 0',
             }} />
 
             <button
@@ -151,10 +97,10 @@ const AvatarResult: React.FC<AvatarResultProps> = ({ imageUrl, onReset }) => {
               style={{
                 position: 'absolute', top: '14px', right: '14px',
                 background: 'none',
-                border: '1px solid rgba(201,56,110,0.25)',
-                borderRadius: '8px',
+                border: '1px solid rgba(227,6,19,0.25)',
+                borderRadius: '10px',
                 width: '32px', height: '32px', fontSize: '16px',
-                cursor: 'pointer', color: '#7A4A5A',
+                cursor: 'pointer', color: '#8A1018',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontWeight: 'bold',
               }}
@@ -163,10 +109,10 @@ const AvatarResult: React.FC<AvatarResultProps> = ({ imageUrl, onReset }) => {
             </button>
 
             <p style={{
-              textAlign: 'center', color: '#7A4A5A',
-              fontSize: '11px', letterSpacing: '2px',
+              textAlign: 'center', color: '#8A1018',
+              fontSize: '12px', letterSpacing: '2px',
               textTransform: 'uppercase', marginBottom: '20px',
-              marginTop: '4px',
+              marginTop: '4px', fontWeight: 800,
             }}>
               Escanea para descargar tu foto
             </p>
@@ -174,9 +120,9 @@ const AvatarResult: React.FC<AvatarResultProps> = ({ imageUrl, onReset }) => {
             <div style={{
               display: 'flex', justifyContent: 'center',
               padding: '16px',
-              background: '#FFF5F8',
-              borderRadius: '10px',
-              border: '1px solid rgba(201,56,110,0.12)',
+              background: '#FFF2F3',
+              borderRadius: '14px',
+              border: '1px solid rgba(227,6,19,0.12)',
             }}>
               <QRCodeSVG
                 value={imageUrl}
@@ -190,10 +136,11 @@ const AvatarResult: React.FC<AvatarResultProps> = ({ imageUrl, onReset }) => {
             <p style={{
               textAlign: 'center',
               marginTop: '14px',
-              fontSize: '12px',
-              color: 'rgba(122,74,90,0.5)',
+              fontSize: '13px',
+              fontWeight: 700,
+              color: '#B0242C',
             }}>
-              💐 Feliz Día de las Madres
+              Antioquia nos enseña a llegar lejos
             </p>
           </div>
 

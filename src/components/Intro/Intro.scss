@@ -1,0 +1,47 @@
+@use '../../styles/claro' as c;
+
+// === PANTALLA 1 · INTRO (arte completo, todo clickeable) ===
+
+@keyframes intro-cta-pulse {
+  0%, 100% { opacity: 0.0;  transform: translateX(-50%) scale(0.94); }
+  50%      { opacity: 0.55; transform: translateX(-50%) scale(1.06); }
+}
+
+.intro-screen {
+  @include c.claro-screen;
+  cursor: pointer;
+  user-select: none;
+  border: none;
+  padding: 0;
+  display: block;
+
+  &:focus-visible { outline: none; }
+}
+
+.intro-bg {
+  @include c.claro-bg-layer;
+}
+
+// Halo que late detrás del "Comenzar" impreso en el arte (75.7% de altura)
+.intro-cta-glow {
+  position: absolute;
+  top: 71.5%;
+  left: 50%;
+  width: 46%;
+  height: 8%;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: 999px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 120, 130, 0.22) 45%,
+    transparent 75%
+  );
+  filter: blur(14px);
+  animation: intro-cta-pulse 2.4s ease-in-out infinite;
+}
+
+.intro-fullscreen-btn {
+  @include c.claro-fs-btn;
+}

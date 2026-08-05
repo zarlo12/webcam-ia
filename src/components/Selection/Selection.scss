@@ -1,365 +1,136 @@
-// === DÍA DE LAS MADRES — Style Slider Screen ===
+@use '../../styles/claro' as c;
 
-$rose: #C9386E;
-$rose-light: #E8749A;
-$rose-dim: rgba(201, 56, 110, 0.35);
-$rose-glow: rgba(201, 56, 110, 0.15);
-$gold: #C49A38;
-$blush: #F9C0D0;
-$cream: #FFF5F8;
-$text: #3D1A26;
-$text-muted: #7A4A5A;
-$white: #FFFFFF;
-$border-light: rgba(201, 56, 110, 0.18);
+// === PANTALLA 3 · SELECCIÓN DE FILTRO ===
+// Geometría calcada de referencias/pantalla3.jpeg (lienzo 1024 × 1366)
 
-@keyframes float-petal {
-  0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.2; }
-  50%       { transform: translateY(-18px) rotate(12deg); opacity: 0.4; }
+@keyframes sel-card-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-@keyframes title-glow {
-  0%, 100% { color: $rose; }
-  50%       { color: $rose-light; }
+.sel-screen {
+  @include c.claro-screen;
+  user-select: none;
 }
 
-@keyframes slideEnter {
-  from { opacity: 0; transform: scale(0.96); }
-  to   { opacity: 1; transform: scale(1); }
+.sel-bg {
+  @include c.claro-bg-layer;
 }
 
-@keyframes infoEnter {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes shimmer-bar {
-  0%   { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
-
-// === CONTAINER ===
-.sel-container {
-  width: 100vw;
-  height: 100vh;
-  background: linear-gradient(145deg, #FFF0F5 0%, #FFE8EF 40%, #FFF5F0 70%, #FEF0F5 100%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  font-family: system-ui, 'Segoe UI', sans-serif;
-  padding: 0 0 8px;
-  box-sizing: border-box;
-}
-
-// === FLOATING PETALS (solo en lados y abajo, nunca en el header) ===
-.sel-petals {
+// Aquí el arte se oscurece bastante más: las tarjetas son las protagonistas
+.sel-veil {
   position: absolute;
   inset: 0;
+  z-index: 1;
   pointer-events: none;
-  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    rgba(80, 2, 14, 0.02) 0%,
+    rgba(76, 2, 14, 0.06) 24%,
+    rgba(52, 2, 12, 0.84) 33%,
+    rgba(44, 1, 10, 0.94) 42%,
+    rgba(44, 1, 10, 0.94) 82%,
+    rgba(58, 2, 12, 0.46) 90%,
+    rgba(80, 2, 14, 0.08) 100%
+  );
 }
 
-.sel-petal {
+// === FILA DE TARJETAS ===
+.sel-row {
   position: absolute;
-  opacity: 0.18;
-
-  &.sel-petal-1 { top: 35%; left: 0%; font-size: 60px; animation: float-petal 7s ease-in-out infinite; }
-  &.sel-petal-2 { top: 30%; right: 0%; font-size: 44px; animation: float-petal 9s ease-in-out infinite; animation-delay: -2s; }
-  &.sel-petal-3 { bottom: 6%; left: 3%; font-size: 52px; animation: float-petal 8s ease-in-out infinite; animation-delay: -4s; }
-  &.sel-petal-4 { bottom: 10%; right: 2%; font-size: 48px; animation: float-petal 10s ease-in-out infinite; animation-delay: -1s; }
-}
-
-// === FULLSCREEN BUTTON ===
-.sel-fullscreen-btn {
-  position: fixed;
-  top: 16px;
-  right: 16px;
-  width: 36px;
-  height: 36px;
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px solid $border-light;
-  border-radius: 8px;
-  color: $text-muted;
-  font-size: 18px;
-  cursor: pointer;
-  z-index: 9999;
+  top: 35%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(88.5%, 1180px);
+  height: 32%;
+  z-index: 2;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-  padding: 0;
-  backdrop-filter: blur(6px);
-
-  &:hover { border-color: $rose; color: $rose; }
+  align-items: stretch;
+  gap: 1.9%;
 }
 
-// === HEADER ===
-.sel-header {
-  position: relative;
-  z-index: 10;
-  text-align: center;
-  padding: 20px 20px 0;
-  flex-shrink: 0;
-}
+.sel-card {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7vh;
+  padding: 0.9vh;
+  box-sizing: border-box;
 
-.sel-date-tag {
-  display: inline-block;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 3px;
-  color: $rose;
-  border: 1px solid $rose-dim;
-  background: rgba(201, 56, 110, 0.06);
-  padding: 4px 16px;
-  border-radius: 20px;
-  margin-bottom: 8px;
-}
+  background: c.$card-bg;
+  border: 1.5px solid c.$card-border;
+  border-radius: clamp(12px, 1.9vh, 30px);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+  font-family: inherit;
+  animation: sel-card-in 0.45s ease-out backwards;
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
 
-.sel-title {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: clamp(22px, 4vw, 34px);
-  font-weight: 700;
-  color: $text;
-  margin: 0 0 4px;
-  line-height: 1.2;
+  &:nth-child(1) { animation-delay: 0.05s; }
+  &:nth-child(2) { animation-delay: 0.13s; }
+  &:nth-child(3) { animation-delay: 0.21s; }
 
-  span {
-    color: $rose;
-    font-style: italic;
-    animation: title-glow 3s ease-in-out infinite;
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.8);
+    transform: translateY(-6px);
+    box-shadow: 0 16px 44px rgba(0, 0, 0, 0.55);
+  }
+
+  &:active { transform: translateY(-2px) scale(0.99); }
+
+  &.sel-card--active {
+    border-color: c.$card-border-hi;
+    transform: translateY(-8px) scale(1.03);
+    box-shadow:
+      0 0 0 3px rgba(255, 255, 255, 0.55),
+      0 20px 54px rgba(0, 0, 0, 0.6);
   }
 }
 
-.sel-subtitle {
-  font-size: 12px;
-  color: $text-muted;
-  margin: 0;
-  letter-spacing: 1px;
+.sel-card-label {
+  flex-shrink: 0;
+  text-align: center;
+  color: c.$white;
+  font-size: clamp(11px, 1.75vh, 28px);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  line-height: 1.5;
 }
 
-// === SLIDER ===
-.sel-slider {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  width: 100%;
-  padding: 0 16px;
-  box-sizing: border-box;
+.sel-card-media {
   flex: 1;
   min-height: 0;
-}
-
-.sel-slide-area {
-  flex: 1;
-  max-width: min(480px, 70vw);
-  aspect-ratio: 1 / 1;
+  display: block;
   overflow: hidden;
-  border-radius: 18px;
-  border: 3px solid rgba(201, 56, 110, 0.28);
-  box-shadow:
-    0 12px 48px rgba(201, 56, 110, 0.18),
-    0 4px 16px rgba(0, 0, 0, 0.08);
+  border-radius: clamp(8px, 1.35vh, 22px);
+  background: #180208;
 }
 
-.sel-slide-img {
+.sel-card-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  animation: slideEnter 0.35s ease-out;
 }
 
-// === ARROWS ===
-.sel-arrow {
-  width: 56px;
-  height: 56px;
-  background: rgba(255, 255, 255, 0.92);
-  border: 2px solid rgba(201, 56, 110, 0.22);
-  border-radius: 50%;
-  color: $rose;
-  font-size: 32px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-  box-shadow: 0 4px 16px rgba(201, 56, 110, 0.12);
-  flex-shrink: 0;
-  padding: 0;
-  line-height: 1;
-  user-select: none;
-
-  &:hover {
-    background: $rose;
-    color: $white;
-    border-color: $rose;
-    box-shadow: 0 6px 24px rgba(201, 56, 110, 0.35);
-    transform: scale(1.1);
-  }
-
-  &:active { transform: scale(0.96); }
-}
-
-// === STYLE INFO ===
-.sel-info {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  padding: 0 20px;
-  flex-shrink: 0;
-}
-
-.sel-dots {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-bottom: 10px;
-}
-
-.sel-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgba(201, 56, 110, 0.2);
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  transition: all 0.25s;
-
-  &.sel-dot--active {
-    background: $rose;
-    width: 28px;
-    border-radius: 5px;
-    box-shadow: 0 2px 8px rgba(201, 56, 110, 0.4);
-  }
-
-  &:hover:not(.sel-dot--active) {
-    background: rgba(201, 56, 110, 0.4);
-    transform: scale(1.2);
-  }
-}
-
-.sel-style-name {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: clamp(20px, 3.5vw, 30px);
-  font-weight: 700;
-  color: $rose;
-  margin: 0 0 4px;
-  font-style: italic;
-  animation: infoEnter 0.35s ease-out;
-}
-
-.sel-style-desc {
-  font-size: 13px;
-  color: $text-muted;
+// === TITULAR INFERIOR ===
+.sel-heading {
+  @include c.claro-heading;
+  position: absolute;
+  top: 70.2%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92%;
+  z-index: 2;
   margin: 0;
-  line-height: 1.5;
-  max-width: 340px;
-  margin: 0 auto;
-  animation: infoEnter 0.35s ease-out;
-}
-
-// === CTA ===
-.sel-cta {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  padding: 12px 24px 0;
-  box-sizing: border-box;
-  flex-shrink: 0;
-}
-
-.sel-submit-btn {
-  width: 100%;
-  max-width: 440px;
-  display: block;
-  margin: 0 auto;
-  padding: 16px 24px;
-  background: linear-gradient(135deg, $rose, $rose-light);
-  border: none;
-  border-radius: 14px;
-  color: $white;
-  font-size: 15px;
-  font-weight: 800;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 6px 24px rgba(201, 56, 110, 0.3);
-  font-family: inherit;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 32px rgba(201, 56, 110, 0.38);
-  }
-
-  &:active { transform: translateY(0); }
-}
-
-// === FOOTER ===
-.sel-footer {
-  position: relative;
-  z-index: 1;
   text-align: center;
-  padding: 8px;
-  font-size: 12px;
-  letter-spacing: 1px;
-  color: rgba(122, 74, 90, 0.4);
-  flex-shrink: 0;
+  color: c.$white;
+  font-size: clamp(22px, 4vh, 64px);
+
+  span { display: block; }
 }
 
-// === RESPONSIVE (totem portrait) ===
-@media (min-width: 1080px) and (orientation: portrait) {
-  .sel-header { padding-top: 32px; }
-  .sel-title { font-size: 52px; }
-
-  .sel-slide-area {
-    max-width: min(640px, 68vw);
-  }
-
-  .sel-arrow {
-    width: 72px;
-    height: 72px;
-    font-size: 42px;
-  }
-
-  .sel-style-name { font-size: 40px; }
-  .sel-style-desc { font-size: 18px; max-width: 480px; }
-
-  .sel-submit-btn {
-    font-size: 22px;
-    padding: 22px 32px;
-    max-width: 600px;
-    letter-spacing: 3px;
-  }
-
-  .sel-dot { width: 12px; height: 12px; }
-  .sel-dot.sel-dot--active { width: 34px; }
-}
-
-@media (min-width: 1440px) {
-  .sel-title { font-size: 64px; }
-
-  .sel-slide-area { max-width: min(700px, 62vw); }
-
-  .sel-arrow {
-    width: 84px;
-    height: 84px;
-    font-size: 50px;
-  }
-
-  .sel-style-name { font-size: 48px; }
-  .sel-style-desc { font-size: 20px; }
-
-  .sel-submit-btn {
-    font-size: 26px;
-    padding: 26px 36px;
-    max-width: 680px;
-  }
+.sel-fullscreen-btn {
+  @include c.claro-fs-btn;
 }

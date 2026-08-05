@@ -5,7 +5,6 @@ import WebcamScene from "../WebcamScene";
 import aiImageService from "../../services/aiImageService";
 import Swal from "sweetalert2";
 import { StyleChoice } from "../../App";
-import { FILTER_LABELS } from "../../filters";
 import fondo from "../../assets/claro/fondo.jpeg";
 import useFullscreen from "../../hooks/useFullscreen";
 
@@ -14,6 +13,8 @@ interface AvatarPhotoProps {
   userId?: string;
   onProcess: () => void;
   onAiImageReady: (imageUrl: string, originalImageDataUrl: string) => void;
+  /** Regresa a la pantalla de filtros por si el usuario eligió mal o cambió de opinión. */
+  onChangeFilter: () => void;
 }
 
 interface WebcamRef {
@@ -105,6 +106,7 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
   userId,
   onProcess,
   onAiImageReady,
+  onChangeFilter,
 }) => {
   const [capturedImage, setCapturedImage] = useState<Blob | null>(null);
   const [capturedImageUrl, setCapturedImageUrl] = useState<string>('');
@@ -112,6 +114,25 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
   const { isFullscreen, toggleFullscreen } = useFullscreen();
 
   const webcamRef = useRef<WebcamRef | null>(null);
+
+  const handleChangeFilter = async () => {
+    if (isProcessing) return;
+    // Si ya hay una foto tomada, confirmamos antes de descartarla.
+    if (capturedImageUrl) {
+      const { isConfirmed } = await Swal.fire({
+        icon: 'question',
+        title: '¿Cambiar de filtro?',
+        text: 'Se descartará la foto que acabas de tomar.',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, cambiar',
+        cancelButtonText: 'Seguir aquí',
+        confirmButtonColor: '#E30613',
+        cancelButtonColor: '#6B1018',
+      });
+      if (!isConfirmed) return;
+    }
+    onChangeFilter();
+  };
 
   const handleCapture = async () => {
     if (!webcamRef.current?.captureImage) return;
@@ -184,10 +205,18 @@ const AvatarPhoto: React.FC<AvatarPhotoProps> = ({
         {isFullscreen ? '⛶' : '⛶'}
       </button>
 
+      <button
+        type="button"
+        className="photo-back-btn"
+        onClick={handleChangeFilter}
+        disabled={isProcessing}
+      >
+        <span aria-hidden="true">‹</span> Volver
+      </button>
+
       <div className="photo-header">
         <h1 className="photo-title-main">Antioquia nos enseña<br />a llegar lejos</h1>
         <p className="photo-subtitle">Ubícate en el centro y toma tu foto</p>
-        <div className="photo-badge">{FILTER_LABELS[styleChoice]}</div>
       </div>
 
       <div className="photo-main">

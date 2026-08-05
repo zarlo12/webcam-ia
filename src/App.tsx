@@ -98,6 +98,7 @@ function MainApp() {
           userId={registro?.cedula}
           onProcess={handleProcess}
           onAiImageReady={handleAiImageReady}
+          onChangeFilter={() => setStep('selection')}
         />
       )}
       {step === 'waiting' && (

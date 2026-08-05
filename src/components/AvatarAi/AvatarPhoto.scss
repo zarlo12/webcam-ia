@@ -160,18 +160,39 @@ $gray: #E7BEC3;
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
   }
 
-  .photo-badge {
-    display: inline-block;
-    font-size: clamp(11px, 1.5vh, 22px);
-    font-weight: 800;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+}
+
+// === BOTÓN VOLVER (esquina superior izquierda) — regresa a elegir filtro ===
+.photo-back-btn {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 18px 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(6px);
+  color: rgba(255, 255, 255, 0.85);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  span { font-size: 22px; line-height: 1; margin-top: -2px; }
+
+  &:hover:not(:disabled) {
+    border-color: $white;
     color: $white;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    background: rgba(227, 6, 19, 0.55);
-    padding: 5px 18px;
-    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.45);
   }
+
+  &:disabled { opacity: 0.35; cursor: not-allowed; }
 }
 
 // === MAIN AREA ===

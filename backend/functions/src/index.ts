@@ -11,6 +11,13 @@ setGlobalOptions({
   region: "us-central1",
 });
 
+// Campaña Claro · "Antioquia nos enseña a llegar lejos" (Feria de las Flores)
+export {
+  generateFeriaImage,
+  feriaHealthCheck,
+  getFeriaStatus,
+} from "./controllers/feriaController";
+
 // Export the CIRCUS functions (project-specific)
 export {
   generateCircusImage,

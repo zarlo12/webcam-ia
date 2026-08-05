@@ -22,9 +22,3 @@ export const FILTERS: FilterOption[] = [
   { id: 2, label: 'Filtro 3', preview: filtro2 },
   { id: 3, label: 'Filtro 2', preview: filtro3 },
 ];
-
-export const FILTER_LABELS: Record<StyleChoice, string> = {
-  1: 'Filtro 1',
-  2: 'Filtro 3',
-  3: 'Filtro 2',
-};

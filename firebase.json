@@ -1,0 +1,36 @@
+{
+  "//": "Solo Hosting. Las Cloud Functions se despliegan con backend/firebase.json (ver backend/functions/deploy-feria.sh).",
+  "hosting": {
+    "site": "feria-colombia",
+    "public": "dist",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "redirects": [
+      {
+        "source": "/aviso",
+        "destination": "/aviso.html",
+        "type": 301
+      }
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "/assets/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      },
+      {
+        "source": "/index.html",
+        "headers": [{ "key": "Cache-Control", "value": "no-cache, max-age=0" }]
+      }
+    ]
+  }
+}

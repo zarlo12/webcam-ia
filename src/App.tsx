@@ -1,25 +1,17 @@
 import { Routes, Route } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import Swal from "sweetalert2";
 import Intro from "./components/Intro/Intro";
 import Registro, { RegistroData } from "./components/Registro/Registro";
 import Selection from "./components/Selection/Selection";
 import AvatarPhoto from "./components/AvatarAi/AvatarPhoto";
 import AvatarResult from "./components/AvatarAi/AvatarResult";
 import Waiting from "./components/AvatarWait/Waiting";
-import { storage } from "./firebaseConfig";
-import { ref, uploadString, getDownloadURL } from "firebase/storage";
 
 export type StyleChoice = 1 | 2 | 3;
 type Step = 'intro' | 'registro' | 'selection' | 'photo' | 'waiting' | 'result';
 
 function MainApp() {
-  useEffect(() => {
-    fetch("https://proyectoshm.com/marco_pruebas/imagen/clear_image_data.php")
-      .then(r => r.json())
-      .then(data => console.log("Clear WS:", data.message))
-      .catch(err => console.error("Error limpiando:", err));
-  }, []);
-
   const [step, setStep] = useState<Step>('intro');
   const [registro, setRegistro] = useState<RegistroData | null>(null);
   const [styleChoice, setStyleChoice] = useState<StyleChoice>(1);
@@ -38,34 +30,28 @@ function MainApp() {
     setStep('waiting');
   };
 
-  const convertUrlToDataUrl = async (url: string): Promise<string> => {
-    if (url.startsWith('data:')) return url;
-    const response = await fetch(url);
-    const blob = await response.blob();
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result as string);
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
+  /**
+   * La Cloud Function ya guardó la imagen en Firebase Storage y devolvió una URL
+   * pública y permanente, así que se usa directamente (antes se volvía a subir
+   * desde el navegador a otro proyecto de Firebase).
+   */
+  const handleAiImageReady = (generatedImageUrl: string) => {
+    setImageUrl(generatedImageUrl);
+    setImagenGenerada(true);
+    setAiImageReady(true);
   };
 
-  const handleAiImageReady = async (generatedImageUrl: string, _originalImageDataUrl: string) => {
-    try {
-      setImagenGenerada(true);
-      setImageUrl(generatedImageUrl);
-
-      const aiDataUrl = await convertUrlToDataUrl(generatedImageUrl);
-      const storageRef = ref(storage, `Antioquia/${Date.now()}.png`);
-      await uploadString(storageRef, aiDataUrl, 'data_url');
-      const downloadURL = await getDownloadURL(storageRef);
-
-      setImageUrl(downloadURL);
-      setAiImageReady(true);
-    } catch (error) {
-      console.error('Error al guardar imagen:', error);
-      setAiImageReady(true);
-    }
+  const handleGenerationError = (message: string) => {
+    setStep('photo');
+    setImagenGenerada(false);
+    setAiImageReady(false);
+    Swal.fire({
+      icon: 'error',
+      title: 'No pudimos crear tu foto',
+      text: message,
+      confirmButtonText: 'Intentar de nuevo',
+      confirmButtonColor: '#E30613',
+    });
   };
 
   const handleReset = () => {
@@ -95,10 +81,11 @@ function MainApp() {
       {step === 'photo' && (
         <AvatarPhoto
           styleChoice={styleChoice}
-          userId={registro?.cedula}
+          registro={registro}
           onProcess={handleProcess}
           onAiImageReady={handleAiImageReady}
           onChangeFilter={() => setStep('selection')}
+          onError={handleGenerationError}
         />
       )}
       {step === 'waiting' && (

@@ -120,7 +120,7 @@ export const FERIA_FILTERS: Record<FeriaFilterId, FeriaFilter> = {
     id: 1,
     label: "Filtro 1",
     templateUrl:
-      "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/feria-colombia%2FFiltro1.jpg?alt=media&token=954653c3-d5f4-4d55-a4c2-991527e5735a",
+      "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/feria-colombia%2FFiltro1.png?alt=media&token=e8d69c2e-ff8c-47dc-bce9-3f10a6e406e0",
     prompt: `${BASE_PROMPT}
 
 HOW TO RENDER THE NEW FACE FOR THIS TEMPLATE:
@@ -129,7 +129,7 @@ In IMAGE 1 the model is a PHOTOREALISTIC WOMAN framed by an arch built out of re
 - The floral mosaic arch, the Antioquia landmarks inside it (antenna tower, Metrocable cabin, colonial church, Pueblito Paisa dome, bullring, chiva bus), the flower Claro logo and the flower banner must remain pixel-faithful to IMAGE 1.
 
 WARDROBE FOR THIS TEMPLATE — the model is a woman, so read the visitor's gender first:
-• IF THE VISITOR IS A WOMAN: keep everything as in IMAGE 1 — the earrings, the necklace and the embroidered white paisa blouse — and re-apply the delicate painted flower art (tiny daisies and petals) across the cheek and temple, adapted to the proportions of her face so it sits naturally on her features instead of looking pasted on.
+• IF THE VISITOR IS A WOMAN: keep everything as in IMAGE 1 — the earrings, the necklace and the embroidered white paisa blouse — and re-apply the painted flower art of IMAGE 1 — white daisies and small red and yellow blossoms spread across the cheekbone, the temple and the brow above the eye, at that same generous size and coverage — adapted to the proportions of her face so it follows her features instead of looking pasted on.
   MANDATORY: she must also wear the braided flower crown of IMAGE 1, with the same flowers, the same width and in the same position on top of her head, filling the same area of the frame. This applies even if her hair in IMAGE 2 is short, straight or loose: the crown rests on her own hair, which keeps the length and texture of her photo. Never leave her head bare.
 • IF THE VISITOR IS A MAN: no flower crown, no earrings, no necklace, no makeup, no embroidered or ruffled blouse. Instead:
   – A traditional Antioquian straw hat (sombrero aguadeño, natural or white straw) with a small band of the same flowers, placed where the flower crown was and filling the same area of the frame so the composition is identical.
@@ -144,14 +144,14 @@ ${OUTPUT_RULES}`,
     id: 2,
     label: "Filtro 3",
     templateUrl:
-      "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/feria-colombia%2FFiltro2.jpg?alt=media&token=8a949548-c42c-4e8a-be36-8257713c6f42",
+      "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/feria-colombia%2FFiltro2.png?alt=media&token=f9b884b4-7b18-4915-a77d-6f147b9799c7",
     prompt: `${BASE_PROMPT}
 
 HOW TO RENDER THE NEW FACE FOR THIS TEMPLATE:
-IMAGE 1 is a PHOTOGRAPH, not an illustration: a WOMAN among the fresh flowers of a silleta, on a vivid Claro-red backdrop, with the campaign headline at the top and the round Claro logo with "PUEDES TODO" at the bottom right.
+IMAGE 1 is a PHOTOGRAPH, not an illustration: a WOMAN among the fresh flowers of a silleta, on a warm backdrop that graduates from Claro red at the top to orange, with glowing golden neon flower outlines in the corners, the campaign headline at the top and the round Claro logo with "PUEDES TODO" at the bottom right. Reproduce that gradient and those warm neon accents exactly as they are; do not flatten the background to a single red, and do not shift the neon to pink or magenta.
 - The output must stay fully PHOTOGRAPHIC. Natural skin texture with pores and real micro-detail, the same warm daylight, the same shallow depth of field and the same colour grade as IMAGE 1. Never stylise, paint, illustrate or 3D-render the face.
 - CAREFUL WITH THIS TEMPLATE: the model looks upwards and sideways with a wide open smile and one hand near her hair. That is HER pose, not an instruction. The visitor keeps the head angle, gaze and expression of IMAGE 2 — most visitors will be looking straight at the camera, and that is correct. If the raised hand no longer makes sense with the visitor's head position, leave it out; the flowers already fill that area.
-- The flowers, the bamboo silleta structure, the red backdrop with its neon flower outlines, the headline and the Claro logo stay exactly as in IMAGE 1.
+- The flowers, the bamboo silleta structure, the red-to-orange backdrop with its golden neon flower outlines, the headline with its hummingbird and yellow flower, and the Claro logo stay exactly as in IMAGE 1.
 
 WARDROBE FOR THIS TEMPLATE — the model is a woman, so read the visitor's gender first:
 • IF THE VISITOR IS A WOMAN: keep the handmade flower earrings and the gold necklaces of IMAGE 1, and re-apply the small floral glitter and the tiny flowers near the eye, adapted to her face.
@@ -163,7 +163,7 @@ ${OUTPUT_RULES}`,
     id: 3,
     label: "Filtro 2",
     templateUrl:
-      "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/feria-colombia%2FFiltro3.jpg?alt=media&token=3a5a8edb-974b-4858-b1d0-198bbcf2a148",
+      "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/feria-colombia%2FFiltro3.png?alt=media&token=7fff4d42-aaa7-4ebd-9aa8-40aa97b167be",
     prompt: `${BASE_PROMPT}
 
 HOW TO RENDER THE NEW FACE FOR THIS TEMPLATE:

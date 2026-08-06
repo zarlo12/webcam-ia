@@ -32,23 +32,42 @@ TASK — REPLACE THE MODEL WITH THE REAL PERSON:
 Reproduce IMAGE 1 exactly, but the model who appears in it must be replaced by the real person from IMAGE 2.
 The result must look like the very same poster, re-shot with a different person. Nothing else about the poster changes.
 
+MENTAL MODEL FOR THIS TASK:
+Do not "paint a new person inspired by the photo". Think of it as CUTTING OUT the visitor's real head from IMAGE 2 and COMPOSITING it into the poster, then only relighting it and re-texturing it so it matches the poster's light and technique. The head that comes out must be the same head that went in.
+
 COPY FROM IMAGE 1 — 100% UNCHANGED, THIS IS THE HARD REQUIREMENT:
-- The exact same composition, crop, camera angle, scale and position of the subject.
+- The exact same composition, crop, framing and camera distance, and the same scale and position of the subject inside the frame.
 - Every decorative element, in the same place: flowers, leaves, floral frames and arches, Antioquia landmarks, sun, sky, background.
 - All text, character for character, with the same typeface, size, colour, curvature and position: "Antioquia nos enseña a llegar lejos". Do not re-letter, translate, re-spell, move or resize it.
 - The Claro logo exactly as it appears: same shape, red, position, size and treatment. Never redraw it, never move it, never duplicate it, never invent additional logos, badges, captions or watermarks.
 - The same colour palette, lighting direction, contrast, grain and artistic technique.
-- The same pose, body position, shoulders and hands as the model in IMAGE 1.
-- The clothing of IMAGE 1 as well — EXCEPT where the wardrobe rule below says otherwise.
+- The clothing of IMAGE 1 — EXCEPT where the wardrobe rule below says otherwise.
 
-TAKE FROM IMAGE 2 — THE PERSON'S IDENTITY, AND NOTHING ELSE:
-- The face and head: face shape, bone structure, jawline, eyes, eyebrows, nose, mouth, lips, chin, cheeks, ears.
-- The exact skin tone — do not lighten, darken or change it.
-- Hair colour, texture and hairline.
-- Facial hair exactly as in the photo: if the person has a beard or moustache, keep it; if not, do not add one.
-- The apparent age and gender of the person in the photo.
-- Eyeglasses only if the person is wearing them.
-A relative of the person in IMAGE 2 must recognise them immediately in the output.
+THE HEAD, THE FACE AND THE EXPRESSION COME FROM IMAGE 2 — NEVER FROM IMAGE 1:
+This section OVERRIDES anything that could be read as "copy the pose of the model".
+- KEEP THE HEAD EXACTLY AS PHOTOGRAPHED: the same head angle and rotation, the same tilt, the same chin height, the same direction of gaze, and the same distance and perspective of the face. If the visitor faces the camera straight on, the output faces the camera straight on — even if the model in IMAGE 1 is looking up, sideways or over the shoulder. NEVER turn, tilt, rotate or re-angle the head to imitate IMAGE 1.
+- KEEP THE EXPRESSION EXACTLY AS PHOTOGRAPHED: if the visitor is not smiling, the output does not smile. If the mouth is closed, it stays closed. If the smile is small, it stays small. Do not open the mouth, do not show teeth that are not visible in the photo, do not widen the eyes, do not raise the eyebrows, do not add a "friendlier" face. The model's expression in IMAGE 1 is irrelevant.
+- The shoulders and body adapt naturally to the head as photographed. A believable neck and shoulder line matters more than reproducing the model's pose. If the model in IMAGE 1 has a raised hand or a gesture that no longer fits the visitor's head position, leave that hand out rather than forcing the head to match it.
+
+IDENTITY LOCK — the output face must be measurably the same face as IMAGE 2:
+- Same facial proportions: width-to-height ratio of the face, distance between the eyes, length and width of the nose, thickness of the lips, height of the forehead, shape of the jaw and chin, shape and position of the ears.
+- Same eyes: shape, size, slant, eyelid fold, iris colour.
+- Same eyebrows: thickness, shape and position.
+- Same skin: exact tone — never lighter or darker — plus moles, freckles, scars, dimples, wrinkles and skin texture. Do not smooth or clear the skin.
+- Same hair: colour, texture, curl, length and hairline.
+- Same facial hair as the photo: if there is a beard or moustache, keep it exactly; if there is none, never add one, not even light stubble.
+- Same apparent age and gender, same body build.
+- Eyeglasses only if the visitor is wearing them, with the same frame shape.
+TEST: if the output face were laid on top of the face in IMAGE 2, the eyes, nose and mouth would line up. A relative of the visitor must recognise them instantly, without hesitation.
+
+FLORAL FACE ART — KEEP IT, IT IS PART OF THE CAMPAIGN:
+The model in IMAGE 1 wears small flowers and petals painted on the skin near the eye, cheekbone and temple. The visitor must get that decoration too — it is a signature of the campaign, not something to drop.
+But it is strictly a LAYER ON TOP of the unchanged face, like festival face paint or stickers pressed onto the skin:
+- The flowers follow the contours and volume of the visitor's real face, at the same place and roughly the same size as in IMAGE 1, scaled to the visitor's face.
+- They NEVER reshape, widen, narrow, lift or hide the eyes, eyebrows, nose, mouth, cheekbones or jaw underneath, and they never become makeup that changes the look of the face.
+- They must not cover more skin than in IMAGE 1, and they must not be placed over the eyes or lips.
+- If the visitor wears glasses, the flowers go around the frame, never on top of it.
+Removing the flowers is a mistake; letting the flowers alter the face is a bigger mistake.
 
 WARDROBE AND ACCESSORIES — THIS RULE OVERRIDES "COPY THE CLOTHING FROM IMAGE 1":
 The model in IMAGE 1 has a fixed gender, but the visitor may not share it. Garments and accessories must always suit the real person in IMAGE 2. NEVER dress a man in women's clothing or women's accessories, and never dress a woman in men's clothing.
@@ -71,7 +90,9 @@ IF THE GENDER IS AMBIGUOUS: choose the neutral option — no earrings, no makeup
 This wardrobe rule never affects the composition, the decoration, the flowers, the landmarks, the text or the logo. Only what the person wears.
 
 STRICTLY FORBIDDEN:
+- Do NOT re-pose the head, change the gaze direction, or change the expression. This is the most common failure: the visitor comes out smiling and looking sideways like the model. That is wrong.
 - Do NOT beautify, slim, smooth, rejuvenate, age, or change the ethnicity or gender of the person.
+- Do NOT "average" the visitor's face with the model's face. The model's face contributes NOTHING.
 - Do NOT copy the background, lighting, framing or clothing of IMAGE 2 — only the person's identity travels.
 - Do NOT add, remove or duplicate people. The output contains EXACTLY ONE person.
 - Do NOT add new text, captions, borders, frames, signatures or watermarks.
@@ -89,7 +110,7 @@ exports.FERIA_FILTERS = {
 
 HOW TO RENDER THE NEW FACE FOR THIS TEMPLATE:
 In IMAGE 1 the model is a PHOTOREALISTIC WOMAN framed by an arch built out of real flowers arranged as a mosaic (silletero craft), with the Claro logo made of red flowers at the bottom and a curved flower banner with the campaign text at the top.
-- Keep the new person's face and skin PHOTOREALISTIC, with the same soft studio lighting, the same skin texture and the same gentle smile direction as the model.
+- Keep the new person's face and skin PHOTOREALISTIC, relit with the same soft studio lighting as the model — but with THEIR OWN head angle, gaze and expression from IMAGE 2. Do not copy the model's smile or the way she holds her head.
 - The floral mosaic arch, the Antioquia landmarks inside it (antenna tower, Metrocable cabin, colonial church, Pueblito Paisa dome, bullring, chiva bus), the flower Claro logo and the flower banner must remain pixel-faithful to IMAGE 1.
 
 WARDROBE FOR THIS TEMPLATE — the model is a woman, so read the visitor's gender first:
@@ -113,12 +134,12 @@ ${OUTPUT_RULES}`,
 HOW TO RENDER THE NEW FACE FOR THIS TEMPLATE:
 IMAGE 1 is a PHOTOGRAPH, not an illustration: a WOMAN among the fresh flowers of a silleta, on a vivid Claro-red backdrop, with the campaign headline at the top and the round Claro logo with "PUEDES TODO" at the bottom right.
 - The output must stay fully PHOTOGRAPHIC. Natural skin texture with pores and real micro-detail, the same warm daylight, the same shallow depth of field and the same colour grade as IMAGE 1. Never stylise, paint, illustrate or 3D-render the face.
-- Keep the same joyful expression, the same head tilt, the same hand near the hair and the same gaze direction as the model.
+- CAREFUL WITH THIS TEMPLATE: the model looks upwards and sideways with a wide open smile and one hand near her hair. That is HER pose, not an instruction. The visitor keeps the head angle, gaze and expression of IMAGE 2 — most visitors will be looking straight at the camera, and that is correct. If the raised hand no longer makes sense with the visitor's head position, leave it out; the flowers already fill that area.
 - The flowers, the bamboo silleta structure, the red backdrop with its neon flower outlines, the headline and the Claro logo stay exactly as in IMAGE 1.
 
 WARDROBE FOR THIS TEMPLATE — the model is a woman, so read the visitor's gender first:
 • IF THE VISITOR IS A WOMAN: keep the handmade flower earrings and the gold necklaces of IMAGE 1, and re-apply the small floral glitter and the tiny flowers near the eye, adapted to her face.
-• IF THE VISITOR IS A MAN: no earrings, no necklaces, no glitter, no flowers on the face, no makeup, no tinted lips. Dress him in a plain white men's shirt or a simple white t-shirt with a normal neckline — never a bare-shouldered or ruffled garment — and keep his hair short and natural and his facial hair exactly as in his photo. He keeps the same pose and gesture as the model, but must read unmistakably as a man. The flowers of the silleta around him already carry the campaign's floral identity; nothing floral goes on his face or ears.
+• IF THE VISITOR IS A MAN: no earrings, no necklaces, no makeup, no tinted lips, no glitter. Dress him in a plain white men's shirt or a simple white t-shirt with a normal neckline — never a bare-shouldered or ruffled garment — and keep his hair short and natural and his facial hair exactly as in his photo. He must read unmistakably as a man. He DOES keep the floral face art, in a restrained version: three or four small flowers on the cheekbone and temple, following the rules of the FLORAL FACE ART section, without glitter and without petals spreading across the face.
 
 ${OUTPUT_RULES}`,
     },

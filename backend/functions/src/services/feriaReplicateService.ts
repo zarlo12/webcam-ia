@@ -1,4 +1,5 @@
 import Replicate from "replicate";
+import sharp from "sharp";
 import { replicateConfig } from "../config";
 import {
   FERIA_ASPECT_RATIO,
@@ -7,12 +8,7 @@ import {
   FERIA_STORAGE,
   FeriaFilterId,
 } from "../config/feria";
-import {
-  base64ToBuffer,
-  generateRequestId,
-  optimizeImageForAI,
-  retryWithBackoff,
-} from "../utils";
+import { base64ToBuffer, generateRequestId, retryWithBackoff } from "../utils";
 import { uploadToStorage } from "../utils/storage";
 import { saveFeriaParticipante } from "../utils/feriaFirestore";
 
@@ -45,6 +41,20 @@ export interface FeriaGenerationResponse {
     model?: string;
   };
 }
+
+/**
+ * Prepara la foto del visitante para el modelo.
+ *
+ * A diferencia de `optimizeImageForAI` (compartida, tope de 1024 px), aquí se
+ * conserva más resolución: mientras más detalle del rostro reciba el modelo,
+ * mejor conserva el parecido. La webcam captura 2048×2048, así que 1600 px
+ * mantiene la cara nítida sin inflar el tiempo de subida.
+ */
+const optimizeVisitorPhoto = async (buffer: Buffer): Promise<Buffer> =>
+  sharp(buffer)
+    .resize(1600, 1600, { fit: "inside", withoutEnlargement: true })
+    .jpeg({ quality: 95 })
+    .toBuffer();
 
 /**
  * Servicio de la campaña "Antioquia nos enseña a llegar lejos".
@@ -83,7 +93,7 @@ class FeriaReplicateService {
 
       // 1. Subir la foto del visitante para tener una URL pública que Replicate pueda leer
       const imageBuffer = base64ToBuffer(request.imageData);
-      const optimizedBuffer = await optimizeImageForAI(imageBuffer);
+      const optimizedBuffer = await optimizeVisitorPhoto(imageBuffer);
 
       const originalImageUrl = await uploadToStorage(
         optimizedBuffer,

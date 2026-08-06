@@ -176,7 +176,7 @@ class FeriaReplicateService {
       image_input: [templateUrl, personUrl],
       aspect_ratio: FERIA_ASPECT_RATIO,
       output_format: "jpg",
-      resolution: "2K",
+      resolution: "1K",
       // Sin búsquedas externas: la referencia visual son las dos imágenes adjuntas
       image_search: false,
       google_search: false,

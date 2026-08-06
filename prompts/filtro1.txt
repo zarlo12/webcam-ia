@@ -1,37 +1,4 @@
-/**
- * Configuración de la campaña "Antioquia nos enseña a llegar lejos" (Claro / Feria de las Flores).
- *
- * Este archivo es el dueño de la relación filtro → plantilla → prompt.
- * El frontend solo manda `filtro: 1 | 2 | 3`, así nunca se puede desincronizar
- * la plantilla que se le adjunta al modelo con el prompt que la describe.
- */
-
-export type FeriaFilterId = 1 | 2 | 3;
-
-/** Carpetas de Storage y colección de Firestore — namespaced para no chocar con otros proyectos. */
-export const FERIA_STORAGE = {
-  originals: "feria-colombia/originales",
-  generated: "feria-colombia/generadas",
-} as const;
-
-export const FERIA_COLLECTION = "feria_colombia_participantes";
-
-/** Modelo de Replicate. Las tres plantillas son 1086×1448 (3:4). */
-export const FERIA_MODEL = "google/nano-banana-2";
-export const FERIA_ASPECT_RATIO = "3:4";
-
-/**
- * Instrucciones comunes a los tres filtros.
- *
- * El orden de las imágenes importa: se envían como image_input = [plantilla, foto].
- * El prompt las nombra IMAGE 1 / IMAGE 2 en ese mismo orden.
- *
- * Estructura deliberada: la identidad va PRIMERO y con jerarquía explícita.
- * Cuando el prompt empieza por "reproduce la plantilla fielmente", el modelo
- * trata la cara de la modelo como parte de lo que hay que reproducir y devuelve
- * un rostro genérico y embellecido.
- */
-const BASE_PROMPT = `You are given EXACTLY TWO images, in this order:
+You are given EXACTLY TWO images, in this order:
 IMAGE 1 = THE TEMPLATE. A finished campaign poster ("Antioquia nos enseña a llegar lejos", Claro, Feria de las Flores, Antioquia, Colombia). It contains a professional model, decoration, text and a Claro logo.
 IMAGE 2 = THE VISITOR. A webcam photo of an ordinary real person at an event booth.
 
@@ -95,26 +62,7 @@ RULE #2 — THE POSTER
 Reproduce IMAGE 1 exactly, with the same composition, crop, framing and camera distance, and the same scale and position of the subject in the frame. Same colour palette, same lighting direction, same technique.
 - All text, character for character, with the same typeface, size, colour, curvature and position: "Antioquia nos enseña a llegar lejos". Do not re-letter, translate, re-spell, move or resize it.
 - The Claro logo exactly as it appears: same shape, colour, position and size. Never redraw, move or duplicate it. Never add other logos, captions, borders, frames or watermarks.
-- Exactly ONE person in the output. If IMAGE 2 contains several people, use only the one who is largest and closest to the centre, and ignore the rest.`;
-
-const OUTPUT_RULES = `OUTPUT: the complete poster, vertical 3:4, same resolution, sharpness and print quality as IMAGE 1. The ONLY difference between IMAGE 1 and the output is WHO the person is — and that person must be unmistakably, unflatteringly, recognisably the visitor from IMAGE 2.`;
-
-export interface FeriaFilter {
-  id: FeriaFilterId;
-  /** Nombre visible en la web app (pantalla 3). */
-  label: string;
-  /** Plantilla que se adjunta al modelo. */
-  templateUrl: string;
-  prompt: string;
-}
-
-export const FERIA_FILTERS: Record<FeriaFilterId, FeriaFilter> = {
-  1: {
-    id: 1,
-    label: "Filtro 1",
-    templateUrl:
-      "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/feria-colombia%2FFiltro1.png?alt=media&token=e8d69c2e-ff8c-47dc-bce9-3f10a6e406e0",
-    prompt: `${BASE_PROMPT}
+- Exactly ONE person in the output. If IMAGE 2 contains several people, use only the one who is largest and closest to the centre, and ignore the rest.
 
 THIS TEMPLATE — PHOTOREALISTIC FACE INSIDE A FLOWER-MOSAIC ARCH:
 IMAGE 1 shows a WOMAN, photographed realistically, framed by a tall arch built out of tightly packed real flowers (silletero craft) in red, yellow and white with green leaves. Built into that arch are the Antioquia landmarks: antenna tower, Metrocable cabin, colonial church, Pueblito Paisa dome, bullring and chiva bus, plus a sun of yellow petals, over a flat red background. At the top there is a curved flower banner with the campaign text, and at the bottom a round Claro logo made of red flowers with a white petal ring.
@@ -129,58 +77,4 @@ WARDROBE — read the visitor's gender first. The model in IMAGE 1 is a woman:
 • IF THE VISITOR IS A MAN: no flower crown, no earrings, no necklace, no makeup, no ruffled or embroidered blouse. Instead, a traditional Antioquian straw hat (sombrero aguadeño) with a small band of the same flowers, placed where the crown was and filling the same area of the frame; a plain white men's paisa shirt with a normal collar, optionally with the woven strap of a leather "carriel"; his own short hair and his own facial hair. On the face, only three or four small flowers on the cheekbone and temple. He must read unmistakably as a paisa man.
 • IF THE GENDER IS AMBIGUOUS: no earrings, no makeup, no crown, a plain white shirt.
 
-${OUTPUT_RULES}`,
-  },
-  2: {
-    id: 2,
-    label: "Filtro 3",
-    templateUrl:
-      "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/feria-colombia%2FFiltro2.png?alt=media&token=f9b884b4-7b18-4915-a77d-6f147b9799c7",
-    prompt: `${BASE_PROMPT}
-
-THIS TEMPLATE — A REAL PHOTOGRAPH, NOT AN ILLUSTRATION:
-IMAGE 1 is a PHOTOGRAPH of a WOMAN among the fresh flowers of a silleta, in front of a warm backdrop that graduates from Claro red at the top to orange, with glowing golden neon flower outlines in the corners, the campaign headline with its hummingbird and yellow flower at the top, and the round Claro logo with "PUEDES TODO" at the bottom right.
-- The output must stay fully PHOTOGRAPHIC: natural skin with pores and real micro-detail, the same warm daylight, the same shallow depth of field and the same colour grade as IMAGE 1. Never stylise, paint, illustrate or 3D-render the face.
-- CAREFUL WITH THIS TEMPLATE: the model looks upwards and sideways with a wide open smile and one hand near her hair. That is HER pose, not an instruction. The visitor keeps the head angle, gaze and expression of IMAGE 2 — most visitors will be looking straight at the camera, and that is correct. If the raised hand no longer makes sense with the visitor's head position, leave it out; the flowers already fill that area.
-- Reproduce the red-to-orange gradient and the warm golden neon accents exactly as they are: do not flatten the background to a single red, and do not shift the neon to pink or magenta. The flowers, the bamboo silleta structure, the headline and the Claro logo stay exactly as in IMAGE 1.
-
-FACE ART — the only thing added to the face:
-Re-apply the small flowers of IMAGE 1 near the outer corner of the eye, on the cheekbone and the temple, at that same size and coverage, following the contours of the visitor's real face, plus the few specks of fine floral glitter that IMAGE 1 has in that same area — and nothing more. They sit on top of a face that is otherwise untouched: they must NEVER reshape, lift, narrow, slim or hide any feature underneath, and the glitter must stay confined to those few specks, never becoming a sheen or a glow over the skin. If the visitor wears glasses, the flowers go around the frame.
-
-WARDROBE — read the visitor's gender first. The model in IMAGE 1 is a woman:
-• IF THE VISITOR IS A WOMAN: keep the handmade flower earrings and the gold necklaces of IMAGE 1.
-• IF THE VISITOR IS A MAN: no earrings, no necklaces, no makeup, no tinted lips. Dress him in a plain white men's shirt or a simple white t-shirt with a normal neckline — never a bare-shouldered or ruffled garment — and keep his own short hair and his own facial hair. He must read unmistakably as a man. He does keep the floral face art, in a restrained version: three or four small flowers on the cheekbone and temple, and no glitter.
-• IF THE GENDER IS AMBIGUOUS: no earrings, no necklaces, no glitter, a plain white shirt.
-
-${OUTPUT_RULES}`,
-  },
-  3: {
-    id: 3,
-    label: "Filtro 2",
-    templateUrl:
-      "https://firebasestorage.googleapis.com/v0/b/imagen-ia-845a3.firebasestorage.app/o/feria-colombia%2FFiltro3.png?alt=media&token=7fff4d42-aaa7-4ebd-9aa8-40aa97b167be",
-    prompt: `${BASE_PROMPT}
-
-THIS TEMPLATE — EDGE-TO-EDGE FLOWER-MOSAIC ARTWORK:
-IMAGE 1 is an artwork in which absolutely everything — including the model's skin, hair and clothes — is built from thousands of tiny packed flower petals and beads (a giant silleta mosaic), in a palette of red, yellow, white and green. Around the figure are the flower-built landmarks: the antenna tower with the round red Claro sign, a red-and-white Metrocable cabin, colonial churches on green hills, the Pueblito Paisa dome with its golden staircase, the bullring, the chiva bus marked "ANTIOQUIA", a paisa farmhouse, a cup of coffee, a leather carriel bag and a straw hat, plus a sun of yellow petals and the curved flower banner with the campaign text.
-
-HOW THE MOSAIC APPLIES TO THE FACE — READ THIS CAREFULLY:
-The mosaic is a SURFACE TREATMENT, never a licence to invent a face.
-- Render the visitor's face, hair and neck with the same petal/bead texture, the same granularity, the same bead size and the same palette used for the model in IMAGE 1, so the technique is indistinguishable from the rest of the artwork.
-- Underneath that texture, the geometry must be EXACTLY the visitor's: same face width and shape, same nose, same eye shape and spacing, same mouth, same jaw, same hairline, same haircut and hair length.
-- Their imperfections survive the translation: a mole becomes a differently coloured bead, a wrinkle or an expression line becomes a line of beads, an asymmetry stays asymmetric, a full or round face stays full or round. The mosaic must NOT smooth, slim, rejuvenate or beautify anything.
-- Facial hair follows IMAGE 2, not IMAGE 1: if the visitor has no beard, render a clean-shaven mosaic face; if they do, render the beard in mosaic.
-
-FACE ART — the only thing added to the face:
-The small flowers that IMAGE 1 places on the cheekbone and temple, rendered in the same mosaic technique and at the same modest size. Nothing else: no glitter, no makeup, no ornaments.
-
-WARDROBE — read the visitor's gender first. The model in IMAGE 1 is a MAN:
-• IF THE VISITOR IS A MAN: keep the denim-and-woven jacket, the white shirt and the green pendant exactly as in IMAGE 1.
-• IF THE VISITOR IS A WOMAN: those garments are unisex — keep them as they are, in the same mosaic technique. Do NOT add a beard, stubble or a masculine jaw, do not broaden her shoulders, and do not invent earrings, makeup or accessories that are not in IMAGE 1. Her hair keeps the cut and length of her photo, rendered in mosaic.
-
-${OUTPUT_RULES}`,
-  },
-};
-
-export const isFeriaFilterId = (value: unknown): value is FeriaFilterId =>
-  value === 1 || value === 2 || value === 3;
+OUTPUT: the complete poster, vertical 3:4, same resolution, sharpness and print quality as IMAGE 1. The ONLY difference between IMAGE 1 and the output is WHO the person is — and that person must be unmistakably, unflatteringly, recognisably the visitor from IMAGE 2.

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Registro.scss';
-import fondo from '../../assets/claro/fondo.jpeg';
+import fondo from '../../assets/claro/fondo_limpio.jpeg';
 import useFullscreen from '../../hooks/useFullscreen';
 
 export interface RegistroData {

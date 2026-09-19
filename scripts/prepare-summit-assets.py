@@ -118,6 +118,26 @@ def copy_art(source: str, dest: str) -> None:
         log(f"{dest:26s} ← {source}  ({im.width}×{im.height})")
 
 
+# Cuánto se engorda la silueta y cuánto se difumina su borde, en píxeles del
+# lienzo de 1123×1401. El ensanche le devuelve aire a la zona de la cabeza; el
+# difuminado es lo que evita el corte recto: el pelo se funde en negro.
+ENSANCHE = 18
+DIFUMINADO = 26
+
+
+def suavizar_silueta(alpha: Image.Image) -> Image.Image:
+    """
+    Engorda la silueta y le difumina el borde.
+
+    Difuminar y volver a umbralizar bajo es un dilatado barato: mueve el borde
+    hacia afuera ~ENSANCHE px sin recorrer un kernel enorme por píxel. El
+    segundo difuminado ya es el degradado que se ve.
+    """
+    crecida = alpha.filter(ImageFilter.GaussianBlur(ENSANCHE))
+    crecida = crecida.point(lambda v: 255 if v > 60 else 0)
+    return crecida.filter(ImageFilter.GaussianBlur(DIFUMINADO))
+
+
 def build_result_mask() -> None:
     """
     paso_4.png trae la silueta orgánica del retrato como transparencia BLANCA
@@ -128,21 +148,30 @@ def build_result_mask() -> None:
       · resultado-mascara.png → silueta blanca opaca (mask-image en CSS,
         dest-in en sharp).
       · resultado-marco.png   → el arte tal cual, que va ENCIMA del retrato.
+
+    La silueta se engorda y se le difumina el borde (ver ENSANCHE/DIFUMINADO).
+    Recortada en seco, a la altura de la cabeza el borde derecho se queda entre
+    13 y 32 puntos por dentro de su parte más ancha, y cortaba el pelo con una
+    diagonal recta pegada a la cara.
     """
     with Image.open(SRC / "paso_4.png") as im:
         rgba = np.array(im.convert("RGBA"))
 
     silhouette = (rgba[..., 3] < 16) & (rgba[..., :3].min(2) > 200)
 
+    alpha = suavizar_silueta(Image.fromarray((silhouette * 255).astype(np.uint8)))
+
     mask = np.zeros_like(rgba)
     mask[..., :3] = 255
-    mask[..., 3] = np.where(silhouette, 255, 0)
+    mask[..., 3] = np.array(alpha)
     # Solo al backend: el marco lo compone sharp, el frontend muestra el
     # resultado ya montado.
     Image.fromarray(mask).save(OUT_BACKEND / "resultado-mascara.png")
     shutil.copyfile(SRC / "paso_4.png", OUT_BACKEND / "resultado-marco.png")
 
-    ys, xs = np.where(silhouette)
+    # El recuadro se mide sobre la máscara YA suavizada: si se midiera sobre la
+    # silueta en seco, el backend recortaría justo el degradado del borde.
+    ys, xs = np.where(np.array(alpha) > 0)
     h, w = silhouette.shape
     log(f"resultado-mascara.png      silueta {xs.max() - xs.min() + 1}×{ys.max() - ys.min() + 1} px")
     log(

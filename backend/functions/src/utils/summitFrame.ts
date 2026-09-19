@@ -16,10 +16,16 @@ import { summitAssetPath } from "./summitAssets";
  *
  * El arte original guarda la silueta como transparencia BLANCA y el exterior
  * como transparencia NEGRA; prepare-summit-assets.py convierte esa diferencia
- * en la máscara opaca que se usa aquí.
+ * en la máscara, que además engorda un poco y le difumina el borde.
+ *
+ * El retrato entra con `contain` sobre el lienzo completo, no recortado a la
+ * caja de la silueta: así se respeta el encuadre que compuso el modelo —que ya
+ * viene en 3:4, la misma proporción larga del lienzo— y la máscara, que es del
+ * tamaño del lienzo, cae siempre por dentro. Recortarlo a la caja obligaba a
+ * ampliar la imagen y le comía la cabeza por arriba.
  */
 
-const { canvas, silhouette, logos } = SUMMIT_FRAME;
+const { canvas, logos } = SUMMIT_FRAME;
 
 interface Assets {
   frame: Buffer;
@@ -59,16 +65,12 @@ const loadAssets = (): Promise<Assets> => {
   if (assets) return assets;
 
   assets = (async () => {
-    const [frame, fullMask, leftLogo, rightLogo] = await Promise.all([
+    const [frame, mask, leftLogo, rightLogo] = await Promise.all([
       fs.readFile(summitAssetPath("resultado-marco.png")),
       fs.readFile(summitAssetPath("resultado-mascara.png")),
       prepareLogo(logos.left, "left"),
       prepareLogo(logos.right, "right"),
     ]);
-
-    // La máscara viene del tamaño del lienzo completo; al retrato solo le
-    // corresponde el recuadro de la silueta.
-    const mask = await sharp(fullMask).extract(silhouette).png().toBuffer();
 
     return { frame, mask, leftLogo, rightLogo };
   })().catch((error) => {
@@ -82,10 +84,11 @@ const loadAssets = (): Promise<Assets> => {
 export const composeSummitFrame = async (portrait: Buffer): Promise<Buffer> => {
   const { frame, mask, leftLogo, rightLogo } = await loadAssets();
 
-  // `cover` recorta lo mínimo: el modelo entrega 3:4 (0.750) y la silueta pide
-  // 965×1356 (0.711), así que solo se pierde un poco a los lados.
   const shaped = await sharp(portrait)
-    .resize(silhouette.width, silhouette.height, { fit: "cover" })
+    .resize(canvas.width, canvas.height, {
+      fit: "contain",
+      background: { r: 0, g: 0, b: 0, alpha: 0 },
+    })
     .composite([{ input: mask, blend: "dest-in" }])
     .png()
     .toBuffer();
@@ -99,7 +102,7 @@ export const composeSummitFrame = async (portrait: Buffer): Promise<Buffer> => {
     },
   })
     .composite([
-      { input: shaped, left: silhouette.left, top: silhouette.top },
+      { input: shaped, left: 0, top: 0 },
       { input: frame, left: 0, top: 0 },
       { input: leftLogo.buffer, left: leftLogo.left, top: leftLogo.top },
       { input: rightLogo.buffer, left: rightLogo.left, top: rightLogo.top },

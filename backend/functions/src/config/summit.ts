@@ -28,9 +28,8 @@ export const SUMMIT_STORAGE = {
 export const SUMMIT_MODEL = "google/nano-banana-2";
 
 /**
- * El retrato se compone después dentro de una silueta de 965×1356 (≈0.71).
- * 3:4 es la relación soportada más cercana, así que el recorte al componer es
- * mínimo y simétrico.
+ * El lienzo final es 1123×1401 (≈0.80) y el retrato entra con `contain`, así
+ * que 3:4 (0.75) es la relación soportada que menos aire deja a los lados.
  */
 export const SUMMIT_ASPECT_RATIO = "3:4";
 
@@ -41,8 +40,12 @@ export const SUMMIT_ASPECT_RATIO = "3:4";
  */
 export const SUMMIT_FRAME = {
   canvas: { width: 1123, height: 1401 },
-  /** Recuadro de la silueta orgánica donde vive el retrato. */
-  silhouette: { left: 118, top: 14, width: 965, height: 1356 },
+  /**
+   * Extensión de la silueta dentro del lienzo, con su degradado incluido.
+   * Solo documental: la máscara es del tamaño del lienzo y se aplica entera.
+   * La calcula prepare-summit-assets.py.
+   */
+  silhouette: { left: 40, top: 15, width: 1042, height: 1318 },
   /**
    * Logos de las esquinas superiores. Van encima de todo —retrato y marco—
    * porque el cliente los quiere siempre visibles.
@@ -125,7 +128,7 @@ VERIFICATION BEFORE YOU OUTPUT — run these three checks:
 =====================================================================
 RULE #2 — THE FRAMING
 =====================================================================
-Vertical portrait, head and shoulders to mid-chest, the face occupying roughly the same share of the frame as in IMAGE 1, centred, with a little headroom. Exactly ONE person in the output: if IMAGE 2 contains several people, use only the one who is largest and closest to the centre and ignore the rest.
+Vertical portrait, head and shoulders to mid-chest, centred, with clear headroom above the hair. LEAVE MARGIN: the subject —including all of the hair— must sit well inside the frame and must NOT touch or run off any edge. Frame a little wider than IMAGE 1 does: there must be visible background between the hair and both side edges. The artwork is later cropped into a rounded shape, so anything touching an edge gets cut off. Exactly ONE person in the output: if IMAGE 2 contains several people, use only the one who is largest and closest to the centre and ignore the rest.
 Do NOT draw any frame, border, card, label, caption, logo, watermark or text. The output is only the portrait and its background — the event's frame is added afterwards by the application.`;
 
 const OUTPUT_RULES = `OUTPUT: a single vertical portrait, 3:4, sharp and high quality, filling the whole canvas edge to edge. The person in it must be unmistakably, unflatteringly, recognisably the visitor from IMAGE 2.`;

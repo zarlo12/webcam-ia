@@ -23,7 +23,7 @@ from collections import deque
 from pathlib import Path
 
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageFilter
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "referencias_02"
@@ -180,6 +180,62 @@ def build_logo() -> None:
     log(f"logo.png                   {logo.width}×{logo.height}  ← paso_5.png")
 
 
+def con_contorno(logo: Image.Image, grosor: float = 0.045) -> Image.Image:
+    """
+    Le pone al logo el mismo halo negro que usan las artes de la campaña.
+
+    Las esquinas del marco están ocupadas —retícula roja a la izquierda, ola
+    densa a la derecha—, así que un logo blanco plano se pierde encima. El
+    contorno es el recurso que ya usa el arte original para el mismo problema
+    (mira "Soluciones Digitales" en paso_3), no un invento.
+    """
+    radio = max(2, round(grosor * logo.height))
+    margen = radio * 3
+    lienzo = Image.new("RGBA", (logo.width + margen * 2, logo.height + margen * 2), (0, 0, 0, 0))
+    lienzo.paste(logo, (margen, margen))
+
+    # Dilatar el alfa y difuminarlo da el halo; repetirlo lo vuelve opaco
+    # bajo el texto sin engordar la silueta.
+    halo = lienzo.split()[3].filter(ImageFilter.MaxFilter(radio * 2 + 1))
+    halo = halo.filter(ImageFilter.GaussianBlur(radio))
+    halo = halo.point(lambda v: min(255, int(v * 2.2)))
+
+    sombra = Image.new("RGBA", lienzo.size, (0, 0, 0, 0))
+    sombra.putalpha(halo)
+    return Image.alpha_composite(sombra, lienzo)
+
+
+def build_corner_logos() -> None:
+    """
+    Logos que el cliente pidió en las esquinas superiores de la imagen generada.
+
+    Vienen enormes (el de la izquierda mide 15224 px de ancho) y con mucho
+    margen transparente alrededor, que descuadraría cualquier posicionamiento.
+    Se recortan a su contenido y se bajan a un tamaño razonable: el lienzo
+    final son 1123 px de ancho, así que 900 px de lado mayor sobra para que se
+    vean nítidos.
+    """
+    Image.MAX_IMAGE_PIXELS = None
+
+    for origen, destino in [
+        ("logo arriba izquierda.png", "logo-izquierda.png"),
+        ("logo arriba derecha.png", "logo-derecha.png"),
+    ]:
+        with Image.open(SRC / "logos" / origen) as im:
+            full = im.convert("RGBA")
+
+        ys, xs = np.where(np.array(full)[..., 3] > 20)
+        recorte = full.crop((int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1))
+        recorte.thumbnail((900, 900), Image.LANCZOS)
+        recorte = con_contorno(recorte)
+        recorte.save(OUT_BACKEND / destino)
+
+        log(
+            f"{destino:26s} {recorte.width}×{recorte.height}  "
+            f"(proporción {recorte.width / recorte.height:.3f})  ← {origen}"
+        )
+
+
 def fade_edge(im: Image.Image, side: str, fraction: float) -> Image.Image:
     """Desvanece un borde hasta alpha 0, para que el recorte no deje costura."""
     im = im.convert("RGBA")
@@ -291,6 +347,9 @@ def main() -> int:
 
     print("\n── Pantalla de estilos ──")
     build_estilos_pieces()
+
+    print("\n── Logos de esquina ──")
+    build_corner_logos()
 
     print("\n── Resultado (marco + máscara) ──")
     build_result_mask()

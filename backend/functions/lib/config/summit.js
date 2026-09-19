@@ -39,6 +39,17 @@ exports.SUMMIT_FRAME = {
     canvas: { width: 1123, height: 1401 },
     /** Recuadro de la silueta orgánica donde vive el retrato. */
     silhouette: { left: 118, top: 14, width: 965, height: 1356 },
+    /**
+     * Logos de las esquinas superiores. Van encima de todo —retrato y marco—
+     * porque el cliente los quiere siempre visibles.
+     *
+     * `width` es el ancho final en píxeles del lienzo; el alto sale solo de la
+     * proporción del archivo. Los márgenes se miden desde el borde del lienzo.
+     */
+    logos: {
+        left: { file: "logo-izquierda.png", width: 340, margin: { x: 34, y: 30 } },
+        right: { file: "logo-derecha.png", width: 250, margin: { x: 34, y: 26 } },
+    },
 };
 /**
  * Reglas de identidad, comunes a los cuatro estilos.

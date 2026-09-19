@@ -1,0 +1,93 @@
+/**
+ * Tokens de Claro Tech Summit 2026.
+ *
+ * Las artes mandan: estos valores están muestreados de los PNG originales para
+ * que lo que se dibuja en CSS (campos, botones, textos de carga) no desentone
+ * con lo que viene pintado.
+ */
+
+$negro: #000000;
+$negro-campo: #0a0a0e; // relleno de los campos del formulario en registro.png
+$rojo: #e30613; // rojo Claro
+$rojo-claro: #ff2b3a;
+$rojo-oscuro: #8a1018;
+$blanco: #ffffff;
+$gris-placeholder: #8b8b93; // placeholder pintado en el arte
+
+/** Franja inferior para los controles que el arte no trae (atrás, siguiente). */
+$footer-alto: 11dvh;
+
+/** Botón de pantalla completa / controles flotantes. */
+@mixin control-flotante {
+  position: fixed;
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  border: 1px solid rgba($rojo, 0.55);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  color: $blanco;
+  font-family: inherit;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    transform 0.18s ease;
+
+  &:hover:not(:disabled) {
+    border-color: $rojo-claro;
+    background: rgba($rojo, 0.22);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.96);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+/** Botón sólido rojo, como el "COMENZAR" del arte de registro. */
+@mixin boton-rojo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(180deg, $rojo-claro 0%, $rojo 55%, #a80710 100%);
+  box-shadow:
+    0 0 18px rgba($rojo, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  color: $blanco;
+  font-family: inherit;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    filter 0.18s ease,
+    transform 0.18s ease;
+
+  &:hover:not(:disabled) {
+    filter: brightness(1.12);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+}

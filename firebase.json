@@ -1,7 +1,7 @@
 {
-  "//": "Solo Hosting. Las Cloud Functions se despliegan con backend/firebase.json (ver backend/functions/deploy-feria.sh).",
+  "//": "Solo Hosting. Las Cloud Functions se despliegan con backend/firebase.json (ver backend/functions/deploy-summit.sh).",
   "hosting": {
-    "site": "feria-colombia",
+    "site": "claro-tech-summit",
     "public": "dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "redirects": [

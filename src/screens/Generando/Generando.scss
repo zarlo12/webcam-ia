@@ -1,0 +1,105 @@
+@use "../../styles/summit" as s;
+
+.generando {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.2vh;
+  padding: 6vh 8vw;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(s.$rojo, 0.16) 0%, transparent 58%),
+    s.$negro;
+  text-align: center;
+}
+
+.generando__logo {
+  width: min(46vw, 15rem);
+  height: auto;
+  margin-bottom: 1vh;
+}
+
+.generando__anillo {
+  position: relative;
+  width: min(42vw, 13rem);
+  aspect-ratio: 1;
+  margin: 1vh 0;
+}
+
+.generando__anillo-capa {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  animation: generando-giro 1.6s linear infinite;
+
+  &--1 {
+    border-top-color: s.$rojo-claro;
+    box-shadow: 0 0 22px rgba(s.$rojo, 0.55);
+  }
+
+  &--2 {
+    inset: 12%;
+    border-right-color: s.$rojo;
+    animation-duration: 2.3s;
+    animation-direction: reverse;
+  }
+
+  &--3 {
+    inset: 24%;
+    border-bottom-color: rgba(s.$blanco, 0.8);
+    animation-duration: 3s;
+  }
+}
+
+@keyframes generando-giro {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.generando__titulo {
+  margin: 0;
+  font-size: clamp(1.6rem, 7.5vw, 3rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+
+  span {
+    color: s.$rojo-claro;
+  }
+}
+
+.generando__mensaje {
+  margin: 0;
+  min-height: 1.6em;
+  color: s.$blanco;
+  font-size: clamp(0.95rem, 3.6vw, 1.3rem);
+  font-weight: 600;
+  animation: generando-entra 0.5s ease;
+}
+
+@keyframes generando-entra {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+.generando__nota {
+  margin: 0;
+  color: rgba(s.$blanco, 0.5);
+  font-size: clamp(0.75rem, 2.8vw, 1rem);
+}
+
+.generando__pie {
+  position: absolute;
+  bottom: 5vh;
+  margin: 0;
+  color: rgba(s.$blanco, 0.75);
+  font-size: clamp(0.9rem, 4vw, 1.4rem);
+  font-weight: 700;
+}

@@ -1,0 +1,104 @@
+@use "../../styles/summit" as s;
+
+/**
+ * Bandas fijas de la pantalla. Se declaran aquí para que la zona de tarjetas
+ * pueda calcular su tamaño sin depender del alto intrínseco de las imágenes:
+ * así el bloque 2×2 siempre entra completo y conserva su proporción.
+ */
+$cabecera-alto: 24dvh;
+$pie-alto: 7dvh;
+$zona-alto: calc(100dvh - #{$cabecera-alto} - #{$pie-alto} - #{s.$footer-alto});
+
+/** Proporción del lienzo en el que diseño maquetó las cuatro tarjetas. */
+$grid-proporcion: calc(1131 / 1391);
+
+.estilos {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: s.$negro;
+  overflow: hidden;
+}
+
+.estilos__cabecera {
+  flex: none;
+  width: 100%;
+  height: $cabecera-alto;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.estilos__zona {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.estilos__grid {
+  position: relative;
+  width: min(94vw, calc(#{$zona-alto} * #{$grid-proporcion}));
+  aspect-ratio: $grid-proporcion;
+}
+
+.estilos__tarjeta {
+  position: absolute;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    transform 0.22s ease,
+    filter 0.22s ease;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+  }
+
+  &:hover:not(:disabled) {
+    transform: scale(1.03);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  &--elegida {
+    transform: scale(1.06);
+    filter: drop-shadow(0 0 3vw rgba(s.$rojo-claro, 0.9)) brightness(1.1);
+  }
+
+  /* Las no elegidas se apagan cuando ya hay una selección. */
+  &:disabled:not(.estilos__tarjeta--elegida) {
+    filter: brightness(0.45) saturate(0.6);
+    cursor: default;
+  }
+
+  &:focus-visible {
+    outline: 2px solid s.$rojo-claro;
+    outline-offset: 4px;
+  }
+}
+
+.estilos__pie {
+  flex: none;
+  height: $pie-alto;
+  width: auto;
+  max-width: 70vw;
+  object-fit: contain;
+}
+
+.estilos__controles {
+  flex: none;
+  height: s.$footer-alto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

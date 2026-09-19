@@ -1,0 +1,95 @@
+@use "../../styles/summit" as s;
+
+/**
+ * Los campos, la casilla y el botón ya vienen dibujados en registro.png.
+ * Lo que va aquí encima es solo lo interactivo, alineado con el arte:
+ * los inputs tapan el texto de ejemplo pintado y repiten su estilo, y los
+ * botones son zonas transparentes sobre lo que ya se ve.
+ */
+
+.registro__form {
+  position: absolute;
+  inset: 0;
+}
+
+.registro__campo {
+  position: absolute;
+  padding: 0;
+  border: none;
+  outline: none;
+  /* Opaco a propósito: tapa el texto de ejemplo que trae el arte. */
+  background: s.$negro-campo;
+  color: s.$blanco;
+  font-family: inherit;
+  font-size: 3.1cqw;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  caret-color: s.$rojo;
+
+  &::placeholder {
+    color: s.$gris-placeholder;
+    opacity: 1;
+  }
+
+  &:focus::placeholder {
+    opacity: 0.45;
+  }
+}
+
+.registro__casilla {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: transparent;
+  font-size: 4cqw;
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.15s ease;
+
+  /* Área de toque más grande que el cuadro dibujado, sin moverlo de sitio. */
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -1.6cqw;
+  }
+
+  &--marcada {
+    color: s.$rojo-claro;
+  }
+}
+
+.registro__aviso,
+.registro__politica,
+.registro__enviar {
+  position: absolute;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.registro__enviar:focus-visible,
+.registro__politica:focus-visible,
+.registro__casilla:focus-visible {
+  outline: 2px solid s.$rojo-claro;
+  outline-offset: 2px;
+}
+
+.registro__error {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  color: s.$rojo-claro;
+  font-size: 2.6cqw;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-align: center;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
+}

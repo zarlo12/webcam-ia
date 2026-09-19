@@ -1,0 +1,30 @@
+@use "../../styles/summit" as s;
+
+.webcam {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #060608;
+}
+
+.webcam__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Espejo solo en la vista previa; la captura se hace sin espejar. */
+  transform: scaleX(-1);
+}
+
+.webcam__error {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0 8%;
+  color: s.$rojo-claro;
+  font-size: 3cqw;
+  font-weight: 700;
+  text-align: center;
+}

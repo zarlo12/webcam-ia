@@ -1,0 +1,19 @@
+/**
+ * El recuadro del arte es un hueco transparente: el blanco que se ve a través
+ * es este bloque, que además le da al código el margen que necesita para que
+ * los lectores lo enganchen.
+ */
+
+.qr__recuadro {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4%;
+  background: #ffffff;
+}
+
+.qr__codigo {
+  width: 100%;
+  height: 100%;
+}

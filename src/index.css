@@ -1,11 +1,13 @@
+/* Claro Tech Summit 2026 · base global */
+
 :root {
-  font-family: system-ui, 'Segoe UI', Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+  font-family: system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
+  line-height: 1.4;
   font-weight: 400;
 
   color-scheme: dark;
-  color: #FFFFFF;
-  background-color: #2E020A;
+  color: #ffffff;
+  background-color: #000000;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,45 +15,33 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
-a {
-  font-weight: 500;
-  color: #FF4A57;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #FF8A93;
+html,
+body,
+#root {
+  height: 100%;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-  background: #2E020A;
+  background: #000000;
   overflow: hidden;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  /* Kiosco táctil: sin zoom por doble toque ni menús de selección. */
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
   font-family: inherit;
-  background-color: transparent;
-  cursor: pointer;
-  transition: border-color 0.2s;
 }
-button:hover {
-  border-color: transparent;
+
+input {
+  -webkit-user-select: text;
+  user-select: text;
 }

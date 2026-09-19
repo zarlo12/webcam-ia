@@ -11,6 +11,13 @@ setGlobalOptions({
   region: "us-central1",
 });
 
+// Claro Tech Summit 2026 · Soluciones Digitales
+export {
+  generateSummitImage,
+  summitHealthCheck,
+  getSummitStatus,
+} from "./controllers/summitController";
+
 // Campaña Claro · "Antioquia nos enseña a llegar lejos" (Feria de las Flores)
 export {
   generateFeriaImage,

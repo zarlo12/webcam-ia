@@ -1,8 +1,8 @@
 {
-  "name": "webcam-ai",
+  "name": "claro-tech-summit-2026",
   "private": true,
   "version": "1.0.0",
-  "description": "AI Image Generation from Webcam using Replicate",
+  "description": "Kiosco de generaci\u00f3n de im\u00e1genes con IA \u00b7 Claro Tech Summit 2026",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,23 +11,15 @@
     "preview": "vite preview",
     "functions:build": "cd backend/functions && npm run build",
     "functions:serve": "cd backend/functions && npm run serve",
-    "functions:deploy": "cd backend/functions && npm run deploy"
+    "functions:deploy": "cd backend/functions && npm run deploy",
+    "assets": "python3 scripts/prepare-summit-assets.py"
   },
   "dependencies": {
-    "@react-three/drei": "^10.0.3",
-    "@react-three/fiber": "^9.0.4",
-    "@types/three": "^0.174.0",
     "axios": "^1.8.1",
-    "cors": "^2.8.5",
-    "firebase": "^11.4.0",
     "qrcode.react": "^4.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-icons": "^5.5.0",
-    "react-image-crop": "^11.0.7",
-    "react-router-dom": "^7.5.0",
-    "sweetalert2": "^11.17.2",
-    "three": "^0.174.0"
+    "sweetalert2": "^11.17.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

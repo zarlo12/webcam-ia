@@ -1,116 +1,121 @@
-import { Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Swal from "sweetalert2";
-import Intro from "./components/Intro/Intro";
-import Registro, { RegistroData } from "./components/Registro/Registro";
-import Selection from "./components/Selection/Selection";
-import AvatarPhoto from "./components/AvatarAi/AvatarPhoto";
-import AvatarResult from "./components/AvatarAi/AvatarResult";
-import Waiting from "./components/AvatarWait/Waiting";
+import { BotonPantallaCompleta } from "./components/ui/Boton";
+import Registro, { type RegistroData } from "./screens/Registro/Registro";
+import Estilos from "./screens/Estilos/Estilos";
+import Camara from "./screens/Camara/Camara";
+import Generando from "./screens/Generando/Generando";
+import Resultado from "./screens/Resultado/Resultado";
+import Qr from "./screens/Qr/Qr";
+import summitService from "./services/summitService";
+import type { FiltroId } from "./config/summit";
 
-export type StyleChoice = 1 | 2 | 3;
-type Step = 'intro' | 'registro' | 'selection' | 'photo' | 'waiting' | 'result';
+/**
+ * Claro Tech Summit 2026 · Soluciones Digitales
+ *
+ * Flujo del kiosco, en el orden de las artes:
+ *
+ *   registro → estilos → camara → generando → resultado → qr
+ *      ↑          ↓         ↓                     ↓        ↓
+ *      └──────────┴─────────┘                     └────────┴──→ registro
+ *
+ * El paso es el único estado que manda: cada pantalla recibe lo que necesita y
+ * avisa qué pasó, sin conocer a las demás.
+ */
 
-function MainApp() {
-  const [step, setStep] = useState<Step>('intro');
-  const [registro, setRegistro] = useState<RegistroData | null>(null);
-  const [styleChoice, setStyleChoice] = useState<StyleChoice>(1);
-  const [imageUrl, setImageUrl] = useState('');
-  const [imagenGenerada, setImagenGenerada] = useState(false);
-  const [aiImageReady, setAiImageReady] = useState(false);
+type Paso = "registro" | "estilos" | "camara" | "generando" | "resultado" | "qr";
 
-  const handleRegistro = (data: RegistroData) => {
-    setRegistro(data);
-    setStep('selection');
-  };
-
-  const handleProcess = () => {
-    setImagenGenerada(false);
-    setAiImageReady(false);
-    setStep('waiting');
-  };
-
-  /**
-   * La Cloud Function ya guardó la imagen en Firebase Storage y devolvió una URL
-   * pública y permanente, así que se usa directamente (antes se volvía a subir
-   * desde el navegador a otro proyecto de Firebase).
-   */
-  const handleAiImageReady = (generatedImageUrl: string) => {
-    setImageUrl(generatedImageUrl);
-    setImagenGenerada(true);
-    setAiImageReady(true);
-  };
-
-  const handleGenerationError = (message: string) => {
-    setStep('photo');
-    setImagenGenerada(false);
-    setAiImageReady(false);
-    Swal.fire({
-      icon: 'error',
-      title: 'No pudimos crear tu foto',
-      text: message,
-      confirmButtonText: 'Intentar de nuevo',
-      confirmButtonColor: '#E30613',
-    });
-  };
-
-  const handleReset = () => {
-    setRegistro(null);
-    setStyleChoice(1);
-    setImageUrl('');
-    setImagenGenerada(false);
-    setAiImageReady(false);
-    setStep('intro');
-  };
-
-  return (
-    <div style={{ width: '100vw', height: '100vh' }}>
-      {step === 'intro' && (
-        <Intro onStart={() => setStep('registro')} />
-      )}
-      {step === 'registro' && (
-        <Registro onSubmit={handleRegistro} />
-      )}
-      {step === 'selection' && (
-        <Selection
-          styleChoice={styleChoice}
-          onStyleChoiceChange={setStyleChoice}
-          onNext={() => setStep('photo')}
-        />
-      )}
-      {step === 'photo' && (
-        <AvatarPhoto
-          styleChoice={styleChoice}
-          registro={registro}
-          onProcess={handleProcess}
-          onAiImageReady={handleAiImageReady}
-          onChangeFilter={() => setStep('selection')}
-          onError={handleGenerationError}
-        />
-      )}
-      {step === 'waiting' && (
-        <Waiting
-          imagenGenerada={imagenGenerada}
-          aiImageReady={aiImageReady}
-          onContinue={() => setStep('result')}
-        />
-      )}
-      {step === 'result' && (
-        <AvatarResult
-          imageUrl={imageUrl}
-          originalImageUrl=""
-          onReset={handleReset}
-        />
-      )}
-    </div>
-  );
-}
+const ALERTA = {
+  confirmButtonColor: "#E30613",
+  background: "#101014",
+  color: "#FFFFFF",
+} as const;
 
 function App() {
+  const [paso, setPaso] = useState<Paso>("registro");
+  const [registro, setRegistro] = useState<RegistroData | null>(null);
+  const [filtro, setFiltro] = useState<FiltroId | null>(null);
+  const [imageUrl, setImageUrl] = useState("");
+
+  const reiniciar = useCallback(() => {
+    setRegistro(null);
+    setFiltro(null);
+    setImageUrl("");
+    setPaso("registro");
+  }, []);
+
+  const generar = useCallback(
+    async (foto: Blob) => {
+      if (!filtro) return;
+
+      setPaso("generando");
+      const resultado = await summitService.generate(foto, filtro, registro);
+
+      if (resultado.success && resultado.imageUrl) {
+        setImageUrl(resultado.imageUrl);
+        setPaso("resultado");
+        return;
+      }
+
+      // Se vuelve a la cámara: el registro y el estilo siguen siendo válidos,
+      // así que el visitante solo repite la foto.
+      setPaso("camara");
+      await Swal.fire({
+        ...ALERTA,
+        icon: "error",
+        title: "No pudimos crear su imagen",
+        text: resultado.error || "Inténtelo de nuevo.",
+        confirmButtonText: "Intentar de nuevo",
+      });
+    },
+    [filtro, registro],
+  );
+
   return (
-    <Routes>
-      <Route path="/" element={<MainApp />} />
-    </Routes>
+    <>
+      {paso !== "generando" && <BotonPantallaCompleta />}
+
+      {paso === "registro" && (
+        <Registro
+          onSubmit={(data) => {
+            setRegistro(data);
+            setPaso("estilos");
+          }}
+        />
+      )}
+
+      {paso === "estilos" && (
+        <Estilos
+          onElegir={(elegido) => {
+            setFiltro(elegido);
+            setPaso("camara");
+          }}
+          onAtras={() => setPaso("registro")}
+        />
+      )}
+
+      {paso === "camara" && (
+        <Camara onCapturar={generar} onAtras={() => setPaso("estilos")} />
+      )}
+
+      {paso === "generando" && <Generando />}
+
+      {paso === "resultado" && (
+        <Resultado
+          imageUrl={imageUrl}
+          onSiguiente={() => setPaso("qr")}
+          onReiniciar={reiniciar}
+        />
+      )}
+
+      {paso === "qr" && (
+        <Qr
+          imageUrl={imageUrl}
+          onAtras={() => setPaso("resultado")}
+          onReiniciar={reiniciar}
+        />
+      )}
+    </>
   );
 }
 

@@ -1,66 +1,98 @@
-# Webcam IA - AI Image Generation
+# Claro Tech Summit 2026 · Soluciones Digitales
 
-Una aplicación moderna de generación de imágenes con IA que captura fotos de la webcam y las procesa usando Replicate AI en lugar de n8n/comfydeploy.
-
-## 🚀 Características
-
-- **Captura de webcam en tiempo real** con React y TypeScript
-- **Generación de imágenes con IA** usando Replicate.com
-- **Múltiples estilos de IA**: Profesional, Realista, Artístico, Cartoon, Vintage
-- **Backend profesional** con Google Cloud Functions
-- **Firebase Storage** para almacenamiento de imágenes
-- **Interfaz moderna** con React y Sass
-- **TypeScript** en todo el stack
-
-## 🏗️ Arquitectura
+Kiosco de generación de imágenes con IA. El visitante se registra, elige un
+estilo, se toma una foto y recibe su retrato generado con un QR para
+descargarlo en el celular.
 
 ```
-Frontend (React + TypeScript + Vite)
-    ↓
-Google Cloud Functions (Node.js + TypeScript)
-    ↓
-Replicate API (AI Image Generation)
-    ↓
-Firebase Storage (Image Storage)
+registro → estilos → cámara → generando → resultado → QR
 ```
 
-## Tecnologías utilizadas
+## Cómo está armado
 
-- React
-- TypeScript
-- Three.js
-- React Three Fiber (@react-three/fiber)
-- React Three Drei (@react-three/drei)
-- Axios para peticiones HTTP
+**Las artes mandan.** Diseño entregó las cinco pantallas como PNG con
+transparencia sobre negro: el arte trae el texto, los marcos y la decoración, y
+deja el hueco donde va el contenido vivo (los campos, la cámara, el retrato, el
+código). El código solo pone encima lo interactivo, posicionado en % del lienzo
+del arte, así que calza igual en cualquier tamaño de pantalla.
 
-## Configuración
+- `src/components/Stage/` — lienzo común: centra el arte respetando su
+  proporción y da el sistema de coordenadas. Lo usan cuatro de las cinco
+  pantallas.
+- `src/config/summit.ts` — **fuente única** del catálogo de estilos y de las
+  coordenadas de cada hueco. Ningún componente tiene coordenadas propias.
+- `src/screens/` — una carpeta por pantalla.
+- `src/App.tsx` — la máquina de pasos, y nada más.
 
-1. Clona este repositorio
-2. Instala las dependencias con `npm install`
-3. Configura tu URL de webhook de n8n en el archivo `.env`:
-   ```
-   VITE_N8N_WEBHOOK_URL="https://tu-instancia-n8n.com/webhook/tu-id-webhook"
-   ```
-4. Ejecuta la aplicación en modo desarrollo con `npm run dev`
-5. Para construir la aplicación para producción, usa `npm run build`
+La pantalla de estilos es la excepción: no tiene un arte propio (el mockup trae
+las tarjetas dibujadas dentro), así que se arma por partes. Está explicado en
+`src/screens/Estilos/Estilos.tsx`.
 
-## Uso
+## Assets
 
-1. Permite el acceso a la webcam cuando el navegador lo solicite
-2. Presiona la tecla 'M' para capturar una imagen
-3. La imagen se enviará automáticamente al webhook de n8n configurado
-4. Utiliza los controles del ratón para ajustar la vista 3D (opcional)
+Los assets de `src/assets/summit/` y `backend/functions/assets/summit/` **no se
+editan a mano**: se derivan de `referencias_02/` con
 
-## Estructura del proyecto
+```bash
+python3 scripts/prepare-summit-assets.py
+```
 
-- `src/components/WebcamScene.tsx`: Componente principal que maneja la captura de la webcam y el envío de imágenes
-- `.env`: Archivo de configuración para la URL del webhook de n8n
+El script recorta las tarjetas, separa la silueta del retrato de su marco,
+extrae el logo y prepara las referencias de estilo que se le mandan al modelo.
+Al final imprime las medidas que hay que verificar contra `src/config/summit.ts`
+si diseño entrega artes nuevas.
 
-## Integración con n8n
+## Backend
 
-Las imágenes se envían como datos base64 en formato JSON al webhook configurado. En n8n, puedes procesar estas imágenes para:
+Cloud Functions en el proyecto de Firebase `imagen-ia-845a3`, que hospeda varias
+activaciones a la vez. Todo lo de esta va con nombre propio para no chocar:
 
-- Almacenarlas en un servicio de almacenamiento
-- Analizarlas con servicios de visión artificial
-- Enviarlas por correo electrónico
-- Integrarlas con otros servicios o flujos de trabajo
+| | |
+|---|---|
+| Funciones | `generateSummitImage`, `summitHealthCheck`, `getSummitStatus` |
+| Colección Firestore | `claro_tech_summit_participantes` |
+| Storage | `claro-tech-summit/{originales,generadas,referencias}` |
+| Hosting | sitio `claro-tech-summit` |
+
+Al generar, el backend manda al modelo dos imágenes —la referencia del estilo y
+la foto del visitante— y sobre el retrato que devuelve compone el marco de la
+campaña con `sharp`. Por eso lo que se ve en pantalla es exactamente lo que se
+descarga por QR.
+
+Las referencias de estilo viajan dentro del paquete de la función y se publican
+solas en Storage la primera vez que se usan: no hay que subir plantillas a mano.
+Si cambia un arte, hay que borrar el objeto viejo de
+`claro-tech-summit/referencias/` para que se vuelva a publicar.
+
+## Comandos
+
+```bash
+npm install
+npm run dev                 # frontend en local
+npm run build               # compila y empaqueta
+
+cd backend/functions
+npm install
+./deploy-summit.sh          # despliega SOLO las funciones de esta activación
+
+./test-summit.sh foto.jpg 4 # prueba los endpoints contra producción
+```
+
+`deploy-summit.sh` despliega por nombre a propósito: un
+`firebase deploy --only functions` sin filtro volvería a desplegar las demás
+campañas que viven en el mismo proyecto.
+
+## Variables de entorno
+
+Frontend (`.env`) — opcional, hay un valor por defecto en el código:
+
+```
+VITE_SUMMIT_FUNCTIONS_URL=https://us-central1-imagen-ia-845a3.cloudfunctions.net
+```
+
+Backend (`backend/functions/.env`):
+
+```
+REPLICATE_API_TOKEN=...
+STORAGE_BUCKET=imagen-ia-845a3.appspot.com
+```

@@ -1,0 +1,14 @@
+@use "../../styles/summit" as s;
+
+.resultado {
+  .stage__art {
+    animation: resultado-aparece 0.6s ease both;
+  }
+}
+
+@keyframes resultado-aparece {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}

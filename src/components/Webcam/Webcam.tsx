@@ -39,9 +39,12 @@ const abrirCamara = async (): Promise<MediaStream> => {
  *
  * Llena su contenedor con `object-fit: cover`, y la captura repite ese mismo
  * recorte: lo que el visitante ve dentro del marco es lo que se manda al
- * modelo. La vista previa va espejada (uno se encuadra mejor viéndose como en
- * un espejo) pero la captura no, para que ningún texto de la ropa salga al
- * revés en la imagen final.
+ * modelo.
+ *
+ * Sin espejo en ningún lado. Espejar la vista previa se siente natural —uno se
+ * encuadra como frente a un espejo— pero entonces la foto tomada aparece
+ * volteada respecto a lo que se acababa de ver, y se lee como un error. Además
+ * cualquier texto de la ropa saldría al revés en la imagen final.
  */
 const Webcam = forwardRef<WebcamHandle>((_, ref) => {
   const videoRef = useRef<HTMLVideoElement>(null);

@@ -11,8 +11,8 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* Espejo solo en la vista previa; la captura se hace sin espejar. */
-  transform: scaleX(-1);
+  /* Sin espejo: la vista previa tiene que ser idéntica a la foto tomada.
+     Espejar solo aquí hacía que la imagen "saltara" al capturar. */
 }
 
 .webcam__error {

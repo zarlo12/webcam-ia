@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.processWebcamImage = exports.sendToVTEX = exports.healthCheck = exports.getProcessingStatus = exports.generateAIImage = exports.getCircusStatus = exports.circusHealthCheck = exports.generateCircusImage = exports.getFeriaStatus = exports.feriaHealthCheck = exports.generateFeriaImage = exports.getSummitStatus = exports.summitHealthCheck = exports.generateSummitImage = void 0;
+exports.processWebcamImage = exports.sendToVTEX = exports.healthCheck = exports.getProcessingStatus = exports.generateAIImage = exports.getCircusStatus = exports.circusHealthCheck = exports.generateCircusImage = exports.getFeriaStatus = exports.feriaHealthCheck = exports.generateFeriaImage = exports.listSummitParticipantes = exports.getSummitStatus = exports.summitHealthCheck = exports.generateSummitImage = void 0;
 const dotenv = __importStar(require("dotenv"));
 // Load environment variables
 dotenv.config();
@@ -48,6 +48,7 @@ var summitController_1 = require("./controllers/summitController");
 Object.defineProperty(exports, "generateSummitImage", { enumerable: true, get: function () { return summitController_1.generateSummitImage; } });
 Object.defineProperty(exports, "summitHealthCheck", { enumerable: true, get: function () { return summitController_1.summitHealthCheck; } });
 Object.defineProperty(exports, "getSummitStatus", { enumerable: true, get: function () { return summitController_1.getSummitStatus; } });
+Object.defineProperty(exports, "listSummitParticipantes", { enumerable: true, get: function () { return summitController_1.listSummitParticipantes; } });
 // Campaña Claro · "Antioquia nos enseña a llegar lejos" (Feria de las Flores)
 var feriaController_1 = require("./controllers/feriaController");
 Object.defineProperty(exports, "generateFeriaImage", { enumerable: true, get: function () { return feriaController_1.generateFeriaImage; } });

@@ -64,6 +64,23 @@ solas en Storage la primera vez que se usan: no hay que subir plantillas a mano.
 Si cambia un arte, hay que borrar el objeto viejo de
 `claro-tech-summit/referencias/` para que se vuelva a publicar.
 
+## Panel de registros
+
+`https://claro-tech-summit.web.app/panel` — tabla de participantes con la foto
+original y la generada, filtros y exportación.
+
+Vive en [`public/panel.html`](public/panel.html): un solo archivo, sin build ni
+dependencias externas (el `.xlsx` se arma a mano, así que no depende de ningún
+CDN — que en un evento es justo lo que falla). Lee de la Cloud Function
+`listSummitParticipantes`, nunca de Firestore directamente, así que las reglas
+de la base siguen cerradas.
+
+> ⚠️ **El panel no tiene contraseña**, por pedido del cliente, y muestra datos
+> personales. Para cerrarlo: descomentar el bloque `PANEL_TOKEN` en
+> [`summitController.ts`](backend/functions/src/controllers/summitController.ts),
+> poner `PANEL_TOKEN=...` en el `.env` de las funciones, redesplegar y entrar con
+> `/panel?token=...`.
+
 ## Comandos
 
 ```bash

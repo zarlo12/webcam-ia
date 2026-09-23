@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow, noarchive" />
+<title>Panel de registros · Claro Tech Summit 2026</title>
+<style>
+/* ---------------------------------------------------------------------------
+   Panel de registros · Claro Tech Summit 2026
+
+   Un solo archivo, sin dependencias: se sirve como estático desde el mismo
+   hosting del kiosco y lee de la Cloud Function listSummitParticipantes.
+   Los colores son los de la campaña; el rojo de las barras (#e30613) está
+   validado sobre esta superficie oscura (banda de luminosidad, croma y
+   contraste >= 3:1).
+--------------------------------------------------------------------------- */
+:root {
+  color-scheme: dark;
+  --fondo:        #08080a;
+  --superficie:   #101014;
+  --superficie-2: #16161c;
+  --borde:        #26262f;
+  --borde-suave:  #1c1c23;
+  --tinta:        #ffffff;
+  --tinta-2:      #a6a6b2;
+  --tinta-3:      #6e6e7c;
+  --rojo:         #e30613;
+  --rojo-vivo:    #f2313d;
+  --ok:           #2e9e6b;
+  --radio:        14px;
+  --sombra: 0 8px 28px rgba(0,0,0,.45);
+  font-family: system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--fondo); color: var(--tinta); }
+body {
+  background:
+    radial-gradient(1100px 420px at 12% -8%, rgba(227,6,19,.16), transparent 62%),
+    radial-gradient(900px 380px at 96% 4%, rgba(227,6,19,.10), transparent 60%),
+    var(--fondo);
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.45;
+}
+.envoltorio { max-width: 1500px; margin: 0 auto; padding: 22px 22px 70px; }
+
+/* --- cabecera --- */
+.cabecera {
+  display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+  padding-bottom: 18px; margin-bottom: 20px;
+  border-bottom: 1px solid var(--borde);
+}
+.marca { display: flex; align-items: center; gap: 13px; margin-right: auto; }
+.marca__icono {
+  width: 42px; height: 42px; border-radius: 11px; flex: none;
+  background: linear-gradient(145deg, var(--rojo-vivo), #8f0510);
+  display: grid; place-items: center;
+  font-weight: 900; font-size: 17px; letter-spacing: -.5px;
+  box-shadow: 0 0 20px rgba(227,6,19,.4);
+}
+.marca__texto h1 { margin: 0; font-size: 19px; font-weight: 800; letter-spacing: -.2px; }
+.marca__texto p  { margin: 1px 0 0; font-size: 12.5px; color: var(--tinta-3); }
+.acciones { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 15px; border-radius: 10px;
+  border: 1px solid var(--borde);
+  background: var(--superficie-2); color: var(--tinta);
+  font: inherit; font-size: 13.5px; font-weight: 600;
+  cursor: pointer; white-space: nowrap;
+  transition: border-color .15s, background .15s, transform .12s;
+}
+.btn:hover:not(:disabled) { border-color: #3a3a46; background: #1e1e26; }
+.btn:active:not(:disabled) { transform: translateY(1px); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn--principal {
+  background: linear-gradient(180deg, var(--rojo-vivo), #b8050f);
+  border-color: transparent;
+  box-shadow: 0 0 16px rgba(227,6,19,.32);
+}
+.btn--principal:hover:not(:disabled) { filter: brightness(1.1); background: linear-gradient(180deg, var(--rojo-vivo), #b8050f); }
+
+.pulso { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--tinta-3); }
+.pulso__punto { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 0 rgba(46,158,107,.6); animation: latido 2.4s infinite; }
+@keyframes latido { 0%{box-shadow:0 0 0 0 rgba(46,158,107,.55)} 70%{box-shadow:0 0 0 7px rgba(46,158,107,0)} 100%{box-shadow:0 0 0 0 rgba(46,158,107,0)} }
+
+/* --- tarjetas de cifras --- */
+.cifras { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 13px; margin-bottom: 15px; }
+.cifra { background: var(--superficie); border: 1px solid var(--borde-suave); border-radius: var(--radio); padding: 15px 17px; }
+.cifra__rotulo { font-size: 11.5px; text-transform: uppercase; letter-spacing: .09em; color: var(--tinta-3); font-weight: 700; }
+.cifra__valor { font-size: 32px; font-weight: 800; letter-spacing: -1px; margin-top: 4px; font-variant-numeric: tabular-nums; }
+.cifra__pie { font-size: 12.5px; color: var(--tinta-2); margin-top: 2px; }
+.cifra--destacada { border-color: rgba(227,6,19,.4); background: linear-gradient(180deg, rgba(227,6,19,.12), var(--superficie) 70%); }
+
+/* --- graficas --- */
+.graficas { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.25fr); gap: 13px; margin-bottom: 15px; }
+@media (max-width: 900px) { .graficas { grid-template-columns: 1fr; } }
+.panel { background: var(--superficie); border: 1px solid var(--borde-suave); border-radius: var(--radio); padding: 16px 18px; }
+.panel__titulo { font-size: 13px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--tinta-2); margin: 0 0 14px; }
+
+.barras { display: flex; flex-direction: column; gap: 11px; }
+.barra__fila { display: grid; grid-template-columns: 132px 1fr auto; align-items: center; gap: 11px; }
+.barra__nombre { font-size: 13px; color: var(--tinta-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.barra__pista { height: 12px; background: var(--superficie-2); border-radius: 6px; overflow: hidden; }
+.barra__valor {
+  display: block; height: 100%; min-width: 3px;
+  background: var(--rojo);
+  border-radius: 0 6px 6px 0;   /* extremo de dato redondeado, base anclada */
+  transition: width .5s cubic-bezier(.22,.61,.36,1);
+}
+.barra__cifra { font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; min-width: 62px; text-align: right; color: var(--tinta); }
+.barra__cifra span { color: var(--tinta-3); font-weight: 500; font-size: 12px; }
+
+.linea-svg { width: 100%; height: 168px; display: block; overflow: visible; }
+.linea-svg .rejilla { stroke: var(--borde-suave); stroke-width: 1; }
+.linea-svg .trazo { fill: none; stroke: var(--rojo); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.linea-svg .area { fill: url(#degradadoArea); }
+.linea-svg .marca { fill: var(--rojo); stroke: var(--superficie); stroke-width: 2; }
+.linea-svg .eje { fill: var(--tinta-3); font-size: 10.5px; }
+.linea-svg .cruz { stroke: var(--tinta-3); stroke-width: 1; stroke-dasharray: 3 3; }
+
+.globo {
+  position: fixed; z-index: 60; pointer-events: none; opacity: 0;
+  transform: translate(-50%, -132%); transition: opacity .12s;
+  background: #1e1e26; border: 1px solid var(--borde);
+  border-radius: 9px; padding: 7px 11px; font-size: 12.5px; white-space: nowrap;
+  box-shadow: var(--sombra);
+}
+.globo b { font-variant-numeric: tabular-nums; }
+
+/* --- filtros --- */
+.filtros {
+  display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end;
+  background: var(--superficie); border: 1px solid var(--borde-suave);
+  border-radius: var(--radio); padding: 14px 16px; margin-bottom: 15px;
+}
+.campo { display: flex; flex-direction: column; gap: 5px; }
+.campo > label { font-size: 11.5px; text-transform: uppercase; letter-spacing: .07em; color: var(--tinta-3); font-weight: 700; }
+.campo input, .campo select {
+  background: var(--superficie-2); border: 1px solid var(--borde); color: var(--tinta);
+  border-radius: 9px; padding: 9px 11px; font: inherit; font-size: 13.5px; min-height: 38px;
+}
+.campo input:focus, .campo select:focus { outline: none; border-color: var(--rojo); }
+.campo--ancho { flex: 1 1 250px; min-width: 200px; }
+.campo--ancho input { width: 100%; }
+
+/* --- tabla --- */
+.tabla-caja { background: var(--superficie); border: 1px solid var(--borde-suave); border-radius: var(--radio); overflow: hidden; }
+.tabla-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+thead th {
+  position: sticky; top: 0; z-index: 2;
+  background: var(--superficie-2); text-align: left;
+  padding: 11px 13px; font-size: 11.5px; text-transform: uppercase; letter-spacing: .07em;
+  color: var(--tinta-3); font-weight: 700; white-space: nowrap;
+  border-bottom: 1px solid var(--borde);
+}
+tbody td { padding: 10px 13px; border-bottom: 1px solid var(--borde-suave); vertical-align: middle; }
+tbody tr:hover { background: rgba(255,255,255,.028); }
+tbody tr:last-child td { border-bottom: none; }
+.par-fotos { display: flex; gap: 7px; }
+.miniatura {
+  width: 46px; height: 58px; border-radius: 7px; object-fit: cover;
+  border: 1px solid var(--borde); background: var(--superficie-2);
+  cursor: zoom-in; transition: transform .14s, border-color .14s;
+}
+.miniatura:hover { transform: scale(1.09); border-color: var(--rojo); }
+.miniatura--vacia { display: grid; place-items: center; font-size: 17px; color: var(--tinta-3); cursor: default; }
+.nombre { font-weight: 600; }
+.tenue { color: var(--tinta-3); font-size: 12.5px; }
+.etiqueta {
+  display: inline-block; padding: 3px 10px; border-radius: 999px;
+  font-size: 12px; font-weight: 700; white-space: nowrap;
+  background: rgba(227,6,19,.14); border: 1px solid rgba(227,6,19,.34); color: #ff8e96;
+}
+.si-no { font-size: 15px; }
+.si-no--si { color: var(--ok); }
+.si-no--no { color: var(--tinta-3); }
+.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.estado { padding: 54px 24px; text-align: center; color: var(--tinta-3); }
+.estado__icono { font-size: 34px; margin-bottom: 10px; opacity: .5; }
+.estado--error { color: #ff8e96; }
+.giro { width: 26px; height: 26px; margin: 0 auto 12px; border: 3px solid var(--borde); border-top-color: var(--rojo); border-radius: 50%; animation: gira .8s linear infinite; }
+@keyframes gira { to { transform: rotate(360deg); } }
+
+.pie-tabla { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 15px; border-top: 1px solid var(--borde); color: var(--tinta-3); font-size: 12.5px; flex-wrap: wrap; }
+
+/* --- visor --- */
+.visor { position: fixed; inset: 0; z-index: 90; background: rgba(4,4,6,.93); backdrop-filter: blur(7px); display: none; place-items: center; padding: 26px; }
+.visor[data-abierto="1"] { display: grid; }
+.visor__caja { max-width: 1020px; width: 100%; }
+.visor__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+@media (max-width: 720px) { .visor__grid { grid-template-columns: 1fr; } }
+.visor__parte { background: var(--superficie); border: 1px solid var(--borde); border-radius: var(--radio); overflow: hidden; }
+.visor__parte h3 { margin: 0; padding: 11px 15px; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--tinta-3); border-bottom: 1px solid var(--borde-suave); }
+.visor__parte img { display: block; width: 100%; max-height: 62vh; object-fit: contain; background: #000; }
+.visor__barra { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 13px; flex-wrap: wrap; }
+.visor__quien { font-size: 17px; font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="envoltorio">
+
+  <header class="cabecera">
+    <div class="marca">
+      <div class="marca__icono">CTS</div>
+      <div class="marca__texto">
+        <h1>Panel de registros</h1>
+        <p>Claro Tech Summit 2026 · Soluciones Digitales</p>
+      </div>
+    </div>
+    <div class="acciones">
+      <span class="pulso" id="pulso" hidden><span class="pulso__punto"></span><span id="pulsoTexto">Actualizado</span></span>
+      <button class="btn" id="btnRecargar">&#8635; Actualizar</button>
+      <button class="btn" id="btnCsv" disabled>&#8681; CSV</button>
+      <button class="btn btn--principal" id="btnExcel" disabled>&#8681; Excel</button>
+    </div>
+  </header>
+
+  <section class="cifras" id="cifras"></section>
+
+  <section class="graficas">
+    <div class="panel">
+      <h2 class="panel__titulo">Registros por estilo</h2>
+      <div class="barras" id="barras"></div>
+    </div>
+    <div class="panel">
+      <h2 class="panel__titulo" id="tituloLinea">Actividad</h2>
+      <svg class="linea-svg" id="linea" preserveAspectRatio="none"></svg>
+    </div>
+  </section>
+
+  <section class="filtros">
+    <div class="campo campo--ancho">
+      <label for="fBuscar">Buscar</label>
+      <input type="search" id="fBuscar" placeholder="Nombre, apellido, cédula o correo…" autocomplete="off" />
+    </div>
+    <div class="campo">
+      <label for="fEstilo">Estilo</label>
+      <select id="fEstilo"><option value="">Todos</option></select>
+    </div>
+    <div class="campo">
+      <label for="fDesde">Desde</label>
+      <input type="date" id="fDesde" />
+    </div>
+    <div class="campo">
+      <label for="fHasta">Hasta</label>
+      <input type="date" id="fHasta" />
+    </div>
+    <div class="campo">
+      <label for="fAuth">Autorización</label>
+      <select id="fAuth">
+        <option value="">Todas</option>
+        <option value="si">Con autorización</option>
+        <option value="no">Sin autorización</option>
+      </select>
+    </div>
+    <div class="campo">
+      <label for="fOrden">Orden</label>
+      <select id="fOrden">
+        <option value="desc">Más recientes</option>
+        <option value="asc">Más antiguos</option>
+      </select>
+    </div>
+    <button class="btn" id="btnLimpiar">Limpiar</button>
+  </section>
+
+  <section class="tabla-caja">
+    <div class="tabla-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Fotos</th><th>Nombre</th><th>Cédula</th><th>Correo</th>
+            <th>Estilo</th><th>Autoriza</th><th>Fecha</th><th>Hora</th>
+          </tr>
+        </thead>
+        <tbody id="cuerpo"></tbody>
+      </table>
+    </div>
+    <div id="estado" class="estado">
+      <div class="giro"></div>
+      Cargando registros…
+    </div>
+    <div class="pie-tabla">
+      <span id="pieConteo">—</span>
+      <span class="tenue">Clic en una miniatura para comparar original y generada</span>
+    </div>
+  </section>
+</div>
+
+<div class="globo" id="globo"></div>
+
+<div class="visor" id="visor">
+  <div class="visor__caja">
+    <div class="visor__barra">
+      <div>
+        <div class="visor__quien" id="visorQuien"></div>
+        <div class="tenue" id="visorCuando"></div>
+      </div>
+      <button class="btn" id="btnCerrarVisor">Cerrar &#10005;</button>
+    </div>
+    <div class="visor__grid">
+      <div class="visor__parte"><h3>Foto original</h3><img id="visorOriginal" alt="Foto original" /></div>
+      <div class="visor__parte"><h3>Imagen generada</h3><img id="visorGenerada" alt="Imagen generada" /></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===========================================================================
+   1. Datos
+   =========================================================================== */
+
+/** Se puede apuntar a otro backend con ?api=… (útil contra el emulador). */
+const API = new URLSearchParams(location.search).get('api')
+  || 'https://us-central1-imagen-ia-845a3.cloudfunctions.net';
+
+const ESTILOS = { 1: 'Acuarela', 2: 'Ilustración', 3: 'Universo Fantástico', 4: 'Cyberpunk' };
+
+let registros = [];      // todo lo que devolvió el backend
+let visibles  = [];      // lo que queda tras aplicar los filtros
+
+const $ = (id) => document.getElementById(id);
+
+/** Trae todas las páginas seguidas; el endpoint devuelve cursor mientras queden. */
+async function cargar() {
+  const items = [];
+  let cursor = null;
+
+  do {
+    const url = new URL(API + '/listSummitParticipantes');
+    url.searchParams.set('limit', '500');
+    if (cursor) url.searchParams.set('cursor', cursor);
+
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error('El servicio respondió ' + resp.status);
+
+    const datos = await resp.json();
+    if (!datos.success) throw new Error(datos.error || 'Respuesta inesperada');
+
+    items.push(...datos.items);
+    cursor = datos.nextCursor;
+  } while (cursor);
+
+  return items;
+}
+
+async function recargar() {
+  $('btnRecargar').disabled = true;
+  try {
+    registros = await cargar();
+    $('estado').hidden = registros.length > 0;
+    if (!registros.length) {
+      $('estado').className = 'estado';
+      $('estado').innerHTML = '<div class="estado__icono">&#128193;</div>Todavía no hay registros.<br>Aparecerán aquí en cuanto alguien complete el flujo en el kiosco.';
+      $('estado').hidden = false;
+    }
+    prepararFiltroEstilos();
+    aplicar();
+    marcarPulso();
+  } catch (e) {
+    $('estado').hidden = false;
+    $('estado').className = 'estado estado--error';
+    $('estado').innerHTML = '<div class="estado__icono">&#9888;</div>No se pudo cargar: ' + escapar(e.message)
+      + '<br><span class="tenue">Revisa que listSummitParticipantes esté desplegada.</span>';
+    $('cuerpo').innerHTML = '';
+  } finally {
+    $('btnRecargar').disabled = false;
+  }
+}
+
+function marcarPulso() {
+  $('pulso').hidden = false;
+  $('pulsoTexto').textContent = 'Actualizado ' + new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+}
+
+/* ===========================================================================
+   2. Filtros
+   =========================================================================== */
+
+function prepararFiltroEstilos() {
+  const sel = $('fEstilo');
+  if (sel.options.length > 1) return;
+  Object.entries(ESTILOS).forEach(([id, nombre]) => {
+    const o = document.createElement('option');
+    o.value = id; o.textContent = nombre;
+    sel.appendChild(o);
+  });
+}
+
+function aplicar() {
+  const q      = $('fBuscar').value.trim().toLowerCase();
+  const estilo = $('fEstilo').value;
+  const desde  = $('fDesde').value ? new Date($('fDesde').value + 'T00:00:00') : null;
+  const hasta  = $('fHasta').value ? new Date($('fHasta').value + 'T23:59:59') : null;
+  const auth   = $('fAuth').value;
+  const orden  = $('fOrden').value;
+
+  visibles = registros.filter((r) => {
+    if (q) {
+      const heno = [r.nombre, r.apellido, r.cedula, r.correo].join(' ').toLowerCase();
+      if (!heno.includes(q)) return false;
+    }
+    if (estilo && String(r.filtro) !== estilo) return false;
+    if (auth === 'si' && !r.autorizaDatos) return false;
+    if (auth === 'no' && r.autorizaDatos) return false;
+    if (desde || hasta) {
+      if (!r.createdAt) return false;
+      const f = new Date(r.createdAt);
+      if (desde && f < desde) return false;
+      if (hasta && f > hasta) return false;
+    }
+    return true;
+  });
+
+  visibles.sort((a, b) => {
+    const fa = a.createdAt ? Date.parse(a.createdAt) : 0;
+    const fb = b.createdAt ? Date.parse(b.createdAt) : 0;
+    return orden === 'asc' ? fa - fb : fb - fa;
+  });
+
+  pintarCifras();
+  pintarBarras();
+  pintarLinea();
+  pintarTabla();
+
+  const hayDatos = visibles.length > 0;
+  $('btnCsv').disabled = !hayDatos;
+  $('btnExcel').disabled = !hayDatos;
+  $('pieConteo').textContent = registros.length === visibles.length
+    ? `${visibles.length} registro${visibles.length === 1 ? '' : 's'}`
+    : `${visibles.length} de ${registros.length} registros`;
+}
+
+/* ===========================================================================
+   3. Cifras y gráficas
+   =========================================================================== */
+
+function pintarCifras() {
+  const hoy = new Date().toDateString();
+  const deHoy = visibles.filter((r) => r.createdAt && new Date(r.createdAt).toDateString() === hoy).length;
+  const autorizados = visibles.filter((r) => r.autorizaDatos).length;
+
+  const porEstilo = contarPorEstilo();
+  const top = Object.entries(porEstilo).sort((a, b) => b[1] - a[1])[0];
+  const pct = visibles.length ? Math.round((autorizados / visibles.length) * 100) : 0;
+
+  const tarjetas = [
+    { rotulo: 'Registros', valor: visibles.length, pie: registros.length === visibles.length ? 'En total' : `Filtrados de ${registros.length}`, destacada: true },
+    { rotulo: 'Hoy', valor: deHoy, pie: new Date().toLocaleDateString('es-CO', { day: '2-digit', month: 'long' }) },
+    { rotulo: 'Con autorización', valor: autorizados, pie: pct + '% del total mostrado' },
+    { rotulo: 'Estilo más elegido', valor: top && top[1] ? top[1] : 0, pie: top && top[1] ? ESTILOS[top[0]] : 'Sin datos' },
+  ];
+
+  $('cifras').innerHTML = tarjetas.map((t) => `
+    <div class="cifra${t.destacada ? ' cifra--destacada' : ''}">
+      <div class="cifra__rotulo">${escapar(t.rotulo)}</div>
+      <div class="cifra__valor">${t.valor.toLocaleString('es-CO')}</div>
+      <div class="cifra__pie">${escapar(t.pie)}</div>
+    </div>`).join('');
+}
+
+function contarPorEstilo() {
+  const conteo = { 1: 0, 2: 0, 3: 0, 4: 0 };
+  visibles.forEach((r) => { if (conteo[r.filtro] !== undefined) conteo[r.filtro]++; });
+  return conteo;
+}
+
+/**
+ * Barras horizontales, una sola serie: el color no codifica nada (todas van en
+ * el rojo de la marca) y la longitud es la que compara. Cada barra lleva su
+ * cifra al lado, así que no hace falta leyenda.
+ */
+function pintarBarras() {
+  const conteo = contarPorEstilo();
+  const max = Math.max(1, ...Object.values(conteo));
+  const total = visibles.length || 1;
+
+  $('barras').innerHTML = Object.entries(ESTILOS).map(([id, nombre]) => {
+    const n = conteo[id];
+    const pct = Math.round((n / total) * 100);
+    return `
+      <div class="barra__fila" data-globo="${escapar(nombre)}: ${n} registro${n === 1 ? '' : 's'} · ${pct}%">
+        <span class="barra__nombre" title="${escapar(nombre)}">${escapar(nombre)}</span>
+        <span class="barra__pista"><span class="barra__valor" style="width:${(n / max) * 100}%"></span></span>
+        <span class="barra__cifra">${n} <span>${pct}%</span></span>
+      </div>`;
+  }).join('');
+}
+
+/**
+ * Actividad en el tiempo. Se agrupa por hora si el rango cabe en dos días y
+ * por día si es más largo, para que el eje nunca quede ilegible.
+ */
+function pintarLinea() {
+  const svg = $('linea');
+  const conFecha = visibles.filter((r) => r.createdAt).map((r) => new Date(r.createdAt));
+
+  if (conFecha.length < 2) {
+    svg.innerHTML = `<text x="50%" y="50%" text-anchor="middle" class="eje">Hacen falta al menos dos registros</text>`;
+    $('tituloLinea').textContent = 'Actividad';
+    return;
+  }
+
+  const min = new Date(Math.min(...conFecha));
+  const max = new Date(Math.max(...conFecha));
+  const porHora = (max - min) <= 48 * 3600e3;
+  $('tituloLinea').textContent = porHora ? 'Actividad por hora' : 'Actividad por día';
+
+  const clave = (d) => porHora
+    ? new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours()).getTime()
+    : new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+
+  const cubos = new Map();
+  const paso = porHora ? 3600e3 : 86400e3;
+  for (let t = clave(min); t <= clave(max); t += paso) cubos.set(t, 0);
+  conFecha.forEach((d) => cubos.set(clave(d), (cubos.get(clave(d)) || 0) + 1));
+
+  const puntos = [...cubos.entries()].sort((a, b) => a[0] - b[0]);
+  const W = 560, H = 168, mI = 30, mD = 8, mS = 12, mB = 24;
+  const tope = Math.max(1, ...puntos.map((p) => p[1]));
+  const x = (i) => mI + (i / Math.max(1, puntos.length - 1)) * (W - mI - mD);
+  const y = (v) => mS + (1 - v / tope) * (H - mS - mB);
+
+  const linea = puntos.map((p, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(p[1]).toFixed(1)}`).join(' ');
+  const area = `${linea} L${x(puntos.length - 1).toFixed(1)},${y(0)} L${x(0).toFixed(1)},${y(0)} Z`;
+
+  const rejilla = [0, 0.5, 1].map((f) => {
+    const v = tope * f;
+    return `<line class="rejilla" x1="${mI}" x2="${W - mD}" y1="${y(v)}" y2="${y(v)}"/>
+            <text class="eje" x="${mI - 6}" y="${y(v) + 3.5}" text-anchor="end">${Math.round(v)}</text>`;
+  }).join('');
+
+  const fmt = (t) => porHora
+    ? new Date(t).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })
+    : new Date(t).toLocaleDateString('es-CO', { day: '2-digit', month: 'short' });
+
+  // Índices repartidos por igual incluyendo los dos extremos: así la última
+  // etiqueta nunca se monta sobre la penúltima, que es lo que pasaba al
+  // forzarla aparte. Los extremos se anclan hacia dentro para no desbordar.
+  const cuantas = Math.min(6, puntos.length);
+  const indices = cuantas < 2
+    ? [0]
+    : [...new Set(Array.from({ length: cuantas },
+        (_, k) => Math.round((k * (puntos.length - 1)) / (cuantas - 1))))];
+
+  const etiquetas = indices.map((i) => {
+    const anclaje = i === 0 ? 'start' : i === puntos.length - 1 ? 'end' : 'middle';
+    return `<text class="eje" x="${x(i)}" y="${H - 6}" text-anchor="${anclaje}">${fmt(puntos[i][0])}</text>`;
+  }).join('');
+
+  const marcas = puntos.map((p, i) =>
+    `<circle class="marca" cx="${x(i)}" cy="${y(p[1])}" r="4"
+       data-globo="${fmt(p[0])} · ${p[1]} registro${p[1] === 1 ? '' : 's'}"
+       style="pointer-events:all"/>`).join('');
+
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.innerHTML = `
+    <defs><linearGradient id="degradadoArea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e30613" stop-opacity=".34"/>
+      <stop offset="100%" stop-color="#e30613" stop-opacity="0"/>
+    </linearGradient></defs>
+    ${rejilla}<path class="area" d="${area}"/><path class="trazo" d="${linea}"/>${marcas}${etiquetas}`;
+}
+
+/* ===========================================================================
+   4. Tabla
+   =========================================================================== */
+
+function pintarTabla() {
+  if (!visibles.length) {
+    $('cuerpo').innerHTML = '';
+    if (registros.length) {
+      $('estado').hidden = false;
+      $('estado').className = 'estado';
+      $('estado').innerHTML = '<div class="estado__icono">&#128269;</div>Ningún registro coincide con los filtros.';
+    }
+    return;
+  }
+  $('estado').hidden = true;
+
+  $('cuerpo').innerHTML = visibles.map((r, i) => {
+    const f = r.createdAt ? new Date(r.createdAt) : null;
+    const nombre = [r.nombre, r.apellido].filter(Boolean).join(' ') || '—';
+    return `
+      <tr>
+        <td>
+          <div class="par-fotos">
+            ${mini(r.originalImageUrl, 'Foto original', i)}
+            ${mini(r.resultImageUrl, 'Imagen generada', i)}
+          </div>
+        </td>
+        <td><span class="nombre">${escapar(nombre)}</span></td>
+        <td class="num tenue">${escapar(r.cedula || '—')}</td>
+        <td class="tenue">${escapar(r.correo || '—')}</td>
+        <td>${r.filtro ? `<span class="etiqueta">${escapar(ESTILOS[r.filtro] || r.filtroLabel)}</span>` : '<span class="tenue">—</span>'}</td>
+        <td class="si-no ${r.autorizaDatos ? 'si-no--si' : 'si-no--no'}">${r.autorizaDatos ? '&#10003;' : '&#8212;'}</td>
+        <td class="num">${f ? f.toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—'}</td>
+        <td class="num tenue">${f ? f.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' }) : '—'}</td>
+      </tr>`;
+  }).join('');
+}
+
+function mini(url, alt, i) {
+  if (!url) return `<span class="miniatura miniatura--vacia" title="Sin imagen">&#8212;</span>`;
+  return `<img class="miniatura" src="${escapar(url)}" alt="${alt}" loading="lazy" data-fila="${i}" />`;
+}
+
+/* ===========================================================================
+   5. Visor
+   =========================================================================== */
+
+function abrirVisor(i) {
+  const r = visibles[i];
+  if (!r) return;
+  const f = r.createdAt ? new Date(r.createdAt) : null;
+  $('visorQuien').textContent = [r.nombre, r.apellido].filter(Boolean).join(' ') || 'Sin nombre';
+  $('visorCuando').textContent = [
+    r.filtro ? ESTILOS[r.filtro] : null,
+    f ? f.toLocaleString('es-CO', { dateStyle: 'long', timeStyle: 'short' }) : null,
+    r.correo || null,
+  ].filter(Boolean).join('  ·  ');
+  $('visorOriginal').src = r.originalImageUrl || '';
+  $('visorGenerada').src = r.resultImageUrl || '';
+  $('visor').dataset.abierto = '1';
+}
+
+/* ===========================================================================
+   6. Exportar
+   =========================================================================== */
+
+const COLUMNAS = [
+  ['Nombre',          (r) => r.nombre],
+  ['Apellido',        (r) => r.apellido],
+  ['Cédula',          (r) => r.cedula],
+  ['Correo',          (r) => r.correo],
+  ['Estilo',          (r) => ESTILOS[r.filtro] || r.filtroLabel || ''],
+  ['Autoriza datos',  (r) => (r.autorizaDatos ? 'Sí' : 'No')],
+  ['Fecha',           (r) => (r.createdAt ? new Date(r.createdAt).toLocaleDateString('es-CO') : '')],
+  ['Hora',            (r) => (r.createdAt ? new Date(r.createdAt).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' }) : '')],
+  ['Foto original',   (r) => r.originalImageUrl],
+  ['Imagen generada', (r) => r.resultImageUrl],
+  ['ID',              (r) => r.id],
+];
+
+const nombreArchivo = (ext) =>
+  `registros-claro-tech-summit-${new Date().toISOString().slice(0, 10)}.${ext}`;
+
+function descargar(blob, nombre) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = nombre;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+
+/** CSV con BOM y punto y coma: así Excel en español lo abre en columnas. */
+function exportarCsv() {
+  const filas = [COLUMNAS.map((c) => c[0])];
+  visibles.forEach((r) => filas.push(COLUMNAS.map((c) => String(c[1](r) ?? ''))));
+  const texto = filas
+    .map((f) => f.map((v) => `"${v.replace(/"/g, '""')}"`).join(';'))
+    .join('\r\n');
+  descargar(new Blob(['﻿' + texto], { type: 'text/csv;charset=utf-8' }), nombreArchivo('csv'));
+}
+
+/* --- .xlsx de verdad, sin librerías -----------------------------------------
+   Un .xlsx es un ZIP con XML dentro. Se escribe el ZIP sin comprimir (método
+   "store"), que evita meter un deflate a mano y Excel abre igual. Así el panel
+   no depende de ningún CDN, que en un evento es justo lo que falla.
+----------------------------------------------------------------------------- */
+
+const TABLA_CRC = (() => {
+  const t = new Uint32Array(256);
+  for (let n = 0; n < 256; n++) {
+    let c = n;
+    for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+    t[n] = c >>> 0;
+  }
+  return t;
+})();
+
+function crc32(bytes) {
+  let c = 0xffffffff;
+  for (let i = 0; i < bytes.length; i++) c = TABLA_CRC[(c ^ bytes[i]) & 0xff] ^ (c >>> 8);
+  return (c ^ 0xffffffff) >>> 0;
+}
+
+function zip(archivos) {
+  const cod = new TextEncoder();
+  const partes = [], central = [];
+  let desplazamiento = 0;
+
+  // Fecha/hora MS-DOS: el formato del ZIP, no admite el epoch de JS.
+  const ahora = new Date();
+  const hora = ((ahora.getHours() << 11) | (ahora.getMinutes() << 5) | (ahora.getSeconds() >> 1)) & 0xffff;
+  const fecha = (((ahora.getFullYear() - 1980) << 9) | ((ahora.getMonth() + 1) << 5) | ahora.getDate()) & 0xffff;
+
+  const u8 = (n) => [n & 0xff];
+  const u16 = (n) => [n & 0xff, (n >>> 8) & 0xff];
+  const u32 = (n) => [n & 0xff, (n >>> 8) & 0xff, (n >>> 16) & 0xff, (n >>> 24) & 0xff];
+
+  archivos.forEach(({ nombre, texto }) => {
+    const datos = cod.encode(texto);
+    const nom = cod.encode(nombre);
+    const suma = crc32(datos);
+
+    const local = [
+      ...u32(0x04034b50), ...u16(20), ...u16(0x0800), ...u16(0),
+      ...u16(hora), ...u16(fecha), ...u32(suma),
+      ...u32(datos.length), ...u32(datos.length),
+      ...u16(nom.length), ...u16(0),
+    ];
+    partes.push(new Uint8Array(local), nom, datos);
+
+    central.push([
+      ...u32(0x02014b50), ...u16(20), ...u16(20), ...u16(0x0800), ...u16(0),
+      ...u16(hora), ...u16(fecha), ...u32(suma),
+      ...u32(datos.length), ...u32(datos.length),
+      ...u16(nom.length), ...u16(0), ...u16(0), ...u16(0), ...u16(0),
+      ...u32(0), ...u32(desplazamiento), ...[...nom],
+    ]);
+
+    desplazamiento += local.length + nom.length + datos.length;
+    void u8;
+  });
+
+  const dir = central.flat();
+  const fin = [
+    ...u32(0x06054b50), ...u16(0), ...u16(0),
+    ...u16(archivos.length), ...u16(archivos.length),
+    ...u32(dir.length), ...u32(desplazamiento), ...u16(0),
+  ];
+
+  return new Blob([...partes, new Uint8Array(dir), new Uint8Array(fin)],
+    { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+}
+
+const xmlSeguro = (v) => String(v ?? '')
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  // Excel rechaza el archivo entero si aparece un carácter de control.
+  .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '');
+
+function columnaExcel(n) {
+  let s = '';
+  while (n > 0) { const r = (n - 1) % 26; s = String.fromCharCode(65 + r) + s; n = Math.floor((n - 1) / 26); }
+  return s;
+}
+
+function exportarExcel() {
+  const filas = [COLUMNAS.map((c) => c[0])];
+  visibles.forEach((r) => filas.push(COLUMNAS.map((c) => String(c[1](r) ?? ''))));
+
+  const hojaFilas = filas.map((fila, i) => {
+    const celdas = fila.map((valor, j) =>
+      `<c r="${columnaExcel(j + 1)}${i + 1}" t="inlineStr"${i === 0 ? ' s="1"' : ''}><is><t xml:space="preserve">${xmlSeguro(valor)}</t></is></c>`
+    ).join('');
+    return `<row r="${i + 1}"${i === 0 ? ' ht="20" customHeight="1"' : ''}>${celdas}</row>`;
+  }).join('');
+
+  const anchos = [16, 16, 14, 30, 20, 14, 12, 9, 46, 46, 22]
+    .map((w, i) => `<col min="${i + 1}" max="${i + 1}" width="${w}" customWidth="1"/>`).join('');
+
+  const ref = `A1:${columnaExcel(COLUMNAS.length)}${filas.length}`;
+
+  zipDescarga([
+    { nombre: '[Content_Types].xml', texto:
+      `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>` },
+    { nombre: '_rels/.rels', texto:
+      `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>` },
+    { nombre: 'xl/workbook.xml', texto:
+      `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="Registros" sheetId="1" r:id="rId1"/></sheets></workbook>` },
+    { nombre: 'xl/_rels/workbook.xml.rels', texto:
+      `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>` },
+    { nombre: 'xl/styles.xml', texto:
+      `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE30613"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1" applyAlignment="1"><alignment vertical="center"/></xf></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>` },
+    { nombre: 'xl/worksheets/sheet1.xml', texto:
+      `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetPr><outlinePr summaryBelow="1" summaryRight="1"/></sheetPr><dimension ref="${ref}"/><sheetViews><sheetView workbookViewId="0" tabSelected="1"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><sheetFormatPr defaultRowHeight="15"/><cols>${anchos}</cols><sheetData>${hojaFilas}</sheetData><autoFilter ref="${ref}"/></worksheet>` },
+  ]);
+}
+
+function zipDescarga(archivos) {
+  descargar(zip(archivos), nombreArchivo('xlsx'));
+}
+
+/* ===========================================================================
+   7. Enganches
+   =========================================================================== */
+
+function escapar(v) {
+  return String(v ?? '').replace(/[&<>"']/g, (c) =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+let reboteFiltro;
+['fBuscar', 'fEstilo', 'fDesde', 'fHasta', 'fAuth', 'fOrden'].forEach((id) => {
+  const el = $(id);
+  const ev = el.tagName === 'SELECT' ? 'change' : 'input';
+  el.addEventListener(ev, () => {
+    clearTimeout(reboteFiltro);
+    reboteFiltro = setTimeout(aplicar, ev === 'input' ? 180 : 0);
+  });
+});
+
+$('btnLimpiar').addEventListener('click', () => {
+  ['fBuscar', 'fDesde', 'fHasta'].forEach((id) => ($(id).value = ''));
+  ['fEstilo', 'fAuth'].forEach((id) => ($(id).value = ''));
+  $('fOrden').value = 'desc';
+  aplicar();
+});
+
+$('btnRecargar').addEventListener('click', recargar);
+$('btnCsv').addEventListener('click', exportarCsv);
+$('btnExcel').addEventListener('click', exportarExcel);
+
+$('cuerpo').addEventListener('click', (e) => {
+  const img = e.target.closest('.miniatura[data-fila]');
+  if (img) abrirVisor(Number(img.dataset.fila));
+});
+
+$('visor').addEventListener('click', (e) => {
+  if (e.target === $('visor') || e.target.closest('#btnCerrarVisor')) $('visor').dataset.abierto = '0';
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') $('visor').dataset.abierto = '0';
+});
+
+// Globo de datos, compartido por las barras y la línea.
+const globo = $('globo');
+document.addEventListener('mouseover', (e) => {
+  const el = e.target.closest('[data-globo]');
+  if (!el) return;
+  globo.innerHTML = '<b>' + escapar(el.dataset.globo) + '</b>';
+  globo.style.opacity = '1';
+});
+document.addEventListener('mousemove', (e) => {
+  if (globo.style.opacity === '1') {
+    globo.style.left = e.clientX + 'px';
+    globo.style.top = e.clientY + 'px';
+  }
+});
+document.addEventListener('mouseout', (e) => {
+  if (e.target.closest('[data-globo]')) globo.style.opacity = '0';
+});
+
+// Refresco automático: el evento está vivo y el panel se mira en una pantalla.
+setInterval(() => { if (!document.hidden) recargar(); }, 60000);
+
+recargar();
+</script>
+</body>
+</html>

@@ -16,6 +16,7 @@ export {
   generateSummitImage,
   summitHealthCheck,
   getSummitStatus,
+  listSummitParticipantes,
 } from "./controllers/summitController";
 
 // Campaña Claro · "Antioquia nos enseña a llegar lejos" (Feria de las Flores)

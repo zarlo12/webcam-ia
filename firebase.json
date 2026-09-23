@@ -9,6 +9,11 @@
         "source": "/aviso",
         "destination": "/aviso.html",
         "type": 301
+      },
+      {
+        "source": "/panel",
+        "destination": "/panel.html",
+        "type": 301
       }
     ],
     "rewrites": [

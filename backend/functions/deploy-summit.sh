@@ -56,6 +56,7 @@ echo "🔴 Funciones a desplegar:"
 echo "   - generateSummitImage  (POST · foto + filtro → imagen con marco)"
 echo "   - summitHealthCheck    (GET  · estado y estilos configurados)"
 echo "   - getSummitStatus      (GET  · ?predictionId=...)"
+echo "   - listSummitParticipantes (GET · listado para el panel)"
 echo ""
 read -p "¿Desplegar a Firebase? (y/n) " -n 1 -r
 echo ""
@@ -67,7 +68,7 @@ fi
 
 echo ""
 echo "🚀 Desplegando..."
-firebase deploy --only "functions:generateSummitImage,functions:summitHealthCheck,functions:getSummitStatus"
+firebase deploy --only "functions:generateSummitImage,functions:summitHealthCheck,functions:getSummitStatus,functions:listSummitParticipantes"
 
 echo ""
 echo "🔴 =========================================="

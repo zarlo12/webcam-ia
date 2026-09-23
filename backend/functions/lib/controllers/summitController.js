@@ -1,10 +1,44 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSummitStatus = exports.summitHealthCheck = exports.generateSummitImage = void 0;
+exports.getSummitStatus = exports.listSummitParticipantes = exports.summitHealthCheck = exports.generateSummitImage = void 0;
 const https_1 = require("firebase-functions/v2/https");
+const admin = __importStar(require("firebase-admin"));
 const summitReplicateService_1 = __importDefault(require("../services/summitReplicateService"));
 const summit_1 = require("../config/summit");
 const multipart_1 = require("../utils/multipart");
@@ -147,6 +181,86 @@ exports.summitHealthCheck = (0, https_1.onRequest)({
             promptLength: f.prompt.length,
         })),
     });
+});
+/**
+ * Listado de participantes para el panel de registros.
+ *
+ * Es de lectura y deliberadamente ABIERTO: así lo pidió el cliente. Las reglas
+ * de Firestore siguen cerradas —quien lee aquí es el Admin SDK—, de modo que la
+ * colección no queda expuesta a internet: solo lo que devuelve este endpoint.
+ *
+ * OJO: devuelve datos personales (nombre, cédula, correo). Para cerrarlo basta
+ * con exigir un token: descomentar el bloque de PANEL_TOKEN de abajo y definir
+ * la variable en el .env de las funciones.
+ *
+ * Pagina por cursor en vez de traerlo todo de golpe, para que un evento con
+ * miles de registros no reviente la memoria de la función.
+ */
+exports.listSummitParticipantes = (0, https_1.onRequest)({
+    cors: true,
+    maxInstances: 10,
+    timeoutSeconds: 60,
+    memory: "512MiB",
+    region: "us-central1",
+}, async (req, res) => {
+    // Para proteger el panel, descomentar:
+    // if (req.query.token !== process.env.PANEL_TOKEN) {
+    //   res.status(401).json({ success: false, error: "No autorizado" });
+    //   return;
+    // }
+    try {
+        const limit = Math.min(Number(req.query.limit) || 500, 1000);
+        const cursor = req.query.cursor;
+        let query = admin
+            .firestore()
+            .collection(summit_1.SUMMIT_COLLECTION)
+            .orderBy("createdAt", "desc")
+            .orderBy(admin.firestore.FieldPath.documentId(), "desc");
+        if (cursor) {
+            const [millis, id] = cursor.split("|");
+            query = query.startAfter(admin.firestore.Timestamp.fromMillis(Number(millis)), id);
+        }
+        const snapshot = await query.limit(limit).get();
+        const items = snapshot.docs.map((doc) => {
+            const data = doc.data();
+            const createdAt = data.createdAt;
+            return {
+                id: doc.id,
+                nombre: data.nombre ?? "",
+                apellido: data.apellido ?? "",
+                cedula: data.cedula ?? "",
+                correo: data.correo ?? "",
+                autorizaDatos: data.autorizaDatos === true,
+                filtro: data.filtro ?? null,
+                filtroLabel: data.filtroLabel ?? "",
+                originalImageUrl: data.originalImageUrl ?? "",
+                resultImageUrl: data.resultImageUrl ?? "",
+                model: data.model ?? "",
+                requestId: data.requestId ?? "",
+                // ISO para que el panel no dependa del formato de Firestore.
+                createdAt: createdAt ? createdAt.toDate().toISOString() : null,
+            };
+        });
+        const last = snapshot.docs[snapshot.docs.length - 1];
+        const lastCreatedAt = last?.get("createdAt");
+        res.status(200).json({
+            success: true,
+            collection: summit_1.SUMMIT_COLLECTION,
+            count: items.length,
+            // Ausente cuando ya no hay más páginas.
+            nextCursor: snapshot.size === limit && last && lastCreatedAt
+                ? `${lastCreatedAt.toMillis()}|${last.id}`
+                : null,
+            items,
+        });
+    }
+    catch (error) {
+        console.error("🔴 Error listando participantes:", error);
+        res.status(500).json({
+            success: false,
+            error: "No se pudo leer el listado de participantes",
+        });
+    }
 });
 exports.getSummitStatus = (0, https_1.onRequest)({
     cors: true,

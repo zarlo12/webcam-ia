@@ -1,13 +1,19 @@
 import { onRequest } from "firebase-functions/v2/https";
 import * as admin from "firebase-admin";
-import summitReplicateService, {
+import summitImageService, {
   SummitGenerationRequest,
-} from "../services/summitReplicateService";
+} from "../services/summitImageService";
+import {
+  esProveedorValido,
+  estadoReplicate,
+  proveedorActivo,
+} from "../services/proveedores";
 import {
   SUMMIT_COLLECTION,
   SUMMIT_FILTERS,
-  SUMMIT_MODEL,
+  SUMMIT_MODELS,
   SUMMIT_STORAGE,
+  SummitProvider,
   isSummitFilterId,
 } from "../config/summit";
 import {
@@ -31,6 +37,8 @@ interface SummitPayload {
   filtro: unknown;
   prompt?: string;
   model?: string;
+  /** Para probar el otro proveedor sin redesplegar. */
+  provider?: string;
   nombre?: string;
   apellido?: string;
   cedula?: string;
@@ -55,12 +63,22 @@ function buildRequest(
     };
   }
 
+  const pedido = payload.provider?.trim().toLowerCase();
+  let provider: SummitProvider | undefined;
+  if (pedido) {
+    if (!esProveedorValido(pedido)) {
+      return { error: `'provider' debe ser 'replicate' o 'fal'. Se recibió: ${pedido}` };
+    }
+    provider = pedido;
+  }
+
   return {
     request: {
       imageData,
       filtro,
       promptOverride: payload.prompt?.trim() || undefined,
       model: payload.model?.trim() || undefined,
+      provider: provider || undefined,
       nombre: payload.nombre?.trim() || undefined,
       apellido: payload.apellido?.trim() || undefined,
       cedula: payload.cedula?.trim() || undefined,
@@ -136,7 +154,7 @@ export const generateSummitImage = onRequest(
           return;
         }
 
-        const result = await summitReplicateService.generate(request);
+        const result = await summitImageService.generate(request);
         console.log(`🔴 ===== FIN (${result.success ? "OK" : "ERROR"}) =====\n`);
         res.status(result.success ? 200 : 400).json(result);
         return;
@@ -169,7 +187,7 @@ export const generateSummitImage = onRequest(
           return;
         }
 
-        const result = await summitReplicateService.generate(request);
+        const result = await summitImageService.generate(request);
         console.log(`🔴 ===== FIN (${result.success ? "OK" : "ERROR"}) =====\n`);
         res.status(result.success ? 200 : 400).json(result);
         return;
@@ -204,8 +222,13 @@ export const summitHealthCheck = onRequest(
       service: "Claro Tech Summit 2026 · Soluciones Digitales",
       message: "🔴 Servicio activo",
       timestamp: new Date().toISOString(),
-      version: "1.0.0",
-      model: SUMMIT_MODEL,
+      version: "1.1.0",
+      // Lo primero que hay que poder ver en una caída: quién está generando.
+      provider: proveedorActivo(),
+      model: SUMMIT_MODELS[proveedorActivo()],
+      providersDisponibles: SUMMIT_MODELS,
+      falKeyConfigurada: !!process.env.FAL_KEY,
+      replicateTokenConfigurado: !!process.env.REPLICATE_API_TOKEN,
       storage: SUMMIT_STORAGE,
       collection: SUMMIT_COLLECTION,
       filters: Object.values(SUMMIT_FILTERS).map((f) => ({
@@ -334,7 +357,7 @@ export const getSummitStatus = onRequest(
         return;
       }
 
-      const status = await summitReplicateService.checkStatus(predictionId);
+      const status = await estadoReplicate(predictionId);
       res.status(200).json({ success: true, data: status });
     } catch (error) {
       console.error("🔴 Error consultando estado:", error);

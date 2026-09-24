@@ -20,9 +20,29 @@ if [ ! -f "package.json" ]; then
 fi
 
 if [ ! -f ".env" ]; then
-    echo "❌ Falta el archivo .env con REPLICATE_API_TOKEN y STORAGE_BUCKET"
+    echo "❌ Falta el archivo .env con STORAGE_BUCKET y la clave del proveedor"
     exit 1
 fi
+
+# El proveedor y su clave tienen que cuadrar, o el kiosco falla en la primera
+# foto del evento en vez de aquí.
+PROVIDER=$(grep -E "^IMAGE_PROVIDER=" .env | cut -d= -f2- | tr -d ' "' | tr '[:upper:]' '[:lower:]')
+PROVIDER=${PROVIDER:-replicate}
+
+case "$PROVIDER" in
+    fal)
+        grep -qE "^FAL_KEY=.+" .env || { echo "❌ IMAGE_PROVIDER=fal pero falta FAL_KEY en .env"; exit 1; }
+        echo "✅ Proveedor: fal.ai  (fal-ai/nano-banana-2/edit)"
+        ;;
+    replicate)
+        grep -qE "^REPLICATE_API_TOKEN=.+" .env || { echo "❌ IMAGE_PROVIDER=replicate pero falta REPLICATE_API_TOKEN en .env"; exit 1; }
+        echo "✅ Proveedor: Replicate  (google/nano-banana-2)"
+        ;;
+    *)
+        echo "❌ IMAGE_PROVIDER debe ser 'replicate' o 'fal'. Está en: '$PROVIDER'"
+        exit 1
+        ;;
+esac
 
 # Las referencias de estilo y el marco viajan dentro del paquete de la función:
 # el backend las publica en Storage la primera vez que se usan.

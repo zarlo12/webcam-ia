@@ -25,7 +25,21 @@ export const SUMMIT_STORAGE = {
   references: "claro-tech-summit/referencias",
 } as const;
 
-export const SUMMIT_MODEL = "google/nano-banana-2";
+/**
+ * Proveedor de generación. Se elige con IMAGE_PROVIDER en el .env de las
+ * funciones ("replicate" o "fal"); por defecto Replicate.
+ *
+ * Existe porque Replicate se cayó en plena operación: poder cambiar de
+ * proveedor es cambiar una variable y redesplegar, sin tocar prompts ni
+ * composición. Los dos corren el mismo modelo de Google (nano-banana 2), así
+ * que el resultado es equivalente.
+ */
+export type SummitProvider = "replicate" | "fal";
+
+export const SUMMIT_MODELS: Record<SummitProvider, string> = {
+  replicate: "google/nano-banana-2",
+  fal: "fal-ai/nano-banana-2/edit",
+};
 
 /**
  * El lienzo final es 1123×1401 (≈0.80) y el retrato entra con `contain`, así

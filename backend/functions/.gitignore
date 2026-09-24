@@ -1,2 +1,6 @@
 node_modules/
 *.local
+# Secretos: nunca. Incluye respaldos tipo .env.respaldo-AAAAMMDD
+.env
+.env.*
+!.env.example

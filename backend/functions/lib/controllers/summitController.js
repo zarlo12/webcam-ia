@@ -39,7 +39,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getSummitStatus = exports.listSummitParticipantes = exports.summitHealthCheck = exports.generateSummitImage = void 0;
 const https_1 = require("firebase-functions/v2/https");
 const admin = __importStar(require("firebase-admin"));
-const summitReplicateService_1 = __importDefault(require("../services/summitReplicateService"));
+const summitImageService_1 = __importDefault(require("../services/summitImageService"));
+const proveedores_1 = require("../services/proveedores");
 const summit_1 = require("../config/summit");
 const multipart_1 = require("../utils/multipart");
 /** El formulario viaja como multipart, así que los booleanos llegan de texto. */
@@ -52,12 +53,21 @@ function buildRequest(imageData, payload) {
             error: `El campo 'filtro' es obligatorio y debe ser 1, 2, 3 o 4. Se recibió: ${JSON.stringify(payload.filtro)}`,
         };
     }
+    const pedido = payload.provider?.trim().toLowerCase();
+    let provider;
+    if (pedido) {
+        if (!(0, proveedores_1.esProveedorValido)(pedido)) {
+            return { error: `'provider' debe ser 'replicate' o 'fal'. Se recibió: ${pedido}` };
+        }
+        provider = pedido;
+    }
     return {
         request: {
             imageData,
             filtro,
             promptOverride: payload.prompt?.trim() || undefined,
             model: payload.model?.trim() || undefined,
+            provider: provider || undefined,
             nombre: payload.nombre?.trim() || undefined,
             apellido: payload.apellido?.trim() || undefined,
             cedula: payload.cedula?.trim() || undefined,
@@ -115,7 +125,7 @@ exports.generateSummitImage = (0, https_1.onRequest)({
                 res.status(400).json({ success: false, error });
                 return;
             }
-            const result = await summitReplicateService_1.default.generate(request);
+            const result = await summitImageService_1.default.generate(request);
             console.log(`🔴 ===== FIN (${result.success ? "OK" : "ERROR"}) =====\n`);
             res.status(result.success ? 200 : 400).json(result);
             return;
@@ -140,7 +150,7 @@ exports.generateSummitImage = (0, https_1.onRequest)({
                 res.status(400).json({ success: false, error });
                 return;
             }
-            const result = await summitReplicateService_1.default.generate(request);
+            const result = await summitImageService_1.default.generate(request);
             console.log(`🔴 ===== FIN (${result.success ? "OK" : "ERROR"}) =====\n`);
             res.status(result.success ? 200 : 400).json(result);
             return;
@@ -170,8 +180,13 @@ exports.summitHealthCheck = (0, https_1.onRequest)({
         service: "Claro Tech Summit 2026 · Soluciones Digitales",
         message: "🔴 Servicio activo",
         timestamp: new Date().toISOString(),
-        version: "1.0.0",
-        model: summit_1.SUMMIT_MODEL,
+        version: "1.1.0",
+        // Lo primero que hay que poder ver en una caída: quién está generando.
+        provider: (0, proveedores_1.proveedorActivo)(),
+        model: summit_1.SUMMIT_MODELS[(0, proveedores_1.proveedorActivo)()],
+        providersDisponibles: summit_1.SUMMIT_MODELS,
+        falKeyConfigurada: !!process.env.FAL_KEY,
+        replicateTokenConfigurado: !!process.env.REPLICATE_API_TOKEN,
         storage: summit_1.SUMMIT_STORAGE,
         collection: summit_1.SUMMIT_COLLECTION,
         filters: Object.values(summit_1.SUMMIT_FILTERS).map((f) => ({
@@ -277,7 +292,7 @@ exports.getSummitStatus = (0, https_1.onRequest)({
                 .json({ success: false, error: "predictionId es obligatorio" });
             return;
         }
-        const status = await summitReplicateService_1.default.checkStatus(predictionId);
+        const status = await (0, proveedores_1.estadoReplicate)(predictionId);
         res.status(200).json({ success: true, data: status });
     }
     catch (error) {

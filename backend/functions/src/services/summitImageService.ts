@@ -1,18 +1,17 @@
-import Replicate from "replicate";
 import sharp from "sharp";
-import { replicateConfig } from "../config";
 import {
   SUMMIT_ASPECT_RATIO,
   SUMMIT_FILTERS,
-  SUMMIT_MODEL,
   SUMMIT_STORAGE,
   SummitFilterId,
+  SummitProvider,
 } from "../config/summit";
 import { base64ToBuffer, generateRequestId, retryWithBackoff } from "../utils";
 import { uploadToStorage } from "../utils/storage";
 import { getStyleReferenceUrl } from "../utils/summitAssets";
 import { composeSummitFrame } from "../utils/summitFrame";
 import { saveSummitParticipante } from "../utils/summitFirestore";
+import { obtenerProveedor } from "./proveedores";
 
 export interface SummitGenerationRequest {
   /** Foto del visitante en base64 (data URL). */
@@ -22,6 +21,8 @@ export interface SummitGenerationRequest {
   promptOverride?: string;
   /** Modelo alterno para pruebas. */
   model?: string;
+  /** Proveedor alterno para pruebas, sin tener que redesplegar. */
+  provider?: SummitProvider;
   nombre?: string;
   apellido?: string;
   cedula?: string;
@@ -43,17 +44,21 @@ export interface SummitGenerationResponse {
     styleReference?: string;
     portraitImage?: string;
     finalImage?: string;
+    provider?: string;
     model?: string;
   };
 }
+
+/** Resolución que se le pide al modelo; el marco final mide 1123×1401. */
+const RESOLUCION = "1K";
 
 /**
  * Prepara la foto del visitante para el modelo.
  *
  * A diferencia de `optimizeImageForAI` (compartida, tope de 1024 px), aquí se
  * conserva más resolución: mientras más detalle del rostro reciba el modelo,
- * mejor conserva el parecido. La webcam captura 2048×2048, así que 1600 px
- * mantiene la cara nítida sin inflar el tiempo de subida.
+ * mejor conserva el parecido. La webcam captura 1600 px de lado mayor, así que
+ * esto no la agranda, solo la normaliza.
  */
 const optimizeVisitorPhoto = async (buffer: Buffer): Promise<Buffer> =>
   sharp(buffer)
@@ -62,7 +67,7 @@ const optimizeVisitorPhoto = async (buffer: Buffer): Promise<Buffer> =>
     .toBuffer();
 
 /**
- * Servicio de Claro Tech Summit 2026.
+ * Servicio de generación de Claro Tech Summit 2026.
  *
  * El modelo recibe DOS imágenes en este orden:
  *   [0] la referencia del estilo elegido → IMAGE 1 en el prompt
@@ -70,35 +75,25 @@ const optimizeVisitorPhoto = async (buffer: Buffer): Promise<Buffer> =>
  * y devuelve un retrato suelto, sin marco. El marco de la campaña se compone
  * después con sharp, para que el arte quede siempre idéntico y no dependa de
  * lo que el modelo decida dibujar.
+ *
+ * Quién ejecuta el modelo (Replicate o fal.ai) lo decide `proveedores.ts` a
+ * partir de IMAGE_PROVIDER: aquí no hay nada atado a un proveedor.
  */
-class SummitReplicateService {
-  private replicate: Replicate | null = null;
-
-  private initReplicate() {
-    if (this.replicate) return this.replicate;
-
-    if (!replicateConfig.apiToken) {
-      throw new Error("REPLICATE_API_TOKEN environment variable is required");
-    }
-
-    this.replicate = new Replicate({ auth: replicateConfig.apiToken });
-    return this.replicate;
-  }
-
+class SummitImageService {
   async generate(
     request: SummitGenerationRequest,
   ): Promise<SummitGenerationResponse> {
     const requestId = generateRequestId();
     const filter = SUMMIT_FILTERS[request.filtro];
-    const model = request.model || SUMMIT_MODEL;
     const prompt = request.promptOverride || filter.prompt;
+    const proveedor = obtenerProveedor(request.provider, request.model);
 
     try {
       console.log(`[SUMMIT-${requestId}] ▶ Filtro ${filter.id} (${filter.label})`);
-      console.log(`[SUMMIT-${requestId}] Modelo: ${model}`);
+      console.log(`[SUMMIT-${requestId}] Proveedor: ${proveedor.nombre} · ${proveedor.modelo}`);
 
       // 1. Subir la foto del visitante y resolver la referencia de estilo.
-      //    Replicate necesita leer las dos por HTTP.
+      //    El proveedor necesita leer las dos por HTTP.
       const imageBuffer = base64ToBuffer(request.imageData);
       const optimizedBuffer = await optimizeVisitorPhoto(imageBuffer);
 
@@ -115,12 +110,19 @@ class SummitReplicateService {
       console.log(`[SUMMIT-${requestId}] 🎨 Referencia: ${styleReferenceUrl}`);
 
       // 2. Generar: referencia primero, foto después (así las nombra el prompt)
-      const portraitUrl = await this.runModel(
-        styleReferenceUrl,
-        originalImageUrl,
-        prompt,
-        model,
-        requestId,
+      const portraitUrl = await retryWithBackoff(
+        () =>
+          proveedor.generar(
+            {
+              prompt,
+              imagenes: [styleReferenceUrl, originalImageUrl],
+              aspecto: SUMMIT_ASPECT_RATIO,
+              resolucion: RESOLUCION,
+            },
+            requestId,
+          ),
+        3,
+        2000,
       );
 
       // 3. Poner el marco de la campaña y guardar el resultado
@@ -147,7 +149,7 @@ class SummitReplicateService {
         originalImageUrl,
         resultImageUrl: finalImageUrl,
         requestId,
-        model,
+        model: `${proveedor.nombre}:${proveedor.modelo}`,
       });
 
       return {
@@ -162,7 +164,8 @@ class SummitReplicateService {
           styleReference: styleReferenceUrl,
           portraitImage: portraitUrl,
           finalImage: finalImageUrl,
-          model,
+          provider: proveedor.nombre,
+          model: proveedor.modelo,
         },
       };
     } catch (error) {
@@ -180,58 +183,6 @@ class SummitReplicateService {
     }
   }
 
-  private async runModel(
-    styleReferenceUrl: string,
-    personUrl: string,
-    prompt: string,
-    model: string,
-    requestId: string,
-  ): Promise<string> {
-    const input = {
-      prompt,
-      // ORDEN CRÍTICO: [referencia, foto] = [IMAGE 1, IMAGE 2] del prompt
-      image_input: [styleReferenceUrl, personUrl],
-      aspect_ratio: SUMMIT_ASPECT_RATIO,
-      output_format: "jpg",
-      resolution: "1K",
-      // Sin búsquedas externas: la referencia visual son las dos imágenes adjuntas
-      image_search: false,
-      google_search: false,
-    };
-
-    console.log(`[SUMMIT-${requestId}] 🤖 image_input:`, input.image_input);
-    console.log(
-      `[SUMMIT-${requestId}] 🤖 prompt: ${prompt.length} chars, aspect ${input.aspect_ratio}`,
-    );
-
-    const output = await retryWithBackoff(
-      async () => this.initReplicate().run(model as any, { input }),
-      3,
-      2000,
-    );
-
-    return this.extractUrl(output);
-  }
-
-  /** Normaliza las distintas formas en que Replicate devuelve la salida. */
-  private extractUrl(output: unknown): string {
-    if (Array.isArray(output)) {
-      const first = output[0];
-      if (first && typeof first === "object" && "url" in (first as any)) {
-        return (first as any).url().toString();
-      }
-      return String(first);
-    }
-
-    if (output && typeof output === "object" && "url" in (output as any)) {
-      return (output as any).url().toString();
-    }
-
-    if (typeof output === "string") return output;
-
-    throw new Error("Formato de salida inesperado del modelo");
-  }
-
   private async download(imageUrl: string): Promise<Buffer> {
     const response = await fetch(imageUrl);
 
@@ -244,29 +195,6 @@ class SummitReplicateService {
     return Buffer.from(await response.arrayBuffer());
   }
 
-  async checkStatus(predictionId: string) {
-    const prediction = await this.initReplicate().predictions.get(predictionId);
-
-    return {
-      id: predictionId,
-      status:
-        prediction.status === "succeeded"
-          ? "completed"
-          : prediction.status === "failed"
-            ? "failed"
-            : "processing",
-      imageUrl: prediction.output
-        ? ((Array.isArray(prediction.output)
-            ? prediction.output[0]
-            : prediction.output) as string)
-        : undefined,
-      error: prediction.error?.toString(),
-      createdAt: new Date(prediction.created_at),
-      completedAt: prediction.completed_at
-        ? new Date(prediction.completed_at)
-        : undefined,
-    };
-  }
 }
 
-export default new SummitReplicateService();
+export default new SummitImageService();

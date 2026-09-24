@@ -13,7 +13,7 @@
  * feria-colombia, circus ni a las funciones genéricas.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isSummitFilterId = exports.SUMMIT_FILTERS = exports.SUMMIT_FRAME = exports.SUMMIT_ASPECT_RATIO = exports.SUMMIT_MODEL = exports.SUMMIT_STORAGE = exports.SUMMIT_COLLECTION = void 0;
+exports.isSummitFilterId = exports.SUMMIT_FILTERS = exports.SUMMIT_FRAME = exports.SUMMIT_ASPECT_RATIO = exports.SUMMIT_MODELS = exports.SUMMIT_STORAGE = exports.SUMMIT_COLLECTION = void 0;
 /** Colección de Firestore. No la comparte ninguna otra campaña. */
 exports.SUMMIT_COLLECTION = "claro_tech_summit_participantes";
 /** Carpetas de Storage, todas bajo el mismo prefijo. */
@@ -23,7 +23,10 @@ exports.SUMMIT_STORAGE = {
     /** Referencias de estilo que el backend publica la primera vez que se usan. */
     references: "claro-tech-summit/referencias",
 };
-exports.SUMMIT_MODEL = "google/nano-banana-2";
+exports.SUMMIT_MODELS = {
+    replicate: "google/nano-banana-2",
+    fal: "fal-ai/nano-banana-2/edit",
+};
 /**
  * El lienzo final es 1123×1401 (≈0.80) y el retrato entra con `contain`, así
  * que 3:4 (0.75) es la relación soportada que menos aire deja a los lados.

@@ -2,15 +2,17 @@
 
 # 🔴 Pruebas de los endpoints de Claro Tech Summit 2026
 #
-# Uso:  ./test-summit.sh ruta/a/una/foto.jpg [estilo]
-#       estilo = 1 acuarela | 2 ilustración | 3 universo fantástico | 4 cyberpunk
-#                (por defecto 1)
+# Uso:  ./test-summit.sh ruta/a/una/foto.jpg [estilo] [proveedor]
+#       estilo    = 1 acuarela | 2 ilustración | 3 universo fantástico | 4 cyberpunk
+#                   (por defecto 1)
+#       proveedor = replicate | fal   (por defecto, el que tenga desplegado)
 
 BASE_URL="${SUMMIT_BASE_URL:-https://us-central1-imagen-ia-845a3.cloudfunctions.net}"
 PHOTO="$1"
 FILTRO="${2:-1}"
+PROVEEDOR="$3"
 
-echo "🔴 1. Health check — muestra estilos y referencias configuradas"
+echo "🔴 1. Health check — proveedor activo, estilos y referencias"
 curl -s "$BASE_URL/summitHealthCheck" | python3 -m json.tool
 
 if [ -z "$PHOTO" ]; then
@@ -26,11 +28,12 @@ if [ ! -f "$PHOTO" ]; then
 fi
 
 echo ""
-echo "🔴 2. Generando con el estilo $FILTRO (puede tardar entre 30 s y 3 min)..."
+echo "🔴 2. Generando con el estilo $FILTRO${PROVEEDOR:+ vía $PROVEEDOR} (entre 10 s y 3 min según el proveedor)..."
 
 curl -X POST "$BASE_URL/generateSummitImage" \
   -F "image=@$PHOTO" \
   -F "filtro=$FILTRO" \
+  ${PROVEEDOR:+-F "provider=$PROVEEDOR"} \
   -F "nombre=Prueba" \
   -F "apellido=cURL" \
   -F "cedula=1000000000" \

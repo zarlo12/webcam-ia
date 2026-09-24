@@ -59,6 +59,37 @@ la foto del visitante— y sobre el retrato que devuelve compone el marco de la
 campaña con `sharp`. Por eso lo que se ve en pantalla es exactamente lo que se
 descarga por QR.
 
+### Proveedor de generación
+
+Se puede correr sobre **Replicate** o sobre **fal.ai**, y los dos ejecutan el
+mismo modelo de Google (nano-banana 2). Se elige con una variable en el `.env`
+de las funciones:
+
+```
+IMAGE_PROVIDER=fal        # o "replicate"
+FAL_KEY=id:secreto
+REPLICATE_API_TOKEN=r8_...
+```
+
+Cambiar de proveedor es cambiar esa línea y redesplegar: no toca prompts,
+composición ni frontend. `deploy-summit.sh` verifica que la clave del proveedor
+elegido esté presente antes de desplegar.
+
+Para probar el otro sin redesplegar, se manda `provider=fal` (o
+`provider=replicate`) en la petición a `generateSummitImage`:
+
+```bash
+./test-summit.sh foto.jpg 4 fal
+```
+
+`summitHealthCheck` informa cuál está activo y si cada clave está configurada.
+
+| | Replicate | fal.ai |
+|---|---|---|
+| Modelo | `google/nano-banana-2` | `fal-ai/nano-banana-2/edit` |
+| Llamada | SDK `replicate` | REST a `fal.run`, sin SDK |
+| Medido | 1–3 min | ~11 s |
+
 Las referencias de estilo viajan dentro del paquete de la función y se publican
 solas en Storage la primera vez que se usan: no hay que subir plantillas a mano.
 Si cambia un arte, hay que borrar el objeto viejo de

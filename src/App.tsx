@@ -1,55 +1,55 @@
 import { useCallback, useState } from "react";
 import Swal from "sweetalert2";
-import { BotonPantallaCompleta } from "./components/ui/Boton";
-import Registro, { type RegistroData } from "./screens/Registro/Registro";
-import Estilos from "./screens/Estilos/Estilos";
-import Camara from "./screens/Camara/Camara";
-import Generando from "./screens/Generando/Generando";
-import Resultado from "./screens/Resultado/Resultado";
-import Qr from "./screens/Qr/Qr";
-import summitService from "./services/summitService";
-import type { FiltroId } from "./config/summit";
+import { BotonPantallaCompleta } from "./components/ui/BotonDT";
+import Registro, { type RegistroData } from "./screens/dt/Registro";
+import Plantillas from "./screens/dt/Plantillas";
+import Camara from "./screens/dt/Camara";
+import Generando from "./screens/dt/Generando";
+import Resultado from "./screens/dt/Resultado";
+import Qr from "./screens/dt/Qr";
+import datatechService from "./services/datatechService";
+import type { PlantillaId } from "./config/datatech";
 
 /**
- * Claro Tech Summit 2026 · Soluciones Digitales
+ * Claro media · DATA TECH — "15 minutos"
  *
- * Flujo del kiosco, en el orden de las artes:
+ * Flujo del kiosco:
  *
- *   registro → estilos → camara → generando → resultado → qr
- *      ↑          ↓         ↓                     ↓        ↓
- *      └──────────┴─────────┘                     └────────┴──→ registro
+ *   registro → plantillas → camara → generando → resultado → qr
+ *      ↑           ↓           ↓                     ↓        ↓
+ *      └───────────┴───────────┘                     └────────┴──→ registro
  *
  * El paso es el único estado que manda: cada pantalla recibe lo que necesita y
  * avisa qué pasó, sin conocer a las demás.
  */
 
-type Paso = "registro" | "estilos" | "camara" | "generando" | "resultado" | "qr";
+type Paso = "registro" | "plantillas" | "camara" | "generando" | "resultado" | "qr";
 
 const ALERTA = {
   confirmButtonColor: "#E30613",
-  background: "#101014",
+  background: "#101016",
   color: "#FFFFFF",
 } as const;
 
 function App() {
   const [paso, setPaso] = useState<Paso>("registro");
   const [registro, setRegistro] = useState<RegistroData | null>(null);
-  const [filtro, setFiltro] = useState<FiltroId | null>(null);
+  const [plantilla, setPlantilla] = useState<PlantillaId | null>(null);
   const [imageUrl, setImageUrl] = useState("");
 
   const reiniciar = useCallback(() => {
     setRegistro(null);
-    setFiltro(null);
+    setPlantilla(null);
     setImageUrl("");
     setPaso("registro");
   }, []);
 
   const generar = useCallback(
     async (foto: Blob) => {
-      if (!filtro) return;
+      if (!plantilla) return;
 
       setPaso("generando");
-      const resultado = await summitService.generate(foto, filtro, registro);
+      const resultado = await datatechService.generate(foto, plantilla, registro);
 
       if (resultado.success && resultado.imageUrl) {
         setImageUrl(resultado.imageUrl);
@@ -57,18 +57,18 @@ function App() {
         return;
       }
 
-      // Se vuelve a la cámara: el registro y el estilo siguen siendo válidos,
+      // Se vuelve a la cámara: el correo y la plantilla siguen siendo válidos,
       // así que el visitante solo repite la foto.
       setPaso("camara");
       await Swal.fire({
         ...ALERTA,
         icon: "error",
-        title: "No pudimos crear su imagen",
+        title: "No pudimos crear su póster",
         text: resultado.error || "Inténtelo de nuevo.",
         confirmButtonText: "Intentar de nuevo",
       });
     },
-    [filtro, registro],
+    [plantilla, registro],
   );
 
   return (
@@ -79,15 +79,15 @@ function App() {
         <Registro
           onSubmit={(data) => {
             setRegistro(data);
-            setPaso("estilos");
+            setPaso("plantillas");
           }}
         />
       )}
 
-      {paso === "estilos" && (
-        <Estilos
-          onElegir={(elegido) => {
-            setFiltro(elegido);
+      {paso === "plantillas" && (
+        <Plantillas
+          onElegir={(elegida) => {
+            setPlantilla(elegida);
             setPaso("camara");
           }}
           onAtras={() => setPaso("registro")}
@@ -95,7 +95,7 @@ function App() {
       )}
 
       {paso === "camara" && (
-        <Camara onCapturar={generar} onAtras={() => setPaso("estilos")} />
+        <Camara onCapturar={generar} onAtras={() => setPaso("plantillas")} />
       )}
 
       {paso === "generando" && <Generando />}

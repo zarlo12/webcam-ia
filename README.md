@@ -1,146 +1,123 @@
-# Claro Tech Summit 2026 · Soluciones Digitales
+# Claro media · DATA TECH — "15 minutos"
 
-Kiosco de generación de imágenes con IA. El visitante se registra, elige un
-estilo, se toma una foto y recibe su retrato generado con un QR para
-descargarlo en el celular.
+Kiosco de pósters con IA. El visitante deja su correo, elige uno de los cinco
+pósters de la campaña, se toma una foto y recibe el mismo póster con su rostro
+en lugar del modelo, con un QR para descargarlo.
 
 ```
-registro → estilos → cámara → generando → resultado → QR
+registro → plantillas → cámara → generando → resultado → QR
 ```
 
 ## Cómo está armado
 
-**Las artes mandan.** Diseño entregó las cinco pantallas como PNG con
-transparencia sobre negro: el arte trae el texto, los marcos y la decoración, y
-deja el hueco donde va el contenido vivo (los campos, la cámara, el retrato, el
-código). El código solo pone encima lo interactivo, posicionado en % del lienzo
-del arte, así que calza igual en cualquier tamaño de pantalla.
+Las cinco plantillas son **pósters terminados**: ya traen el titular, el badge
+"15 MINUTOS" y los logos. El modelo reproduce el póster cambiando quién sale, y
+lo que devuelve se publica tal cual — no se compone ningún marco encima.
 
-- `src/components/Stage/` — lienzo común: centra el arte respetando su
-  proporción y da el sistema de coordenadas. Lo usan cuatro de las cinco
-  pantallas.
-- `src/config/summit.ts` — **fuente única** del catálogo de estilos y de las
-  coordenadas de cada hueco. Ningún componente tiene coordenadas propias.
-- `src/screens/` — una carpeta por pantalla.
+- `src/components/Pantalla/` — armazón común: fondo, logo, titular y franja de
+  controles. Las pantallas se construyen en CSS, no sobre artes con huecos.
+- `src/config/datatech.ts` — catálogo de plantillas del lado del kiosco.
+- `src/screens/dt/` — una carpeta por pantalla.
 - `src/App.tsx` — la máquina de pasos, y nada más.
 
-La pantalla de estilos es la excepción: no tiene un arte propio (el mockup trae
-las tarjetas dibujadas dentro), así que se arma por partes. Está explicado en
-`src/screens/Estilos/Estilos.tsx`.
+El registro pide **solo el correo**: sin nombre, sin cédula y sin casilla de
+tratamiento de datos.
 
 ## Assets
 
-Los assets de `src/assets/summit/` y `backend/functions/assets/summit/` **no se
-editan a mano**: se derivan de `referencias_02/` con
+Los de `src/assets/datatech/` y `backend/functions/assets/datatech/` **no se
+editan a mano**: se derivan de `referencias_03/` con
 
 ```bash
-python3 scripts/prepare-summit-assets.py
+npm run assets          # python3 scripts/prepare-datatech-assets.py
 ```
 
-El script recorta las tarjetas, separa la silueta del retrato de su marco,
-extrae el logo y prepara las referencias de estilo que se le mandan al modelo.
-Al final imprime las medidas que hay que verificar contra `src/config/summit.ts`
-si diseño entrega artes nuevas.
+El script optimiza el fondo, recorta el logo y genera cada plantilla por
+duplicado: en alta para el modelo y en miniatura para la pantalla de selección.
 
 ## Backend
 
-Cloud Functions en el proyecto de Firebase `imagen-ia-845a3`, que hospeda varias
-activaciones a la vez. Todo lo de esta va con nombre propio para no chocar:
+Cloud Functions en el proyecto de Firebase `imagen-ia-845a3`, que hospeda
+varias activaciones a la vez. **`claro-tech-summit` está en producción con
+participantes reales**, así que todo lo de esta va con nombre propio:
 
 | | |
 |---|---|
-| Funciones | `generateSummitImage`, `summitHealthCheck`, `getSummitStatus` |
-| Colección Firestore | `claro_tech_summit_participantes` |
-| Storage | `claro-tech-summit/{originales,generadas,referencias}` |
-| Hosting | sitio `claro-tech-summit` |
+| Funciones | `generateDatatechImage`, `datatechHealthCheck`, `listDatatechParticipantes` |
+| Colección Firestore | `claro_datatech_participantes` |
+| Storage | `claro-datatech/{originales,generadas,plantillas}` |
+| Hosting | sitio `claro-datatech` |
 
-Al generar, el backend manda al modelo dos imágenes —la referencia del estilo y
-la foto del visitante— y sobre el retrato que devuelve compone el marco de la
-campaña con `sharp`. Por eso lo que se ve en pantalla es exactamente lo que se
-descarga por QR.
+`deploy-datatech.sh` despliega por nombre a propósito: un
+`firebase deploy --only functions` sin filtro rompería el Summit.
+
+Las plantillas viajan dentro del paquete de la función y se publican solas en
+Storage la primera vez que se usan. Si cambia un arte, hay que borrar el objeto
+viejo de `claro-datatech/plantillas/` para que se vuelva a publicar.
 
 ### Proveedor de generación
 
-Se puede correr sobre **Replicate** o sobre **fal.ai**, y los dos ejecutan el
-mismo modelo de Google (nano-banana 2). Se elige con una variable en el `.env`
-de las funciones:
+Se comparte con las demás campañas (`src/services/proveedores.ts`): corre sobre
+**Replicate** o sobre **fal.ai**, los dos con el mismo modelo de Google
+(nano-banana 2). Se elige con `IMAGE_PROVIDER` en el `.env` de las funciones.
 
-```
-IMAGE_PROVIDER=fal        # o "replicate"
-FAL_KEY=id:secreto
-REPLICATE_API_TOKEN=r8_...
-```
-
-Cambiar de proveedor es cambiar esa línea y redesplegar: no toca prompts,
-composición ni frontend. `deploy-summit.sh` verifica que la clave del proveedor
-elegido esté presente antes de desplegar.
-
-Para probar el otro sin redesplegar, se manda `provider=fal` (o
-`provider=replicate`) en la petición a `generateSummitImage`:
-
-```bash
-./test-summit.sh foto.jpg 4 fal
-```
-
-`summitHealthCheck` informa cuál está activo y si cada clave está configurada.
-
-| | Replicate | fal.ai |
-|---|---|---|
-| Modelo | `google/nano-banana-2` | `fal-ai/nano-banana-2/edit` |
-| Llamada | SDK `replicate` | REST a `fal.run`, sin SDK |
-| Medido | 1–3 min | ~11 s |
-
-Las referencias de estilo viajan dentro del paquete de la función y se publican
-solas en Storage la primera vez que se usan: no hay que subir plantillas a mano.
-Si cambia un arte, hay que borrar el objeto viejo de
-`claro-tech-summit/referencias/` para que se vuelva a publicar.
+Para probar el otro sin redesplegar se manda `provider=fal` en la petición.
 
 ## Panel de registros
 
-`https://claro-tech-summit.web.app/panel` — tabla de participantes con la foto
-original y la generada, filtros y exportación.
+`https://claro-datatech.web.app/panel` — tabla de participantes con la foto
+original y el póster, filtros y exportación a Excel y CSV.
 
-Vive en [`public/panel.html`](public/panel.html): un solo archivo, sin build ni
-dependencias externas (el `.xlsx` se arma a mano, así que no depende de ningún
-CDN — que en un evento es justo lo que falla). Lee de la Cloud Function
-`listSummitParticipantes`, nunca de Firestore directamente, así que las reglas
-de la base siguen cerradas.
-
-> ⚠️ **El panel no tiene contraseña**, por pedido del cliente, y muestra datos
-> personales. Para cerrarlo: descomentar el bloque `PANEL_TOKEN` en
-> [`summitController.ts`](backend/functions/src/controllers/summitController.ts),
-> poner `PANEL_TOKEN=...` en el `.env` de las funciones, redesplegar y entrar con
-> `/panel?token=...`.
+> ⚠️ **El panel no tiene contraseña** y muestra los correos. Para cerrarlo:
+> descomentar el bloque `PANEL_TOKEN` en
+> [`datatechController.ts`](backend/functions/src/controllers/datatechController.ts),
+> poner `PANEL_TOKEN=...` en el `.env`, redesplegar y entrar con `/panel?token=...`.
 
 ## Comandos
 
 ```bash
 npm install
-npm run dev                 # frontend en local
-npm run build               # compila y empaqueta
+npm run dev                      # frontend en local
+npm run build                    # compila y empaqueta
+npm run assets                   # regenera los assets desde referencias_03/
 
 cd backend/functions
 npm install
-./deploy-summit.sh          # despliega SOLO las funciones de esta activación
+./deploy-datatech.sh             # despliega SOLO las funciones de esta activación
 
-./test-summit.sh foto.jpg 4 # prueba los endpoints contra producción
+./test-datatech.sh foto.jpg 5    # prueba los endpoints contra producción
 ```
 
-`deploy-summit.sh` despliega por nombre a propósito: un
-`firebase deploy --only functions` sin filtro volvería a desplegar las demás
-campañas que viven en el mismo proyecto.
+Hosting (desde la raíz del proyecto, no desde `backend/`):
+
+```bash
+firebase deploy --only hosting
+```
 
 ## Variables de entorno
 
 Frontend (`.env`) — opcional, hay un valor por defecto en el código:
 
 ```
-VITE_SUMMIT_FUNCTIONS_URL=https://us-central1-imagen-ia-845a3.cloudfunctions.net
+VITE_DATATECH_FUNCTIONS_URL=https://us-central1-imagen-ia-845a3.cloudfunctions.net
 ```
 
 Backend (`backend/functions/.env`):
 
 ```
-REPLICATE_API_TOKEN=...
-STORAGE_BUCKET=imagen-ia-845a3.appspot.com
+IMAGE_PROVIDER=fal
+FAL_KEY=id:secreto
+REPLICATE_API_TOKEN=r8_...
+STORAGE_BUCKET=imagen-ia-845a3.firebasestorage.app
 ```
+
+## Otras campañas en este repo
+
+Cada una vive en su propia rama y comparte el proyecto de Firebase, con todo
+prefijado para no chocar:
+
+| Rama | Activación | Colección |
+|---|---|---|
+| `proyecto-03` | Claro media · DATA TECH | `claro_datatech_participantes` |
+| `claro-tech-summit` | Claro Tech Summit 2026 | `claro_tech_summit_participantes` |
+| `feria-flores` | Feria de las Flores | `feria_colombia_participantes` |

@@ -1,8 +1,8 @@
 {
-  "name": "claro-tech-summit-2026",
+  "name": "claro-media-datatech",
   "private": true,
   "version": "1.0.0",
-  "description": "Kiosco de generaci\u00f3n de im\u00e1genes con IA \u00b7 Claro Tech Summit 2026",
+  "description": "Kiosco de p\u00f3sters con IA \u00b7 Claro media \u00b7 DATA TECH (15 minutos)",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -12,7 +12,7 @@
     "functions:build": "cd backend/functions && npm run build",
     "functions:serve": "cd backend/functions && npm run serve",
     "functions:deploy": "cd backend/functions && npm run deploy",
-    "assets": "python3 scripts/prepare-summit-assets.py"
+    "assets": "python3 scripts/prepare-datatech-assets.py"
   },
   "dependencies": {
     "axios": "^1.8.1",

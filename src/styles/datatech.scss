@@ -1,0 +1,113 @@
+/**
+ * Tokens de Claro media · DATA TECH.
+ *
+ * Muestreados de las plantillas de póster y del logo, para que lo que se
+ * dibuja en CSS no desentone con lo que la IA genera.
+ */
+
+$negro: #050508;
+$superficie: rgba(16, 16, 22, 0.72);
+$borde: rgba(255, 255, 255, 0.14);
+$rojo: #e30613; // rojo Claro, el del badge "15 MINUTOS" y los subrayados
+$rojo-vivo: #ff2b3a;
+$blanco: #ffffff;
+$tinta-2: rgba(255, 255, 255, 0.72);
+$tinta-3: rgba(255, 255, 255, 0.45);
+
+/** Franja inferior para los controles. */
+$footer-alto: 12dvh;
+
+/**
+ * Las pantallas van sobre el mismo fondo, que es oscuro pero tiene destellos
+ * rojos en los bordes. Todo lo que lleve texto se apoya en un velo para que se
+ * lea igual encima de un destello.
+ */
+@mixin tarjeta {
+  background: $superficie;
+  border: 1px solid $borde;
+  border-radius: 20px;
+  backdrop-filter: blur(14px);
+}
+
+@mixin boton-rojo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(180deg, $rojo-vivo, $rojo 55%, #a80710);
+  box-shadow:
+    0 0 22px rgba($rojo, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  color: $blanco;
+  font-family: inherit;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    filter 0.18s ease,
+    transform 0.18s ease;
+
+  &:hover:not(:disabled) {
+    filter: brightness(1.12);
+  }
+  &:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+}
+
+@mixin boton-fantasma {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  border: 1px solid rgba($blanco, 0.3);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  color: $blanco;
+  font-family: inherit;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    transform 0.18s ease;
+
+  &:hover:not(:disabled) {
+    border-color: $rojo-vivo;
+    background: rgba($rojo, 0.2);
+  }
+  &:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+/** Titular de pantalla, con la palabra clave en rojo (como los pósters). */
+@mixin titular {
+  margin: 0;
+  font-size: clamp(1.5rem, 6.6vw, 2.7rem);
+  font-weight: 800;
+  line-height: 1.04;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.8);
+
+  em {
+    color: $rojo-vivo;
+    font-style: normal;
+  }
+}

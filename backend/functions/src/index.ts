@@ -11,6 +11,13 @@ setGlobalOptions({
   region: "us-central1",
 });
 
+// Claro media · DATA TECH — "15 minutos"
+export {
+  generateDatatechImage,
+  datatechHealthCheck,
+  listDatatechParticipantes,
+} from "./controllers/datatechController";
+
 // Claro Tech Summit 2026 · Soluciones Digitales
 export {
   generateSummitImage,

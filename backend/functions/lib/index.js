@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.processWebcamImage = exports.sendToVTEX = exports.healthCheck = exports.getProcessingStatus = exports.generateAIImage = exports.getCircusStatus = exports.circusHealthCheck = exports.generateCircusImage = exports.getFeriaStatus = exports.feriaHealthCheck = exports.generateFeriaImage = exports.listSummitParticipantes = exports.getSummitStatus = exports.summitHealthCheck = exports.generateSummitImage = void 0;
+exports.processWebcamImage = exports.sendToVTEX = exports.healthCheck = exports.getProcessingStatus = exports.generateAIImage = exports.getCircusStatus = exports.circusHealthCheck = exports.generateCircusImage = exports.getFeriaStatus = exports.feriaHealthCheck = exports.generateFeriaImage = exports.listSummitParticipantes = exports.getSummitStatus = exports.summitHealthCheck = exports.generateSummitImage = exports.listDatatechParticipantes = exports.datatechHealthCheck = exports.generateDatatechImage = void 0;
 const dotenv = __importStar(require("dotenv"));
 // Load environment variables
 dotenv.config();
@@ -43,6 +43,11 @@ const v2_1 = require("firebase-functions/v2");
     maxInstances: 10,
     region: "us-central1",
 });
+// Claro media · DATA TECH — "15 minutos"
+var datatechController_1 = require("./controllers/datatechController");
+Object.defineProperty(exports, "generateDatatechImage", { enumerable: true, get: function () { return datatechController_1.generateDatatechImage; } });
+Object.defineProperty(exports, "datatechHealthCheck", { enumerable: true, get: function () { return datatechController_1.datatechHealthCheck; } });
+Object.defineProperty(exports, "listDatatechParticipantes", { enumerable: true, get: function () { return datatechController_1.listDatatechParticipantes; } });
 // Claro Tech Summit 2026 · Soluciones Digitales
 var summitController_1 = require("./controllers/summitController");
 Object.defineProperty(exports, "generateSummitImage", { enumerable: true, get: function () { return summitController_1.generateSummitImage; } });

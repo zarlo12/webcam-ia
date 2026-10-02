@@ -4,13 +4,13 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="noindex, nofollow, noarchive" />
-<title>Panel de registros · Claro Tech Summit 2026</title>
+<title>Panel de registros · Claro media DATA TECH</title>
 <style>
 /* ---------------------------------------------------------------------------
-   Panel de registros · Claro Tech Summit 2026
+   Panel de registros · Claro media DATA TECH
 
    Un solo archivo, sin dependencias: se sirve como estático desde el mismo
-   hosting del kiosco y lee de la Cloud Function listSummitParticipantes.
+   hosting del kiosco y lee de la Cloud Function listDatatechParticipantes.
    Los colores son los de la campaña; el rojo de las barras (#e30613) está
    validado sobre esta superficie oscura (banda de luminosidad, croma y
    contraste >= 3:1).
@@ -206,10 +206,10 @@ tbody tr:last-child td { border-bottom: none; }
 
   <header class="cabecera">
     <div class="marca">
-      <div class="marca__icono">CTS</div>
+      <div class="marca__icono">DT</div>
       <div class="marca__texto">
         <h1>Panel de registros</h1>
-        <p>Claro Tech Summit 2026 · Soluciones Digitales</p>
+        <p>Claro media · DATA TECH — 15 minutos</p>
       </div>
     </div>
     <div class="acciones">
@@ -224,7 +224,7 @@ tbody tr:last-child td { border-bottom: none; }
 
   <section class="graficas">
     <div class="panel">
-      <h2 class="panel__titulo">Registros por estilo</h2>
+      <h2 class="panel__titulo">Pósters por plantilla</h2>
       <div class="barras" id="barras"></div>
     </div>
     <div class="panel">
@@ -236,11 +236,11 @@ tbody tr:last-child td { border-bottom: none; }
   <section class="filtros">
     <div class="campo campo--ancho">
       <label for="fBuscar">Buscar</label>
-      <input type="search" id="fBuscar" placeholder="Nombre, apellido, cédula o correo…" autocomplete="off" />
+      <input type="search" id="fBuscar" placeholder="Buscar por correo…" autocomplete="off" />
     </div>
     <div class="campo">
-      <label for="fEstilo">Estilo</label>
-      <select id="fEstilo"><option value="">Todos</option></select>
+      <label for="fPlantilla">Plantilla</label>
+      <select id="fPlantilla"><option value="">Todos</option></select>
     </div>
     <div class="campo">
       <label for="fDesde">Desde</label>
@@ -249,14 +249,6 @@ tbody tr:last-child td { border-bottom: none; }
     <div class="campo">
       <label for="fHasta">Hasta</label>
       <input type="date" id="fHasta" />
-    </div>
-    <div class="campo">
-      <label for="fAuth">Autorización</label>
-      <select id="fAuth">
-        <option value="">Todas</option>
-        <option value="si">Con autorización</option>
-        <option value="no">Sin autorización</option>
-      </select>
     </div>
     <div class="campo">
       <label for="fOrden">Orden</label>
@@ -273,8 +265,7 @@ tbody tr:last-child td { border-bottom: none; }
       <table>
         <thead>
           <tr>
-            <th>Fotos</th><th>Nombre</th><th>Cédula</th><th>Correo</th>
-            <th>Estilo</th><th>Autoriza</th><th>Fecha</th><th>Hora</th>
+            <th>Fotos</th><th>Correo</th><th>Plantilla</th><th>Fecha</th><th>Hora</th>
           </tr>
         </thead>
         <tbody id="cuerpo"></tbody>
@@ -304,7 +295,7 @@ tbody tr:last-child td { border-bottom: none; }
     </div>
     <div class="visor__grid">
       <div class="visor__parte"><h3>Foto original</h3><img id="visorOriginal" alt="Foto original" /></div>
-      <div class="visor__parte"><h3>Imagen generada</h3><img id="visorGenerada" alt="Imagen generada" /></div>
+      <div class="visor__parte"><h3>Póster generado</h3><img id="visorGenerada" alt="Póster generado" /></div>
     </div>
   </div>
 </div>
@@ -318,7 +309,9 @@ tbody tr:last-child td { border-bottom: none; }
 const API = new URLSearchParams(location.search).get('api')
   || 'https://us-central1-imagen-ia-845a3.cloudfunctions.net';
 
-const ESTILOS = { 1: 'Acuarela', 2: 'Ilustración', 3: 'Universo Fantástico', 4: 'Cyberpunk' };
+const PLANTILLAS = {
+  1: 'DATA', 2: 'CONECTO', 3: 'INSIGHTS', 4: 'AUDIENCIAS', 5: 'SEÑALES',
+};
 
 let registros = [];      // todo lo que devolvió el backend
 let visibles  = [];      // lo que queda tras aplicar los filtros
@@ -331,7 +324,7 @@ async function cargar() {
   let cursor = null;
 
   do {
-    const url = new URL(API + '/listSummitParticipantes');
+    const url = new URL(API + '/listDatatechParticipantes');
     url.searchParams.set('limit', '500');
     if (cursor) url.searchParams.set('cursor', cursor);
 
@@ -358,14 +351,14 @@ async function recargar() {
       $('estado').innerHTML = '<div class="estado__icono">&#128193;</div>Todavía no hay registros.<br>Aparecerán aquí en cuanto alguien complete el flujo en el kiosco.';
       $('estado').hidden = false;
     }
-    prepararFiltroEstilos();
+    prepararFiltroPlantillas();
     aplicar();
     marcarPulso();
   } catch (e) {
     $('estado').hidden = false;
     $('estado').className = 'estado estado--error';
     $('estado').innerHTML = '<div class="estado__icono">&#9888;</div>No se pudo cargar: ' + escapar(e.message)
-      + '<br><span class="tenue">Revisa que listSummitParticipantes esté desplegada.</span>';
+      + '<br><span class="tenue">Revisa que listDatatechParticipantes esté desplegada.</span>';
     $('cuerpo').innerHTML = '';
   } finally {
     $('btnRecargar').disabled = false;
@@ -381,10 +374,10 @@ function marcarPulso() {
    2. Filtros
    =========================================================================== */
 
-function prepararFiltroEstilos() {
-  const sel = $('fEstilo');
+function prepararFiltroPlantillas() {
+  const sel = $('fPlantilla');
   if (sel.options.length > 1) return;
-  Object.entries(ESTILOS).forEach(([id, nombre]) => {
+  Object.entries(PLANTILLAS).forEach(([id, nombre]) => {
     const o = document.createElement('option');
     o.value = id; o.textContent = nombre;
     sel.appendChild(o);
@@ -393,20 +386,16 @@ function prepararFiltroEstilos() {
 
 function aplicar() {
   const q      = $('fBuscar').value.trim().toLowerCase();
-  const estilo = $('fEstilo').value;
+  const estilo = $('fPlantilla').value;
   const desde  = $('fDesde').value ? new Date($('fDesde').value + 'T00:00:00') : null;
   const hasta  = $('fHasta').value ? new Date($('fHasta').value + 'T23:59:59') : null;
-  const auth   = $('fAuth').value;
   const orden  = $('fOrden').value;
 
   visibles = registros.filter((r) => {
     if (q) {
-      const heno = [r.nombre, r.apellido, r.cedula, r.correo].join(' ').toLowerCase();
-      if (!heno.includes(q)) return false;
+      if (!String(r.correo || '').toLowerCase().includes(q)) return false;
     }
-    if (estilo && String(r.filtro) !== estilo) return false;
-    if (auth === 'si' && !r.autorizaDatos) return false;
-    if (auth === 'no' && r.autorizaDatos) return false;
+    if (estilo && String(r.plantilla) !== estilo) return false;
     if (desde || hasta) {
       if (!r.createdAt) return false;
       const f = new Date(r.createdAt);
@@ -442,17 +431,17 @@ function aplicar() {
 function pintarCifras() {
   const hoy = new Date().toDateString();
   const deHoy = visibles.filter((r) => r.createdAt && new Date(r.createdAt).toDateString() === hoy).length;
-  const autorizados = visibles.filter((r) => r.autorizaDatos).length;
+  const correos = new Set(visibles.map((r) => r.correo).filter(Boolean)).size;
+  const repetidos = visibles.length - correos;
 
-  const porEstilo = contarPorEstilo();
-  const top = Object.entries(porEstilo).sort((a, b) => b[1] - a[1])[0];
-  const pct = visibles.length ? Math.round((autorizados / visibles.length) * 100) : 0;
+  const porPlantilla = contarPorPlantilla();
+  const top = Object.entries(porPlantilla).sort((a, b) => b[1] - a[1])[0];
 
   const tarjetas = [
     { rotulo: 'Registros', valor: visibles.length, pie: registros.length === visibles.length ? 'En total' : `Filtrados de ${registros.length}`, destacada: true },
     { rotulo: 'Hoy', valor: deHoy, pie: new Date().toLocaleDateString('es-CO', { day: '2-digit', month: 'long' }) },
-    { rotulo: 'Con autorización', valor: autorizados, pie: pct + '% del total mostrado' },
-    { rotulo: 'Estilo más elegido', valor: top && top[1] ? top[1] : 0, pie: top && top[1] ? ESTILOS[top[0]] : 'Sin datos' },
+    { rotulo: 'Correos distintos', valor: correos, pie: repetidos > 0 ? `${repetidos} repiti${repetidos === 1 ? 'ó' : 'eron'} póster` : 'Sin repetidos' },
+    { rotulo: 'Plantilla más elegida', valor: top && top[1] ? top[1] : 0, pie: top && top[1] ? PLANTILLAS[top[0]] : 'Sin datos' },
   ];
 
   $('cifras').innerHTML = tarjetas.map((t) => `
@@ -463,9 +452,9 @@ function pintarCifras() {
     </div>`).join('');
 }
 
-function contarPorEstilo() {
-  const conteo = { 1: 0, 2: 0, 3: 0, 4: 0 };
-  visibles.forEach((r) => { if (conteo[r.filtro] !== undefined) conteo[r.filtro]++; });
+function contarPorPlantilla() {
+  const conteo = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+  visibles.forEach((r) => { if (conteo[r.plantilla] !== undefined) conteo[r.plantilla]++; });
   return conteo;
 }
 
@@ -475,11 +464,11 @@ function contarPorEstilo() {
  * cifra al lado, así que no hace falta leyenda.
  */
 function pintarBarras() {
-  const conteo = contarPorEstilo();
+  const conteo = contarPorPlantilla();
   const max = Math.max(1, ...Object.values(conteo));
   const total = visibles.length || 1;
 
-  $('barras').innerHTML = Object.entries(ESTILOS).map(([id, nombre]) => {
+  $('barras').innerHTML = Object.entries(PLANTILLAS).map(([id, nombre]) => {
     const n = conteo[id];
     const pct = Math.round((n / total) * 100);
     return `
@@ -584,20 +573,17 @@ function pintarTabla() {
 
   $('cuerpo').innerHTML = visibles.map((r, i) => {
     const f = r.createdAt ? new Date(r.createdAt) : null;
-    const nombre = [r.nombre, r.apellido].filter(Boolean).join(' ') || '—';
+    const correo = r.correo || '—';
     return `
       <tr>
         <td>
           <div class="par-fotos">
             ${mini(r.originalImageUrl, 'Foto original', i)}
-            ${mini(r.resultImageUrl, 'Imagen generada', i)}
+            ${mini(r.resultImageUrl, 'Póster generado', i)}
           </div>
         </td>
-        <td><span class="nombre">${escapar(nombre)}</span></td>
-        <td class="num tenue">${escapar(r.cedula || '—')}</td>
-        <td class="tenue">${escapar(r.correo || '—')}</td>
-        <td>${r.filtro ? `<span class="etiqueta">${escapar(ESTILOS[r.filtro] || r.filtroLabel)}</span>` : '<span class="tenue">—</span>'}</td>
-        <td class="si-no ${r.autorizaDatos ? 'si-no--si' : 'si-no--no'}">${r.autorizaDatos ? '&#10003;' : '&#8212;'}</td>
+        <td><span class="nombre">${escapar(correo)}</span></td>
+        <td>${r.plantilla ? `<span class="etiqueta">${escapar(PLANTILLAS[r.plantilla] || r.plantillaPalabra)}</span>` : '<span class="tenue">—</span>'}</td>
         <td class="num">${f ? f.toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—'}</td>
         <td class="num tenue">${f ? f.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' }) : '—'}</td>
       </tr>`;
@@ -617,11 +603,10 @@ function abrirVisor(i) {
   const r = visibles[i];
   if (!r) return;
   const f = r.createdAt ? new Date(r.createdAt) : null;
-  $('visorQuien').textContent = [r.nombre, r.apellido].filter(Boolean).join(' ') || 'Sin nombre';
+  $('visorQuien').textContent = r.correo || 'Sin correo';
   $('visorCuando').textContent = [
-    r.filtro ? ESTILOS[r.filtro] : null,
+    r.plantilla ? PLANTILLAS[r.plantilla] : null,
     f ? f.toLocaleString('es-CO', { dateStyle: 'long', timeStyle: 'short' }) : null,
-    r.correo || null,
   ].filter(Boolean).join('  ·  ');
   $('visorOriginal').src = r.originalImageUrl || '';
   $('visorGenerada').src = r.resultImageUrl || '';
@@ -633,21 +618,17 @@ function abrirVisor(i) {
    =========================================================================== */
 
 const COLUMNAS = [
-  ['Nombre',          (r) => r.nombre],
-  ['Apellido',        (r) => r.apellido],
-  ['Cédula',          (r) => r.cedula],
   ['Correo',          (r) => r.correo],
-  ['Estilo',          (r) => ESTILOS[r.filtro] || r.filtroLabel || ''],
-  ['Autoriza datos',  (r) => (r.autorizaDatos ? 'Sí' : 'No')],
+  ['Plantilla',       (r) => PLANTILLAS[r.plantilla] || r.plantillaPalabra || ''],
   ['Fecha',           (r) => (r.createdAt ? new Date(r.createdAt).toLocaleDateString('es-CO') : '')],
   ['Hora',            (r) => (r.createdAt ? new Date(r.createdAt).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' }) : '')],
   ['Foto original',   (r) => r.originalImageUrl],
-  ['Imagen generada', (r) => r.resultImageUrl],
+  ['Póster generado', (r) => r.resultImageUrl],
   ['ID',              (r) => r.id],
 ];
 
 const nombreArchivo = (ext) =>
-  `registros-claro-tech-summit-${new Date().toISOString().slice(0, 10)}.${ext}`;
+  `registros-claro-datatech-${new Date().toISOString().slice(0, 10)}.${ext}`;
 
 function descargar(blob, nombre) {
   const a = document.createElement('a');
@@ -762,7 +743,7 @@ function exportarExcel() {
     return `<row r="${i + 1}"${i === 0 ? ' ht="20" customHeight="1"' : ''}>${celdas}</row>`;
   }).join('');
 
-  const anchos = [16, 16, 14, 30, 20, 14, 12, 9, 46, 46, 22]
+  const anchos = [30, 18, 12, 9, 46, 46, 22]
     .map((w, i) => `<col min="${i + 1}" max="${i + 1}" width="${w}" customWidth="1"/>`).join('');
 
   const ref = `A1:${columnaExcel(COLUMNAS.length)}${filas.length}`;
@@ -797,7 +778,7 @@ function escapar(v) {
 }
 
 let reboteFiltro;
-['fBuscar', 'fEstilo', 'fDesde', 'fHasta', 'fAuth', 'fOrden'].forEach((id) => {
+['fBuscar', 'fPlantilla', 'fDesde', 'fHasta', 'fOrden'].forEach((id) => {
   const el = $(id);
   const ev = el.tagName === 'SELECT' ? 'change' : 'input';
   el.addEventListener(ev, () => {
@@ -808,7 +789,7 @@ let reboteFiltro;
 
 $('btnLimpiar').addEventListener('click', () => {
   ['fBuscar', 'fDesde', 'fHasta'].forEach((id) => ($(id).value = ''));
-  ['fEstilo', 'fAuth'].forEach((id) => ($(id).value = ''));
+  ['fPlantilla'].forEach((id) => ($(id).value = ''));
   $('fOrden').value = 'desc';
   aplicar();
 });

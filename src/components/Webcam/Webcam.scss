@@ -1,4 +1,4 @@
-@use "../../styles/summit" as s;
+@use "../../styles/datatech" as d;
 
 .webcam {
   position: absolute;
@@ -23,8 +23,8 @@
   justify-content: center;
   margin: 0;
   padding: 0 8%;
-  color: s.$rojo-claro;
-  font-size: 3cqw;
+  color: d.$rojo-vivo;
+  font-size: clamp(0.8rem, 3vw, 1rem);
   font-weight: 700;
   text-align: center;
 }

@@ -1,9 +1,13 @@
 {
-  "//": "Solo Hosting. Las Cloud Functions se despliegan con backend/firebase.json (ver backend/functions/deploy-summit.sh).",
+  "//": "Solo Hosting. Las Cloud Functions se despliegan con backend/firebase.json (ver backend/functions/deploy-datatech.sh).",
   "hosting": {
-    "site": "claro-tech-summit",
+    "site": "claro-datatech",
     "public": "dist",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
     "redirects": [
       {
         "source": "/aviso",
@@ -34,7 +38,12 @@
       },
       {
         "source": "/index.html",
-        "headers": [{ "key": "Cache-Control", "value": "no-cache, max-age=0" }]
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, max-age=0"
+          }
+        ]
       }
     ]
   }

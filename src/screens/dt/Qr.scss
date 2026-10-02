@@ -1,0 +1,28 @@
+@use "../../styles/datatech" as d;
+
+.dt-qr__caja {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4.5%;
+  width: min(62vw, 20rem);
+  aspect-ratio: 1;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 0 3rem rgba(d.$rojo, 0.35);
+}
+
+.dt-qr__codigo {
+  width: 100%;
+  height: 100%;
+}
+
+.dt-qr__pie {
+  margin: 3vh 0 0;
+  max-width: 26ch;
+  color: d.$tinta-2;
+  font-size: clamp(0.8rem, 3.1vw, 1.05rem);
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.35;
+}

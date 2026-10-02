@@ -1,0 +1,67 @@
+@use "../../styles/datatech" as d;
+
+.dt-registro__form {
+  @include d.tarjeta;
+  width: min(100%, 30rem);
+  padding: 4vh 7% 4.5vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.4vh;
+}
+
+.dt-registro__campo {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9vh;
+
+  input {
+    width: 100%;
+    padding: 1.05em 1.1em;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 14px;
+    background: rgba(0, 0, 0, 0.5);
+    color: d.$blanco;
+    font: inherit;
+    font-size: clamp(0.95rem, 3.8vw, 1.25rem);
+    text-align: center;
+    caret-color: d.$rojo-vivo;
+    transition: border-color 0.18s ease;
+
+    &::placeholder {
+      color: d.$tinta-3;
+    }
+    &:focus {
+      outline: none;
+      border-color: d.$rojo-vivo;
+      box-shadow: 0 0 0 3px rgba(d.$rojo, 0.25);
+    }
+    &[aria-invalid="true"] {
+      border-color: d.$rojo-vivo;
+    }
+  }
+}
+
+.dt-registro__etiqueta {
+  color: d.$tinta-3;
+  font-size: clamp(0.65rem, 2.5vw, 0.8rem);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.dt-registro__error {
+  min-height: 1.4em;
+  margin: 0;
+  color: d.$rojo-vivo;
+  font-size: clamp(0.75rem, 2.9vw, 0.95rem);
+  font-weight: 600;
+  text-align: center;
+}
+
+.dt-registro__enviar {
+  width: 100%;
+  min-width: 0;
+}

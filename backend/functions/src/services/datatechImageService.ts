@@ -10,6 +10,7 @@ import { base64ToBuffer, generateRequestId, retryWithBackoff } from "../utils";
 import { uploadToStorage } from "../utils/storage";
 import { getPlantillaUrl } from "../utils/datatechAssets";
 import { saveDatatechParticipante } from "../utils/datatechFirestore";
+import { guardarPosterEnChat } from "../utils/chatAgente";
 import { obtenerProveedor } from "./proveedores";
 
 export interface DatatechGenerationRequest {
@@ -23,6 +24,11 @@ export interface DatatechGenerationRequest {
   /** Proveedor alterno para pruebas, sin tener que redesplegar. */
   provider?: SummitProvider;
   correo?: string;
+  /**
+   * Documento de ClaroMediaAgenteIA del que viene el visitante, cuando entró
+   * desde una propuesta del chat. El póster se guarda también ahí.
+   */
+  chatDocId?: string;
 }
 
 export interface DatatechGenerationResponse {
@@ -34,6 +40,8 @@ export interface DatatechGenerationResponse {
   requestId?: string;
   plantilla?: DatatechPlantillaId;
   participanteId?: string | null;
+  /** True si el póster quedó enlazado al documento del chat. */
+  enlazadoAlChat?: boolean;
   debug?: {
     originalImage?: string;
     templateImage?: string;
@@ -139,16 +147,36 @@ class DatatechImageService {
 
       console.log(`[DATATECH-${requestId}] ✅ Listo: ${finalImageUrl}`);
 
-      // 4. Guardar el registro (no bloquea el resultado si falla)
-      const participanteId = await saveDatatechParticipante({
-        correo: request.correo,
-        plantilla: plantilla.id,
-        plantillaPalabra: plantilla.palabra,
-        originalImageUrl,
-        resultImageUrl: finalImageUrl,
-        requestId,
-        model: `${proveedor.nombre}:${proveedor.modelo}`,
-      });
+      // 4. Guardar los registros. Ninguno bloquea el resultado si falla.
+      //
+      //    Son dos escrituras con dueños distintos: el registro propio del
+      //    kiosco, que alimenta su panel, y —si el visitante vino del chat— el
+      //    documento de su conversación, para que propuesta y póster queden en
+      //    el mismo expediente.
+      const modelo = `${proveedor.nombre}:${proveedor.modelo}`;
+
+      const [participanteId, enlazadoAlChat] = await Promise.all([
+        saveDatatechParticipante({
+          correo: request.correo,
+          plantilla: plantilla.id,
+          plantillaPalabra: plantilla.palabra,
+          originalImageUrl,
+          resultImageUrl: finalImageUrl,
+          requestId,
+          model: modelo,
+          chatDocId: request.chatDocId,
+        }),
+        request.chatDocId
+          ? guardarPosterEnChat(request.chatDocId, {
+              plantilla: plantilla.id,
+              plantillaPalabra: plantilla.palabra,
+              posterUrl: finalImageUrl,
+              originalImageUrl,
+              requestId,
+              model: modelo,
+            })
+          : Promise.resolve(false),
+      ]);
 
       return {
         success: true,
@@ -157,6 +185,7 @@ class DatatechImageService {
         requestId: `datatech-${requestId}`,
         plantilla: plantilla.id,
         participanteId,
+        enlazadoAlChat,
         debug: {
           originalImage: originalImageUrl,
           templateImage: templateUrl,

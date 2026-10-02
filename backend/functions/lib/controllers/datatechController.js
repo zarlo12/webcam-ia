@@ -43,6 +43,7 @@ const datatechImageService_1 = __importDefault(require("../services/datatechImag
 const proveedores_1 = require("../services/proveedores");
 const summit_1 = require("../config/summit");
 const datatech_1 = require("../config/datatech");
+const chatAgente_1 = require("../utils/chatAgente");
 const multipart_1 = require("../utils/multipart");
 /** Valida el payload y devuelve la request lista, o un mensaje de error. */
 function construirPeticion(imageData, payload) {
@@ -68,6 +69,7 @@ function construirPeticion(imageData, payload) {
             model: payload.model?.trim() || undefined,
             provider,
             correo: payload.correo?.trim().toLowerCase() || undefined,
+            chatDocId: payload.chatDocId?.trim() || undefined,
         },
     };
 }
@@ -183,6 +185,9 @@ exports.datatechHealthCheck = (0, https_1.onRequest)({
         aspectRatio: "9:16",
         storage: datatech_1.DATATECH_STORAGE,
         collection: datatech_1.DATATECH_COLLECTION,
+        // Cuando el visitante llega desde el chat, el póster se guarda también
+        // en su documento de esta colección.
+        chatCollection: chatAgente_1.CHAT_COLLECTION,
         plantillas: Object.values(datatech_1.DATATECH_PLANTILLAS).map((p) => ({
             plantilla: p.id,
             palabra: p.palabra,

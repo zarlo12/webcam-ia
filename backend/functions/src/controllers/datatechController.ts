@@ -11,6 +11,7 @@ import {
   DATATECH_STORAGE,
   isDatatechPlantillaId,
 } from "../config/datatech";
+import { CHAT_COLLECTION } from "../utils/chatAgente";
 import {
   detectImageMime,
   getBoundary,
@@ -35,6 +36,8 @@ interface DatatechPayload {
   model?: string;
   provider?: string;
   correo?: string;
+  /** Documento de ClaroMediaAgenteIA del que viene el visitante. */
+  chatDocId?: string;
 }
 
 /** Valida el payload y devuelve la request lista, o un mensaje de error. */
@@ -67,6 +70,7 @@ function construirPeticion(
       model: payload.model?.trim() || undefined,
       provider,
       correo: payload.correo?.trim().toLowerCase() || undefined,
+      chatDocId: payload.chatDocId?.trim() || undefined,
     },
   };
 }
@@ -211,6 +215,9 @@ export const datatechHealthCheck = onRequest(
       aspectRatio: "9:16",
       storage: DATATECH_STORAGE,
       collection: DATATECH_COLLECTION,
+      // Cuando el visitante llega desde el chat, el póster se guarda también
+      // en su documento de esta colección.
+      chatCollection: CHAT_COLLECTION,
       plantillas: Object.values(DATATECH_PLANTILLAS).map((p) => ({
         plantilla: p.id,
         palabra: p.palabra,

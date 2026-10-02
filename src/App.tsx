@@ -9,6 +9,7 @@ import Resultado from "./screens/dt/Resultado";
 import Qr from "./screens/dt/Qr";
 import datatechService from "./services/datatechService";
 import type { PlantillaId } from "./config/datatech";
+import { vieneDelChat, volverAlChat } from "./config/enlaceChat";
 
 /**
  * Claro media · DATA TECH — "15 minutos"
@@ -18,6 +19,10 @@ import type { PlantillaId } from "./config/datatech";
  *   registro → plantillas → camara → generando → resultado → qr
  *      ↑           ↓           ↓                     ↓        ↓
  *      └───────────┴───────────┘                     └────────┴──→ registro
+ *
+ * Si se entra desde el chat (?doc=…), el registro se salta —el chat ya tiene
+ * los datos del visitante— y tanto "atrás" desde plantillas como el cierre
+ * devuelven al chat en vez de reiniciar aquí.
  *
  * El paso es el único estado que manda: cada pantalla recibe lo que necesita y
  * avisa qué pasó, sin conocer a las demás.
@@ -31,13 +36,20 @@ const ALERTA = {
   color: "#FFFFFF",
 } as const;
 
+const enlazado = vieneDelChat();
+
 function App() {
-  const [paso, setPaso] = useState<Paso>("registro");
+  const [paso, setPaso] = useState<Paso>(enlazado ? "plantillas" : "registro");
   const [registro, setRegistro] = useState<RegistroData | null>(null);
   const [plantilla, setPlantilla] = useState<PlantillaId | null>(null);
   const [imageUrl, setImageUrl] = useState("");
 
-  const reiniciar = useCallback(() => {
+  /** Enlazado: volver al chat. Autónomo: empezar de cero aquí. */
+  const terminar = useCallback(() => {
+    if (enlazado) {
+      volverAlChat();
+      return;
+    }
     setRegistro(null);
     setPlantilla(null);
     setImageUrl("");
@@ -90,7 +102,8 @@ function App() {
             setPlantilla(elegida);
             setPaso("camara");
           }}
-          onAtras={() => setPaso("registro")}
+          onAtras={enlazado ? volverAlChat : () => setPaso("registro")}
+          textoAtras={enlazado ? "Volver al chat" : undefined}
         />
       )}
 
@@ -104,7 +117,7 @@ function App() {
         <Resultado
           imageUrl={imageUrl}
           onSiguiente={() => setPaso("qr")}
-          onReiniciar={reiniciar}
+          onReiniciar={() => setPaso("plantillas")}
         />
       )}
 
@@ -112,7 +125,8 @@ function App() {
         <Qr
           imageUrl={imageUrl}
           onAtras={() => setPaso("resultado")}
-          onReiniciar={reiniciar}
+          onTerminar={terminar}
+          textoTerminar={enlazado ? "Regresar al chat" : "Terminar"}
         />
       )}
     </>

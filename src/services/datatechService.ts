@@ -1,6 +1,7 @@
 import axios from "axios";
 import type { PlantillaId } from "../config/datatech";
 import type { RegistroData } from "../screens/dt/Registro";
+import { enlaceChat } from "../config/enlaceChat";
 
 /**
  * Cliente de las Cloud Functions de Claro media · DATA TECH.
@@ -47,10 +48,15 @@ class DatatechService {
       formData.append("plantilla", String(plantilla));
       if (registro) formData.append("correo", registro.correo);
 
+      // Si se entró desde el chat, el póster va a parar a SU documento: el
+      // visitante ya dejó sus datos allí y no tiene por qué repetirlos.
+      if (enlaceChat.docId) formData.append("chatDocId", enlaceChat.docId);
+
       console.log("🟠 Enviando foto a la Cloud Function", {
         endpoint: ENDPOINTS.generate,
         plantilla,
         pesoFoto: photo.size,
+        chatDocId: enlaceChat.docId ?? "(kiosco autónomo)",
       });
 
       const { data } = await axios.post<DatatechResponse>(

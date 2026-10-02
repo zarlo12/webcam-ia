@@ -9,6 +9,7 @@ const utils_1 = require("../utils");
 const storage_1 = require("../utils/storage");
 const datatechAssets_1 = require("../utils/datatechAssets");
 const datatechFirestore_1 = require("../utils/datatechFirestore");
+const chatAgente_1 = require("../utils/chatAgente");
 const proveedores_1 = require("./proveedores");
 /**
  * Resolución que se le pide al proveedor. Se pide 2K y se baja después: el
@@ -76,16 +77,35 @@ class DatatechImageService {
             const posterBuffer = await this.descargar(posterUrl);
             const finalImageUrl = await (0, storage_1.uploadToStorage)(await this.normalizar(posterBuffer), datatech_1.DATATECH_STORAGE.generated, `poster_plantilla${plantilla.id}_${requestId}.jpg`);
             console.log(`[DATATECH-${requestId}] ✅ Listo: ${finalImageUrl}`);
-            // 4. Guardar el registro (no bloquea el resultado si falla)
-            const participanteId = await (0, datatechFirestore_1.saveDatatechParticipante)({
-                correo: request.correo,
-                plantilla: plantilla.id,
-                plantillaPalabra: plantilla.palabra,
-                originalImageUrl,
-                resultImageUrl: finalImageUrl,
-                requestId,
-                model: `${proveedor.nombre}:${proveedor.modelo}`,
-            });
+            // 4. Guardar los registros. Ninguno bloquea el resultado si falla.
+            //
+            //    Son dos escrituras con dueños distintos: el registro propio del
+            //    kiosco, que alimenta su panel, y —si el visitante vino del chat— el
+            //    documento de su conversación, para que propuesta y póster queden en
+            //    el mismo expediente.
+            const modelo = `${proveedor.nombre}:${proveedor.modelo}`;
+            const [participanteId, enlazadoAlChat] = await Promise.all([
+                (0, datatechFirestore_1.saveDatatechParticipante)({
+                    correo: request.correo,
+                    plantilla: plantilla.id,
+                    plantillaPalabra: plantilla.palabra,
+                    originalImageUrl,
+                    resultImageUrl: finalImageUrl,
+                    requestId,
+                    model: modelo,
+                    chatDocId: request.chatDocId,
+                }),
+                request.chatDocId
+                    ? (0, chatAgente_1.guardarPosterEnChat)(request.chatDocId, {
+                        plantilla: plantilla.id,
+                        plantillaPalabra: plantilla.palabra,
+                        posterUrl: finalImageUrl,
+                        originalImageUrl,
+                        requestId,
+                        model: modelo,
+                    })
+                    : Promise.resolve(false),
+            ]);
             return {
                 success: true,
                 imageUrl: finalImageUrl,
@@ -93,6 +113,7 @@ class DatatechImageService {
                 requestId: `datatech-${requestId}`,
                 plantilla: plantilla.id,
                 participanteId,
+                enlazadoAlChat,
                 debug: {
                     originalImage: originalImageUrl,
                     templateImage: templateUrl,

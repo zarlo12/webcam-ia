@@ -63,6 +63,32 @@ Se comparte con las demás campañas (`src/services/proveedores.ts`): corre sobr
 
 Para probar el otro sin redesplegar se manda `provider=fal` en la petición.
 
+## Enlace con el agente de chat
+
+El chat (`chatgpt-claro-media`, en Vercel) y este kiosco (Firebase Hosting) son
+dos despliegues distintos, pero comparten el proyecto de Firebase. El puente es
+el ID del documento, que viaja por la URL:
+
+```
+https://claro-datatech.web.app/?doc=<idDeFirestore>&stand=A
+```
+
+Cuando ese `doc` viene:
+
+- **no se pide el correo** — el chat ya lo tiene, así que el kiosco arranca
+  directo en la elección de póster;
+- el póster se guarda **también** en ese documento de `ClaroMediaAgenteIA`, bajo
+  el campo `fotografiaIA`, para que propuesta y foto queden en el mismo
+  expediente;
+- "atrás" y el botón final **regresan al chat** en vez de reiniciar aquí.
+
+Sin `doc`, el kiosco funciona solo, pidiendo el correo como siempre.
+
+Si el ID no corresponde a ninguna conversación (URL recortada, documento
+borrado), el póster se guarda igual en el registro propio del kiosco y se deja
+un aviso en los logs: **nunca se crea un documento huérfano** en la colección
+del chat.
+
 ## Panel de registros
 
 `https://claro-datatech.web.app/panel` — tabla de participantes con la foto

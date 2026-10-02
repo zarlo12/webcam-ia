@@ -6,7 +6,9 @@ import { Boton, BotonAtras } from "../../components/ui/BotonDT";
 interface QrProps {
   imageUrl: string;
   onAtras: () => void;
-  onReiniciar: () => void;
+  onTerminar: () => void;
+  /** "Regresar al chat" cuando se entró desde una propuesta. */
+  textoTerminar?: string;
 }
 
 /**
@@ -15,7 +17,7 @@ interface QrProps {
  * Apunta a la URL pública del póster en Storage: el visitante la abre con la
  * cámara del celular y lo guarda desde el navegador.
  */
-const Qr = ({ imageUrl, onAtras, onReiniciar }: QrProps) => (
+const Qr = ({ imageUrl, onAtras, onTerminar, textoTerminar = "Terminar" }: QrProps) => (
   <Pantalla
     titulo={
       <>
@@ -27,7 +29,7 @@ const Qr = ({ imageUrl, onAtras, onReiniciar }: QrProps) => (
     footer={
       <>
         <BotonAtras onClick={onAtras}>Ver póster</BotonAtras>
-        <Boton onClick={onReiniciar}>Terminar</Boton>
+        <Boton onClick={onTerminar}>{textoTerminar}</Boton>
       </>
     }
   >

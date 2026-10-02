@@ -55,6 +55,8 @@ const saveDatatechParticipante = async (data) => {
             .collection(datatech_1.DATATECH_COLLECTION)
             .add({
             ...data,
+            // Firestore rechaza undefined; sin visitante del chat el campo no va.
+            chatDocId: data.chatDocId ?? null,
             createdAt: admin.firestore.FieldValue.serverTimestamp(),
             campaign: "claro-media-datatech-15-minutos",
         });
